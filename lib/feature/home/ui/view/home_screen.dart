@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/bottom_navbar_page.dart';
-import 'package:islami_app/feature/home/ui/view/quran_surah_screen.dart';
 import 'package:islami_app/feature/home/ui/view_model/surah/surah_cubit.dart';
 
 class HomeScreen extends StatelessWidget {

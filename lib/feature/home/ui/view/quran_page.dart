@@ -1,25 +1,23 @@
 import 'dart:async';
-import 'package:easy_container/easy_container.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
+import 'package:islami_app/feature/home/data/model/sura.dart';
+import 'package:islami_app/feature/home/ui/view/widget/botton_shee_iItem.dart';
+import 'package:islami_app/feature/home/ui/view/widget/custom_surah_fram_widget.dart';
 import 'package:quran/quran.dart';
-import 'package:quran/quran.dart' as quran;
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class QuranViewPage extends StatefulWidget {
-  int pageNumber;
-  var jsonData;
+final  int pageNumber;
+  final List<SurahModel> jsonData;
 
-  QuranViewPage({Key? key, required this.pageNumber, required this.jsonData})
-    : super(key: key);
+  const QuranViewPage({super.key, required this.pageNumber, required this.jsonData});
 
   @override
   State<QuranViewPage> createState() => _QuranViewPageState();
@@ -85,101 +83,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
       builder:
           (context) => StatefulBuilder(
             builder:
-                (context, setState) => Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.copy),
-                        title: const Text('نسخ الآية'),
-                        onTap: () {
-                          Clipboard.setData(
-                            ClipboardData(text: quran.getVerse(surah, verse)),
-                          );
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('تم نسخ الآية')),
-                          );
-                        },
-                      ),
-                      FutureBuilder<bool>(
-                        future: BookmarkManager.isBookmarked(surah, verse),
-                        builder: (context, snapshot) {
-                          bool isBookmarked = snapshot.data ?? false;
-                          return ListTile(
-                            leading: Icon(
-                              isBookmarked
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                            ),
-                            title: Text(
-                              isBookmarked
-                                  ? 'إزالة من المفضلة'
-                                  : 'إضافة إلى المفضلة',
-                            ),
-                            onTap: () async {
-                              if (isBookmarked) {
-                                await BookmarkManager.removeBookmark(
-                                  surah,
-                                  verse,
-                                );
-                              } else {
-                                await BookmarkManager.addBookmark(surah, verse);
-                              }
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    isBookmarked
-                                        ? 'تم إزالة الآية من المفضلة'
-                                        : 'تمت إضافة الآية إلى المفضلة',
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.share),
-                        title: const Text('مشاركة الآية'),
-                        onTap: () {
-                          // تنفيذ المشاركة
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                (context, setState) => BottonSheetItem(surah: surah, verse: verse,),
           ),
-    );
-  }
-
-  Widget _buildVerseText(int surah, int verse, String verseText) {
-    return FutureBuilder<bool>(
-      future: BookmarkManager.isBookmarked(surah, verse),
-      builder: (context, snapshot) {
-        bool isBookmarked = snapshot.data ?? false;
-        return Row(
-          children: [
-            Expanded(
-              child: Text(
-                verseText,
-                style: TextStyle(fontSize:index == 1 || index == 2
-                    ? 28
-                    : index == 145 || index == 201
-                        ? index == 532 || index == 533
-                            ? 22.5
-                            : 22.4
-                        : 23.1, color: Colors.black),
-              ),
-            ),
-            if (isBookmarked)
-              Icon(Icons.bookmark, size: 16, color: Colors.amber),
-          ],
-        );
-      },
     );
   }
 
@@ -223,7 +128,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
         // onPageChanged: _onPageChanged,
         itemCount: totalPagesCount + 1 /* specify the total number of pages */,
         itemBuilder: (context, index) {
-          bool isEvenPage = index.isEven;
+          // bool isEvenPage = index.isEven;
 
           if (index == 0) {
             return Container(
@@ -244,75 +149,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                     // physics: const ClampingScrollPhysics(),
                     child: Column(
                       children: [
-                        SizedBox(
-                          width: screenSize.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: (screenSize.width * .27),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_back_ios,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget
-                                          .jsonData[getPageData(
-                                                index,
-                                              )[0]["surah"] -
-                                              1]
-                                          .name,
-                                      style: const TextStyle(
-                                        fontFamily: "Taha",
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              EasyContainer(
-                                borderRadius: 12,
-                                color: Colors.orange.withOpacity(.5),
-                                showBorder: true,
-                                height: 20,
-                                width: 120,
-                                padding: 0,
-                                margin: 0,
-                                child: Center(
-                                  child: Text(
-                                    "${"page"} $index ",
-                                    style: const TextStyle(
-                                      fontFamily: 'aldahabi',
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: (screenSize.width * .27),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.settings,
-                                        size: 24,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        CustomSurahFramWidget(screenSize: screenSize, widget: widget, index: index,),
                         if ((index == 1 || index == 2))
                           SizedBox(height: (screenSize.height * .15)),
                         const SizedBox(height: 30),
@@ -429,18 +266,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                                                     Colors.transparent,
                                               ),
                                               children: const <TextSpan>[
-                                                // TextSpan(
-                                                //   text: getVerseQCF(e["surah"], i).substring(getVerseQCF(e["surah"], i).length - 1),
-                                                //   style:  TextStyle(
-                                                //     color: isVerseStarred(
-                                                //                                                     e[
-                                                //                                                         "surah"],
-                                                //                                                     i)
-                                                //                                                 ? Colors
-                                                //                                                     .amber
-                                                //                                                 : secondaryColors[getValue("quranPageolorsIndex")] // Change color here
-                                                //   ),
-                                                // ),
+                                              
                                               ],
                                             ),
                                           );

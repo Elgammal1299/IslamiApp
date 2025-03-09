@@ -11,15 +11,7 @@ class BookmarksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => BookmarkCubit()..loadBookmarks(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'المفضلة',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-        ),
-        body: BlocBuilder<BookmarkCubit, BookmarkState>(
+      child:  BlocBuilder<BookmarkCubit, BookmarkState>(
           builder: (context, state) {
             if (state is BookmarksLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -63,7 +55,6 @@ class BookmarksScreen extends StatelessWidget {
             return const SizedBox();
           },
         ),
-      ),
     );
   }
 }
