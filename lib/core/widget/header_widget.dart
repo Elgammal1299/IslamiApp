@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/feature/home/data/model/sura.dart';
 import 'package:quran/quran.dart' show getVerseCount;
 
 
 
 class HeaderWidget extends StatelessWidget {
-  var e;
-  var jsonData;
+  final dynamic e;
+  final List<SurahModel> jsonData;
 
-  HeaderWidget(
+  const HeaderWidget(
       {super.key, required this.e, required this.jsonData, });
 
   @override

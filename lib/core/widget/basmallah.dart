@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 
 class Basmallah extends StatefulWidget {
-  int index;
-   Basmallah({super.key, required this.index });
+  final int index;
+   const Basmallah({super.key, required this.index });
 
   @override
   State<Basmallah> createState() => _BasmallahState();

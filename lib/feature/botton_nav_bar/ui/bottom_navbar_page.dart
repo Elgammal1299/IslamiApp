@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/home/ui/view/quran_surah_screen.dart';
 
@@ -27,9 +28,9 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: quranPagesColor,
         appBar: AppBar(
-          title: Text('Food App'),
+          title: Text('Quran App'),
           backgroundColor: Colors.grey[100],
           foregroundColor: Colors.black,
           elevation: 0,
@@ -41,10 +42,10 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
           onTap: onItemTapped,
 
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Home'),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Favorite',
+              icon: Icon(Icons.bookmark_outlined),
+              label: 'Bookmark',
             ),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Person'),
           ],

@@ -64,7 +64,6 @@ class SuraListViewItem extends StatelessWidget {
             text: TextSpan(
               text: suraNumber.toString(),
 
-              // textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: "arsura",
                 fontSize: 22,

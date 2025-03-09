@@ -23,13 +23,19 @@ class BookmarksScreen extends StatelessWidget {
 
             if (state is BookmarksLoaded) {
               if (state.bookmarks.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'لا توجد آيات محفوظة',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
+                return Center(
+                  child: Column(
+                    children: [
+                      Icon(Icons.bookmark_remove,color: Colors.red,size: 150,),
+                      const Text(
+                        'لا توجد آيات محفوظة',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }
