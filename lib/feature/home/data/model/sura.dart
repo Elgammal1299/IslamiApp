@@ -1,25 +1,31 @@
 
-class Surah {
-  int id;
-  String revelationPlace;
-  int revelationOrder;
-  String name;
-  String arabicName;
-  int versesCount;
-  Surah({
-    required this.arabicName,
-    required this.id,
+class SurahModel {
+  final int number;
+  final String name;
+  final String englishName;
+  final String englishNameTranslation;
+  final int numberOfAyahs;
+  final String revelationType;
+ 
+
+  const SurahModel({
+    required this.number,
     required this.name,
-    required this.revelationOrder,
-    required this.revelationPlace,
-    required this.versesCount,
+    required this.englishName,
+    required this.englishNameTranslation,
+    required this.numberOfAyahs,
+    required this.revelationType,
+  
   });
-  factory Surah.fromMap(Map<String, dynamic> json) => Surah(
-        arabicName: json["name_arabic"],
-        id: json["id"],
-        name: json["name_simple"],
-        revelationOrder: json["revelation_order"],
-        revelationPlace: json["revelation_place"],
-        versesCount: json["verses_count"],
-      );
+  factory SurahModel.fromJson(Map<String, dynamic> json) {
+    return SurahModel(
+      number: json['number'] as int,
+      name: json['name'] as String,
+      englishName: json['englishName'] as String,
+      englishNameTranslation: json['englishNameTranslation'] as String,
+      numberOfAyahs: json['numberOfAyahs'] as int,
+      revelationType: json['revelationType'] as String,
+      
+    );
+}
 }

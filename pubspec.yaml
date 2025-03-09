@@ -3,38 +3,38 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-
 version: 1.0.0+1
 
 environment:
   sdk: ^3.7.0
 
-
 dependencies:
+  cupertino_icons: ^1.0.8
+  easy_container: ^1.0.5+1
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.8
+  flutter_bloc: ^9.1.0
+  flutter_screenutil: ^5.9.3
+  quran: 
+    path: ./quran-1.2.2
+  share_plus: ^10.1.4
+  shared_preferences: ^2.5.2
+  wakelock_plus: ^1.2.10
 
 dev_dependencies:
+
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 
-  
-  flutter_lints: ^5.0.0
-
-
 flutter:
 
- 
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/json/surahs.json
     - assets/images/
-
-  
 
   # example:
   fonts:
@@ -50,7 +50,7 @@ flutter:
 
     - family: QCF_P002
       fonts:
-          - asset: assets\fonts\QCF2BSMLfonts\QCF2002.ttf
+        - asset: assets\fonts\QCF2BSMLfonts\QCF2002.ttf
 
     - family: QCF_P003
       fonts:
