@@ -3,21 +3,27 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/home/data/model/sura.dart';
-import 'package:islami_app/feature/home/ui/view/widget/botton_shee_iItem.dart';
+import 'package:islami_app/feature/home/ui/view/widget/botton_sheet_iItem.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_surah_fram_widget.dart';
+import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:quran/quran.dart';
 
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class QuranViewPage extends StatefulWidget {
-final  int pageNumber;
+  final int pageNumber;
   final List<SurahModel> jsonData;
 
-  const QuranViewPage({super.key, required this.pageNumber, required this.jsonData});
+  const QuranViewPage({
+    super.key,
+    required this.pageNumber,
+    required this.jsonData,
+  });
 
   @override
   State<QuranViewPage> createState() => _QuranViewPageState();
@@ -83,7 +89,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
       builder:
           (context) => StatefulBuilder(
             builder:
-                (context, setState) => BottonSheetItem(surah: surah, verse: verse,),
+                (context, setState) =>
+                    BottonSheetItem(surah: surah, verse: verse),
           ),
     );
   }
@@ -96,7 +103,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     WakelockPlus.enable();
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -149,7 +156,11 @@ class _QuranViewPageState extends State<QuranViewPage> {
                     // physics: const ClampingScrollPhysics(),
                     child: Column(
                       children: [
-                        CustomSurahFramWidget(screenSize: screenSize, widget: widget, index: index,),
+                        CustomSurahFramWidget(
+                          screenSize: screenSize,
+                          widget: widget,
+                          index: index,
+                        ),
                         if ((index == 1 || index == 2))
                           SizedBox(height: (screenSize.height * .15)),
                         const SizedBox(height: 30),
@@ -265,9 +276,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                                                 backgroundColor:
                                                     Colors.transparent,
                                               ),
-                                              children: const <TextSpan>[
-                                              
-                                              ],
+                                              children: const <TextSpan>[],
                                             ),
                                           );
                                         }

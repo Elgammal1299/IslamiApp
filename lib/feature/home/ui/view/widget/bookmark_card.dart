@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/home/ui/view/quran_page.dart';
 import 'package:islami_app/feature/home/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:quran/quran.dart' as quran;
 

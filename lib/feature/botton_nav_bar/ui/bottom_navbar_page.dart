@@ -1,7 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/services/api/api_service.dart';
+import 'package:islami_app/feature/home/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/home/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/home/ui/view/quran_surah_screen.dart';
+import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
 class BottomNavbarPage extends StatefulWidget {
   const BottomNavbarPage({super.key});
@@ -40,14 +45,20 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: onItemTapped,
-
+    
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Home'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.menu_book_outlined),
+              label: 'Home',
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmark_outlined),
               label: 'Bookmark',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Person'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Person',
+            ),
           ],
         ),
       ),

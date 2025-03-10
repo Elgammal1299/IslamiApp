@@ -9,23 +9,31 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
+  audioplayers: ^6.3.0
   cupertino_icons: ^1.0.8
+  dartz: ^0.10.1
+  dio: ^5.8.0+1
   easy_container: ^1.0.5+1
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.0
   flutter_screenutil: ^5.9.3
-  quran: 
+  json_annotation: ^4.9.0
+  logger: ^2.5.0
+  quran:
     path: ./quran-1.2.2
+  retrofit: ^4.4.2
   share_plus: ^10.1.4
   shared_preferences: ^2.5.2
   wakelock_plus: ^1.2.10
 
 dev_dependencies:
-
+  build_runner: ^2.4.15
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.9.4
+  retrofit_generator: ^9.1.9
 
 flutter:
 
