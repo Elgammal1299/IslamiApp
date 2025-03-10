@@ -85,6 +85,8 @@ class _QuranViewPageState extends State<QuranViewPage> {
 
   void _handleVerseLongPress(int surah, int verse) {
     showModalBottomSheet(
+      
+    
       context: context,
       builder:
           (context) => StatefulBuilder(

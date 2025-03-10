@@ -46,11 +46,18 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-      
-                  
                ListTile(
-                leading: Icon(Icons.menu_book),
-                title: Text("التفسير"),
+                trailing: Icon(Icons.menu_book),
+                title: Text(
+                  
+                  "التفسير",style:  TextStyle(
+                fontFamily: "arsura",
+                fontSize: 20,
+                color: Colors.black,
+                
+              ),
+              textAlign: TextAlign.end,
+              ),
                 onTap: () {
                    Navigator.pushReplacement(
                     context,
@@ -71,7 +78,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
           ),
 
           ListTile(
-            leading: const Icon(Icons.copy),
+            trailing: const Icon(Icons.copy),
             title: const Text(
               'نسخ الآية',
               style: TextStyle(
@@ -79,6 +86,8 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 fontSize: 20,
                 color: Colors.black,
               ),
+              textAlign: TextAlign.end,
+
             ),
             onTap: () {
               Clipboard.setData(
@@ -95,7 +104,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             builder: (context, snapshot) {
               bool isBookmarked = snapshot.data ?? false;
               return ListTile(
-                leading: Icon(
+                trailing: Icon(
                   isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                 ),
                 title: Text(
@@ -105,6 +114,8 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                     fontSize: 20,
                     color: Colors.black,
                   ),
+              textAlign: TextAlign.end,
+
                 ),
                 onTap: () async {
                   if (isBookmarked) {
@@ -135,7 +146,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.share),
+            trailing: const Icon(Icons.share),
             title: const Text(
               'مشاركة الآية',
               style: TextStyle(
@@ -143,6 +154,8 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 fontSize: 20,
                 color: Colors.black,
               ),
+              textAlign: TextAlign.end,
+
             ),
             onTap: () {
               Share.share(

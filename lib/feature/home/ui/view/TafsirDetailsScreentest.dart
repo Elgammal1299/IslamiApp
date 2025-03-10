@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
 class TafsirDetailsScreen extends StatefulWidget {
@@ -32,43 +31,49 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
       backgroundColor: quranPagesColor,
 
       appBar: AppBar(title: const Text("تفسير الآية")),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            
-            
-            // 📖 نص الآية
-            Card(
-              color: Colors.grey[200],
-              elevation: 1,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text(
-                  widget.text,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-                  textAlign: TextAlign.center,
+      body:Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              
+          child: 
+              
+              // 📖 نص الآية
+              Card(
+                color: Colors.grey[200],
+                elevation: 1,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                        textDirection: TextDirection.rtl,
+
+                    widget.text,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,),
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
               ),
-            ),
-            
-            const SizedBox(height: 15),
-
-            // 🔍 عرض التفسير
-            Expanded(
-              child: BlocBuilder<TafsirCubit, TafsirState>(
+        
+              // 🔍 عرض التفسير
+              ),
+          SliverToBoxAdapter(child:SizedBox(height: 16,) ,),
+              SliverToBoxAdapter(
+                child: BlocBuilder<TafsirCubit, TafsirState>(
                 builder: (context, state) {
                   if (state is TafsirError) {
                     return Center(child: Text("خطأ: ${state.message}", style: const TextStyle(fontSize: 20,color: Colors.red)));
                   } else if (state is AyahTafsirLoaded) {
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.all(10),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                       textAlign: TextAlign.end,
+                        textDirection: TextDirection.rtl,
+                       textAlign: TextAlign.justify,
                         state.tafsirByAyah.data!.text.toString(),
-                        style:  TextStyle(fontSize: 22, fontWeight: FontWeight.w600,color: Colors.grey[600]),
+                        style:  TextStyle(
+                          
+                          fontSize: 22, fontWeight: FontWeight.w600,color: Colors.grey[600],    fontFamily: "arsura",),
                         // textAlign: TextAlign.justify,
                       ),
                     );
@@ -76,10 +81,17 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                   return const Center(child: CircularProgressIndicator());
                 },
               ),
-            ),
-          ],
-        ),
+              )
+            ],
+        
+          ),
       ),
-    );
+          );
+      
+      
+      
+           
+   
+    
   }
 }
