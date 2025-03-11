@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:islami_app/feature/home/data/model/tafsir_by_ayah.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
-import 'package:islami_app/feature/home/data/repo/tafsir_repo.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:meta/meta.dart';
 
 part 'tafsir_state.dart';

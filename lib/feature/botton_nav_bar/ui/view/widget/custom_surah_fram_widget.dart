@@ -2,7 +2,7 @@
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
-import 'package:islami_app/feature/home/ui/view/quran_page.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:quran/quran.dart';
 
 class CustomSurahFramWidget extends m.StatelessWidget {

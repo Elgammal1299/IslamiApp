@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islami_app/feature/home/data/model/sura.dart';
-import 'package:islami_app/feature/home/ui/view/widget/sura_list_view_item.dart';
-import 'package:islami_app/feature/home/ui/view_model/surah/surah_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/sura_list_view_item.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:quran/quran.dart';
 
 class QuranSurahScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'api_service.dart';
+part of 'tafsir_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations
 
-class _QuranApiService implements QuranApiService {
-  _QuranApiService(this._dio, {this.baseUrl, this.errorLogger}) {
+class _TafsirService implements TafsirService {
+  _TafsirService(this._dio, {this.baseUrl, this.errorLogger}) {
     baseUrl ??= 'http://api.alquran.cloud/v1';
   }
 

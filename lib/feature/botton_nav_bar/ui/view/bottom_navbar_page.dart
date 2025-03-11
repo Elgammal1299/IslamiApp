@@ -1,12 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/core/services/api/api_service.dart';
-import 'package:islami_app/feature/home/data/repo/tafsir_repo.dart';
-import 'package:islami_app/feature/home/ui/view/bookmarks_page.dart';
-import 'package:islami_app/feature/home/ui/view/quran_surah_screen.dart';
-import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_screen.dart';
 
 class BottomNavbarPage extends StatefulWidget {
   const BottomNavbarPage({super.key});

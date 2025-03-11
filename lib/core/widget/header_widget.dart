@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/feature/home/data/model/sura.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart' show getVerseCount;
 
 

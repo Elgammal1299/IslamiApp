@@ -1,5 +1,5 @@
 
-import 'package:islami_app/feature/home/data/model/tafsir_by_ayah.dart' show Data;
+import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart' show Data;
 import 'package:json_annotation/json_annotation.dart';
 part 'tafsir_quran.g.dart';
 @JsonSerializable()

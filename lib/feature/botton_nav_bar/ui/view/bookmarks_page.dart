@@ -1,8 +1,8 @@
 // lib/feature/bookmarks/ui/view/bookmarks_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islami_app/feature/home/ui/view/widget/bookmark_card.dart';
-import 'package:islami_app/feature/home/ui/view_model/bookmarks/bookmark_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 
 class BookmarksScreen extends StatelessWidget {
   const BookmarksScreen({super.key});

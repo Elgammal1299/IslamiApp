@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:islami_app/core/services/api/api_service.dart';
-import 'package:islami_app/feature/home/data/model/tafsir_by_ayah.dart';
+import 'package:islami_app/core/services/api/tafsir_service.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 
 class QuranRepository {
-  final QuranApiService apiService;
+  final TafsirService apiService;
 
   QuranRepository(this.apiService);
 

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:islami_app/feature/home/data/model/sura.dart';
-import 'package:islami_app/feature/home/data/repo/surah_repository.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:quran/quran.dart';
 import 'package:share_plus/share_plus.dart';

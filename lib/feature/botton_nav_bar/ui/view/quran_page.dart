@@ -3,14 +3,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
-import 'package:islami_app/feature/home/data/model/sura.dart';
-import 'package:islami_app/feature/home/ui/view/widget/botton_sheet_iItem.dart';
-import 'package:islami_app/feature/home/ui/view/widget/custom_surah_fram_widget.dart';
-import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_iItem.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_fram_widget.dart';
 import 'package:quran/quran.dart';
 
 import 'package:wakelock_plus/wakelock_plus.dart';

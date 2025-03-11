@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islami_app/core/services/api/api_service.dart';
+import 'package:islami_app/core/services/api/audio_service.dart';
+import 'package:islami_app/core/services/api/tafsir_service.dart';
 import 'package:islami_app/core/surah_db.dart';
-import 'package:islami_app/feature/home/data/repo/surah_repository.dart';
-import 'package:islami_app/feature/home/data/repo/tafsir_repo.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
-import 'package:islami_app/feature/home/ui/view_model/surah/surah_cubit.dart';
-import 'package:islami_app/feature/home/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create:
-              (context) => TafsirCubit(QuranRepository(QuranApiService(Dio()))),
+              (context) => TafsirCubit(QuranRepository(TafsirService(Dio()))),
         ),
         BlocProvider(
           create:
               (context) =>
                   SurahCubit(JsonRepository(SurahJsonServer()))..getSurahs(),
         ),
+        
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           // useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home:  HomeScreen(),
       ),
     );
   }

@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:islami_app/feature/home/data/model/tafsir_by_ayah.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'api_service.g.dart';
+part 'tafsir_service.g.dart';
 
 @RestApi(baseUrl: "http://api.alquran.cloud/v1")
-abstract class QuranApiService {
-  factory QuranApiService(Dio dio, {String baseUrl}) = _QuranApiService;
+abstract class TafsirService {
+  factory TafsirService(Dio dio, {String baseUrl}) = _TafsirService;
 
   // // 1️⃣ الحصول على جميع الإصدارات المتاحة (نصوص وترجمات وتفسيرات وصوتيات)
   // @GET("/edition")
