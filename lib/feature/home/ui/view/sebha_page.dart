@@ -66,12 +66,7 @@ class _SebhaPageState extends State<SebhaPage>
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _resetCounter,
-          ),
-        ],
+        
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -88,7 +83,7 @@ class _SebhaPageState extends State<SebhaPage>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             
+          
               const SizedBox(height: 30),
               // دائرة السبحة الرئيسية
               GestureDetector(

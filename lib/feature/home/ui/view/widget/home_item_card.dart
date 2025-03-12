@@ -37,6 +37,7 @@ class HomeItemCard extends StatelessWidget {
               item.image,
               height: 80,
               width: 80,
+              fit: BoxFit.cover,
             ),
             const SizedBox(height: 12),
             Text(

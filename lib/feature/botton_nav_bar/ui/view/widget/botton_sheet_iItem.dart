@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/TafsirDetailsScreentest.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:quran/quran.dart' as Quran;
@@ -58,7 +58,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                     context,
                     MaterialPageRoute(
                       builder:
-                          (context) => TafsirDetailsScreen(
+                          (context) => TafsirDetailsPage(
                             tafsirIdentifier: "ar.muyassar",
                             verse: getCumulativeAyahNumber(
                               widget.surah,

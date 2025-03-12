@@ -3,18 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
-class TafsirDetailsScreen extends StatefulWidget {
+class TafsirDetailsPage extends StatefulWidget {
   final String tafsirIdentifier;
   final int verse;
   final String text;
  
-  const TafsirDetailsScreen({super.key,   required this.verse, required this.text, required this.tafsirIdentifier,});
+  const TafsirDetailsPage({super.key,   required this.verse, required this.text, required this.tafsirIdentifier,});
 
   @override
-  _TafsirDetailsScreenState createState() => _TafsirDetailsScreenState();
+  _TafsirDetailsPageState createState() => _TafsirDetailsPageState();
 }
 
-class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
+class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
 
 @override
   void initState() {

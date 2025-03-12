@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 
-class BookmarksScreen extends StatelessWidget {
-  const BookmarksScreen({super.key});
+class BookmarksPage extends StatelessWidget {
+  const BookmarksPage({super.key});
 
   @override
   Widget build(BuildContext context) {

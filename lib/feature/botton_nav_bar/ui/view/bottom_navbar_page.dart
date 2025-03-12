@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_screen.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_page.dart';
 
 class BottomNavbarPage extends StatefulWidget {
   static String routeName = '/bootom';
@@ -21,8 +21,8 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
   }
 
   List<Widget> bodyOptions = <Widget>[
-    QuranSurahScreen(),
-    BookmarksScreen(),
+    QuranSurahPage(),
+    BookmarksPage(),
     Center(child: Text('Person')),
   ];
 
@@ -32,13 +32,15 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
       child: Scaffold(
         backgroundColor: quranPagesColor,
         appBar: AppBar(
-          title: Text('Quran App'),
-          backgroundColor: Colors.grey[100],
+        backgroundColor: quranPagesColor,
+          title: Text('القرءان الكريم'),
+          centerTitle: true,
+          
           foregroundColor: Colors.black,
-          elevation: 0,
+          elevation: 1,
         ),
         body: bodyOptions.elementAt(selectedIndex),
-        drawer: Drawer(child: Center(child: Text('Ahmed'))),
+       
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: onItemTapped,
@@ -46,15 +48,15 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_outlined),
-              label: 'Home',
+              label: 'الرئيسية',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmark_outlined),
-              label: 'Bookmark',
+              label: 'المفضلة',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Person',
+              label: 'الدعاء',
             ),
           ],
         ),

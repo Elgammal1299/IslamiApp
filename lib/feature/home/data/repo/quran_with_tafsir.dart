@@ -7,7 +7,7 @@ import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 class QuranWithTafsirRepo {
   final TafsirService apiService;
 
-  QuranWithTafsirRepo({required this.apiService});
+  QuranWithTafsirRepo(this.apiService);
 
 
   /// 🟢  جلب القرآن كاملًا مع تفسير معين

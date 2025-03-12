@@ -5,8 +5,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/sura_list_view_
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:quran/quran.dart';
 
-class QuranSurahScreen extends StatelessWidget {
-  const QuranSurahScreen({super.key});
+class QuranSurahPage extends StatelessWidget {
+  const QuranSurahPage({super.key});
 
   @override
   Widget build(BuildContext context) {
