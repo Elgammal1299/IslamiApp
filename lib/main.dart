@@ -9,6 +9,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dar
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
+import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
         routes: {
     HomeScreen.routeName: (context) => const HomeScreen(),
     BottomNavbarPage.routeName: (context) => const BottomNavbarPage(),
+    AzkarPage.routeName: (context) => const AzkarPage(),
+    SebhaPage.routeName: (context) => const SebhaPage(),
   },
       ),
     );

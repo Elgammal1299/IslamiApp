@@ -1,4 +1,6 @@
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
+import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
+import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 
 class HomeItemModel {
   final String name;
@@ -22,13 +24,14 @@ class HomeItemModel {
     HomeItemModel(
       name: "الأذكار",
       image: "assets/images/beads.png",
-      route: "/azkar",
+      route: AzkarPage.routeName,
+
     ),
     HomeItemModel(
       name: "السبحة",
-            image: "assets/images/quran.png",
+            image: "assets/images/beads.png",
 
-      route: "/sebha",
+      route: SebhaPage.routeName,
     ),
     HomeItemModel(
       name: "القبلة",

@@ -14,7 +14,7 @@ class HomeItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-                            Navigator.pushNamed(context, item.route);
+         Navigator.pushNamed(context, item.route);
 
       },
       child: Container(
