@@ -1,39 +1,29 @@
 part of 'tafsir_cubit.dart';
 
 @immutable
-sealed class TafsirState {}
+sealed class TafsirByAyahState {}
 
-final class TafsirInitial extends TafsirState {}
+final class TafsirInitial extends TafsirByAyahState {}
 
 
 
 // 🔄 حالة التحميل
-class TafsirLoading extends TafsirState {}
+class TafsirByAyahLoading extends TafsirByAyahState {}
 
-// ✅ حالة نجاح - جلب قائمة التفسيرات
-class TafsirEditionsLoaded extends TafsirState {
-  final TafsirModel tafsirModel;
-   TafsirEditionsLoaded(this.tafsirModel);
 
-}
 
 // ✅ حالة نجاح - تفسير آية معينة
-class AyahTafsirLoaded extends TafsirState {
+class TafsirByAyahLoaded extends TafsirByAyahState {
   final TafsirByAyah tafsirByAyah;
-   AyahTafsirLoaded(this.tafsirByAyah);
+   TafsirByAyahLoaded(this.tafsirByAyah);
 
 }
 
-// ✅ حالة نجاح - القرآن كاملًا مع تفسير معين
-class QuranWithTafsirLoaded extends TafsirState {
-  final TafsirQuran tafsirQuran;
-   QuranWithTafsirLoaded(this.tafsirQuran);
 
-}
 
 // ❌ حالة الفشل
-class TafsirError extends TafsirState {
+class TafsirByAyahError extends TafsirByAyahState {
   final String message;
-   TafsirError(this.message);
+   TafsirByAyahError(this.message);
 
 }

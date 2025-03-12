@@ -60,11 +60,11 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
               ),
           SliverToBoxAdapter(child:SizedBox(height: 16,) ,),
               SliverToBoxAdapter(
-                child: BlocBuilder<TafsirCubit, TafsirState>(
+                child: BlocBuilder<TafsirCubit, TafsirByAyahState>(
                 builder: (context, state) {
-                  if (state is TafsirError) {
+                  if (state is TafsirByAyahError) {
                     return Center(child: Text("خطأ: ${state.message}", style: const TextStyle(fontSize: 20,color: Colors.red)));
-                  } else if (state is AyahTafsirLoaded) {
+                  } else if (state is TafsirByAyahLoaded) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(

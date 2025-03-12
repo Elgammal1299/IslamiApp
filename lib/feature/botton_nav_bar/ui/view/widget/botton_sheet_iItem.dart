@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/TafsirDetailsScreentest.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:quran/quran.dart' as Quran;
@@ -15,7 +13,9 @@ class BottonSheetItem extends StatefulWidget {
   final int verse;
   final int surah;
 
-  const BottonSheetItem({super.key, required this.surah, required this.verse});
+
+
+  const BottonSheetItem({super.key, required this.verse, required this.surah});
 
   @override
   State<BottonSheetItem> createState() => _BottonSheetItemState();
@@ -32,12 +32,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
     return cumulativeNumber + ayahNumber;
   }
 
-  List<Data> tafsirIdentifiers =[];
-  @override
-  void initState() {
-    context.read<TafsirCubit>().fetchTafsirEditions();
-    super.initState();
-  }
+  final List<Data> tafsirIdentifiers = [];
 
   @override
   m.Widget build(m.BuildContext context) {

@@ -4,6 +4,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_screen.dart';
 
 class BottomNavbarPage extends StatefulWidget {
+  static String routeName = '/bootom';
+
   const BottomNavbarPage({super.key});
 
   @override

@@ -28,68 +28,63 @@ class SuraListViewItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
-        child: Row(
-          children: [
-            
-            ListTile(
-              
-              leading: SizedBox(
-                width: 45,
-                height: 45,
-                child: Center(
-                  child: Text(
-                    suraNumber.toString(),
-                    style: const TextStyle(color: orangeColor, fontSize: 14),
-                  ),
-                ),
-              ), //  Material(
-              minVerticalPadding: 0,
-              title: SizedBox(
-                width: 90,
-                child: Row(
-                  children: [
-                    Text(
-                      suraName,
-                      style: const TextStyle(
-                        // fontWeight: FontWeight.bold,
-                        color: blueColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700, // Text color
-                      ),
-                    ),
-                  ],
-                ),
+        child: ListTile(
+          
+          leading: SizedBox(
+            width: 45,
+            height: 45,
+            child: Center(
+              child: Text(
+                suraNumber.toString(),
+                style: const TextStyle(color: orangeColor, fontSize: 14),
               ),
-              subtitle: Text(
-                "$suraNameEnglishTranslated ($ayahCount)",
-                style: TextStyle(fontSize: 14, color: Colors.grey.withOpacity(.8)),
-              ),
-              trailing: RichText(
-                text: TextSpan(
-                  text: suraNumber.toString(),
-            
-                  style: const TextStyle(
-                    fontFamily: "arsura",
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            
-              onTap: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (builder) => QuranViewPage(
-                          jsonData: surahs,
-                          pageNumber: getPageNumber(suraNumberInQuran, 1),
-                        ),
-                  ),
-                );
-              },
             ),
-          ],
+          ), //  Material(
+          minVerticalPadding: 0,
+          title: SizedBox(
+            width: 90,
+            child: Row(
+              children: [
+                Text(
+                  suraName,
+                  style: const TextStyle(
+                    // fontWeight: FontWeight.bold,
+                    color: blueColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700, // Text color
+                  ),
+                ),
+              ],
+            ),
+          ),
+          subtitle: Text(
+            "$suraNameEnglishTranslated ($ayahCount)",
+            style: TextStyle(fontSize: 14, color: Colors.grey.withOpacity(.8)),
+          ),
+          trailing: RichText(
+            text: TextSpan(
+              text: suraNumber.toString(),
+        
+              style: const TextStyle(
+                fontFamily: "arsura",
+                fontSize: 22,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (builder) => QuranViewPage(
+                      jsonData: surahs,
+                      pageNumber: getPageNumber(suraNumberInQuran, 1),
+                    ),
+              ),
+            );
+          },
         ),
       ),
     );
