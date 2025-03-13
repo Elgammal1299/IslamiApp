@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
+
 import 'package:islami_app/core/services/bookmark_manager.dart';
+
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
 import 'package:quran/quran.dart';
@@ -12,8 +14,6 @@ import 'package:share_plus/share_plus.dart';
 class BottonSheetItem extends StatefulWidget {
   final int verse;
   final int surah;
-
-
 
   const BottonSheetItem({super.key, required this.verse, required this.surah});
 
@@ -41,36 +41,35 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-               ListTile(
-                trailing: Icon(Icons.menu_book),
-                title: Text(
-                  
-                  "التفسير",style:  TextStyle(
-                fontFamily: "arsura",
-                fontSize: 20,
-                color: Colors.black,
-                
+           ListTile(
+              trailing: Icon(Icons.menu_book),
+              title: Text(
+                "التفسير",
+                style: TextStyle(
+                  fontFamily: "arsura",
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.end,
               ),
-              textAlign: TextAlign.end,
-              ),
-                onTap: () {
-                   Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => TafsirDetailsPage(
-                            tafsirIdentifier: "ar.muyassar",
-                            verse: getCumulativeAyahNumber(
-                              widget.surah,
-                              widget.verse,
-                            ),
-                            text: quran.getVerse(widget.surah, widget.verse), 
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => TafsirDetailsPage(
+                          tafsirIdentifier: "ar.muyassar",
+                          verse: getCumulativeAyahNumber(
+                            widget.surah,
+                            widget.verse,
                           ),
-                    ),
-                  );
-                },
-             
-          ),
+                          text: quran.getVerse(widget.surah, widget.verse),
+                        ),
+                  ),
+                );
+              },
+            ),
+          
 
           ListTile(
             trailing: const Icon(Icons.copy),
@@ -82,7 +81,6 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 color: Colors.black,
               ),
               textAlign: TextAlign.end,
-
             ),
             onTap: () {
               Clipboard.setData(
@@ -109,8 +107,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                     fontSize: 20,
                     color: Colors.black,
                   ),
-              textAlign: TextAlign.end,
-
+                  textAlign: TextAlign.end,
                 ),
                 onTap: () async {
                   if (isBookmarked) {
@@ -150,7 +147,6 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 color: Colors.black,
               ),
               textAlign: TextAlign.end,
-
             ),
             onTap: () {
               Share.share(

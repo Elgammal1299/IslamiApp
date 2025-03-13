@@ -33,22 +33,20 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
       child: Scaffold(
         backgroundColor: quranPagesColor,
         appBar: AppBar(
-        backgroundColor: quranPagesColor,
+          backgroundColor: quranPagesColor,
           title: Text('القرءان الكريم'),
-          actions: [
-            IconButton(onPressed: () {  }, icon: Icon(Icons.search),),
-          ],
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
           centerTitle: true,
-          
+
           foregroundColor: Colors.black,
           elevation: 1,
         ),
         body: bodyOptions.elementAt(selectedIndex),
-       
+
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: onItemTapped,
-    
+
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_outlined),

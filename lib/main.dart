@@ -2,16 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/services/api/tafsir_service.dart';
-import 'package:islami_app/core/services/api/surah_db.dart';
 import 'package:islami_app/core/services/radio_service.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
@@ -38,15 +35,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create:
-              (context) => TafsirCubit(TafsirByAyahRepository(TafsirService(Dio()))),
+           create:
+             (context) => TafsirCubit(TafsirByAyahRepository(TafsirService(Dio()))),
         ),
-        BlocProvider(
-          create:
-              (context) =>
-                  SurahCubit(JsonRepository(SurahJsonServer()))..getSurahs(),
-                  
-        ),
+       
          BlocProvider(
           create:
               (context) =>
