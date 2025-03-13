@@ -9,11 +9,13 @@ import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
+import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
+import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
@@ -65,9 +67,11 @@ class MyApp extends StatelessWidget {
     HomeScreen.routeName: (context) => const HomeScreen(),
     BottomNavbarPage.routeName: (context) => const BottomNavbarPage(),
     AzkarPage.routeName: (context) => const AzkarPage(),
-    AzkarPage.routeName: (context) => const AzkarPage(),
+    SebhaPage.routeName: (context) => const SebhaPage(),
     TafsirPage.routeName: (context) => const TafsirPage(),
     RadioPage.routeName: (context) => const RadioPage(),
+    AudioPlayerPage.routeName: (context) => const AudioPlayerPage(),
+    QuranSurahList.routeName: (context) =>  QuranSurahList(),
   },
       ),
     );

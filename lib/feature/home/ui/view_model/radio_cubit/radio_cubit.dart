@@ -49,9 +49,9 @@ String? _currentUrl;
   Future<void> stopPlaying() async {
     try {
       await _audioPlayer.stop();
-       if (_currentUrl != null) {
-        emit(RadioPlaying(false, _currentUrl!));
-      }
+      //  if (_currentUrl != null) {
+      //   emit(RadioPlaying(false, _currentUrl!));
+      // }
       emit(RadioStopped());
     } catch (e) {
       emit(RadioError('حدث خطأ أثناء إيقاف المحطة'));

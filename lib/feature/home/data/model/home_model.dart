@@ -1,4 +1,5 @@
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
+import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
@@ -34,13 +35,13 @@ class HomeItemModel {
       name: "السبحة",
             image: "assets/images/sebha.png",
 
-      route: SebhaPage.routeName,
+      route: "",
     ),
     HomeItemModel(
       name: "القبلة",
             image: "assets/images/Qibla.png",
 
-      route: '',
+      route: QuranSurahList.routeName,
     ),
   
      HomeItemModel(
@@ -65,7 +66,8 @@ class HomeItemModel {
       name: "الصوتيات",
            image: "assets/images/audio.png",
 
-      route: "/bookmarks",
+            route: SebhaPage.routeName,
+
 
     ),
     HomeItemModel(

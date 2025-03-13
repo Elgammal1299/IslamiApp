@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/ayat_duea_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_page.dart';
 
@@ -23,7 +24,7 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
   List<Widget> bodyOptions = <Widget>[
     QuranSurahPage(),
     BookmarksPage(),
-    Center(child: Text('Person')),
+    AyatDueaPage(),
   ];
 
   @override
