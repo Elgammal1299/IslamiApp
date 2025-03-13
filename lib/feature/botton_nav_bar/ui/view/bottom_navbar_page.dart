@@ -35,6 +35,9 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
         appBar: AppBar(
         backgroundColor: quranPagesColor,
           title: Text('القرءان الكريم'),
+          actions: [
+            IconButton(onPressed: () {  }, icon: Icon(Icons.search),),
+          ],
           centerTitle: true,
           
           foregroundColor: Colors.black,
@@ -56,7 +59,7 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
               label: 'المفضلة',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.auto_awesome_sharp),
               label: 'الدعاء',
             ),
           ],

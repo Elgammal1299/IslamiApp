@@ -176,7 +176,7 @@ class _RadioPlayerPageState extends State<RadioPlayerPage> with WidgetsBindingOb
   }
 
   Future<void> _stopStation() async {
-    await context.read<RadioCubit>().stopPlaying();
+    // await context.read<RadioCubit>().stopPlaying();
   }
 
   Future<void> _togglePlayPause() async {

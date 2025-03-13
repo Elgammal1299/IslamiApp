@@ -80,7 +80,7 @@ class _AzkarPageState extends State<AzkarPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "السبحة الإلكترونية",
+          " الاذكار",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

@@ -14,11 +14,13 @@ import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
+import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
+import 'package:islami_app/feature/splash_screen/splah_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -62,7 +64,7 @@ class MyApp extends StatelessWidget {
           // useMaterial3: true,
         ),
         // home:  HomeScreen(),
-        initialRoute: HomeScreen.routeName,
+        initialRoute:     SplashScreen.routeName,
         routes: {
     HomeScreen.routeName: (context) => const HomeScreen(),
     BottomNavbarPage.routeName: (context) => const BottomNavbarPage(),
@@ -71,7 +73,8 @@ class MyApp extends StatelessWidget {
     TafsirPage.routeName: (context) => const TafsirPage(),
     RadioPage.routeName: (context) => const RadioPage(),
     AudioPlayerPage.routeName: (context) => const AudioPlayerPage(),
-    QuranSurahList.routeName: (context) =>  QuranSurahList(),
+    QuranAudioSurahList.routeName: (context) =>  QuranAudioSurahList(),
+    SplashScreen.routeName: (context) =>  SplashScreen(),
   },
       ),
     );
