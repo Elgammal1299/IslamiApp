@@ -29,8 +29,6 @@ class QuranViewPage extends StatefulWidget {
 }
 
 class _QuranViewPageState extends State<QuranViewPage> {
-  var highlightVerse;
-  var shouldHighlightText;
   List<GlobalKey> richTextKeys = List.generate(
     604, // Replace with the number of pages in your PageView
     (_) => GlobalKey(),
@@ -40,31 +38,32 @@ class _QuranViewPageState extends State<QuranViewPage> {
       index = widget.pageNumber;
     });
   }
+  
 
   int index = 0;
   late PageController _pageController;
-  late Timer timer;
+  // late Timer timer;
   String selectedSpan = "";
 
-  // highlightVerseFunction() {
+  // highlightVerseFunction(bool shouldHighlightText, String highlightVerse) {
   //   setState(() {
-  //     shouldHighlightText = widget.shouldHighlightText;
+  //     this.shouldHighlightText = shouldHighlightText;
   //   });
-  //   if (widget.shouldHighlightText) {
+  //   if (shouldHighlightText) {
   //     setState(() {
-  //       highlightVerse = widget.highlightVerse;
+  //       this.highlightVerse = highlightVerse;
   //     });
 
   //     Timer.periodic(const Duration(milliseconds: 400), (timer) {
   //       if (mounted) {
   //         setState(() {
-  //           shouldHighlightText = false;
+  //           this.shouldHighlightText = false;
   //         });
   //       }
   //       Timer(const Duration(milliseconds: 200), () {
   //         if (mounted) {
   //           setState(() {
-  //             shouldHighlightText = true;
+  //             this.shouldHighlightText = true;
   //           });
   //         }
   //         if (timer.tick == 4) {
@@ -235,6 +234,7 @@ int getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
                                                 recognizer:
                                                     LongPressGestureRecognizer()
                                                       ..onLongPress = () {
+                                                        
                                                         _handleVerseLongPress(
                                                           e["surah"],
                                                           i,

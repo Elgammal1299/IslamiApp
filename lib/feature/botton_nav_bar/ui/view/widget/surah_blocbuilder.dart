@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/sura_list_view_item.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
@@ -15,12 +16,13 @@ class SurahBlocBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(                
+        TextField(   
+          textAlign: TextAlign.end,             
         decoration: InputDecoration(
-      hintText: 'البحث باسم السورة',
+      hintText: '... البحث باسم السورة',
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black, width: 1),
-        borderRadius: BorderRadius.circular(12),                  
+        borderSide: const BorderSide(color:orangeColor, width: 1),
+        borderRadius: BorderRadius.circular(10),                  
       ),
         ),              
       ),
