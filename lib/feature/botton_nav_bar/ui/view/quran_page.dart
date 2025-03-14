@@ -10,6 +10,7 @@ import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_iItem.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_fram_widget.dart';
 import 'package:quran/quran.dart';
+import 'package:quran/quran.dart' as Quran;
 
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -81,14 +82,24 @@ class _QuranViewPageState extends State<QuranViewPage> {
   //   }
   // }
 
+int getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
+    int cumulativeNumber = 0;
+
+    for (int i = 1; i < surahNumber; i++) {
+      cumulativeNumber += Quran.getVerseCount(i);
+    }
+
+    return cumulativeNumber + ayahNumber;
+  }
   void _handleVerseLongPress(int surah, int verse) {
+    int cumulativeNumber = getCumulativeAyahNumber(surah ,verse );
     showModalBottomSheet(
       context: context,
       builder:
           (context) => StatefulBuilder(
             builder:
                 (context, setState) =>
-                    BottonSheetItem(surah: surah, verse: verse),
+                    BottonSheetItem(surah: surah, verse: verse, cumulativeNumber: cumulativeNumber, ),
           ),
     );
   }
