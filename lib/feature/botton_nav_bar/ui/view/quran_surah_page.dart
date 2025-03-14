@@ -10,12 +10,11 @@ class QuranSurahPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-        BlocProvider(
-          create:
-              (context) =>
-                  SurahCubit(JsonRepository(SurahJsonServer()))..getSurahs(),
-      
+    return BlocProvider(
+      create:
+          (context) =>
+              SurahCubit(JsonRepository(SurahJsonServer()))..getSurahs(),
+
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SurahBlocBuilder(),

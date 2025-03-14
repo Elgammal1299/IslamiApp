@@ -18,6 +18,7 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
 
 @override
   void initState() {
+   
  context.read<TafsirCubit>().fetchAyahTafsir(
           widget.verse.toString(),
           widget.tafsirIdentifier,
