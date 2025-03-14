@@ -9,6 +9,7 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
+  assets_audio_player: ^3.1.1
   audioplayers: ^6.3.0
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
@@ -46,6 +47,7 @@ flutter:
     - assets/json/surahs.json
     - assets/images/
     - assets/audio/audio.txt
+    - assets/audio/splasah_audio.m4a
 
   # example:
   fonts:

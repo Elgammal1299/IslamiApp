@@ -12,42 +12,42 @@ class QuranAudioSurahList extends StatelessWidget {
     {
       'name': 'الفاتحة',
       'number': 1,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
     {
       'name': 'البقرة',
       'number': 2,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
      {
       'name': 'ال عمران',
       'number': 3,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
     {
       'name': 'النساء',
       'number': 4,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
       {
       'name': 'المائدة',
       'number': 5,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
     {
       'name': 'الانعام',
       'number': 6,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
      {
       'name': 'الاعراف',
       'number': 7,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
     {
       'name': 'الانفال',
       'number': 8,
-      'imageUrl': 'assets/images/quran.png',
+      'imageUrl': 'assets/images/quran3.png',
     },
     // أضف باقي السور هنا
   ];
@@ -74,9 +74,9 @@ class QuranAudioSurahList extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.purple.shade900,
-              Colors.blue.shade900,
-              Colors.black,
+              Colors.grey,
+              Colors.grey,
+              Colors.grey,
             ],
           ),
         ),
@@ -117,46 +117,67 @@ class QuranAudioSurahList extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.asset(
-                        surahs[index]['imageUrl'],
-                        fit: BoxFit.cover,
-                      ),
+                      
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.7),
+                            colors:
+                             [
+                              Colors.black87,
+                              Colors.white,
                             ],
                           ),
                         ),
+                      ),
+                      
+                      Image.asset(
+                        surahs[index]['imageUrl'],
+                        fit: BoxFit.contain,
                       ),
                       Positioned(
                         bottom: 16,
                         left: 16,
                         right: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              surahs[index]['name'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                        child: Container(
+                          decoration: BoxDecoration(
+
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors:
+                             [
+                              Colors.white,
+                              Colors.transparent,
+                              Colors.white70,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                
+                                surahs[index]['name'],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'سورة ${surahs[index]['number']}',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
+                              // SizedBox(height: 4),
+                              Text(
+                                'سورة ${surahs[index]['number']}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
