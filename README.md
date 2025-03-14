@@ -9,6 +9,7 @@ quran_package → Displays Quranic verses and surahs
 alquran.cloud/api
 
 🎛 State Management & Data Handling
+
 flutter_bloc → State management using Cubit
 dartz → Functional programming & error handling
 🔗 API & Networking
