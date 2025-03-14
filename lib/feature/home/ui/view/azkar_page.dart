@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:islami_app/feature/home/ui/view/widget/counter_botton_widget.dart';
+import 'package:islami_app/feature/home/ui/view/widget/reset_botton_widget.dart';
+
 class AzkarPage extends StatefulWidget {
   static String routeName = "/azkarScreen";
   const AzkarPage({super.key});
@@ -57,6 +60,7 @@ class _AzkarPageState extends State<AzkarPage>
       if (_counter % 33 == 0) {
         _dhikrIndex = (_dhikrIndex + 1) % _dhikrList.length;
         _currentDhikr = _dhikrList[_dhikrIndex];
+        _counter=0;
       }
     });
   }
@@ -101,10 +105,12 @@ class _AzkarPageState extends State<AzkarPage>
           children: [
             // عرض الذكر الحالي
             Container(
+              width: double.infinity,
+              height: 150,
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.symmetric(horizontal: 24),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.teal,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -115,13 +121,16 @@ class _AzkarPageState extends State<AzkarPage>
                   ),
                 ],
               ),
-              child: Text(
-                _currentDhikr,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+              child: Center(
+                child: Text(
+                  _currentDhikr,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 40),
@@ -155,80 +164,21 @@ class _AzkarPageState extends State<AzkarPage>
                   builder: (context, child) {
                     return Transform.rotate(
                       angle: _animation.value * 2 * math.pi,
-                      child: Container(
-                        width: 180,
-                        height: 180,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            _counter.toString(),
-                            style: const TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: GestureDetector(
+                  onTap: _incrementCounter,
+                        
+                        child: CounterBottonWidget(counter: _counter,)),
                     );
                   },
                 ),
               ],
             ),
             const SizedBox(height: 40),
-            // أزرار التحكم
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _resetCounter,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
-                    shape: const CircleBorder(),
-                  ),
-                  child: const Icon(Icons.refresh),
-                ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: _incrementCounter,
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.blue.shade400,
-                          Colors.blue.shade700,
-                        ],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.add,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            GestureDetector(
+              onTap: _resetCounter,
+              
+              child: ResetBottonWidget()),
+            
           ],
         ),
       ),

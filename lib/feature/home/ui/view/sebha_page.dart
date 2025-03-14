@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/feature/home/ui/view/widget/counter_botton_widget.dart';
 import 'dart:math' as math;
+
+import 'package:islami_app/feature/home/ui/view/widget/reset_botton_widget.dart';
 
 class SebhaPage extends StatefulWidget {
   static String routeName = "/SebhaScreen";
@@ -93,57 +96,7 @@ class _SebhaPageState extends State<SebhaPage>
                   builder: (context, child) {
                     return Transform.rotate(
                       angle: _animation.value * 2 * math.pi,
-                      child: Container(
-                        width: 250,
-                        height: 250,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Colors.teal.shade300,
-                              Colors.teal.shade600,
-                            ],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.teal.withOpacity(0.3),
-                              spreadRadius: 5,
-                              blurRadius: 15,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                _counter.toString(),
-                                style: TextStyle(
-                                  fontSize: 65,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.teal.shade700,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: CounterBottonWidget(counter: _counter),
                     );
                   },
                 ),
@@ -158,52 +111,11 @@ class _SebhaPageState extends State<SebhaPage>
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // بعد النص الإرشادي أضف:
 const SizedBox(height: 30),
 // زر إعادة التعيين
 GestureDetector(
   onTap: _resetCounter,
-  child: Container(
-    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.teal.shade300,
-          Colors.teal.shade600,
-        ],
-      ),
-      borderRadius: BorderRadius.circular(30),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.teal.withOpacity(0.3),
-          spreadRadius: 1,
-          blurRadius: 8,
-          offset: const Offset(0, 3),
-        ),
-      ],
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          Icons.refresh_rounded,
-          color: Colors.white,
-          size: 24,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          "إعادة التعيين",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-  ),
+  child: ResetBottonWidget(),
 ),
 
             ],
