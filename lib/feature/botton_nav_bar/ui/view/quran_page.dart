@@ -42,6 +42,9 @@ class _QuranViewPageState extends State<QuranViewPage> {
 
   int index = 0;
   late PageController _pageController;
+    int? highlightedSurah;
+  int? highlightedVerse;
+
   // late Timer timer;
   String selectedSpan = "";
 
@@ -91,6 +94,10 @@ int getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
     return cumulativeNumber + ayahNumber;
   }
   void _handleVerseLongPress(int surah, int verse) {
+    setState(() {
+      highlightedSurah = surah;
+      highlightedVerse = verse;
+    });
     int cumulativeNumber = getCumulativeAyahNumber(surah ,verse );
     showModalBottomSheet(
       context: context,
@@ -100,7 +107,12 @@ int getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
                 (context, setState) =>
                     BottonSheetItem(surah: surah, verse: verse, cumulativeNumber: cumulativeNumber, ),
           ),
-    );
+    ).then((_) {
+      setState(() {
+        highlightedSurah = null;
+        highlightedVerse = null;
+      });
+    });
   }
 
   @override
@@ -285,7 +297,9 @@ int getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
                                                               : 22.4
                                                           : 23.1,
                                                   backgroundColor:
-                                                      Colors.transparent,
+                                                      (highlightedSurah == e["surah"] && highlightedVerse == i)
+                                    ? Colors.orange
+                                    : Colors.transparent,
                                                 ),
                                                 children: const <TextSpan>[],
                                               ),
