@@ -1,278 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
-// import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
-
-// class TafsirPage extends StatefulWidget {
-//   static String routeName = "/TafsirScreen";
-//   const TafsirPage({super.key});
-
-//   @override
-//   State<TafsirPage> createState() => _TafsirPageState();
-// }
-
-// class _TafsirPageState extends State<TafsirPage> {
-//   @override
-//   void initState() {
-//    context.read<QuranWithTafsirCubit>().fetchTafsirEditions();
-//     super.initState();
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           "التفسير",
-//           style: TextStyle(fontWeight: FontWeight.bold),
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: BlocBuilder<QuranWithTafsirCubit, QuranWithTafsirState>(
-//         builder: (context, state) {
-//           if (state is QuranWithTafsirLoading) {
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (state is TafsirEditionsLoaded) {
-//             return TafsirEditionsList(editions: state.tafsirModel);
-//           } else if (state is QuranWithTafsirError) {
-//             return Center(child: Text(state.message));
-//           }
-//           return const SizedBox();
-//         },
-//       ),
-//     );
-//   }
-// }
-
-
-// class TafsirEditionsList extends StatelessWidget {
-//   final TafsirModel editions;
-
-//   const TafsirEditionsList({super.key, required this.editions});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         gradient: LinearGradient(
-//           begin: Alignment.topCenter,
-//           end: Alignment.bottomCenter,
-//           colors: [
-//             Colors.teal.shade50,
-//             Colors.white,
-//           ],
-//         ),
-//       ),
-//       child: ListView.builder(
-//         padding: const EdgeInsets.all(16),
-//         itemCount: editions.data!.length,
-//         itemBuilder: (context, index) {
-//           final edition = editions.data![index];
-//           return Padding(
-//             padding: const EdgeInsets.only(bottom: 12),
-//             child: GestureDetector(
-//               onTap: () {
-//                 // عند اختيار تفسير، ننتقل إلى صفحة التفسير مع تمرير identifier
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(
-//                     builder: (context) => TafsirContentView(
-//                       identifier: edition.identifier ?? "ar.muyassar",
-//                     ),
-//                   ),
-//                 );
-//               },
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   color: Colors.white,
-//                   borderRadius: BorderRadius.circular(15),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.grey.withOpacity(0.2),
-//                       spreadRadius: 2,
-//                       blurRadius: 8,
-//                       offset: const Offset(0, 3),
-//                     ),
-//                   ],
-//                 ),
-//                 child: ListTile(
-//                   contentPadding: const EdgeInsets.all(16),
-//                   title: Text(
-//                     edition.name ?? '',
-//                     style: const TextStyle(
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   subtitle: Text(
-//                     edition.englishName ?? '',
-//                     style: TextStyle(
-//                       color: Colors.grey.shade600,
-//                       fontSize: 14,
-//                     ),
-//                   ),
-//                   trailing: Icon(
-//                     Icons.arrow_forward_ios,
-//                     color: Colors.teal.shade300,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// // ثانياً: صفحة عرض التفسير
-// class TafsirContentView extends StatefulWidget {
-//   final String identifier;
-
-//   const TafsirContentView({
-//     super.key,
-//     required this.identifier,
-//   });
-
-//   @override
-//   State<TafsirContentView> createState() => _TafsirContentViewState();
-// }
-
-// class _TafsirContentViewState extends State<TafsirContentView> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     // جلب التفسير عند بدء الصفحة
-//     context.read<QuranWithTafsirCubit>().fetchQuranWithTafsir(widget.identifier);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           "التفسير",
-//           style: TextStyle(fontWeight: FontWeight.bold),
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: BlocBuilder<QuranWithTafsirCubit, QuranWithTafsirState>(
-//         builder: (context, state) {
-//           if (state is QuranWithTafsirLoading) {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-
-//           if (state is QuranWithTafsirError) {
-//             return Center(
-//               child: Text(state.message),
-//             );
-//           }
-
-//           if (state is QuranWithTafsirLoaded) {
-//             return Container(
-//               decoration: BoxDecoration(
-//                 gradient: LinearGradient(
-//                   begin: Alignment.topCenter,
-//                   end: Alignment.bottomCenter,
-//                   colors: [
-//                     Colors.teal.shade50,
-//                     Colors.white,
-//                   ],
-//                 ),
-//               ),
-//               child: ListView.builder(
-//                 padding: const EdgeInsets.all(16),
-//                 itemCount: 1,//state.tafsirQuran.surahs?.length ?? 0,
-//                 itemBuilder: (context, index) {
-//                   final surah = state.tafsirQuran.data;
-//                   return Container(
-//                     margin: const EdgeInsets.only(bottom: 16),
-//                     decoration: BoxDecoration(
-//                       color: Colors.white,
-//                       borderRadius: BorderRadius.circular(15),
-//                       boxShadow: [
-//                         BoxShadow(
-//                           color: Colors.grey.withOpacity(0.2),
-//                           spreadRadius: 2,
-//                           blurRadius: 8,
-//                           offset: const Offset(0, 3),
-//                         ),
-//                       ],
-//                     ),
-//                     child: ExpansionTile(
-//                       title: Text(
-//                         "سورة ${surah!.surah ?? ''}",
-//                         style: const TextStyle(
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                       children:  [
-//                         Container(
-//                           padding: const EdgeInsets.all(16),
-//                           decoration: BoxDecoration(
-//                             border: Border(
-//                               bottom: BorderSide(
-//                                 color: Colors.grey.shade200,
-//                               ),
-//                             ),
-//                           ),
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               Container(
-//                                 padding: const EdgeInsets.symmetric(
-//                                   horizontal: 12,
-//                                   vertical: 6,
-//                                 ),
-//                                 decoration: BoxDecoration(
-//                                   color: Colors.teal.shade50,
-//                                   borderRadius: BorderRadius.circular(20),
-//                                 ),
-//                                 child: Text(
-//                                   "آية ${surah.number ?? ''}",
-//                                   style: TextStyle(
-//                                     color: Colors.teal.shade700,
-//                                     fontWeight: FontWeight.bold,
-//                                   ),
-//                                 ),
-//                               ),
-//                               const SizedBox(height: 12),
-//                               Text(
-//                                 surah.edition!.name ?? '',
-//                                 style: const TextStyle(
-//                                   fontSize: 16,
-//                                   height: 1.8,
-//                                 ),
-//                                 textAlign: TextAlign.justify,
-//                                 textDirection: TextDirection.rtl,
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   );
-//                 },
-//               ),
-//             );
-//           }
-
-//           return const SizedBox();
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 
 class TafsirPage extends StatefulWidget {
-  static String routeName = "/TafsirScreen";
   const TafsirPage({super.key});
 
   @override
@@ -288,10 +20,7 @@ class _TafsirPageState extends State<TafsirPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-    );
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -360,10 +89,7 @@ class TafsirEditionsList extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.teal.shade50,
-            Colors.white,
-          ],
+          colors: [Colors.teal.shade50, Colors.white],
         ),
       ),
       child: ListView.builder(
@@ -398,17 +124,11 @@ class TafsirEditionsList extends StatelessWidget {
             contentPadding: const EdgeInsets.all(16),
             title: Text(
               edition.name ?? '',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
               edition.englishName ?? '',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
             trailing: Icon(
               Icons.arrow_forward_ios,
@@ -421,15 +141,10 @@ class TafsirEditionsList extends StatelessWidget {
   }
 
   void _navigateToTafsirContent(BuildContext context, dynamic edition) {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => TafsirContentView(
-          identifier: edition.identifier ?? "ar.muyassar",
-        ),
-        
-       
-      ),
+      AppRoutes.tafsirByQuranContentRouter,
+      arguments: {"identifier": edition.identifier ?? "ar.muyassar"},
     );
   }
 }
@@ -437,10 +152,7 @@ class TafsirEditionsList extends StatelessWidget {
 class TafsirContentView extends StatefulWidget {
   final String identifier;
 
-  const TafsirContentView({
-    super.key,
-    required this.identifier,
-  });
+  const TafsirContentView({super.key, required this.identifier});
 
   @override
   State<TafsirContentView> createState() => _TafsirContentViewState();
@@ -454,16 +166,15 @@ class _TafsirContentViewState extends State<TafsirContentView> {
   }
 
   void _loadTafsir() {
-    context.read<QuranWithTafsirCubit>().fetchQuranWithTafsir(widget.identifier);
-      print(widget.identifier);
+    context.read<QuranWithTafsirCubit>().fetchQuranWithTafsir(
+      widget.identifier,
+    );
+    print(widget.identifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-    );
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -528,10 +239,7 @@ class _TafsirContentViewState extends State<TafsirContentView> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.teal.shade50,
-            Colors.white,
-          ],
+          colors: [Colors.teal.shade50, Colors.white],
         ),
       ),
       child: ListView.builder(
@@ -561,20 +269,13 @@ class _TafsirContentViewState extends State<TafsirContentView> {
         ],
       ),
       child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-        ),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           title: Text(
             "سورة ${surah.surah ?? ''}",
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          children: [
-            _buildAyahContent(surah),
-          ],
+          children: [_buildAyahContent(surah)],
         ),
       ),
     );
@@ -584,11 +285,7 @@ class _TafsirContentViewState extends State<TafsirContentView> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey.shade200,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -603,10 +300,7 @@ class _TafsirContentViewState extends State<TafsirContentView> {
 
   Widget _buildAyahNumber(dynamic surah) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.teal.shade50,
         borderRadius: BorderRadius.circular(20),
@@ -624,10 +318,7 @@ class _TafsirContentViewState extends State<TafsirContentView> {
   Widget _buildTafsirText(dynamic surah) {
     return Text(
       surah.edition!.name ?? '',
-      style: const TextStyle(
-        fontSize: 16,
-        height: 1.8,
-      ),
+      style: const TextStyle(fontSize: 16, height: 1.8),
       textAlign: TextAlign.justify,
       textDirection: TextDirection.rtl,
     );

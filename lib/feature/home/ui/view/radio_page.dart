@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/radio_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
+
 class RadioPage extends StatefulWidget {
-  static const String routeName = '/radio';
+  
 
   const RadioPage({Key? key}) : super(key: key);
 
@@ -26,10 +28,7 @@ class _RadioPageState extends State<RadioPage> {
       appBar: AppBar(
         title: const Text(
           'إذاعة القرآن',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
       ),
@@ -38,18 +37,13 @@ class _RadioPageState extends State<RadioPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.teal.shade50,
-              Colors.white,
-            ],
+            colors: [Colors.teal.shade50, Colors.white],
           ),
         ),
         child: BlocBuilder<RadioCubit, RadioState>(
           builder: (context, state) {
             if (state is RadioLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state is RadioError) {
@@ -80,13 +74,10 @@ class _RadioPageState extends State<RadioPage> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => RadioPlayerPage(
-                              station: station,
-                            ),
-                          ),
+                          AppRoutes.radioPlayerRouter,
+                          arguments: {"station": station},
                         );
                       },
                       child: Container(
@@ -147,16 +138,14 @@ class _RadioPageState extends State<RadioPage> {
 class RadioPlayerPage extends StatefulWidget {
   final RadioModel station;
 
-  const RadioPlayerPage({
-    Key? key,
-    required this.station,
-  }) : super(key: key);
+  const RadioPlayerPage({Key? key, required this.station}) : super(key: key);
 
   @override
   State<RadioPlayerPage> createState() => _RadioPlayerPageState();
 }
 
-class _RadioPlayerPageState extends State<RadioPlayerPage> with WidgetsBindingObserver {
+class _RadioPlayerPageState extends State<RadioPlayerPage>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -215,14 +204,15 @@ class _RadioPlayerPageState extends State<RadioPlayerPage> with WidgetsBindingOb
           child: BlocBuilder<RadioCubit, RadioState>(
             buildWhen: (previous, current) {
               // إعادة البناء فقط عند تغيير حالة التشغيل
-              return current is RadioPlaying || 
-                     (previous is RadioPlaying && current is! RadioPlaying);
+              return current is RadioPlaying ||
+                  (previous is RadioPlaying && current is! RadioPlaying);
             },
             builder: (context, state) {
-              final bool isPlaying = state is RadioPlaying && 
-                                   state.isPlaying && 
-                                   state.currentUrl == widget.station.url;
-              
+              final bool isPlaying =
+                  state is RadioPlaying &&
+                  state.isPlaying &&
+                  state.currentUrl == widget.station.url;
+
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

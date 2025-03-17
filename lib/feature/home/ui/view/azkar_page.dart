@@ -5,7 +5,7 @@ import 'package:islami_app/feature/home/ui/view/widget/counter_botton_widget.dar
 import 'package:islami_app/feature/home/ui/view/widget/reset_botton_widget.dart';
 
 class AzkarPage extends StatefulWidget {
-  static String routeName = "/azkarScreen";
+  
   const AzkarPage({super.key});
 
   @override

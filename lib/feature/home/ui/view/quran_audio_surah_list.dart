@@ -2,10 +2,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 
 class QuranAudioSurahList extends StatelessWidget {
-  static const String routeName = '/quran-surah-list';
+
    QuranAudioSurahList({super.key});
 
   final List<Map<String, dynamic>> surahs = [
@@ -92,14 +92,14 @@ class QuranAudioSurahList extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AudioPlayerPage.routeName,
-                  arguments: {
-                    'surahIndex': index,
-                    'surahName': surahs[index]['name'],
-                  },
-                );
+                 Navigator.pushNamed(
+  context,
+  AppRoutes.audioPlayerPageRouter,
+  arguments: {
+    'surahIndex': index,
+    'surahName': surahs[index]['name'],
+  },
+);
               },
               child: Container(
                 decoration: BoxDecoration(

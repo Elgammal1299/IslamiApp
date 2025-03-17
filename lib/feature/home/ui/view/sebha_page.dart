@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'package:islami_app/feature/home/ui/view/widget/reset_botton_widget.dart';
 
 class SebhaPage extends StatefulWidget {
-  static String routeName = "/SebhaScreen";
+ 
   const SebhaPage({super.key});
 
   @override

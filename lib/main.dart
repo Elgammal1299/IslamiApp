@@ -1,23 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/router/app_routes.dart';
+import 'package:islami_app/core/router/route.dart';
 import 'package:islami_app/core/services/api/tafsir_service.dart';
 import 'package:islami_app/core/services/radio_service.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
-import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
-import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
-import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
-import 'package:islami_app/feature/home/ui/view/radio_page.dart';
-import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
-import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
-import 'package:islami_app/feature/splash_screen/splah_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -35,18 +28,20 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-           create:
-             (context) => TafsirCubit(TafsirByAyahRepository(TafsirService(Dio()))),
-        ),
-       
-         BlocProvider(
           create:
               (context) =>
-                  QuranWithTafsirCubit(QuranWithTafsirRepo(TafsirService(Dio()), )),
-                  
+                  TafsirCubit(TafsirByAyahRepository(TafsirService(Dio()))),
+        ),
+
+        BlocProvider(
+          create:
+              (context) => QuranWithTafsirCubit(
+                QuranWithTafsirRepo(TafsirService(Dio())),
+              ),
         ),
         BlocProvider(
-  create: (context) => RadioCubit(RadioRepository(RadioService(Dio()))))
+          create: (context) => RadioCubit(RadioRepository(RadioService(Dio()))),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -56,18 +51,8 @@ class MyApp extends StatelessWidget {
           // useMaterial3: true,
         ),
         // home:  HomeScreen(),
-        initialRoute:     SplashScreen.routeName,
-        routes: {
-    HomeScreen.routeName: (context) => const HomeScreen(),
-    BottomNavbarPage.routeName: (context) => const BottomNavbarPage(),
-    AzkarPage.routeName: (context) => const AzkarPage(),
-    SebhaPage.routeName: (context) => const SebhaPage(),
-    TafsirPage.routeName: (context) => const TafsirPage(),
-    RadioPage.routeName: (context) => const RadioPage(),
-    AudioPlayerPage.routeName: (context) => const AudioPlayerPage(),
-    QuranAudioSurahList.routeName: (context) =>  QuranAudioSurahList(),
-    SplashScreen.routeName: (context) =>  SplashScreen(),
-  },
+        initialRoute: AppRoutes.splasahRouter,
+        onGenerateRoute: generateRoute,
       ),
     );
   }

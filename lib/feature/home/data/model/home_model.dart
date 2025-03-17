@@ -1,9 +1,4 @@
-import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
-import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
-import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
-import 'package:islami_app/feature/home/ui/view/radio_page.dart';
-import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
-import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 
 class HomeItemModel {
   final String name;
@@ -17,7 +12,7 @@ final List<HomeItemModel> items = [
   HomeItemModel(
     name: "القرآن الكريم",
     image: "assets/images/quran.png",
-    route: BottomNavbarPage.routeName,
+    route: AppRoutes.navBarRoute,
   ),
   HomeItemModel(
     name: "الأحاديث",
@@ -30,14 +25,14 @@ final List<HomeItemModel> items = [
     name: "السبحة",
     image: "assets/images/sebha.png",
 
-    route: SebhaPage.routeName,
+    route: AppRoutes.sebhaPageRouter,
   ),
   HomeItemModel(name: "القبلة", image: "assets/images/Qibla.png", route: ''),
 
   HomeItemModel(
     name: "الأذكار",
     image: "assets/images/zikr.png",
-    route: AzkarPage.routeName,
+    route: AppRoutes.azkarPageRouter,
   ),
   HomeItemModel(
     name: "أوقات الصلاة",
@@ -49,18 +44,18 @@ final List<HomeItemModel> items = [
     name: "الراديو",
     image: "assets/images/radio.png",
 
-    route: RadioPage.routeName,
+    route: AppRoutes.radioPageRouter,
   ),
   HomeItemModel(
     name: "الصوتيات",
     image: "assets/images/audio.png",
 
-    route: QuranAudioSurahList.routeName,
+    route:AppRoutes.quranAudioSurahListRouter,
   ),
   HomeItemModel(
     name: "التفسير",
     image: "assets/images/hadith.png",
 
-    route: TafsirPage.routeName,
+    route: AppRoutes.tafsirByQuranPageRouter,
   ),
 ];

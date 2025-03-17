@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:islami_app/feature/home/ui/view/widget/waveform_painter.dart';
 
 class AudioPlayerPage extends StatefulWidget {
-  static String routeName = '/AudioPlayerPage';
+  
 
-  const AudioPlayerPage({super.key});
+  const AudioPlayerPage({super.key, required surahIndex, required surahName});
 
   @override
   _AudioPlayerPageState createState() => _AudioPlayerPageState();

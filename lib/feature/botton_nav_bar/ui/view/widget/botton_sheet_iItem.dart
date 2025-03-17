@@ -2,12 +2,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/audio_bottom_sheet.dart';
 
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:share_plus/share_plus.dart';
@@ -83,7 +83,6 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 context: context,
                 builder:
                     (_) => AudioBottomSheet(
-
                       audioUrl: audioURL,
                       ayah: quran.getVerse(widget.surah, widget.verse),
                     ),
@@ -102,20 +101,14 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
               textAlign: TextAlign.end,
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.pushReplacementNamed(
                 context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => TafsirDetailsPage(
-                        tafsirIdentifier: "ar.muyassar",
-                        verse: widget.cumulativeNumber,
-                        // getCumulativeAyahNumber(
-                        //   widget.surah,
-                        //   widget.verse,
-                        // ),
-                        text: quran.getVerse(widget.surah, widget.verse),
-                      ),
-                ),
+                AppRoutes.tafsirDetailsByAyahRouter,
+                arguments: {
+                  "tafsirIdentifier": "ar.muyassar",
+                  "verse": widget.cumulativeNumber,
+                  "text": quran.getVerse(widget.surah, widget.verse),
+                },
               );
             },
           ),

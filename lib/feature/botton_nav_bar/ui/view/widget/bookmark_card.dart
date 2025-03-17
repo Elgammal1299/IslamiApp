@@ -19,13 +19,7 @@ class BookmarkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // Navigator.push(context, MaterialPageRoute(builder: (context){
-        //   return QuranViewPage(pageNumber: surah, jsonData: [],);
-        // }));
-      },
-      child: Card(
+    return Card(
         elevation: 4,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         shape: RoundedRectangleBorder(
@@ -99,7 +93,7 @@ class BookmarkCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      
     );
   }
 }

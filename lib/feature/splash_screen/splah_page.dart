@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/feature/home/ui/view/home_screen.dart';
-
+import 'package:islami_app/core/router/app_routes.dart';
 class SplashScreen extends StatefulWidget {
-  static String routeName = '/SplashScreen';
+  // static String routeName = '/SplashScreen';
 
   const SplashScreen({super.key});
 
@@ -27,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
     
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
     });
   }
 

@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:quran/quran.dart';
 
 class SuraListViewItem extends StatelessWidget {
@@ -29,7 +28,6 @@ class SuraListViewItem extends StatelessWidget {
       padding: const EdgeInsets.all(0.0),
       child: Container(
         child: ListTile(
-          
           leading: SizedBox(
             width: 45,
             height: 45,
@@ -64,7 +62,7 @@ class SuraListViewItem extends StatelessWidget {
           trailing: RichText(
             text: TextSpan(
               text: suraNumber.toString(),
-        
+
               style: const TextStyle(
                 fontFamily: "arsura",
                 fontSize: 22,
@@ -72,17 +70,15 @@ class SuraListViewItem extends StatelessWidget {
               ),
             ),
           ),
-        
+
           onTap: () async {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder:
-                    (builder) => QuranViewPage(
-                      jsonData: surahs,
-                      pageNumber: getPageNumber(suraNumberInQuran, 1),
-                    ),
-              ),
+              AppRoutes.quranViewRouter,
+              arguments: {
+                "jsonData": surahs,
+                "pageNumber": getPageNumber(suraNumberInQuran, 1),
+              },
             );
           },
         ),
