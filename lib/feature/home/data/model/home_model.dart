@@ -58,4 +58,11 @@ final List<HomeItemModel> items = [
 
     route: AppRoutes.tafsirByQuranPageRouter,
   ),
+  HomeItemModel(
+    name: "الصوتيات 2",
+    image: "assets/images/hadith.png",
+
+    route: AppRoutes.recitersPageRouter
+,
+  ),
 ];

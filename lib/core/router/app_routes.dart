@@ -12,6 +12,6 @@ class AppRoutes {
   static const azkarPageRouter = "/azkarScreen";
   static const quranAudioSurahListRouter = '/QuranAudioSurahList';
   static const audioPlayerPageRouter = '/AudioPlayerPage';
-  // static const homeRoute = '/HomeScreen';
-  // static const homeRoute = '/HomeScreen';
+  static const recitersPageRouter = '/recitersPage';
+
 }
