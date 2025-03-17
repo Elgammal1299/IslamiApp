@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
                 QuranWithTafsirRepo(TafsirService(Dio())),
               ),
         ),
-        BlocProvider(
-          create: (context) => RadioCubit(RadioRepository(RadioService(Dio()))),
-        ),
+        // BlocProvider(
+        //   create: (context) => RadioCubit(RadioRepository(RadioService(Dio()))),
+        // ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         ),
         // home:  HomeScreen(),
         initialRoute: AppRoutes.splasahRouter,
-        onGenerateRoute: generateRoute,
+        onGenerateRoute: AppRouter.generateRoute,
       ),
     );
   }
