@@ -7,7 +7,7 @@ import 'package:islami_app/core/services/api/quran_audio_api.dart';
 import 'package:islami_app/core/services/api/surah_db.dart';
 import 'package:islami_app/core/services/api/tafsir_service.dart';
 import 'package:islami_app/core/services/radio_service.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/repo/hadith_repo.dart';
+import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';

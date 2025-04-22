@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/hadith.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/repo/hadith_repo.dart';
+import 'package:islami_app/feature/home/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model_item.dart';
 import 'package:meta/meta.dart';
 

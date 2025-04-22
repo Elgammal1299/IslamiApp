@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/model/hadith.dart';
 
 class HadithCard extends StatelessWidget {
   final HadithModel hadithModel;

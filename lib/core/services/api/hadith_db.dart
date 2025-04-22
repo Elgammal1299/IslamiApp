@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/model/hadith.dart';
 
 class HadithJsonServer {
   Future<List<HadithModel>> readJsonAbuDaud() async {

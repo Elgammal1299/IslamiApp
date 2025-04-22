@@ -1,5 +1,5 @@
 import 'package:islami_app/core/services/api/hadith_db.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/model/hadith.dart';
 
 class HadithRepo {
   final HadithJsonServer jsonServer;
