@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 class SplashScreen extends StatefulWidget {
-  // static String routeName = '/SplashScreen';
 
   const SplashScreen({super.key});
 
