@@ -9,6 +9,7 @@ environment:
   sdk: ^3.7.0
 
 dependencies:
+  audio_service: ^0.18.18
   audioplayers: ^6.3.0
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
@@ -24,6 +25,7 @@ dependencies:
   quran:
     path: ./quran-1.2.2
   retrofit: ^4.4.2
+  rxdart: ^0.28.0
   share_plus: ^10.1.4
   shared_preferences: ^2.5.2
   string_validator: ^0.3.0

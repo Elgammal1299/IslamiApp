@@ -1,5 +1,7 @@
 package com.example.islami_app
 
-import io.flutter.embedding.android.FlutterActivity
+import com.ryanheise.audioservice.AudioServiceFragmentActivity
 
-class MainActivity : FlutterActivity()
+class MainActivity : AudioServiceFragmentActivity() {
+    // لا تحتاج إلى أي كود إضافي هنا
+}
