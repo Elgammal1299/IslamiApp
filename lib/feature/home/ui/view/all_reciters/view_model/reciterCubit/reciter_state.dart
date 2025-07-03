@@ -1,6 +1,5 @@
 part of 'reciter_cubit.dart';
 
-@immutable
 sealed class ReciterState {}
 
 final class ReciterInitial extends ReciterState {}

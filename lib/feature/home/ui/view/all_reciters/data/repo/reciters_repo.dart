@@ -1,12 +1,11 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:islami_app/core/services/api/quran_audio_api.dart';
-import 'package:islami_app/feature/home/data/model/quran_audio_model.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 
-class ReciterRepository {
+class ReciterRepo {
   final QuranAudioService apiService;
 
-  ReciterRepository(this.apiService);
+  ReciterRepo(this.apiService);
 
   Future<Either<String, List<Reciters>>> getReciters() async {
     try {

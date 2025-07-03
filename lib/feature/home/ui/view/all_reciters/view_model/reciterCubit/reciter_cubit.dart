@@ -1,12 +1,11 @@
-import 'package:bloc/bloc.dart';
-import 'package:islami_app/feature/home/data/model/quran_audio_model.dart';
-import 'package:islami_app/feature/home/data/repo/quran_audio_repo.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 
 part 'reciter_state.dart';
 
 class ReciterCubit extends Cubit<ReciterState> {
-  final ReciterRepository repository;
+  final ReciterRepo repository;
   ReciterCubit(this.repository) : super(ReciterInitial());
 
   void fetchReciters() async {
@@ -17,5 +16,4 @@ class ReciterCubit extends Cubit<ReciterState> {
       (data) => emit(ReciterLoaded(data)),
     );
   }
-
 }
