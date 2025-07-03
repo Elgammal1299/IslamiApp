@@ -893,7 +893,7 @@ packages:
     source: hosted
     version: "1.4.1"
   string_validator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: string_validator
       sha256: "50dd8ecf91db6a732f4a851eeae81ee12406eedc62d0da72f2d91a04a2d10dd8"

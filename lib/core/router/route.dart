@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/router/app_routes.dart';
+import 'package:islami_app/core/services/api/hadith_db.dart';
 import 'package:islami_app/core/services/api/quran_audio_api.dart';
 import 'package:islami_app/core/services/api/surah_db.dart';
 import 'package:islami_app/core/services/api/tafsir_service.dart';
 import 'package:islami_app/core/services/radio_service.dart';
+import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
@@ -13,21 +15,24 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
-import 'package:islami_app/feature/home/data/repo/quran_audio_repo.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
+import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
+import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
-import 'package:islami_app/feature/home/ui/view/reciters_page.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
+import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
-import 'package:islami_app/feature/home/ui/view_model/reciterCubit/reciter_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import 'package:islami_app/feature/splash_screen/splah_page.dart';
 
 class AppRouter {
@@ -86,6 +91,26 @@ class AppRouter {
 
       case AppRoutes.quranAudioSurahListRouter:
         return MaterialPageRoute(builder: (_) => QuranAudioSurahList());
+
+      case AppRoutes.hadithDetailsRouter:
+        final hadithCubit = settings.arguments as HadithCubit;
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: hadithCubit,
+                child: const HadithDetailsPage(),
+              ),
+        );
+
+      case AppRoutes.hadithRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) => HadithCubit(HadithRepo(HadithJsonServer())),
+                child: HadithPage(),
+              ),
+        );
 
       case AppRoutes.audioPlayerPageRouter:
         final args = settings.arguments as Map<String, dynamic>?;
@@ -149,7 +174,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                create: (context) => ReciterCubit(ReciterRepository(QuranAudioService(Dio())))..fetchReciters(),
+                create:
+                    (context) =>
+                        ReciterCubit(ReciterRepo(QuranAudioService(Dio())))
+                          ..fetchReciters(),
                 child: RecitersScreen(),
               ),
         );

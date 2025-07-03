@@ -13,5 +13,7 @@ class AppRoutes {
   static const quranAudioSurahListRouter = '/QuranAudioSurahList';
   static const audioPlayerPageRouter = '/AudioPlayerPage';
   static const recitersPageRouter = '/recitersPage';
+  static const hadithRouter = '/hadithPage';
+  static const hadithDetailsRouter = '/hadithDetailsPage';
 
 }

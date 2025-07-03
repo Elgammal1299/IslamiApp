@@ -18,7 +18,7 @@ final List<HomeItemModel> items = [
     name: "الأحاديث",
     image: "assets/images/hadith.png",
 
-    route: "/hadith",
+    route: AppRoutes.hadithRouter,
   ),
 
   HomeItemModel(
@@ -50,7 +50,7 @@ final List<HomeItemModel> items = [
     name: "الصوتيات",
     image: "assets/images/audio.png",
 
-    route:AppRoutes.quranAudioSurahListRouter,
+    route: AppRoutes.quranAudioSurahListRouter,
   ),
   HomeItemModel(
     name: "التفسير",
@@ -59,10 +59,9 @@ final List<HomeItemModel> items = [
     route: AppRoutes.tafsirByQuranPageRouter,
   ),
   HomeItemModel(
-    name: "الصوتيات 2",
+    name: "المكتبة الصوتية",
     image: "assets/images/hadith.png",
 
-    route: AppRoutes.recitersPageRouter
-,
+    route: AppRoutes.recitersPageRouter,
   ),
 ];
