@@ -25,6 +25,7 @@ import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
+import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
 import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
@@ -51,6 +52,8 @@ class AppRouter {
 
       case AppRoutes.azkarPageRouter:
         return MaterialPageRoute(builder: (_) => AzkarPage());
+      case AppRoutes.qiblahRouter:
+        return MaterialPageRoute(builder: (_) => QiblahScreen());
 
       case AppRoutes.navBarRoute:
         return MaterialPageRoute(

@@ -27,7 +27,11 @@ final List<HomeItemModel> items = [
 
     route: AppRoutes.sebhaPageRouter,
   ),
-  HomeItemModel(name: "القبلة", image: "assets/images/Qibla.png", route: ''),
+  HomeItemModel(
+    name: "القبلة",
+    image: "assets/images/Qibla.png",
+    route: AppRoutes.qiblahRouter,
+  ),
 
   HomeItemModel(
     name: "الأذكار",
