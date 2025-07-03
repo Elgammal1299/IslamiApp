@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 
 class CustomRecitersListItem extends StatelessWidget {
   const CustomRecitersListItem({
@@ -43,9 +46,13 @@ class CustomRecitersListItem extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return RecitersSurahList(
-                                  server: moshaf.server ?? '',
-                                  surahList: moshaf.surahList ?? '1,2,3',
+                                return BlocProvider(
+                                  create:
+                                      (context) => AudioCubit(AudioManager()),
+                                  child: RecitersSurahList(
+                                    moshaf: moshaf,
+                                    name: reciter.name ?? '',
+                                  ),
                                 );
                               },
                             ),

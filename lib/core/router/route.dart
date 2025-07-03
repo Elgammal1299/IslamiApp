@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/services/api/hadith_db.dart';
 import 'package:islami_app/core/services/api/quran_audio_api.dart';
@@ -18,6 +19,7 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/taf
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
@@ -173,11 +175,16 @@ class AppRouter {
       case AppRoutes.recitersPageRouter:
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider(
-                create:
-                    (context) =>
-                        ReciterCubit(ReciterRepo(QuranAudioService(Dio())))
-                          ..fetchReciters(),
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create:
+                        (context) =>
+                            ReciterCubit(ReciterRepo(QuranAudioService(Dio())))
+                              ..fetchReciters(),
+                  ),
+                  BlocProvider(create: (context) => AudioCubit(AudioManager())),
+                ],
                 child: RecitersScreen(),
               ),
         );
