@@ -39,10 +39,10 @@ final List<HomeItemModel> items = [
     route: AppRoutes.azkarPageRouter,
   ),
   HomeItemModel(
-    name: "أوقات الصلاة",
+    name: "تسجيل ريكورد",
     image: "assets/images/prayer_time.png",
 
-    route: "/prayer",
+    route: AppRoutes.audioRecordingRouter,
   ),
   HomeItemModel(
     name: "الراديو",

@@ -21,6 +21,7 @@ import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
+import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
@@ -32,6 +33,7 @@ import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
 import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
+import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
@@ -46,6 +48,14 @@ class AppRouter {
 
       case AppRoutes.homeRoute:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case AppRoutes.audioRecordingRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => AudioRecordingCubit(),
+                child: AudioRecordingScreen(),
+              ),
+        );
 
       case AppRoutes.sebhaPageRouter:
         return MaterialPageRoute(builder: (_) => SebhaPage());
