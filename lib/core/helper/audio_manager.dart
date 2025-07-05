@@ -89,7 +89,7 @@ class AudioManager {
 
     _player.currentIndexStream.listen((index) async {
       if (index != null && index < _playlist.length) {
-        final currentItem = _playlist[index];
+        // final currentItem = _playlist[index];
         final duration = _player.duration;
         _duration.add(duration ?? Duration.zero);
       }

@@ -32,15 +32,7 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: quranPagesColor,
-        appBar: AppBar(
-          backgroundColor: quranPagesColor,
-          title: Text('القرءان الكريم'),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
-          centerTitle: true,
 
-          foregroundColor: Colors.black,
-          elevation: 1,
-        ),
         body: bodyOptions.elementAt(selectedIndex),
 
         bottomNavigationBar: BottomNavigationBar(

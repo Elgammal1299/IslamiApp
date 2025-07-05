@@ -153,6 +153,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
         leading: _isSearching ? BackButton(color: orangeColor) : null,
         title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
         actions: _buildAppBarActions(),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
