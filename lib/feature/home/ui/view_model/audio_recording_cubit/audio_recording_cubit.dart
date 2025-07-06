@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/services/hive_service.dart';
+import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 part 'audio_recording_state.dart';
@@ -22,6 +24,12 @@ class AudioRecordingCubit extends Cubit<AudioRecordingState> {
           sampleRate: 44100,
         ),
         path: path,
+      );
+      final audioService = HiveService.instanceFor<RecordingModel>("audioBox");
+
+      await audioService.addItem(
+        DateTime.now().millisecondsSinceEpoch.toString(),
+        RecordingModel(filePath: path, createdAt: DateTime.now()),
       );
 
       emit(AudioRecording());

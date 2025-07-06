@@ -31,7 +31,7 @@ class _BottomNavbarPageState extends State<BottomNavbarPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: quranPagesColor,
+        backgroundColor:AppColors.primary,// quranPagesColor,
 
         body: bodyOptions.elementAt(selectedIndex),
 

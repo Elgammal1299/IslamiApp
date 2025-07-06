@@ -10,15 +10,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: quranPagesColor,
+      backgroundColor: AppColors.background, //quranPagesColor,
 
       appBar: AppBar(
         title: const Text(
           "تطبيق إسلامي",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
@@ -52,25 +49,25 @@ class HomeScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            Colors.blue.withOpacity(0.1),
-                            Colors.green.withOpacity(0.1),
-                          ],
-                        ),
-                      ),
-                      child: Center(
-                      child: Image.asset(
-                        'assets/images/images.png',
-                        fit: BoxFit.contain,
-                      ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Colors.blue.withOpacity(0.1),
+                        Colors.green.withOpacity(0.1),
+                      ],
                     ),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/images.png',
+                      fit: BoxFit.contain,
                     ),
-                    // الصورة المتحركة
-                    
+                  ),
+                ),
+
+                // الصورة المتحركة
               ),
             ),
           ),

@@ -52,7 +52,7 @@ class BookmarkCard extends StatelessWidget {
                     'سورة ${quran.getSurahNameArabic(surah)}',
                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: blueColor,
+                      color:AppColors.accent,// blueColor,
                       fontSize: 16,
                     
                   ),

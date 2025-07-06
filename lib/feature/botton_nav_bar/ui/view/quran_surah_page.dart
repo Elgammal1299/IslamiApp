@@ -31,13 +31,13 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   Widget _buildSearchField() {
     return TextField(
       controller: _searchTextAyatController,
-      cursorColor: orangeColor,
+      cursorColor: AppColors.secondary,
       decoration: InputDecoration(
         hintText: 'ابحث في الآيات...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: orangeColor, fontSize: 18),
+        hintStyle: TextStyle(color: AppColors.secondary, fontSize: 18),
       ),
-      style: TextStyle(color: orangeColor, fontSize: 18),
+      style: TextStyle(color: AppColors.secondary, fontSize: 18),
       onChanged: (searchedCharacter) {
         addSearchedForAyatsToSearchedList(searchedCharacter);
       },
@@ -87,14 +87,14 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
             _clearSearch();
             Navigator.pop(context);
           },
-          icon: Icon(Icons.clear, color: orangeColor),
+          icon: Icon(Icons.clear, color: AppColors.secondary),
         ),
       ];
     } else {
       return [
         IconButton(
           onPressed: _startSearch,
-          icon: Icon(Icons.search, color: orangeColor),
+          icon: Icon(Icons.search, color: AppColors.secondary),
         ),
       ];
     }
@@ -125,7 +125,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   }
 
   Widget _buildAppBarTitle() {
-    return Text('القرآن الكريم', style: TextStyle(color: orangeColor));
+    return Text('القرآن الكريم', style: TextStyle(color: AppColors.secondary));
   }
 
   Widget _buildVerseSearchResults() {
@@ -137,7 +137,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
       return Center(
         child: Text(
           'لا توجد نتائج بحث',
-          style: TextStyle(color: orangeColor, fontSize: 18),
+          style: TextStyle(color: AppColors.secondary, fontSize: 18),
         ),
       );
     }
@@ -149,8 +149,8 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: quranPagesColor,
-        leading: _isSearching ? BackButton(color: orangeColor) : null,
+        backgroundColor: AppColors.secondary,
+        leading: _isSearching ? BackButton(color: AppColors.secondary) : null,
         title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
         actions: _buildAppBarActions(),
         centerTitle: true,
@@ -162,13 +162,13 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
             if (!_isSearching)
               TextField(
                 controller: _searchTextSurahController,
-                cursorColor: orangeColor,
+                cursorColor: AppColors.secondary,
                 decoration: InputDecoration(
                   hintText: 'ابحث عن سورة...',
                   border: InputBorder.none,
-                  hintStyle: TextStyle(color: orangeColor, fontSize: 18),
+                  hintStyle: TextStyle(color: AppColors.secondary, fontSize: 18),
                 ),
-                style: TextStyle(color: orangeColor, fontSize: 18),
+                style: TextStyle(color: AppColors.secondary, fontSize: 18),
                 onChanged: (searchedSurah) {
                   addSearchedForSurahToSearchedList(searchedSurah);
                 },

@@ -22,7 +22,9 @@ import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
-import 'package:islami_app/feature/home/ui/view/azkar_page.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_repo.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
@@ -61,7 +63,13 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => SebhaPage());
 
       case AppRoutes.azkarPageRouter:
-        return MaterialPageRoute(builder: (_) => AzkarPage());
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => AzkarCubit(AzkarRepo())..loadAzkar(),
+                child: AzkarScreen(),
+              ),
+        );
       case AppRoutes.qiblahRouter:
         return MaterialPageRoute(builder: (_) => QiblahScreen());
 
