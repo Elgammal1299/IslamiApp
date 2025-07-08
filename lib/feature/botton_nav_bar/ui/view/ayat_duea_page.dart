@@ -13,7 +13,7 @@ class AyatDueaPage extends StatelessWidget {
           padding: EdgeInsets.all(12),
 child: Text("دعاء من  القرءان الكريم", style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: blueColor,
+                          color: AppColors.accent,//blueColor,
                           fontSize: 20,
                         ), ),
         ),
@@ -36,7 +36,7 @@ child: Text("دعاء من  القرءان الكريم", style: const TextStyle
                         'سورة ${verses[index].surahName}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: blueColor,
+                          color: AppColors.accent,//blueColor,
                           fontSize: 16,
                         ),
                       ),

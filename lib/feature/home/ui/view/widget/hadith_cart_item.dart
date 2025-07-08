@@ -25,7 +25,7 @@ class HadithCard extends StatelessWidget {
                   'حديث رقم  ${hadithModel.number}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: blueColor,
+                    color: AppColors.accent, //blueColor,
                     fontSize: 16,
                   ),
                 ),
@@ -48,7 +48,7 @@ class HadithCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
               decoration: BoxDecoration(
-                color: blueColor,
+                color: AppColors.accent, // blueColor,
                 borderRadius: BorderRadius.circular(20),
               ),
             ),

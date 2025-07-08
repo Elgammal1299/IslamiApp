@@ -34,7 +34,7 @@ class SuraListViewItem extends StatelessWidget {
             child: Center(
               child: Text(
                 suraNumber.toString(),
-                style: const TextStyle(color: orangeColor, fontSize: 14),
+                style: const TextStyle(color: AppColors.secondary, fontSize: 14),
               ),
             ),
           ), //  Material(
@@ -47,7 +47,7 @@ class SuraListViewItem extends StatelessWidget {
                   suraName,
                   style: const TextStyle(
                     // fontWeight: FontWeight.bold,
-                    color: blueColor,
+                    color:AppColors.accent,// blueColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w700, // Text color
                   ),

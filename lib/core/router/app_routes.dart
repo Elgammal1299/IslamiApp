@@ -16,4 +16,5 @@ class AppRoutes {
   static const hadithRouter = '/hadithPage';
   static const hadithDetailsRouter = '/hadithDetailsPage';
   static const qiblahRouter = '/qiblahScreen';
+  static const audioRecordingRouter = '/audioRecordingScreen';
 }

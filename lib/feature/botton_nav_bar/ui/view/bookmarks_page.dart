@@ -16,7 +16,7 @@ class BookmarksPage extends StatelessWidget {
           padding: EdgeInsets.all(12),
 child: Text("المفضلة", style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: blueColor,
+                          color:AppColors.accent,// blueColor,
                           fontSize: 20,
                         ), ),
         ),
