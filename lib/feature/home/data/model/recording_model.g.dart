@@ -19,17 +19,20 @@ class RecordingModelAdapter extends TypeAdapter<RecordingModel> {
     return RecordingModel(
       filePath: fields[0] as String,
       createdAt: fields[1] as DateTime,
+      duration: fields[2] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordingModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.filePath)
       ..writeByte(1)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(2)
+      ..write(obj.duration);
   }
 
   @override
