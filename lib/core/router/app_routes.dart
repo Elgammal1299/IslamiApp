@@ -10,6 +10,7 @@ class AppRoutes {
   static const radioPlayerRouter = '/radioPlayer';
   static const sebhaPageRouter = '/SebhaPage';
   static const azkarPageRouter = "/azkarScreen";
+  static const azkarYawmiScreen = "/azkarYawmiScreen";
   static const quranAudioSurahListRouter = '/QuranAudioSurahList';
   static const audioPlayerPageRouter = '/AudioPlayerPage';
   static const recitersPageRouter = '/recitersPage';

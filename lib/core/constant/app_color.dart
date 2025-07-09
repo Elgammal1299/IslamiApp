@@ -48,3 +48,16 @@ class AppColors {
   static const Color darkTextSecondary = Color(0xFFAAAAAA);
   static const Color darkDivider = Color(0xFF2C2C2C);
 }
+// import 'package:flutter/material.dart';
+
+// class AppColors {
+//   static const primary = Color(0xFF2B6777);         // الأزرق الأساسي
+//   static const primaryLight = Color(0xFF52AB98);    // الأخضر المائل للأزرق
+//   static const secondary = Color(0xFFB2D1D8);       // خلفيات ثانوية
+//   static const background = Color(0xFFF8F9FA);      // خلفية التطبيق
+//   static const card = Colors.white;                 // كروت
+//   static const textDark = Colors.black87;           // نص داكن
+//   static const textLight = Colors.white;            // نص فاتح
+//   static const dialogBackground = Color(0xFFF2F2F2);// خلفية AlertDialog
+//   static const iconColor = Color(0xFF4D9CAB);       // لون الأيقونات
+// }

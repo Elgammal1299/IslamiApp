@@ -4,7 +4,6 @@ import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  static String routeName = '/home';
   const HomeScreen({super.key});
 
   @override
@@ -77,9 +76,9 @@ class HomeScreen extends StatelessWidget {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.8,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.7,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {

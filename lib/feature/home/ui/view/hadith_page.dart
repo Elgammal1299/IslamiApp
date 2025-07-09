@@ -10,8 +10,18 @@ class HadithPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('احاديث نبوية')),
+      backgroundColor: const Color(0xFFFFF8F0), // خلفية الصفحة بيج هادي
+      appBar: AppBar(
+        title: const Text(
+          'أحاديث نبوية',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF4E342E), // بني غامق
+        foregroundColor: Colors.white,
+      ),
       body: ListView.builder(
+        padding: const EdgeInsets.only(top: 8, bottom: 16),
         itemCount: hadithItems.length,
         itemBuilder: (context, index) {
           return HadithNameItem(item: hadithItems[index]);
@@ -28,7 +38,7 @@ class HadithNameItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         context.read<HadithCubit>().getHadith(item.type);
         Navigator.pushNamed(
@@ -37,29 +47,36 @@ class HadithNameItem extends StatelessWidget {
           arguments: context.read<HadithCubit>(),
         );
       },
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        height: 150,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         decoration: BoxDecoration(
-          color: Colors.yellow[50],
-          border: Border.all(color: Colors.yellow[700]!, width: 2),
-          borderRadius: BorderRadius.circular(8),
+          color: const Color(0xFFFFFFFF), // أبيض للكارت
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Color(0xFFE0C097), width: 1.5), // بني فاتح
           boxShadow: [
             BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 2,
-              blurRadius: 5,
+              color: const Color(0x33000000), // ظل خفيف (20% شفاف)
+              blurRadius: 6,
+              spreadRadius: 1,
               offset: const Offset(0, 3),
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
           children: [
-            Text(
-              item.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            const Icon(Icons.menu_book, size: 28, color: Color(0xFF4E342E)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                item.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF4E342E), // بني غامق
+                ),
+              ),
             ),
           ],
         ),
