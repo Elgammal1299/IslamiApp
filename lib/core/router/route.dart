@@ -22,9 +22,12 @@ import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_yawmi_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
@@ -68,6 +71,16 @@ class AppRouter {
               (_) => BlocProvider(
                 create: (context) => AzkarCubit(AzkarRepo())..loadAzkar(),
                 child: AzkarScreen(),
+              ),
+        );
+      case AppRoutes.azkarYawmiScreen:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) =>
+                        AzkarYawmiCubit(AzkarYawmiRepo())..loadSupplications(),
+                child: AzkarYawmiScreen(),
               ),
         );
       case AppRoutes.qiblahRouter:

@@ -11,38 +11,50 @@ class HomeItemModel {
 final List<HomeItemModel> items = [
   HomeItemModel(
     name: "القرآن الكريم",
-    image: "assets/images/quran.png",
+    image: "assets/images/quran_10360836.png",
     route: AppRoutes.navBarRoute,
   ),
   HomeItemModel(
     name: "الأحاديث",
-    image: "assets/images/hadith.png",
+    image: "assets/images/images2.jpeg",
 
     route: AppRoutes.hadithRouter,
   ),
 
   HomeItemModel(
     name: "السبحة",
-    image: "assets/images/sebha.png",
+    image: "assets/images/6668725.jpg",
 
     route: AppRoutes.sebhaPageRouter,
   ),
   HomeItemModel(
     name: "القبلة",
-    image: "assets/images/Qibla.png",
+    image: "assets/images/kaaba.png",
     route: AppRoutes.qiblahRouter,
   ),
 
   HomeItemModel(
-    name: "الأذكار",
-    image: "assets/images/zikr.png",
+    name: "ذكر يومي",
+    image: "assets/images/download.png",
+    route: AppRoutes.azkarYawmiScreen,
+  ),
+  HomeItemModel(
+    name: "دعاء وذكر",
+    image: "assets/images/praying.png",
     route: AppRoutes.azkarPageRouter,
   ),
   HomeItemModel(
     name: "تسجيل ريكورد",
-    image: "assets/images/prayer_time.png",
+    image:
+        "assets/images/wired-flat-188-microphone-recording-hover-recording.png",
 
     route: AppRoutes.audioRecordingRouter,
+  ),
+  HomeItemModel(
+    name: "المكتبة الصوتية",
+    image: "assets/images/audio.png",
+
+    route: AppRoutes.recitersPageRouter,
   ),
   HomeItemModel(
     name: "الراديو",
@@ -61,11 +73,5 @@ final List<HomeItemModel> items = [
     image: "assets/images/hadith.png",
 
     route: AppRoutes.tafsirByQuranPageRouter,
-  ),
-  HomeItemModel(
-    name: "المكتبة الصوتية",
-    image: "assets/images/hadith.png",
-
-    route: AppRoutes.recitersPageRouter,
   ),
 ];
