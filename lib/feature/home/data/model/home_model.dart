@@ -62,16 +62,16 @@ final List<HomeItemModel> items = [
 
     route: AppRoutes.radioPageRouter,
   ),
-  HomeItemModel(
-    name: "الصوتيات",
-    image: "assets/images/audio.png",
+  // HomeItemModel(
+  //   name: "الصوتيات",
+  //   image: "assets/images/audio.png",
 
-    route: AppRoutes.quranAudioSurahListRouter,
-  ),
-  HomeItemModel(
-    name: "التفسير",
-    image: "assets/images/hadith.png",
+  //   route: AppRoutes.quranAudioSurahListRouter,
+  // ),
+  // HomeItemModel(
+  //   name: "التفسير",
+  //   image: "assets/images/hadith.png",
 
-    route: AppRoutes.tafsirByQuranPageRouter,
-  ),
+  //   route: AppRoutes.tafsirByQuranPageRouter,
+  // ), 
 ];

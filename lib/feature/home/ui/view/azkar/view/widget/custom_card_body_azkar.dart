@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -32,26 +33,23 @@ class CustomCardBodyAzkar extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Color(0xFF2B6777),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: SelectableText(
               cleanContent(current.content),
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                height: 1.7,
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge!.copyWith(color: AppColors.white),
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: const BoxDecoration(
-              color: Color(0xFFB2D1D8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).secondaryHeaderColor,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -61,20 +59,24 @@ class CustomCardBodyAzkar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
+                  tooltip: 'مشاركة',
+                  icon: Icon(
+                    Icons.share,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Share.share(current.content);
+                  },
+                ),
+                SizedBox(width: 16),
+                IconButton(
                   tooltip: 'نسخ',
-                  icon: const Icon(Icons.copy, color: Colors.white),
+                  icon: Icon(Icons.copy, color: Theme.of(context).primaryColor),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: current.content));
                     ScaffoldMessenger.of(
                       context,
                     ).showSnackBar(const SnackBar(content: Text("✅ تم النسخ")));
-                  },
-                ),
-                IconButton(
-                  tooltip: 'مشاركة',
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  onPressed: () {
-                    Share.share(current.content);
                   },
                 ),
               ],

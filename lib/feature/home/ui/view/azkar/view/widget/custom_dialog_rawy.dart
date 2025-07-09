@@ -17,59 +17,50 @@ class CustomDialogRawy extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                backgroundColor: const Color(0xFFF2F2F2),
-                titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-                contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
-                actionsPadding: const EdgeInsets.only(bottom: 12, right: 12),
+                backgroundColor: Theme.of(context).cardColor,
+
                 title: Row(
-                  children: const [
-                    Icon(Icons.menu_book_rounded, color: Color(0xFF2B6777)),
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.menu_book_rounded,
+                      color: Theme.of(context).canvasColor,
+                    ),
                     SizedBox(width: 8),
                     Text(
                       "الراوي",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2B6777),
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 content: SingleChildScrollView(
                   child: Text(
                     supplication.note!,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.5,
-                      color: Colors.black87,
-                    ),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
                 actions: [
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2B6777),
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).canvasColor,
+                      foregroundColor: Theme.of(context).cardColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
                     label: const Text("إغلاق"),
                   ),
                 ],
               ),
         );
       },
-      child: const Text(
-        " الراوي",
-        style: TextStyle(
-          fontSize: 15,
-          color: Color(0xFFB2D1D8),
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        children: [
+          Text(" الراوي", style: Theme.of(context).textTheme.titleMedium),
+          SizedBox(width: 8),
+          Icon(Icons.person_rounded, color: Theme.of(context).cardColor),
+        ],
       ),
     );
   }

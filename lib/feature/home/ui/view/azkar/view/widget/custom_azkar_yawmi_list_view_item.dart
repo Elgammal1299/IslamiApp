@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/supplication_reader_screen.dart';
 
@@ -24,54 +25,51 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF0FAF8),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFB2D1D8), width: 1),
-        ),
-        child: Row(
-          children: [
-            // دائرة أيقونة
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xFFB2D1D8),
-              ),
-              child: const Icon(
-                Icons.bookmark_border_rounded,
-                size: 24,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 16),
-
-            // الاسم وعدد الأذكار
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                    overflow: TextOverflow.ellipsis,
                     category,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2B6777),
-                    ),
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.right,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${items.length} ذكر',
-                    style: const TextStyle(fontSize: 14, color: Colors.teal),
+                    style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.right,
                   ),
                 ],
               ),
-            ),
-          ],
+              Spacer(),
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Icon(
+                  Icons.bookmark_border_rounded,
+                  size: 24,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

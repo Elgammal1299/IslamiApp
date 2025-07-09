@@ -5,7 +5,6 @@ import 'dart:math' as math;
 import 'package:islami_app/feature/home/ui/view/widget/reset_botton_widget.dart';
 
 class SebhaPage extends StatefulWidget {
- 
   const SebhaPage({super.key});
 
   @override
@@ -29,10 +28,7 @@ class _SebhaPageState extends State<SebhaPage>
     _animation = Tween<double>(
       begin: 0,
       end: 0.08,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -69,57 +65,35 @@ class _SebhaPageState extends State<SebhaPage>
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.teal.shade50,
-              Colors.white,
-            ],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          
-              const SizedBox(height: 30),
-              // دائرة السبحة الرئيسية
-              GestureDetector(
-                onTap: _incrementCounter,
-                child: AnimatedBuilder(
-                  animation: _animation,
-                  builder: (context, child) {
-                    return Transform.rotate(
-                      angle: _animation.value * 2 * math.pi,
-                      child: CounterBottonWidget(counter: _counter),
-                    );
-                  },
-                ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 30),
+            // دائرة السبحة الرئيسية
+            GestureDetector(
+              onTap: _incrementCounter,
+              child: AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  return Transform.rotate(
+                    angle: _animation.value * 2 * math.pi,
+                    child: CounterBottonWidget(counter: _counter),
+                  );
+                },
               ),
-              const SizedBox(height: 40),
-              // نص إرشادي
-              Text(
-                "انقر على الدائرة للتسبيح",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-const SizedBox(height: 30),
-// زر إعادة التعيين
-GestureDetector(
-  onTap: _resetCounter,
-  child: ResetBottonWidget(),
-),
-
-            ],
-          ),
+            ),
+            const SizedBox(height: 40),
+            // نص إرشادي
+            Text(
+              "انقر على الدائرة للتسبيح",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 30),
+            // زر إعادة التعيين
+            GestureDetector(onTap: _resetCounter, child: ResetBottonWidget()),
+          ],
         ),
       ),
     );

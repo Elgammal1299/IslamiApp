@@ -45,6 +45,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
   Widget build(BuildContext context) {
     if (!_locationEnabled) {
       return Scaffold(
+        appBar: AppBar(title: Text('القبلة')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +54,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
               Image.asset('assets/images/gps.png'),
               Text(
                 "!! يرجى تفعيل الموقع",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -71,7 +72,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
               Image.asset('assets/images/gps.png', width: 300, height: 300),
               Text(
                 "يجب منح إذن الوصول للموقع",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -89,7 +90,12 @@ class _QiblahScreenState extends State<QiblahScreen> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text("حدث خطأ في تحديد القبلة"));
+            return Center(
+              child: Text(
+                "حدث خطأ في تحديد القبلة",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            );
           }
 
           final qiblahDirection = snapshot.data;
@@ -101,7 +107,10 @@ class _QiblahScreenState extends State<QiblahScreen> {
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset(
-                  'assets/images/Compass.svg',
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/images/CompassDark.svg'
+                      : 'assets/images/Compass.svg',
+
                   width: 300,
                   height: 300,
                 ),
@@ -119,7 +128,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
                   child: Transform.translate(
                     offset: Offset(0, -170), // المسافة من المركز (سالب للأعلى)
                     child: Image.asset(
-                      'assets/images/Qibla.png',
+                      'assets/images/kaaba.png',
                       width: 40,
                       height: 40,
                     ),
