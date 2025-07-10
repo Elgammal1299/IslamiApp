@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/data/model/radio_model.dart';
@@ -6,9 +5,8 @@ import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.da
 
 class RadioPlayerPage extends StatefulWidget {
   final RadioModel station;
-  
 
-  const RadioPlayerPage({super.key, required this.station, });
+  const RadioPlayerPage({super.key, required this.station});
 
   @override
   State<RadioPlayerPage> createState() => _RadioPlayerPageState();
@@ -16,7 +14,7 @@ class RadioPlayerPage extends StatefulWidget {
 
 class _RadioPlayerPageState extends State<RadioPlayerPage>
     with WidgetsBindingObserver {
-      late RadioCubit _radioCubit;
+  late RadioCubit _radioCubit;
   @override
   void initState() {
     super.initState();
@@ -57,85 +55,65 @@ class _RadioPlayerPageState extends State<RadioPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-          
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.teal.shade50, Colors.white],
-            ),
-          ),
-          child: BlocBuilder<RadioCubit, RadioState>(
-            buildWhen: (previous, current) {
-              // إعادة البناء فقط عند تغيير حالة التشغيل
-              return current is RadioPlaying ||
-                  (previous is RadioPlaying && current is! RadioPlaying);
-            },
-            builder: (context, state) {
-              final bool isPlaying =
-                  state is RadioPlaying &&
-                  state.isPlaying &&
-                  state.currentUrl == widget.station.url;
+    return Scaffold(
+      body: BlocBuilder<RadioCubit, RadioState>(
+        buildWhen: (previous, current) {
+          // إعادة البناء فقط عند تغيير حالة التشغيل
+          return current is RadioPlaying ||
+              (previous is RadioPlaying && current is! RadioPlaying);
+        },
+        builder: (context, state) {
+          final bool isPlaying =
+              state is RadioPlaying &&
+              state.isPlaying &&
+              state.currentUrl == widget.station.url;
 
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // ... Station image container
-                    const SizedBox(height: 32),
-                    Text(
-                      widget.station.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 48),
-                    GestureDetector(
-                      onTap: _togglePlayPause,
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.teal.shade100,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.teal.withOpacity(0.3),
-                              spreadRadius: 2,
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          isPlaying ? Icons.pause : Icons.play_arrow,
-                          size: 40,
-                          color: Colors.teal.shade700,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      isPlaying ? 'جاري التشغيل' : 'متوقف',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.teal.shade700,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // ... Station image container
+                const SizedBox(height: 32),
+                Text(
+                  widget.station.name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
                 ),
-              );
-            },
-          ),
-        ),
-   
+                const SizedBox(height: 48),
+                GestureDetector(
+                  onTap: _togglePlayPause,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          spreadRadius: 2,
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      size: 40,
+                      color: Theme.of(context).cardColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  isPlaying ? 'جاري التشغيل' : 'متوقف',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
