@@ -14,65 +14,69 @@ class BookmarksPage extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.all(12),
-child: Text("المفضلة", style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color:AppColors.accent,// blueColor,
-                          fontSize: 20,
-                        ), ),
+          child: Text(
+            "المفضلة",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.accent, // blueColor,
+              fontSize: 20,
+            ),
+          ),
         ),
         Expanded(
           child: BlocProvider(
             create: (context) => BookmarkCubit()..loadBookmarks(),
-            child:  BlocBuilder<BookmarkCubit, BookmarkState>(
-                builder: (context, state) {
-                  if (state is BookmarksLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-          
-                  if (state is BookmarksError) {
-                    return Center(child: Text(state.message));
-                  }
-          
-                  if (state is BookmarksLoaded) {
-                    if (state.bookmarks.isEmpty) {
-                      return Center(
-                        child: Column(
-                          children: [
-                            Icon(Icons.bookmark_remove,color: Colors.red,size: 150,),
-                            const Text(
-                              'لا توجد آيات محفوظة',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold
-                              ),
+            child: BlocBuilder<BookmarkCubit, BookmarkState>(
+              builder: (context, state) {
+                if (state is BookmarksLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state is BookmarksError) {
+                  return Center(child: Text(state.message));
+                }
+
+                if (state is BookmarksLoaded) {
+                  if (state.bookmarks.isEmpty) {
+                    return Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.bookmark_remove,
+                            color: Colors.red,
+                            size: 150,
+                          ),
+                          const Text(
+                            'لا توجد آيات محفوظة',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
-                      );
-                    }
-          
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder(
-                        itemCount: state.bookmarks.length,
-                        itemBuilder: (context, index) {
-                          List<String> parts = state.bookmarks[index].split(':');
-                          int surah = int.parse(parts[0]);
-                          int ayah = int.parse(parts[1]);
-          
-                          return BookmarkCard(
-                            surah: surah,
-                            ayah: ayah,
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     );
                   }
-          
-                  return const SizedBox();
-                },
-              ),
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      itemCount: state.bookmarks.length,
+                      itemBuilder: (context, index) {
+                        List<String> parts = state.bookmarks[index].split(':');
+                        int surah = int.parse(parts[0]);
+                        int ayah = int.parse(parts[1]);
+
+                        return BookmarkCard(surah: surah, ayah: ayah);
+                      },
+                    ),
+                  );
+                }
+
+                return const SizedBox();
+              },
+            ),
           ),
         ),
       ],

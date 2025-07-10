@@ -1,60 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/ayat_duea_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_page.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
 
-class BottomNavbarPage extends StatefulWidget {
-  static String routeName = '/bootom';
-
+class BottomNavbarPage extends StatelessWidget {
   const BottomNavbarPage({super.key});
 
   @override
-  State<BottomNavbarPage> createState() => _BottomNavbarPageState();
-}
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<NavBarCubit, int>(
+        builder: (context, state) {
+          return IndexedStack(
+            index: state,
+            children: const [QuranSurahPage(), BookmarksPage()],
+          );
+        },
+      ),
 
-class _BottomNavbarPageState extends State<BottomNavbarPage> {
-  int selectedIndex = 0;
-  void onItemTapped(int newIndex) {
-    setState(() {
-      selectedIndex = newIndex;
-    });
+      bottomNavigationBar: BlocBuilder<NavBarCubit, int>(
+        builder: (context, state) {
+          return BottomNavigationBar(
+            currentIndex: state,
+            onTap: (value) {
+              BlocProvider.of<NavBarCubit>(context).changeTab(value);
+            },
+            items: [
+              _buildBottomNavigationBarItem(
+                label: 'الرئيسية',
+                icon: Icons.menu_book_outlined,
+              ),
+              _buildBottomNavigationBarItem(
+                label: 'المفضلة',
+                icon: Icons.bookmark_outlined,
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
-  List<Widget> bodyOptions = <Widget>[
-    QuranSurahPage(),
-    BookmarksPage(),
-    AyatDueaPage(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor:AppColors.primary,// quranPagesColor,
-
-        body: bodyOptions.elementAt(selectedIndex),
-
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: onItemTapped,
-
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_outlined),
-              label: 'الرئيسية',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_outlined),
-              label: 'المفضلة',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome_sharp),
-              label: 'الدعاء',
-            ),
-          ],
+  BottomNavigationBarItem _buildBottomNavigationBarItem({
+    required String label,
+    required IconData icon,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Icon(icon),
+      activeIcon: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.circular(30),
         ),
+        child: Icon(icon, color: AppColors.white),
       ),
+      label: label,
     );
   }
 }

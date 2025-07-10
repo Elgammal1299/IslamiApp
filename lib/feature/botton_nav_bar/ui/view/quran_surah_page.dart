@@ -125,7 +125,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   }
 
   Widget _buildAppBarTitle() {
-    return Text('القرآن الكريم', style: TextStyle(color: AppColors.secondary));
+    return Text('القرآن الكريم');
   }
 
   Widget _buildVerseSearchResults() {
@@ -137,7 +137,9 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
       return Center(
         child: Text(
           'لا توجد نتائج بحث',
-          style: TextStyle(color: AppColors.secondary, fontSize: 18),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge!.copyWith(color: AppColors.black),
         ),
       );
     }
@@ -149,7 +151,6 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.secondary,
         leading: _isSearching ? BackButton(color: AppColors.secondary) : null,
         title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
         actions: _buildAppBarActions(),
@@ -162,13 +163,13 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
             if (!_isSearching)
               TextField(
                 controller: _searchTextSurahController,
-                cursorColor: AppColors.secondary,
+                cursorColor: AppColors.black,
+                style: TextStyle(color: AppColors.black),
                 decoration: InputDecoration(
                   hintText: 'ابحث عن سورة...',
                   border: InputBorder.none,
-                  hintStyle: TextStyle(color: AppColors.secondary, fontSize: 18),
                 ),
-                style: TextStyle(color: AppColors.secondary, fontSize: 18),
+
                 onChanged: (searchedSurah) {
                   addSearchedForSurahToSearchedList(searchedSurah);
                 },

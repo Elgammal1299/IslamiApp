@@ -14,6 +14,7 @@ class AppTheme {
     secondaryHeaderColor: AppColors.secondary,
     hintColor: AppColors.white,
     canvasColor: AppColors.primary2,
+    primaryColorDark: AppColors.black,
 
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primary,
@@ -22,6 +23,7 @@ class AppTheme {
       centerTitle: true,
     ),
     inputDecorationTheme: InputDecorationTheme(
+      floatingLabelStyle: TextStyle(color: AppColors.black),
       filled: true,
       fillColor: AppColors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -52,6 +54,7 @@ class AppTheme {
       bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 18),
       bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 16),
       bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+
       titleLarge: TextStyle(
         color: AppColors.black,
         fontWeight: FontWeight.bold,
@@ -62,9 +65,27 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
+      // labelLarge: TextStyle(
+      //   fontFamily: "arsura",
+      //   fontSize: 30,
+      //   color: AppColors.black,
+      // ),
     ),
 
     iconTheme: const IconThemeData(color: AppColors.accent),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      elevation: 0,
+      backgroundColor: AppColors.secondary,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.black,
+      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24),
+      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24),
+      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
 
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
@@ -89,7 +110,7 @@ class AppTheme {
     secondaryHeaderColor: AppColors.secondary,
     hintColor: AppColors.black,
     canvasColor: AppColors.primary2,
-
+    primaryColorDark: AppColors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.darkPrimary,
       foregroundColor: Colors.white,
@@ -98,16 +119,17 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.secondary,
+      floatingLabelStyle: TextStyle(color: AppColors.black),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       labelStyle: const TextStyle(color: AppColors.primary),
-      hintStyle: const TextStyle(color: Colors.white70),
+      hintStyle: const TextStyle(color: AppColors.primary),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.white38),
+        borderSide: const BorderSide(color: AppColors.white),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.white38),
+        borderSide: const BorderSide(color: AppColors.white),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -126,14 +148,38 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.darkTextPrimary, fontSize: 16),
       bodyMedium: TextStyle(color: AppColors.darkTextSecondary, fontSize: 14),
+      bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+      titleMedium: TextStyle(
+        color: AppColors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
       titleLarge: TextStyle(
         color: AppColors.white,
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
+      // labelLarge: TextStyle(
+      //   fontFamily: "arsura",
+      //   fontSize: 30,
+      //   color: AppColors.white,
+      // ),
     ),
 
     iconTheme: const IconThemeData(color: AppColors.accent),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      elevation: 0,
+      backgroundColor: AppColors.secondary,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.black,
+      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24),
+      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24),
+      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
 
     colorScheme: const ColorScheme.dark(
       primary: AppColors.darkPrimary,

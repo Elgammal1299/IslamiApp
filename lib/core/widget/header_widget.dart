@@ -29,9 +29,11 @@ class HeaderWidget extends StatelessWidget {
                 Text(
                   textAlign: TextAlign.center,
                   "اياتها\n${getVerseCount(e["surah"])}",
-                  style: const TextStyle(
-                    fontSize: 5,
+                  style: TextStyle(
+                    fontSize: 7,
                     fontFamily: "UthmanicHafs13",
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Center(
@@ -40,10 +42,10 @@ class HeaderWidget extends StatelessWidget {
                       text: e["surah"].toString(),
 
                       // textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: "arsura",
                         fontSize: 22,
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColorDark,
                       ),
                     ),
                   ),
@@ -51,9 +53,11 @@ class HeaderWidget extends StatelessWidget {
                 Text(
                   "ترتيبها\n${e["surah"]}",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 5,
+                  style: TextStyle(
+                    fontSize: 7,
                     fontFamily: "UthmanicHafs13",
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
