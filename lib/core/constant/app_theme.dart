@@ -22,8 +22,18 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
     ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.primary,
+      inactiveTrackColor: AppColors.secondary,
+      thumbColor: AppColors.primary,
+      overlayColor: AppColors.primary.withOpacity(0.2),
+      trackHeight: 4,
+      // ممكن تضيف كمان لو عايز:
+      // valueIndicatorColor: AppColors.primary,
+    ),
     inputDecorationTheme: InputDecorationTheme(
       floatingLabelStyle: TextStyle(color: AppColors.black),
+
       filled: true,
       fillColor: AppColors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -65,11 +75,12 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
-      // labelLarge: TextStyle(
-      //   fontFamily: "arsura",
-      //   fontSize: 30,
-      //   color: AppColors.black,
-      // ),
+      labelLarge: TextStyle(
+        fontFamily: "arsura",
+        fontSize: 30,
+        color: AppColors.black,
+        fontWeight: FontWeight.bold,
+      ),
     ),
 
     iconTheme: const IconThemeData(color: AppColors.accent),
@@ -159,11 +170,12 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontSize: 20,
       ),
-      // labelLarge: TextStyle(
-      //   fontFamily: "arsura",
-      //   fontSize: 30,
-      //   color: AppColors.white,
-      // ),
+      labelLarge: TextStyle(
+        fontFamily: "arsura",
+        fontWeight: FontWeight.bold,
+        fontSize: 30,
+        color: AppColors.white,
+      ),
     ),
 
     iconTheme: const IconThemeData(color: AppColors.accent),

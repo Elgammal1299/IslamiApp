@@ -29,7 +29,7 @@ class CustomSurahItemListView extends StatelessWidget {
                 : searchedForSurah[index];
 
         return SuraListViewItem(
-          suraNumber: index + 1,
+          suraNumber: surah.number,
           suraName: surah.name,
           suraNameEnglishTranslated: surah.englishNameTranslation,
           ayahCount: getVerseCount(surah.number),

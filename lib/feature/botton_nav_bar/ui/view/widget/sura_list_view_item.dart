@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';

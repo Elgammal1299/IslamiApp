@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 
 class AudioBottomSheet extends StatefulWidget {
   final String audioUrl;
@@ -72,53 +73,51 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Card(
-            color: Colors.grey[200],
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
               padding: const EdgeInsets.all(15),
               child: Text(
                 textDirection: TextDirection.rtl,
 
                 widget.ayah,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.justify,
               ),
             ),
-          ),
-          // زر التشغيل/الإيقاف المؤقت
-          IconButton(
-            icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow, size: 36),
-            onPressed: _togglePlay,
-          ),
-          // شريط التمرير الذي يعرض حالة التشغيل ويسمح بالتقديم أو التأخير
-          Slider(
-            min: 0,
-            max: _duration.inSeconds.toDouble(),
-            value: _position.inSeconds.toDouble().clamp(
-              0,
-              _duration.inSeconds.toDouble(),
+            // زر التشغيل/الإيقاف المؤقت
+            IconButton(
+              icon: Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                size: 40,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: _togglePlay,
             ),
-            onChanged: (value) {
-              _seekTo(value);
-            },
-          ),
-          // عرض الوقت الحالي والمدى الكلي
-          Text(
-            "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
-            style: const TextStyle(fontSize: 14),
-          ),
-        ],
+            // شريط التمرير الذي يعرض حالة التشغيل ويسمح بالتقديم أو التأخير
+            Slider(
+              activeColor: AppColors.primary,
+              inactiveColor: AppColors.secondary,
+              min: 0,
+              max: _duration.inSeconds.toDouble(),
+              value: _position.inSeconds.toDouble().clamp(
+                0,
+                _duration.inSeconds.toDouble(),
+              ),
+              onChanged: (value) {
+                _seekTo(value);
+              },
+            ),
+            // عرض الوقت الحالي والمدى الكلي
+            Text(
+              "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
+        ),
       ),
     );
   }

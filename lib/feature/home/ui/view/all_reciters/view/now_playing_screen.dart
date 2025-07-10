@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:just_audio/just_audio.dart';
@@ -36,28 +37,16 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {}, //_showMoreOptions,
+    return BlocBuilder<AudioCubit, AudioState>(
+      builder: (context, state) {
+        if (state is! AudioPlaybackState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(state.currentItem?.title ?? 'لا توجد أغنية'),
           ),
-        ],
-      ),
-      body: BlocBuilder<AudioCubit, AudioState>(
-        builder: (context, state) {
-          if (state is! AudioPlaybackState) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return Column(
+          body: Column(
             children: [
               Expanded(child: Center(child: _buildAlbumArt(state.currentItem))),
               Padding(
@@ -66,16 +55,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                   children: [
                     Text(
                       state.currentItem?.title ?? 'لا توجد أغنية',
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.labelLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       state.currentItem?.artist ?? 'فنان غير معروف',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
@@ -87,9 +73,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 ),
               ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -101,9 +87,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: AppColors.secondary,
             blurRadius: 20,
-            offset: const Offset(0, 10),
+            offset: const Offset(2, 2),
           ),
         ],
       ),
@@ -123,7 +109,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
   Widget _buildPlaceholderArt() {
     return Container(
-      color: Colors.grey[200],
+      color: Theme.of(context).primaryColor,
       child: const Icon(Icons.music_note, color: Colors.grey, size: 100),
     );
   }
@@ -145,7 +131,12 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
         BlocBuilder<AudioCubit, AudioState>(
           builder: (context, state) {
             if (state is! AudioPlaybackState) {
-              return Slider(value: 0, onChanged: (_) {});
+              return Slider(
+                activeColor: AppColors.primary,
+                inactiveColor: AppColors.secondary,
+                value: 0,
+                onChanged: (_) {},
+              );
             }
 
             final duration = state.duration ?? Duration.zero;
@@ -174,11 +165,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 ),
                 valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
                 valueIndicatorColor: Theme.of(context).colorScheme.primary,
-                valueIndicatorTextStyle: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.white),
+                valueIndicatorTextStyle: Theme.of(context).textTheme.titleLarge,
               ),
               child: Slider(
+                activeColor: AppColors.primary,
+                inactiveColor: AppColors.secondary,
                 value: value.clamp(0.0, 1.0),
                 onChanged: (newValue) {
                   final newPosition = duration * newValue;
@@ -196,15 +187,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             children: [
               Text(
                 _formatDuration(currentPosition),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
                 _formatDuration(currentDuration),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
@@ -223,8 +210,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             size: 28,
             color:
                 state.loopMode != LoopMode.off
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).iconTheme.color?.withOpacity(0.7),
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).primaryColor,
           ),
           onPressed: () {
             final newMode =
@@ -237,13 +224,17 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
           },
         ),
         IconButton(
-          icon: const Icon(Icons.skip_previous, size: 36),
+          icon: Icon(
+            Icons.skip_previous,
+            size: 36,
+            color: Theme.of(context).primaryColor,
+          ),
           onPressed: () => context.read<AudioCubit>().skipToPrevious(),
         ),
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
@@ -256,13 +247,17 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             icon: Icon(
               state.isPlaying ? Icons.pause : Icons.play_arrow,
               size: 36,
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
             ),
             onPressed: () => context.read<AudioCubit>().togglePlayPause(),
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.skip_next, size: 36),
+          icon: Icon(
+            Icons.skip_next,
+            size: 36,
+            color: Theme.of(context).primaryColor,
+          ),
           onPressed: () => context.read<AudioCubit>().skipToNext(),
         ),
         IconButton(
@@ -272,7 +267,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             color:
                 state.isShuffled
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).iconTheme.color?.withOpacity(0.7),
+                    : Theme.of(context).primaryColor,
           ),
           onPressed:
               () => context.read<AudioCubit>().setShuffle(!state.isShuffled),

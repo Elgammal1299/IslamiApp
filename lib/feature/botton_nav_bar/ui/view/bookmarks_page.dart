@@ -1,9 +1,9 @@
-// lib/feature/bookmarks/ui/view/bookmarks_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 
 class BookmarksPage extends StatelessWidget {
   const BookmarksPage({super.key});
@@ -12,17 +12,6 @@ class BookmarksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.all(12),
-          child: Text(
-            "المفضلة",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.accent, // blueColor,
-              fontSize: 20,
-            ),
-          ),
-        ),
         Expanded(
           child: BlocProvider(
             create: (context) => BookmarkCubit()..loadBookmarks(),
@@ -40,19 +29,16 @@ class BookmarksPage extends StatelessWidget {
                   if (state.bookmarks.isEmpty) {
                     return Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.bookmark_remove,
-                            color: Colors.red,
-                            size: 150,
+                            Icons.bookmark_outline_rounded,
+                            color: AppColors.primary,
+                            size: 120,
                           ),
-                          const Text(
-                            'لا توجد آيات محفوظة',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Text(
+                            'لا يوجد مرجعيات',
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),
@@ -68,7 +54,12 @@ class BookmarksPage extends StatelessWidget {
                         int surah = int.parse(parts[0]);
                         int ayah = int.parse(parts[1]);
 
-                        return BookmarkCard(surah: surah, ayah: ayah);
+                        return BookmarkCard(
+                          surahs: BlocProvider.of<SurahCubit>(context).surahs,
+
+                          surah: surah,
+                          ayah: ayah,
+                        );
                       },
                     ),
                   );

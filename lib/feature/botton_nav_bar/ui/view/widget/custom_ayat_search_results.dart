@@ -1,11 +1,18 @@
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/router/app_routes.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
 
 class CustomAyatSearchResults extends StatelessWidget {
-  const CustomAyatSearchResults({super.key, required this.searchedForAyats});
+  const CustomAyatSearchResults({
+    super.key,
+    required this.searchedForAyats,
+    required this.surahs,
+  });
 
   final dynamic searchedForAyats;
+  final List<SurahModel> surahs;
 
   @override
   Widget build(BuildContext context) {
@@ -16,30 +23,35 @@ class CustomAyatSearchResults extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(6.0),
           child: EasyContainer(
-            color: Colors.white70,
+            color: Theme.of(context).cardColor,
             borderRadius: 14,
-            onTap: () {},
+            onTap: () async {
+              final surah = result["surah"];
+              final verse = result["verse"];
+              final pageNumber = getPageNumber(surah, verse);
+              Navigator.pushNamed(
+                context,
+                AppRoutes.quranViewRouter,
+                arguments: {"jsonData": surahs, "pageNumber": pageNumber},
+              );
+            },
+
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "سورة ${getSurahNameArabic(result["surah"])} - الآية ${result["verse"]}",
-                  textDirection: TextDirection.rtl,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(height: 4),
+
                 Text(
                   getVerse(
                     result["surah"],
                     result["verse"],
                     verseEndSymbol: true,
                   ),
-                  textDirection: TextDirection.rtl,
-                  style: TextStyle(color: Colors.black87, fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
             ),

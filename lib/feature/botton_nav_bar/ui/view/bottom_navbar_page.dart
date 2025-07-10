@@ -10,19 +10,20 @@ class BottomNavbarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<NavBarCubit, int>(
-        builder: (context, state) {
-          return IndexedStack(
+    return BlocBuilder<NavBarCubit, int>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar:
+              state == 1
+                  ? AppBar(title: const Text("المرجعيات"), centerTitle: true)
+                  : null,
+
+          body: IndexedStack(
             index: state,
             children: const [QuranSurahPage(), BookmarksPage()],
-          );
-        },
-      ),
+          ),
 
-      bottomNavigationBar: BlocBuilder<NavBarCubit, int>(
-        builder: (context, state) {
-          return BottomNavigationBar(
+          bottomNavigationBar: BottomNavigationBar(
             currentIndex: state,
             onTap: (value) {
               BlocProvider.of<NavBarCubit>(context).changeTab(value);
@@ -33,13 +34,13 @@ class BottomNavbarPage extends StatelessWidget {
                 icon: Icons.menu_book_outlined,
               ),
               _buildBottomNavigationBarItem(
-                label: 'المفضلة',
+                label: 'المرجعيات',
                 icon: Icons.bookmark_outlined,
               ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
