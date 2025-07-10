@@ -17,7 +17,7 @@ class AzkarYawmiScreen extends StatelessWidget {
             if (state is SupplicationLoaded) {
               final keys = state.data.keys.toList();
 
-              return ListView.separated(
+              return ListView.builder(
                 itemCount: keys.length,
                 itemBuilder: (context, index) {
                   final category = keys[index];
@@ -27,9 +27,6 @@ class AzkarYawmiScreen extends StatelessWidget {
                     items: items,
                     category: category,
                   );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 8);
                 },
               );
             } else if (state is SupplicationLoading) {

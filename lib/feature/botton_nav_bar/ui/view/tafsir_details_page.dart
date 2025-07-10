@@ -32,33 +32,26 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
-
       appBar: AppBar(title: const Text("تفسير الآية")),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child:
-              // 📖 نص الآية
-              Card(
-                color: Colors.grey[200],
-                elevation: 1,
+              child: Card(
+                color: Theme.of(context).cardColor,
+                elevation: 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                shadowColor: AppColors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Text(
                     textDirection: TextDirection.rtl,
 
                     widget.text,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.justify,
                   ),
                 ),
@@ -84,12 +77,7 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
                         textDirection: TextDirection.rtl,
                         textAlign: TextAlign.justify,
                         state.tafsirByAyah.data!.text.toString(),
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[600],
-                          fontFamily: "arsura",
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
                         // textAlign: TextAlign.justify,
                       ),
                     );

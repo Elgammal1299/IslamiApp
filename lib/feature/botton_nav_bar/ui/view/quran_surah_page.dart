@@ -20,25 +20,29 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   bool _isSearching = false;
   final _searchTextSurahController = TextEditingController();
   final _searchTextAyatController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void dispose() {
     _searchTextSurahController.dispose();
     _searchTextAyatController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   Widget _buildSearchField() {
     return TextField(
+      focusNode: _searchFocusNode,
       controller: _searchTextAyatController,
-      cursorColor: AppColors.secondary,
+      cursorColor: Theme.of(context).primaryColorDark,
       decoration: InputDecoration(
         hintText: 'ابحث في الآيات...',
         border: InputBorder.none,
-        hintStyle: TextStyle(color: AppColors.secondary, fontSize: 18),
+        hintStyle: TextStyle(color: Theme.of(context).cardColor, fontSize: 18),
       ),
-      style: TextStyle(color: AppColors.secondary, fontSize: 18),
+      style: TextStyle(color: AppColors.black, fontSize: 18),
       onChanged: (searchedCharacter) {
+        _searchTextSurahController.clear(); // لتفريغ البحث في السور
         addSearchedForAyatsToSearchedList(searchedCharacter);
       },
     );
@@ -61,6 +65,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
     final surahCubit = BlocProvider.of<SurahCubit>(context).surahs;
 
     if (searchQuery.isNotEmpty) {
+      _searchTextAyatController.clear(); // لتفريغ البحث في الآيات
       setState(() {
         searchedForSurah =
             surahCubit.where((sura) {
@@ -71,6 +76,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
               return suraName.contains(searchQuery.toLowerCase()) ||
                   suraNameTranslated.contains(searchQuery.toLowerCase());
             }).toList();
+        searchedForAyats = null;
       });
     } else {
       setState(() {
@@ -108,6 +114,9 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
     setState(() {
       _isSearching = true;
     });
+    Future.delayed(Duration(milliseconds: 100), () {
+      FocusScope.of(context).requestFocus(_searchFocusNode);
+    });
   }
 
   void _stopSearching() {
@@ -120,36 +129,42 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
   void _clearSearch() {
     setState(() {
       _searchTextAyatController.clear();
+      _searchTextSurahController.clear();
       searchedForAyats = null;
+      searchedForSurah = [];
     });
   }
 
   Widget _buildAppBarTitle() {
-    return Text('القرآن الكريم', style: TextStyle(color: AppColors.secondary));
+    return const Text('القرآن الكريم');
   }
 
-  Widget _buildVerseSearchResults() {
+  Widget _buildVerseSearchResults(List<SurahModel> surahs) {
     if (searchedForAyats == null) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (searchedForAyats["occurences"] == 0) {
       return Center(
         child: Text(
           'لا توجد نتائج بحث',
-          style: TextStyle(color: AppColors.secondary, fontSize: 18),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge!.copyWith(color: AppColors.black),
         ),
       );
     }
 
-    return CustomAyatSearchResults(searchedForAyats: searchedForAyats);
+    return CustomAyatSearchResults(
+      searchedForAyats: searchedForAyats,
+      surahs: surahs,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.secondary,
         leading: _isSearching ? BackButton(color: AppColors.secondary) : null,
         title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
         actions: _buildAppBarActions(),
@@ -162,13 +177,12 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
             if (!_isSearching)
               TextField(
                 controller: _searchTextSurahController,
-                cursorColor: AppColors.secondary,
-                decoration: InputDecoration(
+                cursorColor: AppColors.black,
+                style: const TextStyle(color: AppColors.black),
+                decoration: const InputDecoration(
                   hintText: 'ابحث عن سورة...',
                   border: InputBorder.none,
-                  hintStyle: TextStyle(color: AppColors.secondary, fontSize: 18),
                 ),
-                style: TextStyle(color: AppColors.secondary, fontSize: 18),
                 onChanged: (searchedSurah) {
                   addSearchedForSurahToSearchedList(searchedSurah);
                 },
@@ -177,14 +191,14 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
               child: BlocBuilder<SurahCubit, SurahState>(
                 builder: (context, state) {
                   if (state is SurahLoading) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (state is SurahError) {
                     return Center(child: Text(state.message));
                   }
                   if (state is SurahSuccess) {
                     return searchedForAyats != null
-                        ? _buildVerseSearchResults()
+                        ? _buildVerseSearchResults(state.surahs)
                         : CustomSurahItemListView(
                           surahs: state.surahs,
                           searchTextSurahController: _searchTextSurahController,

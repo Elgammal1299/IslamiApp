@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
@@ -24,65 +23,47 @@ class SuraListViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Container(
-        child: ListTile(
-          leading: SizedBox(
-            width: 45,
-            height: 45,
-            child: Center(
-              child: Text(
-                suraNumber.toString(),
-                style: const TextStyle(color: AppColors.secondary, fontSize: 14),
-              ),
-            ),
-          ), //  Material(
-          minVerticalPadding: 0,
-          title: SizedBox(
-            width: 90,
-            child: Row(
-              children: [
-                Text(
-                  suraName,
-                  style: const TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    color:AppColors.accent,// blueColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700, // Text color
-                  ),
-                ),
-              ],
-            ),
-          ),
-          subtitle: Text(
-            "$suraNameEnglishTranslated ($ayahCount)",
-            style: TextStyle(fontSize: 14, color: Colors.grey.withOpacity(.8)),
-          ),
-          trailing: RichText(
-            text: TextSpan(
-              text: suraNumber.toString(),
+    return ListTile(
+      leading: SizedBox(
+        width: 45,
+        height: 45,
+        child: Center(
+          child: Text(
+            suraNumber.toString(),
 
-              style: const TextStyle(
-                fontFamily: "arsura",
-                fontSize: 22,
-                color: Colors.black,
-              ),
-            ),
-          ),
-
-          onTap: () async {
-            Navigator.pushNamed(
+            style: Theme.of(
               context,
-              AppRoutes.quranViewRouter,
-              arguments: {
-                "jsonData": surahs,
-                "pageNumber": getPageNumber(suraNumberInQuran, 1),
-              },
-            );
-          },
+            ).textTheme.titleMedium!.copyWith(fontSize: 14),
+          ),
+        ),
+      ), //  Material(
+      minVerticalPadding: 0,
+      title: RichText(
+        text: TextSpan(
+          text: suraNumber.toString(),
+
+          style: TextStyle(
+            fontFamily: "arsura",
+            fontSize: 30,
+            color: Theme.of(context).primaryColorDark,
+          ),
         ),
       ),
+      trailing: Text(
+        "( $ayahCount ) ",
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
+      ),
+
+      onTap: () async {
+        Navigator.pushNamed(
+          context,
+          AppRoutes.quranViewRouter,
+          arguments: {
+            "jsonData": surahs,
+            "pageNumber": getPageNumber(suraNumberInQuran, 1),
+          },
+        );
+      },
     );
   }
 }

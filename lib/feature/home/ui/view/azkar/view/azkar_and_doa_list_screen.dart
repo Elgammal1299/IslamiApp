@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_dialog_rawy.dart';
 import 'package:share_plus/share_plus.dart';
@@ -26,28 +27,25 @@ class AzkarAndDoaListScreen extends StatelessWidget {
             ),
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ==== الحديث + الراوي (بنفس الخلفية) ====
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF2B6777),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         supplication.body,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: AppColors.white,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -64,8 +62,8 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFB2D1D8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).secondaryHeaderColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
@@ -75,7 +73,21 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.copy, color: Colors.white),
+                        icon: Icon(
+                          Icons.share,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        tooltip: "مشاركة",
+                        onPressed: () {
+                          Share.share(supplication.body);
+                        },
+                      ),
+                      SizedBox(width: 14),
+                      IconButton(
+                        icon: Icon(
+                          Icons.copy,
+                          color: Theme.of(context).primaryColor,
+                        ),
                         tooltip: "نسخ",
                         onPressed: () {
                           Clipboard.setData(
@@ -84,13 +96,6 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("✅ تم نسخ الذكر")),
                           );
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.share, color: Colors.white),
-                        tooltip: "مشاركة",
-                        onPressed: () {
-                          Share.share(supplication.body);
                         },
                       ),
                     ],

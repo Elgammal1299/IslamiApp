@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 
@@ -9,8 +8,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background, //quranPagesColor,
-
       appBar: AppBar(
         title: const Text(
           "تطبيق إسلامي",
@@ -34,11 +31,11 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Theme.of(context).shadowColor.withOpacity(0.1),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 3),

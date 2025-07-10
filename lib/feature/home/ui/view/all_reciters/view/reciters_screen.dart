@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/custom_reciters_list_item.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 
@@ -23,6 +24,7 @@ class _RecitersScreenState extends State<RecitersScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextField(
+              style: TextStyle(color: AppColors.black, fontSize: 18),
               decoration: InputDecoration(
                 labelText: "بحث عن قارئ",
                 border: OutlineInputBorder(),

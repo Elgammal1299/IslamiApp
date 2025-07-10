@@ -1,4 +1,3 @@
-
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
@@ -9,7 +8,8 @@ class CustomSurahFramWidget extends m.StatelessWidget {
   const CustomSurahFramWidget({
     super.key,
     required this.screenSize,
-    required this.widget, required this.index,
+    required this.widget,
+    required this.index,
   });
 
   final m.Size screenSize;
@@ -20,68 +20,44 @@ class CustomSurahFramWidget extends m.StatelessWidget {
   m.Widget build(m.BuildContext context) {
     return SizedBox(
       width: screenSize.width,
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: (screenSize.width * .27),
+            width: (screenSize.width * .30),
             child: Row(
               children: [
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back_ios,
                     size: 24,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
                 Text(
-                  widget
-                      .jsonData[getPageData(
-                            index,
-                          )[0]["surah"] -
-                          1]
-                      .name,
-                  style: const TextStyle(
-                    fontFamily: "Taha",
-                    fontSize: 14,
-                  ),
+                  widget.jsonData[getPageData(index)[0]["surah"] - 1].name,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),
           ),
           EasyContainer(
             borderRadius: 12,
-            color: Colors.orange.withOpacity(.5),
+            color: Theme.of(context).secondaryHeaderColor,
             showBorder: true,
-            height: 20,
+            height: 25,
             width: 120,
             padding: 0,
             margin: 0,
             child: Center(
               child: Text(
-                "${"page"} $index ",
-                style: const TextStyle(
-                  fontFamily: 'aldahabi',
-                  fontSize: 12,
-                ),
+                "${"صفحة"} $index ",
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-            ),
-          ),
-          SizedBox(
-            width: (screenSize.width * .27),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.settings,
-                    size: 24,
-                  ),
-                ),
-              ],
             ),
           ),
         ],

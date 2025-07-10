@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
-import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/now_playing_screen.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -44,22 +45,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              'قائمة التشغيل',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: _showMoreOptions,
-              ),
-            ],
-          ),
+          appBar: AppBar(title: Text('قائمة التشغيل')),
           body: FadeTransition(
             opacity: _fadeAnimation,
             child: _buildPlaylist(state),
@@ -93,9 +79,13 @@ class _PlaylistScreenState extends State<PlaylistScreen>
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      elevation: isCurrentItem ? 4 : 1,
-      color: isCurrentItem ? Colors.white70 : Colors.white,
+      elevation: isCurrentItem ? 4 : 2,
+      color:
+          isCurrentItem
+              ? Theme.of(context).secondaryHeaderColor
+              : Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shadowColor: AppColors.white,
       child: InkWell(
         onTap: () async {
           final index = state.playlist.indexOf(item);
@@ -132,20 +122,12 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                       children: [
                         Text(
                           item.title,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleMedium?.copyWith(
-                            fontWeight:
-                                isCurrentItem
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                            color:
-                                isCurrentItem
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium?.color,
-                          ),
+                          style:
+                              isCurrentItem
+                                  ? Theme.of(context).textTheme.titleLarge!
+                                      .copyWith(color: AppColors.black)
+                                  : Theme.of(context).textTheme.titleLarge,
+
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -155,20 +137,11 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                           child: Text(
                             textAlign: TextAlign.end,
                             item.displayTitle ?? '',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.copyWith(
-                              fontWeight:
-                                  isCurrentItem
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                              color:
-                                  isCurrentItem
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium?.color,
-                            ),
+                            style:
+                                isCurrentItem
+                                    ? Theme.of(context).textTheme.bodyLarge!
+                                        .copyWith(color: AppColors.black)
+                                    : Theme.of(context).textTheme.bodyLarge,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -178,12 +151,12 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                     const SizedBox(height: 4),
                     Text(
                       item.artist ?? 'فنان غير معروف',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color:
-                            isCurrentItem
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.grey[600],
-                      ),
+                      style:
+                          isCurrentItem
+                              ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                color: AppColors.black,
+                              )
+                              : Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -269,9 +242,5 @@ class _PlaylistScreenState extends State<PlaylistScreen>
         ],
       ),
     );
-  }
-
-  void _showMoreOptions() {
-    // TODO: Implement more options menu
   }
 }

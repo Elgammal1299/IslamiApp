@@ -17,12 +17,7 @@ class CustomSurahItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      separatorBuilder:
-          (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Divider(color: Colors.grey.withOpacity(.5)),
-          ),
+    return ListView.builder(
       itemCount:
           _searchTextSurahController.text.isEmpty
               ? surahs.length
@@ -34,7 +29,7 @@ class CustomSurahItemListView extends StatelessWidget {
                 : searchedForSurah[index];
 
         return SuraListViewItem(
-          suraNumber: index + 1,
+          suraNumber: surah.number,
           suraName: surah.name,
           suraNameEnglishTranslated: surah.englishNameTranslation,
           ayahCount: getVerseCount(surah.number),

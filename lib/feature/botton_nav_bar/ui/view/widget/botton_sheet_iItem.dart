@@ -65,15 +65,10 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            trailing: Icon(Icons.play_arrow),
+            leading: Icon(Icons.play_arrow),
             title: Text(
               "استماع ",
-              style: TextStyle(
-                fontFamily: "arsura",
-                fontSize: 20,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             onTap: () {
               // await audioPlayer.play(UrlSource(audioURL));
@@ -90,15 +85,10 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             },
           ),
           ListTile(
-            trailing: Icon(Icons.menu_book),
+            leading: Icon(Icons.menu_book),
             title: Text(
               "التفسير",
-              style: TextStyle(
-                fontFamily: "arsura",
-                fontSize: 20,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             onTap: () {
               Navigator.pushReplacementNamed(
@@ -114,15 +104,10 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
           ),
 
           ListTile(
-            trailing: const Icon(Icons.copy),
-            title: const Text(
+            leading: const Icon(Icons.copy),
+            title: Text(
               'نسخ الآية',
-              style: TextStyle(
-                fontFamily: "arsura",
-                fontSize: 20,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             onTap: () {
               Clipboard.setData(
@@ -139,17 +124,12 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             builder: (context, snapshot) {
               bool isBookmarked = snapshot.data ?? false;
               return ListTile(
-                trailing: Icon(
+                leading: Icon(
                   isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                 ),
                 title: Text(
-                  isBookmarked ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة',
-                  style: TextStyle(
-                    fontFamily: "arsura",
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.end,
+                  isBookmarked ? 'إزالة من المرجعيات' : 'إضافة إلى المرجعيات',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 onTap: () async {
                   if (isBookmarked) {
@@ -170,8 +150,8 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                     SnackBar(
                       content: Text(
                         isBookmarked
-                            ? 'تم إزالة الآية من المفضلة'
-                            : 'تمت إضافة الآية إلى المفضلة',
+                            ? 'تم إزالة الآية من المرجعيات'
+                            : 'تمت إضافة الآية إلى المرجعيات',
                       ),
                     ),
                   );
@@ -180,15 +160,10 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             },
           ),
           ListTile(
-            trailing: const Icon(Icons.share),
-            title: const Text(
+            leading: const Icon(Icons.share),
+            title: Text(
               'مشاركة الآية',
-              style: TextStyle(
-                fontFamily: "arsura",
-                fontSize: 20,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             onTap: () {
               Share.share(

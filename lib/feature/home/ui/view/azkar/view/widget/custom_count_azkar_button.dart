@@ -22,26 +22,32 @@ class CustomCountAzkarButton extends StatelessWidget {
                 child: CircularProgressIndicator(
                   value: progress,
                   strokeWidth: 8,
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.teal),
+                  backgroundColor: Theme.of(context).canvasColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.teal,
+                  color: Theme.of(context).canvasColor,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.teal.withOpacity(0.4),
+                      color: Theme.of(context).canvasColor,
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.check, color: Colors.white, size: 40),
+                child: Icon(
+                  Icons.check,
+                  color: Theme.of(context).hintColor,
+                  size: 40,
+                ),
               ),
             ],
           ),

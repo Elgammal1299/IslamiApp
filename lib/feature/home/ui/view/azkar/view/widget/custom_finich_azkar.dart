@@ -12,15 +12,15 @@ class CustomFinichAzkar extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.verified_rounded, color: Colors.teal, size: 80),
+            Icon(
+              Icons.verified_rounded,
+              color: Theme.of(context).primaryColor,
+              size: 150,
+            ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'تم بحمد الله ',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -33,8 +33,8 @@ class CustomFinichAzkar extends StatelessWidget {
               },
 
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Theme.of(context).hintColor,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,

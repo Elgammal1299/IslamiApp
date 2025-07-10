@@ -16,15 +16,11 @@ class CustomCountRepetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'الذكر ${currentIndex + 1} من ${widget.supplications.length}',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey.shade700,
-            fontWeight: FontWeight.w600,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
 
@@ -32,20 +28,27 @@ class CustomCountRepetItem extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFFE0F2F1),
+            color: Theme.of(context).secondaryHeaderColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.teal, width: 1.2),
+            border: Border.all(
+              color: Theme.of(context).canvasColor,
+              width: 1.2,
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.repeat, color: Colors.teal, size: 20),
+              Icon(
+                Icons.repeat,
+                color: Theme.of(context).canvasColor,
+                size: 20,
+              ),
               const SizedBox(width: 6),
               Text(
                 'التكرار: $maxCount مرة',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: Colors.teal,
+                  color: Theme.of(context).canvasColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
