@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
+import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeCubit>().state is DarkThemeState;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -16,10 +19,8 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.brightness_6),
-            onPressed: () {
-              // هنا يمكنك إضافة منطق تغيير الثيم
-            },
+            icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
           ),
         ],
       ),

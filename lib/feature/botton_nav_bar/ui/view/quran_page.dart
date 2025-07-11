@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
@@ -128,7 +127,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Container(
-                  width: 1, // أو أي رقم صغير جدًا
+                  width: 1,
                   height: double.infinity,
                   color: Colors.red,
                 ),
