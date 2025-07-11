@@ -5,6 +5,7 @@ import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
+import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/islami_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +17,11 @@ void main() async {
   final audioBox = HiveService.instanceFor<RecordingModel>("audioBox");
   await audioBox.init();
   runApp(
-    BlocProvider(
-      create: (context) => AudioCubit(AudioManager()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AudioCubit(AudioManager())),
+        BlocProvider(create: (context) => ThemeCubit()),
+      ],
       child: const IslamiApp(),
     ),
   );
