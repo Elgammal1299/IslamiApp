@@ -9,6 +9,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+
     final isDark = context.watch<ThemeCubit>().state is DarkThemeState;
     return Scaffold(
       appBar: AppBar(
@@ -85,6 +87,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
+          
         ],
       ),
     );

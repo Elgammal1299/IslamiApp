@@ -36,24 +36,27 @@ class AudioRecordingCubit extends Cubit<AudioRecordingState> {
 
   Future<void> stopRecording() async {
     final path = await _record.stop();
+
     if (path != null && lastCreatedAt != null) {
-      // Get duration using just_audio
       try {
         final player = AudioPlayer();
         await player.setFilePath(path);
         final duration = player.duration?.inMilliseconds ?? 0;
         await player.dispose();
+
+        // استخدام HiveService لتخزين التسجيل
         final audioService = HiveService.instanceFor<RecordingModel>(
-          "audioBox",
+          boxName: "audioBox",
         );
-        await audioService.addItem(
-          DateTime.now().millisecondsSinceEpoch.toString(),
+        await audioService.put(
+          DateTime.now().millisecondsSinceEpoch.toString(), // مفتاح مميز
           RecordingModel(
             filePath: path,
             createdAt: lastCreatedAt!,
             duration: duration,
           ),
         );
+
         emit(AudioRecorded(path));
       } catch (e) {
         emit(AudioRecordingError("فشل في قراءة مدة التسجيل"));
