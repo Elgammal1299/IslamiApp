@@ -75,6 +75,11 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
+      titleSmall: TextStyle(
+        color: AppColors.darkDivider,
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
       labelLarge: TextStyle(
         fontFamily: "arsura",
         fontSize: 30,
