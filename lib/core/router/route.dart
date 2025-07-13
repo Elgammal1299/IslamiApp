@@ -44,6 +44,8 @@ import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
+import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
+import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
 import 'package:islami_app/feature/splash_screen/splah_page.dart';
 
 class AppRouter {
@@ -51,6 +53,14 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => SplashScreen());
+      case AppRoutes.notificationScreenRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (_) => NotificationCubit()..init(),
+                child: NotificationScreen(),
+              ),
+        );
 
       case AppRoutes.homeRoute:
         return MaterialPageRoute(builder: (_) => HomeScreen());

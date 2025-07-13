@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
@@ -9,8 +10,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
     final isDark = context.watch<ThemeCubit>().state is DarkThemeState;
     return Scaffold(
       appBar: AppBar(
@@ -19,10 +18,16 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+          onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+        ),
         actions: [
           IconButton(
-            icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.notificationScreenRouter); 
+            },
+            icon: Icon(Icons.notifications),
           ),
         ],
       ),
@@ -87,7 +92,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          
         ],
       ),
     );

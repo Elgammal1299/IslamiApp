@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:islami_app/feature/notification/data/repo/notification_repo.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -102,6 +103,11 @@ class LocalNotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: repeat,
       payload: payload ?? 'custom_payload',
+    );
+    await NotificationRepo().logNotification(
+      title: title,
+      body: body,
+      type: 'scheduled',
     );
   }
 
