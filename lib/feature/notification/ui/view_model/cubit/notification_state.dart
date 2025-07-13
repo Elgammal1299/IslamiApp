@@ -7,7 +7,7 @@ final class NotificationInitial extends NotificationState {}
 final class NotificationLoading extends NotificationState {}
 
 final class NotificationLoaded extends NotificationState {
-  final List<NotificationModel> notifications;
+  final List<MapEntry<String, NotificationModel>> notifications;
 
   NotificationLoaded(this.notifications);
 }

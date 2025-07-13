@@ -14,12 +14,15 @@ class NotificationModel extends HiveObject {
   final DateTime dateTime;
 
   @HiveField(3)
-  final String type; // firebase | scheduled
+  final String type;
+  @HiveField(4)
+   bool? isRead;
 
   NotificationModel({
     required this.title,
     required this.body,
     required this.dateTime,
     required this.type,
+    this.isRead = false,
   });
 }
