@@ -10,6 +10,7 @@ import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
+import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
@@ -37,8 +38,6 @@ void main() async {
     badge: true,
     sound: true,
   );
-  tz.initializeTimeZones();
-  await LocalNotificationService.init();
 
   await MessagingConfig.initFirebaseMessaging();
   String? token = await FirebaseMessaging.instance.getToken();
@@ -50,9 +49,17 @@ void main() async {
 
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
+  
   Hive.registerAdapter(RecordingModelAdapter());
+  Hive.registerAdapter(NotificationModelAdapter());
   final audioBox = HiveService.instanceFor<RecordingModel>(boxName: "audioBox");
   await audioBox.init();
+  final notificationsBox = HiveService.instanceFor<NotificationModel>(
+    boxName: 'notifications',
+  );
+  await notificationsBox.init();
+  tz.initializeTimeZones();
+  await LocalNotificationService.init();
   runApp(
     MultiBlocProvider(
       providers: [
