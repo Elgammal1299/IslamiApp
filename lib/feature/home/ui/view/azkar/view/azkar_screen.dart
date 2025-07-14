@@ -9,7 +9,7 @@ class AzkarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("📂 قائمة الأذكار")),
+      appBar: AppBar(title: const Text(" قائمة الأذكار")),
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (context, state) {
           if (state is AzkarLoading) {

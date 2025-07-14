@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_random_screen.dart';
@@ -15,12 +16,14 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "تطبيق إسلامي",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        title: Text(
+          "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: AppColors.white,
+            fontSize: 20,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: IconButton(
           icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
           onPressed: () => context.read<ThemeCubit>().toggleTheme(),

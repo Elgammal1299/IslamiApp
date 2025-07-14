@@ -68,6 +68,7 @@ flutter:
     - assets/json/
     - assets/json/Azkar/
     - assets/images/
+    - assets/audio/
   
 
   # example:

@@ -35,7 +35,7 @@ final List<HomeItemModel> items = [
 
   HomeItemModel(
     name: "ذكر يومي",
-    image: "assets/images/azkar.png",
+    image: "assets/images/download.png",
     route: AppRoutes.azkarYawmiScreen,
   ),
   HomeItemModel(
@@ -50,7 +50,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.audioRecordingRouter,
   ),
   HomeItemModel(
-    name: "المكتبة الصوتية",
+    name: "صوتيات",
     image: "assets/images/audio.png",
 
     route: AppRoutes.recitersPageRouter,
