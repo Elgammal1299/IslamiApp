@@ -53,6 +53,10 @@ void _navigateByRoute(BuildContext context, String route, String? slug) {
       _navigateWithSlug(context, slug);
       break;
 
+    case '/azkar_page':
+      Navigator.pushNamed(context, AppRoutes.quranViewRouter);
+      break;
+
     default:
       log('⚠️ Unknown route: $route');
       _goToDefault(context);
@@ -76,6 +80,10 @@ void _navigateByType(
     case 'invoice':
     case 'system':
       Navigator.pushNamed(context, AppRoutes.homeRoute);
+      break;
+
+    case 'azkar':
+      Navigator.pushNamed(context, AppRoutes.quranViewRouter);
       break;
 
     default:

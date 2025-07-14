@@ -1,9 +1,12 @@
+import 'package:islami_app/core/constant/app_constant.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 
 class NotificationRepo {
   final HiveService<NotificationModel> _service =
-      HiveService.instanceFor<NotificationModel>(boxName: 'notifications');
+      HiveService.instanceFor<NotificationModel>(
+        boxName: AppConstant.hivenotifications,
+      );
 
   /// تسجّل إشعار جديد (مع isRead = false)
   Future<void> logNotification({

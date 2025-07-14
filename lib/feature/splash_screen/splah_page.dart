@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -73,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen>
                 FadeTransition(
                   opacity: _animation,
                   child: Image.asset(
-                    'assets/images/splash.png',
+                    AppImage.splashImage,
                     width: 200,
                     height: 200,
                   ),

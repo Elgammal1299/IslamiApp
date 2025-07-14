@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart' show getVerseCount;
 
@@ -16,7 +17,7 @@ class HeaderWidget extends StatelessWidget {
         children: [
           Center(
             child: Image.asset(
-              "assets/images/surah_fram.png",
+              AppImage.surahFramImage,
               width: MediaQuery.of(context).size.width,
               height: 50,
             ),

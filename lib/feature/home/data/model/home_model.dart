@@ -1,3 +1,4 @@
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
 class HomeItemModel {
@@ -11,62 +12,57 @@ class HomeItemModel {
 final List<HomeItemModel> items = [
   HomeItemModel(
     name: "القرآن الكريم",
-    image: "assets/images/10604515.png",
+    image: AppImage.quranImage,
     route: AppRoutes.navBarRoute,
   ),
   HomeItemModel(
     name: "الأحاديث",
-    image: "assets/images/hadith.png",
+    image: AppImage.hadithImage,
 
     route: AppRoutes.hadithRouter,
   ),
 
   HomeItemModel(
     name: "السبحة",
-    image: "assets/images/beads.png",
+    image: AppImage.beadsImage,
 
     route: AppRoutes.sebhaPageRouter,
   ),
   HomeItemModel(
     name: "القبلة",
-    image: "assets/images/kaaba.png",
+    image: AppImage.kaabaImage,
     route: AppRoutes.qiblahRouter,
   ),
 
   HomeItemModel(
     name: "ذكر يومي",
-    image: "assets/images/download.png",
+    image: AppImage.azkarImage,
     route: AppRoutes.azkarYawmiScreen,
   ),
   HomeItemModel(
     name: "دعاء وذكر",
-    image: "assets/images/praying.png",
+    image: AppImage.prayingImage,
     route: AppRoutes.azkarPageRouter,
   ),
   HomeItemModel(
     name: "تسجيل ريكورد",
-    image: "assets/images/mic.png",
+    image: AppImage.micImage,
 
     route: AppRoutes.audioRecordingRouter,
   ),
   HomeItemModel(
     name: "صوتيات",
-    image: "assets/images/audio.png",
+    image: AppImage.audioImage,
 
     route: AppRoutes.recitersPageRouter,
   ),
   HomeItemModel(
     name: "الراديو",
-    image: "assets/images/radio.png",
+    image: AppImage.radioImage,
 
     route: AppRoutes.radioPageRouter,
   ),
-  // HomeItemModel(
-  //   name: "الصوتيات",
-  //   image: "assets/images/audio.png",
 
-  //   route: AppRoutes.quranAudioSurahListRouter,
-  // ),
   // HomeItemModel(
   //   name: "التفسير",
   //   image: "assets/images/hadith.png",

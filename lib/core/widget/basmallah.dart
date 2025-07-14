@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 
 class Basmallah extends StatefulWidget {
   final int index;
@@ -22,7 +23,7 @@ class _BasmallahState extends State<Basmallah> {
           bottom: 2,
         ),
         child: Image.asset(
-          "assets/images/Basmala.png",
+          AppImage.basmalaImage,
           color: Theme.of(context).primaryColorDark,
           width: MediaQuery.of(context).size.width * .4,
         ),

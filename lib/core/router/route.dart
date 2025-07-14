@@ -21,7 +21,6 @@ import 'package:islami_app/feature/home/ui/view/all_reciters/data/repo/reciters_
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/audio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_yawmi_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_repo.dart';
@@ -33,7 +32,6 @@ import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
 import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
-import 'package:islami_app/feature/home/ui/view/quran_audio_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
@@ -141,9 +139,6 @@ class AppRouter {
               ),
         );
 
-      case AppRoutes.quranAudioSurahListRouter:
-        return MaterialPageRoute(builder: (_) => QuranAudioSurahList());
-
       case AppRoutes.hadithDetailsRouter:
         final hadithCubit = settings.arguments as HadithCubit;
         return MaterialPageRoute(
@@ -161,16 +156,6 @@ class AppRouter {
                 create:
                     (context) => HadithCubit(HadithRepo(HadithJsonServer())),
                 child: HadithPage(),
-              ),
-        );
-
-      case AppRoutes.audioPlayerPageRouter:
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder:
-              (_) => AudioPlayerPage(
-                surahIndex: args?['surahIndex'],
-                surahName: args?['surahName'],
               ),
         );
 

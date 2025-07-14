@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/constant/app_constant.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:path_provider/path_provider.dart';
@@ -46,7 +47,7 @@ class AudioRecordingCubit extends Cubit<AudioRecordingState> {
 
         // استخدام HiveService لتخزين التسجيل
         final audioService = HiveService.instanceFor<RecordingModel>(
-          boxName: "audioBox",
+          boxName: AppConstant.hiveAudio,
         );
         await audioService.put(
           DateTime.now().millisecondsSinceEpoch.toString(), // مفتاح مميز

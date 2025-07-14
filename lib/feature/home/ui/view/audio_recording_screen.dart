@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:islami_app/core/constant/app_constant.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
@@ -18,7 +19,7 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
   late final RecorderController recorderController;
   late final PlayerController playerController;
   final audioService = HiveService.instanceFor<RecordingModel>(
-    boxName: "audioBox",
+    boxName: AppConstant.hiveAudio,
   );
 
   List<RecordingModel> recordings = [];

@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:islami_app/core/constant/app_constant.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
@@ -49,13 +50,15 @@ void main() async {
 
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
-  
+
   Hive.registerAdapter(RecordingModelAdapter());
   Hive.registerAdapter(NotificationModelAdapter());
-  final audioBox = HiveService.instanceFor<RecordingModel>(boxName: "audioBox");
+  final audioBox = HiveService.instanceFor<RecordingModel>(
+    boxName: AppConstant.hiveAudio,
+  );
   await audioBox.init();
   final notificationsBox = HiveService.instanceFor<NotificationModel>(
-    boxName: 'notifications',
+    boxName: AppConstant.hivenotifications,
   );
   await notificationsBox.init();
   tz.initializeTimeZones();
