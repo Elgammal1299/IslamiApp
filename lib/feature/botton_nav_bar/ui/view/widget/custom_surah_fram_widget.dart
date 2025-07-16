@@ -1,31 +1,30 @@
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as m;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:quran/quran.dart';
 
-class CustomSurahFramWidget extends m.StatelessWidget {
+class CustomSurahFramWidget extends StatelessWidget {
   const CustomSurahFramWidget({
     super.key,
-    required this.screenSize,
     required this.widget,
     required this.index,
   });
 
-  final m.Size screenSize;
   final QuranViewPage widget;
   final int index;
 
   @override
-  m.Widget build(m.BuildContext context) {
+  Widget build(BuildContext context) {
     return SizedBox(
-      width: screenSize.width,
+      width: 1.sw, // عرض الشاشة بالكامل
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // ✅ الجزء الأيسر: زر الرجوع واسم السورة
           SizedBox(
-            width: (screenSize.width * .30),
+            width: 0.35.sw, // 35% من عرض الشاشة
             child: Row(
               children: [
                 IconButton(
@@ -34,29 +33,38 @@ class CustomSurahFramWidget extends m.StatelessWidget {
                   },
                   icon: Icon(
                     Icons.arrow_back_ios,
-                    size: 24,
+                    size: 20.sp,
                     color: Theme.of(context).primaryColorDark,
                   ),
                 ),
-                Text(
-                  widget.jsonData[getPageData(index)[0]["surah"] - 1].name,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Flexible(
+                  child: Text(
+                    widget.jsonData[getPageData(index)[0]["surah"] - 1].name,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 18.sp,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
+
+          // ✅ الجزء الأيمن: صندوق رقم الصفحة
           EasyContainer(
-            borderRadius: 12,
+            borderRadius: 10.r,
             color: Theme.of(context).secondaryHeaderColor,
             showBorder: true,
-            height: 25,
-            width: 120,
+            height: 28.h,
+            width: 110.w,
             padding: 0,
             margin: 0,
             child: Center(
               child: Text(
-                "${"صفحة"} $index ",
-                style: Theme.of(context).textTheme.bodySmall,
+                "صفحة $index",
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
               ),
             ),
           ),

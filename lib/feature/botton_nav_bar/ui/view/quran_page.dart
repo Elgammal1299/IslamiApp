@@ -143,11 +143,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                   physics: const ClampingScrollPhysics(),
                   child: Column(
                     children: [
-                      CustomSurahFramWidget(
-                        screenSize: screenSize,
-                        widget: widget,
-                        index: index,
-                      ),
+                      CustomSurahFramWidget(widget: widget, index: index),
                       if ((index == 1 || index == 2))
                         SizedBox(height: (screenSize.height * .15)),
                       const SizedBox(height: 30),
