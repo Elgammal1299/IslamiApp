@@ -6,8 +6,8 @@ import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_random_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_random_cubit/azkar_random_cubit.dart';
 
-class AzkarRandomScreen extends StatelessWidget {
-  const AzkarRandomScreen({super.key});
+class AzkarRandom extends StatelessWidget {
+  const AzkarRandom({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
-import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_random_screen.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_random.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0, right: 16, left: 16),
-              child: AzkarRandomScreen(),
+              child: AzkarRandom(),
             ),
           ),
 

@@ -43,11 +43,7 @@ class HomeItemCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                   ),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 4,
-                  ),
+
                   child: Text(
                     item.name,
                     style: Theme.of(
