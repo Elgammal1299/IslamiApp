@@ -17,7 +17,7 @@ class IslamiApp extends StatelessWidget {
         final isDark = state is DarkThemeState;
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'وَارْتَقِ',
+          title: 'وَارْتَـقِ',
           locale: const Locale('ar'),
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,

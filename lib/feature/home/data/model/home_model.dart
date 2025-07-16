@@ -45,7 +45,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.azkarPageRouter,
   ),
   HomeItemModel(
-    name: "تسجيل ريكورد",
+    name: "ريكورد",
     image: AppImage.micImage,
 
     route: AppRoutes.audioRecordingRouter,

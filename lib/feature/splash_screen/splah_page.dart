@@ -73,20 +73,29 @@ class _SplashScreenState extends State<SplashScreen>
               children: [
                 FadeTransition(
                   opacity: _animation,
-                  child: Image.asset(
-                    AppImage.splashImage,
-                    width: 200,
-                    height: 200,
+                  child: CircleAvatar(
+                    radius: 120,
+                    backgroundColor: Colors.green,
+
+                    child: Image.asset(
+                      Theme.of(context).brightness == Brightness.dark
+                          ? AppImage.splashImageDark
+                          : AppImage.splashImageLight,
+
+                      width: 300,
+                      height: 300,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'القرءان الكريم',
-                  style: TextStyle(
-                    fontFamily: "arsura",
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
+                Text(
+                  'وَارْتَـقِ',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'كل ما يخص المسلم',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),

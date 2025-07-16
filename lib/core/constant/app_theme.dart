@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 
 class AppTheme {
@@ -60,29 +61,29 @@ class AppTheme {
         borderSide: const BorderSide(color: AppColors.red, width: 2),
       ),
     ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 18),
-      bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 16),
-      bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 18.sp),
+      bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 16.sp),
+      bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp),
 
       titleLarge: TextStyle(
         color: AppColors.black,
         fontWeight: FontWeight.bold,
-        fontSize: 18,
+        fontSize: 18.sp,
       ),
       titleMedium: TextStyle(
         color: AppColors.black,
         fontWeight: FontWeight.bold,
-        fontSize: 16,
+        fontSize: 16.sp,
       ),
       titleSmall: TextStyle(
         color: AppColors.darkDivider,
         fontWeight: FontWeight.bold,
-        fontSize: 14,
+        fontSize: 14.sp,
       ),
       labelLarge: TextStyle(
         fontFamily: "arsura",
-        fontSize: 30,
+        fontSize: 30.sp,
         color: AppColors.black,
         fontWeight: FontWeight.bold,
       ),
@@ -94,11 +95,14 @@ class AppTheme {
       backgroundColor: AppColors.secondary,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: AppColors.black,
-      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24),
-      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24),
-      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24.sp),
+      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24.sp),
+      selectedLabelStyle: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.bold,
+      ),
       unselectedLabelStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -161,24 +165,27 @@ class AppTheme {
       ),
     ),
 
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.darkTextPrimary, fontSize: 16),
-      bodyMedium: TextStyle(color: AppColors.darkTextSecondary, fontSize: 14),
-      bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: AppColors.darkTextPrimary, fontSize: 16.sp),
+      bodyMedium: TextStyle(
+        color: AppColors.darkTextSecondary,
+        fontSize: 14.sp,
+      ),
+      bodySmall: TextStyle(color: AppColors.textSecondary, fontSize: 14.sp),
       titleMedium: TextStyle(
         color: AppColors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 16,
+        fontSize: 16.sp,
       ),
       titleLarge: TextStyle(
         color: AppColors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 18,
+        fontSize: 18.sp,
       ),
       labelLarge: TextStyle(
         fontFamily: "arsura",
         fontWeight: FontWeight.bold,
-        fontSize: 30,
+        fontSize: 30.sp,
         color: AppColors.white,
       ),
     ),
@@ -189,11 +196,14 @@ class AppTheme {
       backgroundColor: AppColors.secondary,
       selectedItemColor: AppColors.primary,
       unselectedItemColor: AppColors.black,
-      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24),
-      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24),
-      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      selectedIconTheme: IconThemeData(color: AppColors.white, size: 24.sp),
+      unselectedIconTheme: IconThemeData(color: AppColors.black, size: 24.sp),
+      selectedLabelStyle: TextStyle(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.bold,
+      ),
       unselectedLabelStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         fontWeight: FontWeight.bold,
       ),
     ),
