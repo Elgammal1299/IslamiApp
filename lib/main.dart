@@ -31,8 +31,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  final themeCubit = ThemeCubit();
+  await themeCubit.loadTheme();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -44,9 +47,9 @@ void main() async {
   await MessagingConfig.initFirebaseMessaging();
   String? token = await FirebaseMessaging.instance.getToken();
   log("📲 FCM Token: $token");
+
   NotificationSettings settings =
       await FirebaseMessaging.instance.requestPermission();
-
   log("🔔 Notification Permission Status: ${settings.authorizationStatus}");
 
   await SharedPreferences.getInstance();
@@ -54,30 +57,34 @@ void main() async {
 
   Hive.registerAdapter(RecordingModelAdapter());
   Hive.registerAdapter(NotificationModelAdapter());
+
   final audioBox = HiveService.instanceFor<RecordingModel>(
     boxName: AppConstant.hiveAudio,
   );
   await audioBox.init();
+
   final notificationsBox = HiveService.instanceFor<NotificationModel>(
     boxName: AppConstant.hivenotifications,
   );
   await notificationsBox.init();
+
   tz.initializeTimeZones();
   await LocalNotificationService.init();
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AudioCubit(AudioManager())),
-        BlocProvider(create: (context) => ThemeCubit()),
+        BlocProvider.value(value: themeCubit), // ← هنا الفرق
       ],
       child: ScreenUtilInit(
-        designSize: Size(402, 874),
+        designSize: const Size(402, 874),
         minTextAdapt: true,
         splitScreenMode: true,
         useInheritedMediaQuery: true,
         ensureScreenSize: true,
         enableScaleText: () => true,
-        builder: (context, child) => IslamiApp(),
+        builder: (context, child) => const IslamiApp(),
       ),
     ),
   );
