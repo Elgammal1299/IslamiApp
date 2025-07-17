@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:just_audio/just_audio.dart';
@@ -95,24 +96,24 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child:
-            item?.artUri != null
-                ? Image.network(
-                  item!.artUri.toString(),
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildPlaceholderArt(),
-                )
-                : _buildPlaceholderArt(),
+        child: Image.asset(AppImage.quranCoverImage),
+        // item?.artUri != null
+        //     ? Image.network(
+        //       item!.artUri.toString(),
+        //       fit: BoxFit.cover,
+        //       errorBuilder: (_, __, ___) => _buildPlaceholderArt(),
+        //     )
+        //     : _buildPlaceholderArt(),
       ),
     );
   }
 
-  Widget _buildPlaceholderArt() {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: const Icon(Icons.music_note, color: Colors.grey, size: 100),
-    );
-  }
+  // Widget _buildPlaceholderArt() {
+  //   return Container(
+  //     color: Theme.of(context).primaryColor,
+  //     child: const Icon(Icons.music_note, color: Colors.grey, size: 100),
+  //   );
+  // }
 
   Widget _buildProgressBar(AudioPlaybackState state) {
     final currentDuration = state.duration ?? Duration.zero;

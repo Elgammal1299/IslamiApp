@@ -18,4 +18,5 @@ class AppImage {
   static final compassDarkImage = 'assets/images/CompassDark.svg';
   static final compassImage = 'assets/images/Compass.svg';
   static final needleImage = 'assets/images/needle.svg';
+  static final quranCoverImage = 'assets/images/quran_cover.jpg';
 }

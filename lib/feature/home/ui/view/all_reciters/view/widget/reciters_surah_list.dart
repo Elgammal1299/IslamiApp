@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/audio_app_wrapper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:quran/quran.dart' as quran;
 
 class RecitersSurahList extends StatefulWidget {
@@ -27,7 +31,17 @@ class _RecitersSurahListState extends State<RecitersSurahList> {
     _initAudio();
   }
 
+  Future<Uri> _copyAssetToTemp(String assetPath) async {
+    final data = await rootBundle.load(assetPath);
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/${assetPath.split('/').last}');
+    await file.writeAsBytes(data.buffer.asUint8List());
+    return Uri.file(file.path);
+  }
+
   Future<void> _initAudio() async {
+    final artUri = await _copyAssetToTemp('assets/images/quran_cover.jpg');
+
     List<int> numberSurahList =
         (widget.moshaf.surahList ?? '')
             .split(",")
@@ -52,9 +66,10 @@ class _RecitersSurahListState extends State<RecitersSurahList> {
             duration: const Duration(
               minutes: 5,
             ), // لو مش معروف، ممكن تسيبها null
-            artUri: Uri.parse(
-              'https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg', // صورة ثابتة مؤقتًا
-            ),
+            artUri: artUri,
+            //      Uri.parse(
+            //  'https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg', // صورة ثابتة مؤقتًا
+            //     ),
           );
         }).toList();
 

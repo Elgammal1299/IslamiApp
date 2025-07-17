@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -200,24 +201,24 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child:
-            item.artUri != null
-                ? Image.network(
-                  item.artUri.toString(),
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildPlaceholderArt(),
-                )
-                : _buildPlaceholderArt(),
+        child: Image.asset(AppImage.quranCoverImage),
+        // item.artUri != null
+        //     ? Image.network(
+        //       item.artUri.toString(),
+        //       fit: BoxFit.cover,
+        //       errorBuilder: (_, __, ___) => _buildPlaceholderArt(),
+        //     )
+        //     : _buildPlaceholderArt(),
       ),
     );
   }
 
-  Widget _buildPlaceholderArt() {
-    return Container(
-      color: Colors.grey[200],
-      child: const Icon(Icons.music_note, color: Colors.grey, size: 30),
-    );
-  }
+  // Widget _buildPlaceholderArt() {
+  //   return Container(
+  //     color: Colors.grey[200],
+  //     child: const Icon(Icons.music_note, color: Colors.grey, size: 30),
+  //   );
+  // }
 
   Widget _buildEmptyState() {
     return Center(
