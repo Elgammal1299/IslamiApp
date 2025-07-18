@@ -44,12 +44,15 @@ class HomeItemCard extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
 
-                  child: Text(
-                    item.name,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge!.copyWith(color: AppColors.white),
-                    textAlign: TextAlign.center,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      item.name,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge!.copyWith(color: AppColors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
