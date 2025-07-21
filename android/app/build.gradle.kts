@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.islami_app"
+    namespace = "com.wartaqi.islamiapp"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
