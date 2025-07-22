@@ -1,3 +1,4 @@
+import 'package:islami_app/core/services/api/download.dart';
 import 'package:islami_app/core/services/api/hadith_db.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
 
@@ -7,7 +8,9 @@ class HadithRepo {
   HadithRepo(this.jsonServer);
   Future<List<HadithModel>> readJsonAbuDaud() async {
     try {
-      return await jsonServer.readJsonAbuDaud();
+     return await GetData.getData();
+
+      // return await jsonServer.readJsonAbuDaud();
     } catch (e) {
       throw Exception(e);
     }

@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/constant/app_json.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HadithJsonServer {
   Future<List<HadithModel>> readJsonAbuDaud() async {
@@ -86,5 +89,25 @@ class HadithJsonServer {
     //كده انا بحول النص الى object
     final List<dynamic> jsonResponse = json.decode(jsonString);
     return jsonResponse.map((json) => HadithModel.fromMap(json)).toList();
+  }
+
+  Future<List<HadithModel>?> readJsonFromFullPath(String fullPath) async {
+    try {
+      final file = File(fullPath);
+
+      if (await file.exists()) {
+        final contents = await file.readAsString();
+        final List<dynamic> data = jsonDecode(contents);
+
+        log("✅ تم قراءة الملف من: $fullPath");
+        log('message${data.toString()}');
+        return data.map((e) => HadithModel.fromMap(e)).toList();
+      } else {
+        log('❌ الملف غير موجود: $fullPath');
+      }
+    } catch (e) {
+      log('❌ خطأ في قراءة الملف: $e');
+    }
+    return null;
   }
 }
