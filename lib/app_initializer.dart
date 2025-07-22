@@ -39,8 +39,10 @@ class AppInitializer {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await FirebaseMessaging.instance.subscribeToTopic('all');
+    log("✅ Subscribed to topic: all_users");
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
           alert: true,

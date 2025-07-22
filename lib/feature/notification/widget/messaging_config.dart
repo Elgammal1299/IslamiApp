@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:islami_app/app_initializer.dart';
 import 'package:islami_app/feature/notification/data/repo/notification_repo.dart';
@@ -127,14 +126,15 @@ class MessagingConfig {
               importance: Importance.max,
               priority: Priority.high,
               playSound: true,
-
+              largeIcon: const DrawableResourceAndroidBitmap(
+                '@mipmap/ic_launcher',
+              ),
               icon: '@mipmap/ic_launcher',
               sound: const RawResourceAndroidNotificationSound('notifigation'),
 
               enableVibration: true,
 
               enableLights: true,
-              color: const Color(0xFFFF0000),
               styleInformation: BigTextStyleInformation(
                 notification.body ?? '',
                 htmlFormatBigText: true,
