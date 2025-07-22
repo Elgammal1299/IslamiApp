@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/constant/app_json.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HadithJsonServer {
   Future<List<HadithModel>> readJsonAbuDaud() async {

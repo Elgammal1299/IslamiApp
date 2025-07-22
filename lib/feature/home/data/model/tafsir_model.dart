@@ -2,7 +2,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'tafsir_model.g.dart';
 @JsonSerializable()
-class TafsirModel {
+class TafsirModel  {
   int? code;
   String? status;
   List<Data>? data;
@@ -15,7 +15,7 @@ factory TafsirModel.fromJson(Map<String, dynamic> json) =>
 
 
 @JsonSerializable()
-class Data {
+class Data  {
   String? identifier;
   String? language;
   String? name;

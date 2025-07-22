@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
 import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model_item.dart';
+
+
+import 'package:equatable/equatable.dart';
 
 part 'hadith_state.dart';
 
@@ -16,36 +21,37 @@ class HadithCubit extends Cubit<HadithState> {
 
       switch (type) {
         case HadithType.bukhari:
-          hadiths = await jsonRepository.readJsonBukhari();
+          hadiths = await jsonRepository.Bukhari();
           break;
         case HadithType.muslim:
-          hadiths = await jsonRepository.readJsonMuslim();
+          hadiths = await jsonRepository.Muslim();
           break;
         case HadithType.abuDaud:
-          hadiths = await jsonRepository.readJsonAbuDaud();
+          hadiths = await jsonRepository.AbuDaud();
           break;
         case HadithType.tirmidzi:
-          hadiths = await jsonRepository.readJsonTirmidzi();
+          hadiths = await jsonRepository.Tirmidzi();
           break;
         case HadithType.nasai:
-          hadiths = await jsonRepository.readJsonNasai();
+          hadiths = await jsonRepository.Nasai();
           break;
         case HadithType.ibnuMajah:
-          hadiths = await jsonRepository.readJsonIbnuMajah();
+          hadiths = await jsonRepository.IbnuMajah();
           break;
         case HadithType.malik:
-          hadiths = await jsonRepository.readJsonMalik();
+          hadiths = await jsonRepository.Malik();
           break;
         case HadithType.darimi:
-          hadiths = await jsonRepository.readJsonDarimi();
+          hadiths = await jsonRepository.Darimi();
           break;
         case HadithType.ahmed:
-          hadiths = await jsonRepository.readJsonAhmed();
+          hadiths = await jsonRepository.Ahmed();
           break;
       }
 
       emit(HadithSuccess(hadiths));
     } catch (e) {
+      log(e.toString());
       emit(HadithError(e.toString()));
     }
   }
@@ -56,7 +62,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithAbuDaud() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonAbuDaud();
+  //     final surahs = await jsonRepository.AbuDaud();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -67,7 +73,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithAhmed() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonAhmed();
+  //     final surahs = await jsonRepository.Ahmed();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -78,7 +84,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithBukhari() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonBukhari();
+  //     final surahs = await jsonRepository.Bukhari();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -89,7 +95,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithIbnuMajah() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonIbnuMajah();
+  //     final surahs = await jsonRepository.IbnuMajah();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -100,7 +106,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithMalik() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonMalik();
+  //     final surahs = await jsonRepository.Malik();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -111,7 +117,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithMuslim() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonMuslim();
+  //     final surahs = await jsonRepository.Muslim();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -122,7 +128,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithNasai() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonNasai();
+  //     final surahs = await jsonRepository.Nasai();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -133,7 +139,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithTirmidzi() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonTirmidzi();
+  //     final surahs = await jsonRepository.Tirmidzi();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {
@@ -144,7 +150,7 @@ class HadithCubit extends Cubit<HadithState> {
   // void getHadithdarimi() async {
   //   emit(HadithLoading());
   //   try {
-  //     final surahs = await jsonRepository.readJsonDarimi();
+  //     final surahs = await jsonRepository.Darimi();
 
   //     emit(HadithSuccess(surahs));
   //   } catch (e) {

@@ -1,6 +1,6 @@
 part of 'audio_recording_cubit.dart';
 
-sealed class AudioRecordingState {}
+sealed class AudioRecordingState  {}
 
 final class AudioRecordingInitial extends AudioRecordingState {}
 

@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class HadithModel {
+import 'package:equatable/equatable.dart';
+
+class HadithModel extends Equatable {
   final int number;
   final String arab;
   final String id;
@@ -26,4 +28,6 @@ class HadithModel {
       id: map['id'] as String,
     );
   }
+  @override
+  List<Object?> get props => [number, arab, id];
 }

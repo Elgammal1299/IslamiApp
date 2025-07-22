@@ -1,30 +1,32 @@
+import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GetData {
-  static final String url =
-      "https://raw.githubusercontent.com/Elgammal1299/hadith/refs/heads/main/abu-daud.json";
+  final String endpoint;
 
   static final Dio dio = Dio();
 
-  static Future<List<HadithModel>> getData() async {
+  GetData(this.endpoint);
+
+  static Future<List<HadithModel>> getData({required String endpoint}) async {
+    final String url =
+        "https://raw.githubusercontent.com/Elgammal1299/hadith/refs/heads/main/$endpoint.json";
+
     try {
       final response = await dio.get(url);
 
       if (response.statusCode == 200) {
-        final data = response.data;
-        // log("📂 Data fetched successfully from ==== $data");
+        final data = json.decode(response.data);
 
         if (data is List) {
+          log("📂 Data fetched successfully from $url");
           return data.map((item) => HadithModel.fromMap(item)).toList();
         } else {
-          log("❌ Unexpected JSON format");
+          log("❌ Unexpected JSON format: not a List");
           return [];
         }
       } else {
@@ -48,6 +50,7 @@ class GetHadithData {
       final response = await dio.get(url);
       final data = response.data as List;
 
+      log("📂 Data fetched successfully from ==== ");
       final List<HadithModel> hadithList =
           data.map((item) => HadithModel.fromMap(item)).toList();
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:islami_app/core/services/api/download.dart';
 import 'package:islami_app/core/services/api/hadith_db.dart';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
@@ -6,9 +8,12 @@ class HadithRepo {
   final HadithJsonServer jsonServer;
 
   HadithRepo(this.jsonServer);
-  Future<List<HadithModel>> readJsonAbuDaud() async {
+
+  Future<List<HadithModel>>AbuDaud() async {
     try {
-     return await GetData.getData();
+      log("xdasdasdasdas");
+
+      return await GetData.getData( endpoint: "abu-daud");
 
       // return await jsonServer.readJsonAbuDaud();
     } catch (e) {
@@ -16,7 +21,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonBukhari() async {
+  Future<List<HadithModel>>Bukhari() async {
     try {
       return await jsonServer.readJsonBukhari();
     } catch (e) {
@@ -24,7 +29,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonMuslim() async {
+  Future<List<HadithModel>>Muslim() async {
     try {
       return await jsonServer.readJsonMuslim();
     } catch (e) {
@@ -32,7 +37,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonAhmed() async {
+  Future<List<HadithModel>>Ahmed() async {
     try {
       return await jsonServer.readJsonAhmed();
     } catch (e) {
@@ -40,7 +45,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonIbnuMajah() async {
+  Future<List<HadithModel>>IbnuMajah() async {
     try {
       return await jsonServer.readJsonIbnuMajah();
     } catch (e) {
@@ -48,7 +53,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonNasai() async {
+  Future<List<HadithModel>>Nasai() async {
     try {
       return await jsonServer.readJsonNasai();
     } catch (e) {
@@ -56,7 +61,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonMalik() async {
+  Future<List<HadithModel>>Malik() async {
     try {
       return await jsonServer.readJsonMalik();
     } catch (e) {
@@ -64,7 +69,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonDarimi() async {
+  Future<List<HadithModel>>Darimi() async {
     try {
       return await jsonServer.readJsonDarimi();
     } catch (e) {
@@ -72,7 +77,7 @@ class HadithRepo {
     }
   }
 
-  Future<List<HadithModel>> readJsonTirmidzi() async {
+  Future<List<HadithModel>>Tirmidzi() async {
     try {
       return await jsonServer.readJsonTirmidzi();
     } catch (e) {

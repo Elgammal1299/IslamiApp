@@ -1,5 +1,7 @@
 // lib/feature/radio/data/model/radio_model.dart
-class RadioModel {
+import 'package:equatable/equatable.dart';
+
+class RadioModel extends Equatable {
   final int id;
   final String name;
   final String url;
@@ -17,4 +19,6 @@ class RadioModel {
       url: json['url'] ?? '',
     );
   }
+  @override
+  List<Object?> get props => [id, name, url];
 }

@@ -6,6 +6,7 @@ import 'package:islami_app/core/router/route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 
+
 class IslamiApp extends StatelessWidget {
   const IslamiApp({super.key});
 

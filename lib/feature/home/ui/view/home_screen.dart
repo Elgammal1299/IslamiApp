@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_random.dart';
