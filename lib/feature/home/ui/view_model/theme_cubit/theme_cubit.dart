@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/services/server_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'theme_state.dart';
@@ -10,8 +11,7 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   /// تحميل الثيم من SharedPreferences
   Future<void> loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isDark = prefs.getBool(_themeKey) ?? false;
+    final isDark = sl<SharedPreferences>().getBool(_themeKey) ?? false;
     if (isDark) {
       emit(DarkThemeState());
     } else {
@@ -21,27 +21,24 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   /// التبديل بين الثيمات + الحفظ
   Future<void> toggleTheme() async {
-    final prefs = await SharedPreferences.getInstance();
     if (state is LightThemeState) {
-      await prefs.setBool(_themeKey, true);
+      await sl<SharedPreferences>().setBool(_themeKey, true);
       emit(DarkThemeState());
     } else {
-      await prefs.setBool(_themeKey, false);
+      await sl<SharedPreferences>().setBool(_themeKey, false);
       emit(LightThemeState());
     }
   }
 
   /// تعيين الوضع الليلي مع الحفظ
   Future<void> setDark() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_themeKey, true);
+    await sl<SharedPreferences>().setBool(_themeKey, true);
     emit(DarkThemeState());
   }
 
   /// تعيين الوضع الفاتح مع الحفظ
   Future<void> setLight() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_themeKey, false);
+    await sl<SharedPreferences>().setBool(_themeKey, false);
     emit(LightThemeState());
   }
 }
