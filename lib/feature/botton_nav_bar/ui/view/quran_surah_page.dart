@@ -102,7 +102,9 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
     )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
     isSearching.value = true;
     Future.delayed(Duration(milliseconds: 100), () {
-      FocusScope.of(context).requestFocus(_searchFocusNode);
+      if (mounted) {
+        FocusScope.of(context).requestFocus(_searchFocusNode);
+      }
     });
   }
 

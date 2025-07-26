@@ -17,16 +17,15 @@ class CustomSurahItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSearching = _searchTextSurahController.text.isNotEmpty;
+    final currentList = isSearching ? searchedForSurah : surahs;
+
     return ListView.builder(
-      itemCount:
-          _searchTextSurahController.text.isEmpty
-              ? surahs.length
-              : searchedForSurah.length,
+      cacheExtent: 200,
+
+      itemCount: currentList.length,
       itemBuilder: (context, index) {
-        final surah =
-            _searchTextSurahController.text.isEmpty
-                ? surahs[index]
-                : searchedForSurah[index];
+        final surah = currentList[index];
 
         return SuraListViewItem(
           suraNumber: surah.number,
