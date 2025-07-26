@@ -4,7 +4,7 @@ import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 
-class QuranWithTafsirRepo {
+class QuranWithTafsirRepo  {
   final TafsirService apiService;
 
   QuranWithTafsirRepo(this.apiService);

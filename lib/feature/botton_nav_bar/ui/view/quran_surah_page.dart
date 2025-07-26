@@ -213,7 +213,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
                       },
                     );
                   }
-                  return const SizedBox();
+                  return const SizedBox.shrink();
                 },
               ),
             ),

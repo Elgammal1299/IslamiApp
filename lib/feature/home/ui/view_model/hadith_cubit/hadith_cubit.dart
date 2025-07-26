@@ -5,7 +5,6 @@ import 'package:islami_app/feature/home/data/model/hadith.dart';
 import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model_item.dart';
 
-
 import 'package:equatable/equatable.dart';
 
 part 'hadith_state.dart';
@@ -14,48 +13,36 @@ class HadithCubit extends Cubit<HadithState> {
   final HadithRepo jsonRepository;
   HadithCubit(this.jsonRepository) : super(HadithInitial());
 
-  void getHadith(HadithType type) async {
+  void getHadith(String name) async {
     emit(HadithLoading());
-    try {
-      List<HadithModel> hadiths;
-
-      switch (type) {
-        case HadithType.bukhari:
-          hadiths = await jsonRepository.Bukhari();
-          break;
-        case HadithType.muslim:
-          hadiths = await jsonRepository.Muslim();
-          break;
-        case HadithType.abuDaud:
-          hadiths = await jsonRepository.AbuDaud();
-          break;
-        case HadithType.tirmidzi:
-          hadiths = await jsonRepository.Tirmidzi();
-          break;
-        case HadithType.nasai:
-          hadiths = await jsonRepository.Nasai();
-          break;
-        case HadithType.ibnuMajah:
-          hadiths = await jsonRepository.IbnuMajah();
-          break;
-        case HadithType.malik:
-          hadiths = await jsonRepository.Malik();
-          break;
-        case HadithType.darimi:
-          hadiths = await jsonRepository.Darimi();
-          break;
-        case HadithType.ahmed:
-          hadiths = await jsonRepository.Ahmed();
-          break;
-      }
-
-      emit(HadithSuccess(hadiths));
-    } catch (e) {
-      log(e.toString());
-      emit(HadithError(e.toString()));
-    }
+    final result = await jsonRepository.getHadith(name);
+    result.fold(
+      (l) => emit(HadithError(l.toString())),
+      (r) => emit(HadithSuccess(r)),
+    );
   }
 }
+  //     try {
+  //       List<HadithModel> hadiths;
+
+  //       final res = await jsonRepository.getHadith();
+
+  // res.fold(
+  //         (failure) {
+  //           log("Error fetching hadith: ${failure.message}");
+  //           emit(HadithError(failure.message));
+  //         },
+  //         (data) {
+  //           hadiths = data;
+  //         },
+  //       );
+  //       emit(HadithSuccess(hadiths));
+  //     } catch (e) {
+  //       log(e.toString());
+  //       emit(HadithError(e.toString()));
+  //     }
+  //   }
+
 
 
 

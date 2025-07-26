@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/router/app_routes.dart';
@@ -13,7 +15,8 @@ class HadithNameItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<HadithCubit>().getHadith(item.type);
+        context.read<HadithCubit>().getHadith(item.englishName);
+        log("Selected Hadith: ${item.name}");
         Navigator.pushNamed(
           context,
           AppRoutes.hadithDetailsRouter,
