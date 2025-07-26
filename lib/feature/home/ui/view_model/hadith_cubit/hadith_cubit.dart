@@ -1,6 +1,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islami_app/feature/home/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/repo/hadith_repo.dart';
 
 import 'package:equatable/equatable.dart';

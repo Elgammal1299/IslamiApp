@@ -43,7 +43,7 @@ const List<HadithModelItem> hadithItems = [
     type: HadithType.tirmidzi,
     englishName: "tirmidzi",
   ),
-  HadithModelItem(name: "احمد", type: HadithType.ahmed, englishName: "ahmed"),
+  HadithModelItem(name: "احمد", type: HadithType.ahmed, englishName: "ahmad"),
   HadithModelItem(
     name: "ابن ماجا",
     type: HadithType.ibnuMajah,

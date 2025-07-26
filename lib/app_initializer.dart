@@ -12,6 +12,7 @@ import 'package:islami_app/core/helper/audio_manager.dart';
 
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/core/services/server_locator.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
@@ -66,6 +67,7 @@ class AppInitializer {
     Hive.registerAdapter(RecordingModelAdapter());
     Hive.registerAdapter(NotificationModelAdapter());
 
+
     final audioBox = HiveService.instanceFor<RecordingModel>(
       boxName: AppConstant.hiveAudio,
     );
@@ -78,7 +80,8 @@ class AppInitializer {
 
     tz.initializeTimeZones();
     await LocalNotificationService.init();
-
+     Hive.registerAdapter(HadithModelAdapter());
+    await Hive.openBox<List>('hadiths');
     runApp(
       MultiBlocProvider(
         providers: [

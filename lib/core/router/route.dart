@@ -158,7 +158,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider(
                 create:
-                    (context) => HadithCubit(HadithRepo(HadithJsonServer())),
+                    (context) => HadithCubit(HadithRepo()),
                 child: const HadithPage(),
               ),
         );

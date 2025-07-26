@@ -11,12 +11,12 @@ class HadithNameItem extends StatelessWidget {
 
   const HadithNameItem({super.key, required this.item});
 
-  @override
+  @override                                          
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         context.read<HadithCubit>().getHadith(item.englishName);
-        log("Selected Hadith: ${item.name}");
+  
         Navigator.pushNamed(
           context,
           AppRoutes.hadithDetailsRouter,

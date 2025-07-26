@@ -36,12 +36,11 @@ class HadithDetailsPage extends StatelessWidget {
               itemCount: hadiths.length,
               itemBuilder: (context, index) {
                 final hadith = hadiths[index];
-                debugPrint("Hadith=======: $hadith");
                 return CustomHadithCard(hadithModel: hadith);
               },
             );
           }
-          return const SizedBox.shrink(); // Return an empty widget if no state matches
+          return const SizedBox.shrink(); 
         },
       ),
     );
