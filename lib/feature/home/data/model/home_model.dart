@@ -1,8 +1,7 @@
-
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
-class HomeItemModel  {
+class HomeItemModel {
   final String name;
   final String image;
   final String route;

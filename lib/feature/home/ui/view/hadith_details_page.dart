@@ -9,7 +9,7 @@ class HadithDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("حديث اليوم")),
+      appBar: AppBar(title: const Text("حديث اليوم")),
       body: BlocBuilder<HadithCubit, HadithState>(
         buildWhen:
             (previous, current) =>
@@ -41,7 +41,7 @@ class HadithDetailsPage extends StatelessWidget {
               },
             );
           }
-          return SizedBox.shrink(); // Return an empty widget if no state matches
+          return const SizedBox.shrink(); // Return an empty widget if no state matches
         },
       ),
     );

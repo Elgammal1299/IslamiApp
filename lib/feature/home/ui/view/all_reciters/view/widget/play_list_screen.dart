@@ -46,7 +46,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(title: Text('قائمة التشغيل')),
+          appBar: AppBar(title: const Text('قائمة التشغيل')),
           body: FadeTransition(
             opacity: _fadeAnimation,
             child: _buildPlaylist(state),
@@ -107,7 +107,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            border: isCurrentItem ? Border.all(color: Colors.black) : Border(),
+            border: isCurrentItem ? Border.all(color: Colors.black) : const Border(),
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.all(12),
@@ -132,7 +132,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Expanded(
                           flex: 4,
                           child: Text(

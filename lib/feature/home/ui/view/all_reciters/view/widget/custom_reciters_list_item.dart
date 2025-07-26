@@ -21,13 +21,13 @@ class CustomRecitersListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Column(
         children: [
           ListTile(
             leading: CircleAvatar(
               backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(Icons.mic, color: AppColors.white),
+              child: const Icon(Icons.mic, color: AppColors.white),
             ),
             title: Text(
               reciter.name ?? 'Unknown',
@@ -48,7 +48,7 @@ class CustomRecitersListItem extends StatelessWidget {
                         moshaf.name ?? "Unknown",
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      trailing: Icon(Icons.play_arrow, color: AppColors.white),
+                      trailing: const Icon(Icons.play_arrow, color: AppColors.white),
                       onTap:
                           () => Navigator.push(
                             context,

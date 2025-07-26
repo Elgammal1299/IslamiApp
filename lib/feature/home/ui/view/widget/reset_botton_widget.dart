@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 
@@ -16,7 +15,7 @@ class ResetBottonWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.refresh_rounded, color: AppColors.white, size: 24),
+          const Icon(Icons.refresh_rounded, color: AppColors.white, size: 24),
           const SizedBox(width: 8),
           Text(
             "إعادة التعيين",

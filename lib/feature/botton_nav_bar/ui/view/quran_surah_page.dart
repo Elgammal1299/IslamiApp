@@ -44,7 +44,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
         border: InputBorder.none,
         hintStyle: TextStyle(color: Theme.of(context).cardColor, fontSize: 18),
       ),
-      style: TextStyle(color: AppColors.black, fontSize: 18),
+      style: const TextStyle(color: AppColors.black, fontSize: 18),
       onChanged: (searchedCharacter) {
         _searchTextSurahController.clear();
         addSearchedForAyatsToSearchedList(searchedCharacter);
@@ -101,7 +101,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
       context,
     )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
     isSearching.value = true;
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) {
         FocusScope.of(context).requestFocus(_searchFocusNode);
       }
@@ -149,8 +149,8 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
           builder:
               (context, value, _) =>
                   value
-                      ? BackButton(color: AppColors.secondary)
-                      : SizedBox.shrink(),
+                      ? const BackButton(color: AppColors.secondary)
+                      : const SizedBox.shrink(),
         ),
         title: ValueListenableBuilder<bool>(
           valueListenable: isSearching,
@@ -181,7 +181,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
                         addSearchedForSurahToSearchedList(searchedSurah);
                       },
                     )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               },
             ),
             Expanded(

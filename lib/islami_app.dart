@@ -6,7 +6,6 @@ import 'package:islami_app/core/router/route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 
-
 class IslamiApp extends StatelessWidget {
   const IslamiApp({super.key});
 
@@ -25,7 +24,7 @@ class IslamiApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [Locale('ar')],
+          supportedLocales: [const Locale('ar')],
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,

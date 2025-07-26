@@ -23,7 +23,6 @@ class QuranWithTafsirCubit extends Cubit<QuranWithTafsirState> {
     );
   }
 
-
   /// 🟢 جلب القرآن كاملًا مع تفسير معين
   Future<void> fetchQuranWithTafsir(String editionIdentifier) async {
     emit(QuranWithTafsirLoading());
@@ -35,5 +34,4 @@ class QuranWithTafsirCubit extends Cubit<QuranWithTafsirState> {
       (data) => emit(QuranWithTafsirLoaded(data)),
     );
   }
-
 }

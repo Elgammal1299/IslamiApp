@@ -13,7 +13,7 @@ class CustomAzkarAndDoaList extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: ListTile(
-        contentPadding: EdgeInsets.all(14),
+        contentPadding: const EdgeInsets.all(14),
         title: Text(
           category.name,
           style: Theme.of(context).textTheme.titleLarge,

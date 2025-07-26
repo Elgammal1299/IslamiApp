@@ -12,7 +12,7 @@ class ReciterRepo {
       final response = await apiService.fetchReciters();
       return Right(response.reciters ?? []);
     } catch (e) {
-      return Left("Failed to fetch reciters");
+      return const Left("Failed to fetch reciters");
     }
   }
 }

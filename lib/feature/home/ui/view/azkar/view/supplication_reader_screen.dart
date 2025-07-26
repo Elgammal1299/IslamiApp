@@ -38,7 +38,7 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
     if (currentIndex >= widget.supplications.length) {
       return Scaffold(
         appBar: AppBar(title: const Text('تمت القراءة')),
-        body: CustomFinichAzkar(),
+        body: const CustomFinichAzkar(),
       );
     }
 

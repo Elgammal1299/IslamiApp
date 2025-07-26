@@ -3,6 +3,7 @@ part of 'azkar_random_cubit.dart';
 sealed class AzkarRandomState {}
 
 final class AzkarRandomInitial extends AzkarRandomState {}
+
 class DikrLoading extends AzkarRandomState {}
 
 class AzkarRandomLoaded extends AzkarRandomState {

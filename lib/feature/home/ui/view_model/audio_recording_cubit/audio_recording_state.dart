@@ -1,12 +1,10 @@
 part of 'audio_recording_cubit.dart';
 
-sealed class AudioRecordingState  {}
+sealed class AudioRecordingState {}
 
 final class AudioRecordingInitial extends AudioRecordingState {}
 
-class AudioRecording extends AudioRecordingState {
-
-}
+class AudioRecording extends AudioRecordingState {}
 
 class AudioRecordingStopped extends AudioRecordingState {
   final String path;
@@ -18,11 +16,7 @@ class AudioRecordingError extends AudioRecordingState {
   AudioRecordingError(this.message);
 }
 
-
-
 class AudioRecorded extends AudioRecordingState {
   final String path;
   AudioRecorded(this.path);
 }
-
-

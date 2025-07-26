@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _playSplashAudio();
 
-    Future.delayed(Duration(seconds: 7), () {
+    Future.delayed(const Duration(seconds: 7), () {
       Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
     });
   }
@@ -92,7 +92,7 @@ class _SplashScreenState extends State<SplashScreen>
                   'وَارْتَـقِ',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'كل ما يخص المسلم',
                   style: Theme.of(context).textTheme.titleLarge,

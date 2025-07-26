@@ -20,7 +20,7 @@ class BottomNavbarPage extends StatelessWidget {
 
           body: IndexedStack(
             index: state,
-            children: [QuranSurahPage(), BookmarksPage()],
+            children: [const QuranSurahPage(), const BookmarksPage()],
           ),
 
           bottomNavigationBar: BottomNavigationBar(

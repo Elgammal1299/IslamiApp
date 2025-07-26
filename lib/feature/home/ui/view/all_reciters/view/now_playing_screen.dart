@@ -41,7 +41,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     return BlocBuilder<AudioCubit, AudioState>(
       builder: (context, state) {
         if (state is! AudioPlaybackState) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return Scaffold(
           appBar: AppBar(
@@ -87,10 +87,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: AppColors.secondary,
             blurRadius: 20,
-            offset: const Offset(2, 2),
+            offset: Offset(2, 2),
           ),
         ],
       ),

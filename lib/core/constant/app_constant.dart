@@ -1,4 +1,4 @@
 class AppConstant {
-  static final hiveAudio = "audioBox";
-  static final hivenotifications = 'notifications';
+  static const hiveAudio = "audioBox";
+  static const hivenotifications = 'notifications';
 }

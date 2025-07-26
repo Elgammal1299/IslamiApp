@@ -35,7 +35,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: SelectableText(
               cleanContent(current.content),
@@ -50,7 +50,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: Theme.of(context).secondaryHeaderColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
@@ -68,7 +68,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
                     Share.share(current.content);
                   },
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 IconButton(
                   tooltip: 'نسخ',
                   icon: Icon(Icons.copy, color: Theme.of(context).primaryColor),

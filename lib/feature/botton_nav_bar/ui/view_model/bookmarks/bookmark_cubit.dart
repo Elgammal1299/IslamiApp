@@ -7,7 +7,6 @@ part 'bookmark_state.dart';
 class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit() : super(BookmarkInitial());
 
-
   Future<void> loadBookmarks() async {
     emit(BookmarksLoading());
     try {
@@ -27,4 +26,3 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     }
   }
 }
-

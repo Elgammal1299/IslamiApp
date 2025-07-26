@@ -65,7 +65,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            leading: Icon(Icons.play_arrow),
+            leading: const Icon(Icons.play_arrow),
             title: Text(
               "استماع ",
               style: Theme.of(context).textTheme.titleLarge,
@@ -85,7 +85,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.menu_book),
+            leading: const Icon(Icons.menu_book),
             title: Text(
               "التفسير",
               style: Theme.of(context).textTheme.titleLarge,

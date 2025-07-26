@@ -104,7 +104,7 @@ class _RecordingRowWidgetState extends State<RecordingRowWidget> {
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).primaryColorDark,
-              offset: Offset(2, 2),
+              offset: const Offset(2, 2),
             ),
           ],
         ),

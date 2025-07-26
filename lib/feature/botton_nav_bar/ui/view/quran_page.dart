@@ -185,7 +185,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                                         );
                                         if (index != 187 && index != 1) {
                                           spans.add(
-                                            WidgetSpan(
+                                            const WidgetSpan(
                                               child: Basmallah(index: 0),
                                             ),
                                           );

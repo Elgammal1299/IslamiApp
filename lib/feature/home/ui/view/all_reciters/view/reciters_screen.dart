@@ -18,14 +18,14 @@ class _RecitersScreenState extends State<RecitersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("قرّاء القرآن")),
+      appBar: AppBar(title: const Text("قرّاء القرآن")),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: TextField(
-              style: TextStyle(color: AppColors.black, fontSize: 18),
-              decoration: InputDecoration(
+              style: const TextStyle(color: AppColors.black, fontSize: 18),
+              decoration: const InputDecoration(
                 labelText: "بحث عن قارئ",
                 border: OutlineInputBorder(),
               ),
@@ -40,7 +40,7 @@ class _RecitersScreenState extends State<RecitersScreen> {
             child: BlocBuilder<ReciterCubit, ReciterState>(
               builder: (context, state) {
                 if (state is ReciterLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state is ReciterLoaded) {
                   final filteredReciters =
                       state.reciters
@@ -70,7 +70,7 @@ class _RecitersScreenState extends State<RecitersScreen> {
                 } else if (state is ReciterError) {
                   return Center(child: Text(state.message));
                 }
-                return Center(child: Text("No data available"));
+                return const Center(child: Text("No data available"));
               },
             ),
           ),

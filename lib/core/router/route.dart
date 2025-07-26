@@ -51,36 +51,36 @@ class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
                 create: (_) => NotificationCubit()..init(),
-                child: NotificationScreen(),
+                child: const NotificationScreen(),
               ),
         );
 
       case AppRoutes.homeRoute:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       case AppRoutes.audioRecordingRouter:
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
                 create: (context) => AudioRecordingCubit(),
-                child: AudioRecordingScreen(),
+                child: const AudioRecordingScreen(),
               ),
         );
 
       case AppRoutes.sebhaPageRouter:
-        return MaterialPageRoute(builder: (_) => SebhaPage());
+        return MaterialPageRoute(builder: (_) => const SebhaPage());
 
       case AppRoutes.azkarPageRouter:
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
                 create: (context) => AzkarCubit(AzkarRepo())..loadAzkar(),
-                child: AzkarScreen(),
+                child: const AzkarScreen(),
               ),
         );
       case AppRoutes.azkarYawmiScreen:
@@ -90,11 +90,11 @@ class AppRouter {
                 create:
                     (context) =>
                         AzkarYawmiCubit(AzkarYawmiRepo())..loadSupplications(),
-                child: AzkarYawmiScreen(),
+                child: const AzkarYawmiScreen(),
               ),
         );
       case AppRoutes.qiblahRouter:
-        return MaterialPageRoute(builder: (_) => QiblahScreen());
+        return MaterialPageRoute(builder: (_) => const QiblahScreen());
 
       case AppRoutes.navBarRoute:
         return MaterialPageRoute(
@@ -112,7 +112,7 @@ class AppRouter {
                     create: (context) => BookmarkCubit()..loadBookmarks(),
                   ),
                 ],
-                child: BottomNavbarPage(),
+                child: const BottomNavbarPage(),
               ),
         );
 
@@ -159,7 +159,7 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) => HadithCubit(HadithRepo(HadithJsonServer())),
-                child: HadithPage(),
+                child: const HadithPage(),
               ),
         );
 
@@ -170,7 +170,7 @@ class AppRouter {
                 create:
                     (context) =>
                         RadioCubit(RadioRepository(RadioService(Dio()))),
-                child: RadioPage(),
+                child: const RadioPage(),
               ),
         );
 
@@ -199,7 +199,7 @@ class AppRouter {
                     (context) => QuranWithTafsirCubit(
                       QuranWithTafsirRepo(TafsirService(Dio())),
                     ),
-                child: TafsirPage(),
+                child: const TafsirPage(),
               ),
         );
 
@@ -224,7 +224,7 @@ class AppRouter {
                   ),
                   BlocProvider(create: (context) => AudioCubit(AudioManager())),
                 ],
-                child: RecitersScreen(),
+                child: const RecitersScreen(),
               ),
         );
 

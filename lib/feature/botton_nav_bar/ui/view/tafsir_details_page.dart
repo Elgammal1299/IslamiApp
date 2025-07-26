@@ -59,7 +59,7 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
 
               // 🔍 عرض التفسير
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(
               child: BlocBuilder<TafsirCubit, TafsirByAyahState>(
                 builder: (context, state) {

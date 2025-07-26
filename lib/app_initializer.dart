@@ -5,17 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:islami_app/core/constant/app_constant.dart';
 
 import 'package:islami_app/core/helper/audio_manager.dart';
-import 'package:islami_app/core/init/firebase_messaging_service.dart';
 
-import 'package:islami_app/core/init/notification_initializer.dart';
-import 'package:islami_app/core/init/theme_initializer.dart';
 import 'package:islami_app/core/services/hive_service.dart';
-import 'package:islami_app/core/services/hive_service_initializer.dart';
 import 'package:islami_app/core/services/server_locator.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -25,7 +20,6 @@ import 'package:islami_app/feature/notification/widget/local_notification_servic
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
 import 'package:islami_app/islami_app.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

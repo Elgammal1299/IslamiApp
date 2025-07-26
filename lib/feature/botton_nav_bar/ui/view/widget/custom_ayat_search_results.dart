@@ -43,7 +43,7 @@ class CustomAyatSearchResults extends StatelessWidget {
                   "سورة ${getSurahNameArabic(result["surah"])} - الآية ${result["verse"]}",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
 
                 Text(
                   getVerse(

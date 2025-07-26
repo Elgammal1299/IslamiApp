@@ -18,18 +18,18 @@ class BookmarksPage extends StatelessWidget {
               if (state is BookmarksLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-          
+
               if (state is BookmarksError) {
                 return Center(child: Text(state.message));
               }
-          
+
               if (state is BookmarksLoaded) {
                 if (state.bookmarks.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.bookmark_outline_rounded,
                           color: AppColors.primary,
                           size: 120,
@@ -42,7 +42,7 @@ class BookmarksPage extends StatelessWidget {
                     ),
                   );
                 }
-          
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
@@ -51,10 +51,10 @@ class BookmarksPage extends StatelessWidget {
                       List<String> parts = state.bookmarks[index].split(':');
                       int surah = int.parse(parts[0]);
                       int ayah = int.parse(parts[1]);
-          
+
                       return BookmarkCard(
                         surahs: BlocProvider.of<SurahCubit>(context).surahs,
-          
+
                         surah: surah,
                         ayah: ayah,
                       );
@@ -62,7 +62,7 @@ class BookmarksPage extends StatelessWidget {
                   ),
                 );
               }
-          
+
               return const SizedBox();
             },
           ),

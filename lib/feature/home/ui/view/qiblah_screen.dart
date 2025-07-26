@@ -46,7 +46,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
   Widget build(BuildContext context) {
     if (!_locationEnabled) {
       return Scaffold(
-        appBar: AppBar(title: Text('القبلة')),
+        appBar: AppBar(title: const Text('القبلة')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
                 Transform.rotate(
                   angle: angleInRadians,
                   child: Transform.translate(
-                    offset: Offset(0, -170), // المسافة من المركز (سالب للأعلى)
+                    offset: const Offset(0, -170), // المسافة من المركز (سالب للأعلى)
                     child: Image.asset(
                       AppImage.kaabaImage,
                       width: 40,

@@ -28,7 +28,7 @@ class CustomNotificationList extends StatelessWidget {
               itemCount: notifications.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final  entry = notifications[index];
+                final entry = notifications[index];
                 return CustomNotificationItem(entry: entry);
               },
             ),

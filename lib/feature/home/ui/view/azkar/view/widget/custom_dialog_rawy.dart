@@ -26,7 +26,7 @@ class CustomDialogRawy extends StatelessWidget {
                       Icons.menu_book_rounded,
                       color: Theme.of(context).canvasColor,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       "الراوي",
                       style: Theme.of(context).textTheme.titleLarge,
@@ -58,7 +58,7 @@ class CustomDialogRawy extends StatelessWidget {
       child: Row(
         children: [
           Text(" الراوي", style: Theme.of(context).textTheme.titleMedium),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Icon(Icons.person_rounded, color: Theme.of(context).cardColor),
         ],
       ),

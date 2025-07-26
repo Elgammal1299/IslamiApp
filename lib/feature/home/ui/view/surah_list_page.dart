@@ -46,7 +46,7 @@
 //                   ),
 //                 ),
 //               ),
-              
+
 //               // قائمة السور
 //               Expanded(
 //                 child: ListView.builder(
@@ -124,10 +124,10 @@
 //                                     context,
 //                                     MaterialPageRoute(
 //                                       builder: (context) => AudioPlayerPage(
-                                     
+
 //                                         ),
 //                                       ),
-                                    
+
 //                                   );
 //                                 },
 //                               ),
@@ -146,5 +146,3 @@
 //     );
 //   }
 // }
-
-

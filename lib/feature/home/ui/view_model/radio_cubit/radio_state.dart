@@ -26,5 +26,5 @@ class RadioPlaying extends RadioState {
 }
 
 class RadioStopped extends RadioState {}
-class RadioPaused extends RadioState {}
 
+class RadioPaused extends RadioState {}

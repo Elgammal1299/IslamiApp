@@ -42,9 +42,9 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           // Azkar Random
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 16.0, right: 16, left: 16),
+              padding: EdgeInsets.only(top: 16.0, right: 16, left: 16),
               child: AzkarRandom(),
             ),
           ),

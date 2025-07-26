@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:islami_app/feature/home/data/model/hadith.dart';
 import 'package:dio/dio.dart';
 
-
 class HadithService {
   static final Dio _dio = Dio();
-  static const String _baseUrl = 'https://raw.githubusercontent.com/Elgammal1299/hadith/refs/heads/main/';
+  static const String _baseUrl =
+      'https://raw.githubusercontent.com/Elgammal1299/hadith/refs/heads/main/';
 
   static Future<List<HadithModel>> fetchHadiths(String endpoint) async {
     final String url = '$_baseUrl$endpoint.json';
@@ -21,7 +21,9 @@ class HadithService {
           log("📂 Data fetched successfully from $url");
           return decoded.map((item) => HadithModel.fromMap(item)).toList();
         } else {
-          log("❌ Unexpected format: Expected List but got ${decoded.runtimeType}");
+          log(
+            "❌ Unexpected format: Expected List but got ${decoded.runtimeType}",
+          );
         }
       } else {
         log("❌ Request failed: Status code ${response.statusCode}");
@@ -33,7 +35,6 @@ class HadithService {
     return [];
   }
 }
-
 
 // class GetHadithData {
 //   final String url =

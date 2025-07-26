@@ -27,16 +27,16 @@ class CustomFinichAzkar extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Image.asset(AppImage.congratulationsImage),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Text(
               "زادك الله نورًا وطمأنينة. أحسنت!",
               style: Theme.of(
                 context,
               ).textTheme.titleLarge!.copyWith(fontSize: 22),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

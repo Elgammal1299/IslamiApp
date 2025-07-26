@@ -33,7 +33,7 @@ class AppTheme {
       // valueIndicatorColor: AppColors.primary,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      floatingLabelStyle: TextStyle(color: AppColors.black),
+      floatingLabelStyle: const TextStyle(color: AppColors.black),
 
       filled: true,
       fillColor: AppColors.white,
@@ -139,7 +139,7 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.secondary,
-      floatingLabelStyle: TextStyle(color: AppColors.black),
+      floatingLabelStyle: const TextStyle(color: AppColors.black),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       labelStyle: const TextStyle(color: AppColors.primary),
       hintStyle: const TextStyle(color: AppColors.primary),

@@ -9,8 +9,7 @@ class TafsirCubit extends Cubit<TafsirByAyahState> {
   final TafsirByAyahRepository repository;
   TafsirCubit(this.repository) : super(TafsirInitial());
 
-   
-   /// 🟢 جلب تفسير آية معينة
+  /// 🟢 جلب تفسير آية معينة
   Future<void> fetchAyahTafsir(String verseId, String editionIdentifier) async {
     emit(TafsirByAyahLoading());
 
@@ -21,5 +20,4 @@ class TafsirCubit extends Cubit<TafsirByAyahState> {
       (data) => emit(TafsirByAyahLoaded(data)),
     );
   }
-
 }

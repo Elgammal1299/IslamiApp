@@ -92,7 +92,7 @@ class _SebhaPageState extends State<SebhaPage>
             ),
             const SizedBox(height: 30),
             // زر إعادة التعيين
-            GestureDetector(onTap: _resetCounter, child: ResetBottonWidget()),
+            GestureDetector(onTap: _resetCounter, child: const ResetBottonWidget()),
           ],
         ),
       ),

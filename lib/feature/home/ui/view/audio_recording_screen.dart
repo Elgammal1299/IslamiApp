@@ -125,7 +125,7 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('تسجيل الصوت')),
+      appBar: AppBar(title: const Text('تسجيل الصوت')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

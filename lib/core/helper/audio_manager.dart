@@ -38,7 +38,7 @@ class AudioManager {
 
     _audioHandler = await AudioService.init(
       builder: () => AudioHandlerImpl(this),
-      config: AudioServiceConfig(
+      config: const AudioServiceConfig(
         androidNotificationChannelId: 'com.your.app.audio',
         androidNotificationChannelName: 'تطبيق اسلامي',
         androidNotificationOngoing: true,

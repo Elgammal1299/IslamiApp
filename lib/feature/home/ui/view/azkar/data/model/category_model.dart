@@ -21,9 +21,10 @@ class CategoryModel {
     Map<String, dynamic> json,
     List<SupplicationModel> allSupplications,
   ) {
-    final supplications = (json['supplications'] as List)
-        .map((s) => allSupplications.firstWhere((a) => a.id == s['id']))
-        .toList();
+    final supplications =
+        (json['supplications'] as List)
+            .map((s) => allSupplications.firstWhere((a) => a.id == s['id']))
+            .toList();
 
     return CategoryModel(
       id: json['id'],
@@ -34,4 +35,4 @@ class CategoryModel {
       supplications: supplications,
     );
   }
-  }
+}
