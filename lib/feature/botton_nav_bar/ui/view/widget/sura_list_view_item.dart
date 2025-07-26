@@ -30,7 +30,6 @@ class SuraListViewItem extends StatelessWidget {
         child: Center(
           child: Text(
             suraNumber.toString(),
-
             style: Theme.of(
               context,
             ).textTheme.titleMedium!.copyWith(fontSize: 14),

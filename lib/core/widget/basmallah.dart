@@ -12,7 +12,7 @@ class Basmallah extends StatefulWidget {
 class _BasmallahState extends State<Basmallah> {
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
     return SizedBox(
       width: screenSize.width,
       child: Padding(
@@ -25,7 +25,7 @@ class _BasmallahState extends State<Basmallah> {
         child: Image.asset(
           AppImage.basmalaImage,
           color: Theme.of(context).primaryColorDark,
-          width: MediaQuery.of(context).size.width * .4,
+          width: MediaQuery.sizeOf(context).width * .4,
         ),
       ),
     );

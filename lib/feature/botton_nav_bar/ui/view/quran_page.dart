@@ -102,7 +102,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
 
     return Scaffold(
       body: PageView.builder(

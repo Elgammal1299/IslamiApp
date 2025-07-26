@@ -76,7 +76,7 @@ class _CustomMiniPlayerWidgetState extends State<CustomMiniPlayerWidget> {
             onHorizontalDragUpdate: (details) {
               if (widget.duration.inMilliseconds == 0) return;
 
-              final screenWidth = MediaQuery.of(context).size.width;
+              final screenWidth = MediaQuery.sizeOf(context).width;
               final dragDistance =
                   details.localPosition.dx - widget.dragStartPosition;
               final dragPercentage = dragDistance / screenWidth;

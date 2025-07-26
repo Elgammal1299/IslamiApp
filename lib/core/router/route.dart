@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
-import 'package:islami_app/core/services/api/hadith_db.dart';
 import 'package:islami_app/core/services/api/quran_audio_api.dart';
 import 'package:islami_app/core/services/api/surah_db.dart';
 import 'package:islami_app/core/services/api/tafsir_service.dart';
