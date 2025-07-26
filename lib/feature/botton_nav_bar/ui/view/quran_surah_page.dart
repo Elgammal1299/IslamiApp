@@ -15,9 +15,10 @@ class QuranSurahPage extends StatefulWidget {
 }
 
 class _QuranSurahPageState extends State<QuranSurahPage> {
-  List<SurahModel> searchedForSurah = [];
-  dynamic searchedForAyats;
-  bool _isSearching = false;
+  final ValueNotifier<List<SurahModel>> searchedForSurah = ValueNotifier([]);
+  final ValueNotifier<dynamic> searchedForAyats = ValueNotifier(null);
+  final ValueNotifier<bool> isSearching = ValueNotifier(false);
+
   final _searchTextSurahController = TextEditingController();
   final _searchTextAyatController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
@@ -27,6 +28,9 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
     _searchTextSurahController.dispose();
     _searchTextAyatController.dispose();
     _searchFocusNode.dispose();
+    searchedForSurah.dispose();
+    searchedForAyats.dispose();
+    isSearching.dispose();
     super.dispose();
   }
 
@@ -42,7 +46,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
       ),
       style: TextStyle(color: AppColors.black, fontSize: 18),
       onChanged: (searchedCharacter) {
-        _searchTextSurahController.clear(); // لتفريغ البحث في السور
+        _searchTextSurahController.clear();
         addSearchedForAyatsToSearchedList(searchedCharacter);
       },
     );
@@ -50,70 +54,53 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
 
   void addSearchedForAyatsToSearchedList(String searchQuery) {
     if (searchQuery.isNotEmpty && searchQuery.length > 3 ||
-        searchQuery.toString().contains(" ")) {
-      setState(() {
-        searchedForAyats = searchWords(searchQuery);
-      });
+        searchQuery.contains(" ")) {
+      searchedForAyats.value = searchWords(searchQuery);
     } else {
-      setState(() {
-        searchedForAyats = null;
-      });
+      searchedForAyats.value = null;
     }
   }
 
   void addSearchedForSurahToSearchedList(String searchQuery) {
     final surahCubit = BlocProvider.of<SurahCubit>(context).surahs;
-
     if (searchQuery.isNotEmpty) {
-      _searchTextAyatController.clear(); // لتفريغ البحث في الآيات
-      setState(() {
-        searchedForSurah =
-            surahCubit.where((sura) {
-              final suraName = sura.englishName.toLowerCase();
-              final suraNameTranslated =
-                  getSurahNameArabic(sura.number).toLowerCase();
-
-              return suraName.contains(searchQuery.toLowerCase()) ||
-                  suraNameTranslated.contains(searchQuery.toLowerCase());
-            }).toList();
-        searchedForAyats = null;
-      });
+      _searchTextAyatController.clear();
+      searchedForSurah.value =
+          surahCubit.where((sura) {
+            final suraName = sura.englishName.toLowerCase();
+            final suraNameTranslated =
+                getSurahNameArabic(sura.number).toLowerCase();
+            return suraName.contains(searchQuery.toLowerCase()) ||
+                suraNameTranslated.contains(searchQuery.toLowerCase());
+          }).toList();
+      searchedForAyats.value = null;
     } else {
-      setState(() {
-        searchedForSurah = [];
-      });
+      searchedForSurah.value = [];
     }
   }
 
   List<Widget> _buildAppBarActions() {
-    if (_isSearching) {
-      return [
-        IconButton(
-          onPressed: () {
-            _clearSearch();
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.clear, color: AppColors.secondary),
-        ),
-      ];
-    } else {
-      return [
-        IconButton(
-          onPressed: _startSearch,
-          icon: Icon(Icons.search, color: AppColors.secondary),
-        ),
-      ];
-    }
+    return [
+      ValueListenableBuilder<bool>(
+        valueListenable: isSearching,
+        builder: (context, value, _) {
+          return IconButton(
+            onPressed: value ? _clearSearch : _startSearch,
+            icon: Icon(
+              value ? Icons.clear : Icons.search,
+              color: AppColors.secondary,
+            ),
+          );
+        },
+      ),
+    ];
   }
 
   void _startSearch() {
     ModalRoute.of(
       context,
     )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
-
-    setState(() {
-      _isSearching = true;
-    });
+    isSearching.value = true;
     Future.delayed(Duration(milliseconds: 100), () {
       FocusScope.of(context).requestFocus(_searchFocusNode);
     });
@@ -121,30 +108,24 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
 
   void _stopSearching() {
     _clearSearch();
-    setState(() {
-      _isSearching = false;
-    });
+    isSearching.value = false;
   }
 
   void _clearSearch() {
-    setState(() {
-      _searchTextAyatController.clear();
-      _searchTextSurahController.clear();
-      searchedForAyats = null;
-      searchedForSurah = [];
-    });
+    _searchTextAyatController.clear();
+    _searchTextSurahController.clear();
+    searchedForAyats.value = null;
+    searchedForSurah.value = [];
   }
 
-  Widget _buildAppBarTitle() {
-    return const Text('القرآن الكريم');
-  }
+  Widget _buildAppBarTitle() => const Text('القرآن الكريم');
 
   Widget _buildVerseSearchResults(List<SurahModel> surahs) {
-    if (searchedForAyats == null) {
+    final ayats = searchedForAyats.value;
+    if (ayats == null) {
       return const Center(child: CircularProgressIndicator());
     }
-
-    if (searchedForAyats["occurences"] == 0) {
+    if (ayats["occurences"] == 0) {
       return Center(
         child: Text(
           'لا توجد نتائج بحث',
@@ -154,19 +135,27 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
         ),
       );
     }
-
-    return CustomAyatSearchResults(
-      searchedForAyats: searchedForAyats,
-      surahs: surahs,
-    );
+    return CustomAyatSearchResults(searchedForAyats: ayats, surahs: surahs);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: _isSearching ? BackButton(color: AppColors.secondary) : null,
-        title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
+        leading: ValueListenableBuilder<bool>(
+          valueListenable: isSearching,
+          builder:
+              (context, value, _) =>
+                  value
+                      ? BackButton(color: AppColors.secondary)
+                      : SizedBox.shrink(),
+        ),
+        title: ValueListenableBuilder<bool>(
+          valueListenable: isSearching,
+          builder:
+              (context, value, _) =>
+                  value ? _buildSearchField() : _buildAppBarTitle(),
+        ),
         actions: _buildAppBarActions(),
         centerTitle: true,
       ),
@@ -174,19 +163,25 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            if (!_isSearching)
-              TextField(
-                controller: _searchTextSurahController,
-                cursorColor: AppColors.black,
-                style: const TextStyle(color: AppColors.black),
-                decoration: const InputDecoration(
-                  hintText: 'ابحث عن سورة...',
-                  border: InputBorder.none,
-                ),
-                onChanged: (searchedSurah) {
-                  addSearchedForSurahToSearchedList(searchedSurah);
-                },
-              ),
+            ValueListenableBuilder<bool>(
+              valueListenable: isSearching,
+              builder: (context, value, _) {
+                return !value
+                    ? TextField(
+                      controller: _searchTextSurahController,
+                      cursorColor: AppColors.black,
+                      style: const TextStyle(color: AppColors.black),
+                      decoration: const InputDecoration(
+                        hintText: 'ابحث عن سورة...',
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (searchedSurah) {
+                        addSearchedForSurahToSearchedList(searchedSurah);
+                      },
+                    )
+                    : SizedBox.shrink();
+              },
+            ),
             Expanded(
               child: BlocBuilder<SurahCubit, SurahState>(
                 builder: (context, state) {
@@ -197,13 +192,24 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
                     return Center(child: Text(state.message));
                   }
                   if (state is SurahSuccess) {
-                    return searchedForAyats != null
-                        ? _buildVerseSearchResults(state.surahs)
-                        : CustomSurahItemListView(
-                          surahs: state.surahs,
-                          searchTextSurahController: _searchTextSurahController,
-                          searchedForSurah: searchedForSurah,
-                        );
+                    return ValueListenableBuilder<dynamic>(
+                      valueListenable: searchedForAyats,
+                      builder: (context, value, _) {
+                        return value != null
+                            ? _buildVerseSearchResults(state.surahs)
+                            : ValueListenableBuilder<List<SurahModel>>(
+                              valueListenable: searchedForSurah,
+                              builder: (context, filteredSurahs, _) {
+                                return CustomSurahItemListView(
+                                  surahs: state.surahs,
+                                  searchTextSurahController:
+                                      _searchTextSurahController,
+                                  searchedForSurah: filteredSurahs,
+                                );
+                              },
+                            );
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
