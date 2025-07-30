@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/widget/counter_botton_widget.dart';
 import 'dart:math' as math;
 
@@ -88,11 +89,14 @@ class _SebhaPageState extends State<SebhaPage>
             // نص إرشادي
             Text(
               "انقر على الدائرة للتسبيح",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: context.textTheme.titleLarge,
             ),
             const SizedBox(height: 30),
             // زر إعادة التعيين
-            GestureDetector(onTap: _resetCounter, child: const ResetBottonWidget()),
+            GestureDetector(
+              onTap: _resetCounter,
+              child: const ResetBottonWidget(),
+            ),
           ],
         ),
       ),

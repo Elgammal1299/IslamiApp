@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
@@ -31,9 +32,9 @@ class CustomNotificationItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(model.title, style: Theme.of(context).textTheme.titleLarge),
+            Text(model.title, style: context.textTheme.titleLarge),
             const SizedBox(height: 4),
-            Text(model.body, style: Theme.of(context).textTheme.titleMedium),
+            Text(model.body, style: context.textTheme.titleMedium),
           ],
         ),
       ),

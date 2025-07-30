@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/data/model/radio_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 
@@ -76,7 +77,7 @@ class _RadioPlayerPageState extends State<RadioPlayerPage>
                 const SizedBox(height: 32),
                 Text(
                   widget.station.name,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 48),
@@ -107,7 +108,7 @@ class _RadioPlayerPageState extends State<RadioPlayerPage>
                 const SizedBox(height: 32),
                 Text(
                   isPlaying ? 'جاري التشغيل' : 'متوقف',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                 ),
               ],
             ),

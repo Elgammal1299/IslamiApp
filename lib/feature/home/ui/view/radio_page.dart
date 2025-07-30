@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 
@@ -98,7 +99,7 @@ class _RadioPageState extends State<RadioPage> {
                         ),
                         title: Text(
                           station.name,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: context.textTheme.titleLarge,
                         ),
                         trailing: Icon(
                           Icons.play_circle_filled,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 
@@ -59,7 +60,7 @@ class CustomFinichAzkar extends StatelessWidget {
 
                 child: Text(
                   'القائمة الرئيسية',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                 ),
               ),
             ),

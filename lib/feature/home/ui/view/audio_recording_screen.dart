@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:islami_app/core/constant/app_constant.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
@@ -50,28 +51,19 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(
-              "حذف التسجيل؟",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text("حذف التسجيل؟", style: context.textTheme.titleLarge),
             content: Text(
               "هل أنت متأكد أنك تريد حذف هذا التسجيل؟ لا يمكن التراجع.",
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: context.textTheme.bodyLarge,
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: Text(
-                  "إلغاء",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                child: Text("إلغاء", style: context.textTheme.titleLarge),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: Text(
-                  "حذف",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                child: Text("حذف", style: context.textTheme.titleLarge),
               ),
             ],
           ),
@@ -158,10 +150,7 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
             ),
             const SizedBox(height: 24),
             const Divider(),
-            Text(
-              " التسجيلات المحفوظة",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text(" التسجيلات المحفوظة", style: context.textTheme.titleLarge),
             const SizedBox(height: 12),
             Expanded(
               child: RecordingListWidget(

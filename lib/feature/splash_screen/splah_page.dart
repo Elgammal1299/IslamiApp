@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,7 +11,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -31,7 +33,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _playSplashAudio();
 
     Future.delayed(const Duration(seconds: 7), () {
- 
       Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
     });
   }
@@ -57,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void dispose() {
     _controller.dispose();
     _audioPlayer.dispose();
-    isMuted.dispose(); 
+    isMuted.dispose();
     super.dispose();
   }
 
@@ -78,16 +79,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     radius: 120,
                     backgroundColor: Colors.green,
                     child: Image.asset(
-                      isDark ? AppImage.splashImageDark : AppImage.splashImageLight,
+                      isDark
+                          ? AppImage.splashImageDark
+                          : AppImage.splashImageLight,
                       width: 300,
                       height: 300,
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text('وَارْتَـقِ', style: Theme.of(context).textTheme.titleLarge),
+                Text('وَارْتَـقِ', style: context.textTheme.titleLarge),
                 const SizedBox(height: 10),
-                Text('كل ما يخص المسلم', style: Theme.of(context).textTheme.titleLarge),
+                Text('كل ما يخص المسلم', style: context.textTheme.titleLarge),
               ],
             ),
           ),

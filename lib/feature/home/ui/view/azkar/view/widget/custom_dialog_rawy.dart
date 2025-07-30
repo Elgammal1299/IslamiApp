@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/supplication_model.dart';
 
 class CustomDialogRawy extends StatelessWidget {
@@ -27,16 +28,13 @@ class CustomDialogRawy extends StatelessWidget {
                       color: Theme.of(context).canvasColor,
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      "الراوي",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                    Text("الراوي", style: context.textTheme.titleLarge),
                   ],
                 ),
                 content: SingleChildScrollView(
                   child: Text(
                     supplication.note!,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: context.textTheme.titleLarge,
                   ),
                 ),
                 actions: [
@@ -57,7 +55,7 @@ class CustomDialogRawy extends StatelessWidget {
       },
       child: Row(
         children: [
-          Text(" الراوي", style: Theme.of(context).textTheme.titleMedium),
+          Text(" الراوي", style: context.textTheme.titleMedium),
           const SizedBox(width: 8),
           Icon(Icons.person_rounded, color: Theme.of(context).cardColor),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 
 class RecordingRowWidget extends StatefulWidget {
@@ -190,13 +191,13 @@ class _RecordingRowWidgetState extends State<RecordingRowWidget> {
                 // Duration (left)
                 Text(
                   _formatDuration(Duration(milliseconds: rec.duration ?? 0)),
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: context.textTheme.bodyMedium,
                 ),
                 const Spacer(),
                 // Time (right)
                 Text(
                   DateFormat('hh:mm a').format(rec.createdAt),
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: context.textTheme.bodyMedium,
                 ),
               ],
             ),

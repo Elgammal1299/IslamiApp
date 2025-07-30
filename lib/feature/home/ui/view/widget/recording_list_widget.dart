@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/recording_row_widget.dart';
 
@@ -29,10 +30,7 @@ class RecordingListWidget extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
           const SizedBox(height: 12),
-          Text(
-            "لا توجد تسجيلات محفوظة",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text("لا توجد تسجيلات محفوظة", style: context.textTheme.titleLarge),
         ],
       );
     }

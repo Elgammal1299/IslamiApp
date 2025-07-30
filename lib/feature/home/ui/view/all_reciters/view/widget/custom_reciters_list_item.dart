@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
@@ -31,7 +32,7 @@ class CustomRecitersListItem extends StatelessWidget {
             ),
             title: Text(
               reciter.name ?? 'Unknown',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: context.textTheme.titleLarge,
             ),
             trailing: Icon(
               isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
@@ -46,9 +47,12 @@ class CustomRecitersListItem extends StatelessWidget {
                     return ListTile(
                       title: Text(
                         moshaf.name ?? "Unknown",
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: context.textTheme.bodyLarge,
                       ),
-                      trailing: const Icon(Icons.play_arrow, color: AppColors.white),
+                      trailing: const Icon(
+                        Icons.play_arrow,
+                        color: AppColors.white,
+                      ),
                       onTap:
                           () => Navigator.push(
                             context,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
 class TafsirDetailsPage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
                     textDirection: TextDirection.rtl,
 
                     widget.text,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: context.textTheme.titleLarge,
                     textAlign: TextAlign.justify,
                   ),
                 ),
@@ -77,7 +78,7 @@ class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
                         textDirection: TextDirection.rtl,
                         textAlign: TextAlign.justify,
                         state.tafsirByAyah.data!.text.toString(),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: context.textTheme.titleLarge,
                         // textAlign: TextAlign.justify,
                       ),
                     );

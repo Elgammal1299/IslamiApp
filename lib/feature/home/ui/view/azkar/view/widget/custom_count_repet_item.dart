@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/supplication_reader_screen.dart';
 
 class CustomCountRepetItem extends StatelessWidget {
@@ -20,7 +21,7 @@ class CustomCountRepetItem extends StatelessWidget {
       children: [
         Text(
           'الذكر ${currentIndex + 1} من ${widget.supplications.length}',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: context.textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
 

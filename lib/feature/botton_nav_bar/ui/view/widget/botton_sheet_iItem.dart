@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
 import 'package:islami_app/core/services/bookmark_manager.dart';
@@ -66,10 +67,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
         children: [
           ListTile(
             leading: const Icon(Icons.play_arrow),
-            title: Text(
-              "استماع ",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text("استماع ", style: context.textTheme.titleLarge),
             onTap: () {
               // await audioPlayer.play(UrlSource(audioURL));
               Navigator.pop(context);
@@ -86,10 +84,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
           ),
           ListTile(
             leading: const Icon(Icons.menu_book),
-            title: Text(
-              "التفسير",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text("التفسير", style: context.textTheme.titleLarge),
             onTap: () {
               Navigator.pushReplacementNamed(
                 context,
@@ -105,10 +100,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
 
           ListTile(
             leading: const Icon(Icons.copy),
-            title: Text(
-              'نسخ الآية',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text('نسخ الآية', style: context.textTheme.titleLarge),
             onTap: () {
               Clipboard.setData(
                 ClipboardData(text: quran.getVerse(widget.surah, widget.verse)),
@@ -129,7 +121,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 ),
                 title: Text(
                   isBookmarked ? 'إزالة من المرجعيات' : 'إضافة إلى المرجعيات',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                 ),
                 onTap: () async {
                   if (isBookmarked) {
@@ -161,10 +153,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
           ),
           ListTile(
             leading: const Icon(Icons.share),
-            title: Text(
-              'مشاركة الآية',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            title: Text('مشاركة الآية', style: context.textTheme.titleLarge),
             onTap: () {
               Share.share(
                 '${getVerse(widget.surah, widget.verse)}\n\n'
