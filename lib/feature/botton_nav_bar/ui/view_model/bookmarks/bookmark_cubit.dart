@@ -1,6 +1,9 @@
-import 'package:bloc/bloc.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' ;
 import 'package:islami_app/core/services/bookmark_manager.dart';
-import 'package:meta/meta.dart';
+
 
 part 'bookmark_state.dart';
 
@@ -20,7 +23,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   Future<void> removeBookmark(int surah, int ayah) async {
     try {
       await BookmarkManager.removeBookmark(surah, ayah);
-      loadBookmarks(); // إعادة تحميل القائمة
+      loadBookmarks(); 
     } catch (e) {
       emit(BookmarksError(e.toString()));
     }

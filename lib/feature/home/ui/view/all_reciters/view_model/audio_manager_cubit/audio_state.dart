@@ -1,6 +1,6 @@
 part of 'audio_cubit.dart';
 
-sealed class AudioState {
+sealed class AudioState  {
   const AudioState();
 }
 

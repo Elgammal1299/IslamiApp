@@ -1,4 +1,6 @@
-class SurahModel {
+import 'package:equatable/equatable.dart';
+
+class SurahModel  extends Equatable {
   final int number;
   final String name;
   final String englishName;
@@ -24,4 +26,13 @@ class SurahModel {
       revelationType: json['revelationType'] as String,
     );
   }
+  @override
+  List<Object?> get props => [
+    number,
+    name,
+    englishName,
+    englishNameTranslation,
+    numberOfAyahs,
+    revelationType,
+  ];
 }

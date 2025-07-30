@@ -9,8 +9,5 @@ Future<void> setupServiceLocator() async {
   sl.registerSingleton<SharedPreferences>(
     await SharedPreferences.getInstance(),
   );
-  // sl.registerLazySingleton(() => FirebaseInitializer());
-  // sl.registerLazySingleton(() => HiveInitializer());
-  // sl.registerLazySingleton(() => NotificationInitializer());
-  // sl.registerLazySingleton(() => ThemeInitializer());
+ 
 }

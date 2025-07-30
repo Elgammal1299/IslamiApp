@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/section_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_repo.dart';

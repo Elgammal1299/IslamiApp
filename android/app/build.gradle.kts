@@ -53,12 +53,17 @@ android {
     buildTypes {
           debug {
         }
-        release {
-            signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
+       
+release {
+    // توقيع النسخة تم تعطيله مؤقتًا
+    // signingConfig = signingConfigs.getByName("release")
+    isMinifyEnabled = false
+    isShrinkResources = false
+    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+}
+
+
+
     }
 
 }

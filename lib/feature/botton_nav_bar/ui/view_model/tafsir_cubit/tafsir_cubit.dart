@@ -1,7 +1,10 @@
-import 'package:bloc/bloc.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
-import 'package:meta/meta.dart';
+
 
 part 'tafsir_state.dart';
 

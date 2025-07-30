@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/services/server_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
