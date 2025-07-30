@@ -1,11 +1,13 @@
-class AzkarYawmiModel {
+import 'package:equatable/equatable.dart';
+
+class AzkarYawmiModel  extends Equatable {
   final String category;
   final String count;
   final String content;
   final String description;
   final String reference;
 
-  AzkarYawmiModel({
+  const AzkarYawmiModel({
     required this.category,
     required this.count,
     required this.content,
@@ -22,4 +24,13 @@ class AzkarYawmiModel {
       reference: json['reference'] ?? '',
     );
   }
+  @override
+  List<Object?> get props => [
+    category,
+    count,
+    content,
+    description,
+    reference,
+  ];
+
 }

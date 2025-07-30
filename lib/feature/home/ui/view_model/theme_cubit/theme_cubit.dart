@@ -40,6 +40,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   /// تعيين الوضع الفاتح مع الحفظ
   Future<void> setLight() async {
     await sl<SharedPreferences>().setBool(_themeKey, false);
+
     emit(LightThemeState());
   }
 }

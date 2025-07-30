@@ -84,7 +84,7 @@ class RecordingInputWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+         const SizedBox(height: 8),
         Text(
           isRecording ? "جاري التسجيل..." : "اضغط لتسجيل جديد",
           style: context.textTheme.titleLarge,

@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+
 part 'hadith_model.g.dart';
 
- // لو هتولد تلقائي، إنما هنا مش لازم فعليًا
-
 @HiveType(typeId: 4)
+// ignore: must_be_immutable
 class HadithModel extends HiveObject with EquatableMixin {
   @HiveField(0)
   final int number;
@@ -24,7 +23,11 @@ class HadithModel extends HiveObject with EquatableMixin {
     required this.id,
   });
 
-  HadithModel copyWith({int? number, String? arab, String? id}) {
+  HadithModel copyWith({
+    int? number,
+    String? arab,
+    String? id,
+  }) {
     return HadithModel(
       number: number ?? this.number,
       arab: arab ?? this.arab,
@@ -47,7 +50,7 @@ class HadithModel extends HiveObject with EquatableMixin {
       'id': id,
     };
   }
+
   @override
   List<Object?> get props => [number, arab, id];
-
 }

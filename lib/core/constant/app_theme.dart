@@ -27,7 +27,7 @@ class AppTheme {
       activeTrackColor: AppColors.primary,
       inactiveTrackColor: AppColors.secondary,
       thumbColor: AppColors.primary,
-      overlayColor: AppColors.primary.withOpacity(0.2),
+      overlayColor: AppColors.primary.withValues(alpha: 0.2),
       trackHeight: 4,
       // ممكن تضيف كمان لو عايز:
       // valueIndicatorColor: AppColors.primary,

@@ -1,14 +1,12 @@
 part of 'bookmark_cubit.dart';
 
 @immutable
-sealed class BookmarkState  extends Equatable {
+sealed class BookmarkState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 final class BookmarkInitial extends BookmarkState {}
-
-final class BookmarksInitial extends BookmarkState {}
 
 final class BookmarksLoading extends BookmarkState {}
 

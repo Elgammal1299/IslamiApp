@@ -1,6 +1,6 @@
 part of 'quran_with_tafsir_cubit.dart';
 
-@immutable
+
 sealed class QuranWithTafsirState extends Equatable {
   @override
   List<Object?> get props => [];

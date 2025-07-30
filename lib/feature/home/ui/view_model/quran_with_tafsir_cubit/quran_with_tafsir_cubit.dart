@@ -1,9 +1,9 @@
-import 'package:bloc/bloc.dart';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 import 'package:islami_app/feature/home/data/repo/quran_with_tafsir.dart';
-import 'package:meta/meta.dart';
 
 part 'quran_with_tafsir_state.dart';
 
