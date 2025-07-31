@@ -51,13 +51,9 @@ class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
-<<<<<<< HEAD
-        return MaterialPageRoute(builder: (_) => SplashScreen());
-      case AppRoutes.notificationViewRouter:
-        return MaterialPageRoute(builder: (_) => NotificationView());
-=======
         return MaterialPageRoute(builder: (_) => const SplashScreen());
->>>>>>> 85dea111c35d4994d9894f22cb97752a3098885b
+      case AppRoutes.notificationViewRouter:
+        return MaterialPageRoute(builder: (_) => const NotificationView());
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
@@ -163,8 +159,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                create:
-                    (context) => HadithCubit(HadithRepo()),
+                create: (context) => HadithCubit(HadithRepo()),
                 child: const HadithPage(),
               ),
         );
