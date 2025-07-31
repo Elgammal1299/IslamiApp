@@ -9,7 +9,7 @@ class HadithDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("حديث اليوم")),
+      appBar: AppBar(title: const Text("حديث اليوم")),
       body: BlocBuilder<HadithCubit, HadithState>(
         buildWhen:
             (previous, current) =>
@@ -36,12 +36,11 @@ class HadithDetailsPage extends StatelessWidget {
               itemCount: hadiths.length,
               itemBuilder: (context, index) {
                 final hadith = hadiths[index];
-                debugPrint("Hadith=======: $hadith");
                 return CustomHadithCard(hadithModel: hadith);
               },
             );
           }
-          return SizedBox.shrink(); // Return an empty widget if no state matches
+          return const SizedBox.shrink(); 
         },
       ),
     );

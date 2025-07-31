@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 
 class AudioBottomSheet extends StatefulWidget {
   final String audioUrl;
@@ -84,7 +85,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
                 textDirection: TextDirection.rtl,
 
                 widget.ayah,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: context.textTheme.titleLarge,
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -114,7 +115,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
             // عرض الوقت الحالي والمدى الكلي
             Text(
               "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: context.textTheme.titleLarge,
             ),
           ],
         ),

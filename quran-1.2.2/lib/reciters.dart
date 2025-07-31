@@ -1,12 +1,14 @@
-List reciters = [{
-"identifier": "ar.abdulbasitmurattal",
-"language": "ar",
-"name": "عبد الباسط عبد الصمد المرتل",
-"englishName": "Abdul Basit (muratal)",
-"format": "audio",
-"type": "translation",
-"direction": null
-},{
+List reciters = [
+  {
+    "identifier": "ar.abdulbasitmurattal",
+    "language": "ar",
+    "name": "عبد الباسط عبد الصمد المرتل",
+    "englishName": "Abdul Basit (muratal)",
+    "format": "audio",
+    "type": "translation",
+    "direction": null
+  },
+  {
     "identifier": "ar.abdulsamad",
     "language": "ar",
     "name": "عبدالباسط عبدالصمد",
@@ -23,24 +25,25 @@ List reciters = [{
     "format": "audio",
     "type": "versebyverse",
     "direction": null
-  },{
-"identifier": "ar.minshawi",
-"language": "ar",
-"name": "محمد صديق المنشاوي",
-"englishName": "Minshawi",
-"format": "audio",
-"type": "translation",
-"direction": null
-},
-{
-"identifier": "ar.minshawimujawwad",
-"language": "ar",
-"name": "محمد صديق المنشاوي (المجود)",
-"englishName": "Minshawy (Mujawwad)",
-"format": "audio",
-"type": "translation",
-"direction": null
-},
+  },
+  {
+    "identifier": "ar.minshawi",
+    "language": "ar",
+    "name": "محمد صديق المنشاوي",
+    "englishName": "Minshawi",
+    "format": "audio",
+    "type": "translation",
+    "direction": null
+  },
+  {
+    "identifier": "ar.minshawimujawwad",
+    "language": "ar",
+    "name": "محمد صديق المنشاوي (المجود)",
+    "englishName": "Minshawy (Mujawwad)",
+    "format": "audio",
+    "type": "translation",
+    "direction": null
+  },
   {
     "identifier": "ar.abdurrahmaansudais",
     "language": "ar",
@@ -50,7 +53,6 @@ List reciters = [{
     "type": "versebyverse",
     "direction": null
   },
-  
   {
     "identifier": "ar.shaatree",
     "language": "ar",

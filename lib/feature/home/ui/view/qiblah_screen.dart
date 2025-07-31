@@ -4,6 +4,7 @@ import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 
 class QiblahScreen extends StatefulWidget {
   const QiblahScreen({super.key});
@@ -46,17 +47,14 @@ class _QiblahScreenState extends State<QiblahScreen> {
   Widget build(BuildContext context) {
     if (!_locationEnabled) {
       return Scaffold(
-        appBar: AppBar(title: Text('القبلة')),
+        appBar: AppBar(title: const Text('القبلة')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(AppImage.gpsImage),
-              Text(
-                "!! يرجى تفعيل الموقع",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text("!! يرجى تفعيل الموقع", style: context.textTheme.titleLarge),
             ],
           ),
         ),
@@ -73,7 +71,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
               Image.asset(AppImage.gpsImage, width: 300, height: 300),
               Text(
                 "يجب منح إذن الوصول للموقع",
-                style: Theme.of(context).textTheme.titleLarge,
+                style: context.textTheme.titleLarge,
               ),
             ],
           ),
@@ -94,7 +92,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
             return Center(
               child: Text(
                 "حدث خطأ في تحديد القبلة",
-                style: Theme.of(context).textTheme.titleLarge,
+                style: context.textTheme.titleLarge,
               ),
             );
           }
@@ -127,7 +125,10 @@ class _QiblahScreenState extends State<QiblahScreen> {
                 Transform.rotate(
                   angle: angleInRadians,
                   child: Transform.translate(
-                    offset: Offset(0, -170), // المسافة من المركز (سالب للأعلى)
+                    offset: const Offset(
+                      0,
+                      -170,
+                    ), // المسافة من المركز (سالب للأعلى)
                     child: Image.asset(
                       AppImage.kaabaImage,
                       width: 40,

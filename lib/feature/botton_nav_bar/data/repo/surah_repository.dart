@@ -1,4 +1,3 @@
-
 import 'package:islami_app/core/services/api/surah_db.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 

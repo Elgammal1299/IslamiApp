@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_and_doa_list_screen.dart';
 
@@ -14,11 +14,8 @@ class CustomAzkarAndDoaList extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
       child: ListTile(
-        contentPadding: EdgeInsets.all(14),
-        title: Text(
-          category.name,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        contentPadding: const EdgeInsets.all(14),
+        title: Text(category.name, style: context.textTheme.titleLarge),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(

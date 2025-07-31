@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/home/data/model/hadith.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CustomHadithCard extends StatelessWidget {
@@ -24,7 +24,7 @@ class CustomHadithCard extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: SelectableText(
                 hadithModel.arab,
@@ -39,7 +39,7 @@ class CustomHadithCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
@@ -57,7 +57,7 @@ class CustomHadithCard extends StatelessWidget {
                       Share.share(hadithModel.arab);
                     },
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   IconButton(
                     tooltip: 'نسخ',
                     icon: Icon(

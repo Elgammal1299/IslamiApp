@@ -1,6 +1,7 @@
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:quran/quran.dart';
 
@@ -40,7 +41,7 @@ class CustomSurahFramWidget extends StatelessWidget {
                 Flexible(
                   child: Text(
                     widget.jsonData[getPageData(index)[0]["surah"] - 1].name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    style: context.textTheme.titleLarge?.copyWith(
                       fontSize: 18.sp,
                       overflow: TextOverflow.ellipsis,
                     ),

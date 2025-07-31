@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 
-class SectionModel {
+class SectionModel extends Equatable {
   final int id;
   final int weight;
   final String name;
   final String icon;
   final List<CategoryModel> categories;
 
-  SectionModel({
+   const SectionModel({
     required this.id,
     required this.weight,
     required this.name,
@@ -32,4 +33,12 @@ class SectionModel {
       categories: categories,
     );
   }
+  @override
+  List<Object?> get props => [
+    id,
+    weight,
+    name,
+    icon,
+    categories,
+  ];
 }

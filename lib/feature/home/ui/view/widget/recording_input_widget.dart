@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 
 class RecordingInputWidget extends StatelessWidget {
   final bool isRecording;
@@ -83,10 +84,10 @@ class RecordingInputWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+         const SizedBox(height: 8),
         Text(
           isRecording ? "جاري التسجيل..." : "اضغط لتسجيل جديد",
-          style: Theme.of(context).textTheme.titleLarge,
+          style: context.textTheme.titleLarge,
         ),
         if (error != null)
           Padding(

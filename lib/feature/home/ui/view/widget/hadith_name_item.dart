@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model_item.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
@@ -13,7 +15,8 @@ class HadithNameItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<HadithCubit>().getHadith(item.type);
+        context.read<HadithCubit>().getHadith(item.englishName);
+
         Navigator.pushNamed(
           context,
           AppRoutes.hadithDetailsRouter,
@@ -41,10 +44,7 @@ class HadithNameItem extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                item.name,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              child: Text(item.name, style: context.textTheme.titleLarge),
             ),
           ],
         ),

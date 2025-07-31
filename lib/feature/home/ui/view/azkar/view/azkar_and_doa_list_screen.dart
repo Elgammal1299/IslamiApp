@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_dialog_rawy.dart';
 import 'package:share_plus/share_plus.dart';
@@ -34,7 +35,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
                   ),
@@ -44,7 +45,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       Text(
                         supplication.body,
                         textAlign: TextAlign.right,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        style: context.textTheme.titleLarge!.copyWith(
                           color: AppColors.white,
                         ),
                       ),
@@ -64,7 +65,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).secondaryHeaderColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     ),
@@ -82,7 +83,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                           Share.share(supplication.body);
                         },
                       ),
-                      SizedBox(width: 14),
+                      const SizedBox(width: 14),
                       IconButton(
                         icon: Icon(
                           Icons.copy,

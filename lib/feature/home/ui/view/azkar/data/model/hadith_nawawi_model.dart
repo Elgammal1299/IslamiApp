@@ -1,8 +1,10 @@
-class HadithNawawiModel {
+import 'package:equatable/equatable.dart';
+
+class HadithNawawiModel extends Equatable {
   final String hadith;
   final String description;
 
-  HadithNawawiModel({required this.hadith, required this.description});
+ const HadithNawawiModel({required this.hadith, required this.description});
 
   factory HadithNawawiModel.fromJson(Map<String, dynamic> json) {
     return HadithNawawiModel(
@@ -11,8 +13,7 @@ class HadithNawawiModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'hadith': hadith,
-    'description': description,
-  };
+  
+  @override
+  List<Object?> get props => [hadith, description];
 }

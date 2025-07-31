@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 
@@ -27,16 +28,16 @@ class CustomFinichAzkar extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Image.asset(AppImage.congratulationsImage),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Text(
               "زادك الله نورًا وطمأنينة. أحسنت!",
               style: Theme.of(
                 context,
               ).textTheme.titleLarge!.copyWith(fontSize: 22),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -59,7 +60,7 @@ class CustomFinichAzkar extends StatelessWidget {
 
                 child: Text(
                   'القائمة الرئيسية',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                 ),
               ),
             ),

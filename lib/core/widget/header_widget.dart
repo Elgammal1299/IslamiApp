@@ -18,7 +18,7 @@ class HeaderWidget extends StatelessWidget {
           Center(
             child: Image.asset(
               AppImage.surahFramImage,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.sizeOf(context).width,
               height: 50,
             ),
           ),

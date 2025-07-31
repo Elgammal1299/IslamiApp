@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_random.dart';
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          style: context.textTheme.titleLarge!.copyWith(
             color: AppColors.white,
             fontSize: 20,
           ),
@@ -43,9 +43,9 @@ class HomeScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           // Azkar Random
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 16.0, right: 16, left: 16),
+              padding: EdgeInsets.only(top: 16.0, right: 16, left: 16),
               child: AzkarRandom(),
             ),
           ),

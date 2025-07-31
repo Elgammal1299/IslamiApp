@@ -16,7 +16,7 @@ class NotificationModel extends HiveObject {
   @HiveField(3)
   final String type;
   @HiveField(4)
-   bool? isRead;
+  bool? isRead;
 
   NotificationModel({
     required this.title,

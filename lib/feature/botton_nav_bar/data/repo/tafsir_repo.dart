@@ -8,26 +8,28 @@ class TafsirByAyahRepository {
 
   TafsirByAyahRepository(this.apiService);
 
-
   /// 🟢  جلب تفسير آية معينة
-  Future<Either<String, TafsirByAyah>> getAyahTafsir(String verseId, String editionIdentifier) async {
+  Future<Either<String, TafsirByAyah>> getAyahTafsir(
+    String verseId,
+    String editionIdentifier,
+  ) async {
     try {
-      final response = await apiService.getAyahTafsir(verseId, editionIdentifier);
+      final response = await apiService.getAyahTafsir(
+        verseId,
+        editionIdentifier,
+      );
       return Right(response);
     } catch (e) {
       return Left(handleError(e));
     }
   }
-
-
-
 }
 
-  /// 🛑 دالة خاصة للتعامل مع الأخطاء
-  String handleError(dynamic error) {
-    if (error is DioException) {
-      return "❌ خطأ في الاتصال: ${error.message}";
-    } else {
-      return "❌ خطأ غير متوقع: $error";
-    }
+/// 🛑 دالة خاصة للتعامل مع الأخطاء
+String handleError(dynamic error) {
+  if (error is DioException) {
+    return "❌ خطأ في الاتصال: ${error.message}";
+  } else {
+    return "❌ خطأ غير متوقع: $error";
   }
+}

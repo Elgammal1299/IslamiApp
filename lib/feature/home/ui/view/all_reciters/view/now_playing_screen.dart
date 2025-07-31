@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:just_audio/just_audio.dart';
@@ -41,7 +42,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     return BlocBuilder<AudioCubit, AudioState>(
       builder: (context, state) {
         if (state is! AudioPlaybackState) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return Scaffold(
           appBar: AppBar(
@@ -56,13 +57,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                   children: [
                     Text(
                       state.currentItem?.title ?? 'لا توجد أغنية',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: context.textTheme.labelLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       state.currentItem?.artist ?? 'فنان غير معروف',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: context.textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
@@ -87,10 +88,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: AppColors.secondary,
             blurRadius: 20,
-            offset: const Offset(2, 2),
+            offset: Offset(2, 2),
           ),
         ],
       ),
@@ -166,7 +167,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 ),
                 valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
                 valueIndicatorColor: Theme.of(context).colorScheme.primary,
-                valueIndicatorTextStyle: Theme.of(context).textTheme.titleLarge,
+                valueIndicatorTextStyle: context.textTheme.titleLarge,
               ),
               child: Slider(
                 activeColor: AppColors.primary,
@@ -188,11 +189,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             children: [
               Text(
                 _formatDuration(currentPosition),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: context.textTheme.bodyMedium,
               ),
               Text(
                 _formatDuration(currentDuration),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: context.textTheme.bodyMedium,
               ),
             ],
           ),

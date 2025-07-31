@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bookmarks_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_page.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
 
 class BottomNavbarPage extends StatelessWidget {
@@ -21,7 +20,7 @@ class BottomNavbarPage extends StatelessWidget {
 
           body: IndexedStack(
             index: state,
-            children: [QuranSurahPage(), BookmarksPage()],
+            children: [const QuranSurahPage(), const BookmarksPage()],
           ),
 
           bottomNavigationBar: BottomNavigationBar(

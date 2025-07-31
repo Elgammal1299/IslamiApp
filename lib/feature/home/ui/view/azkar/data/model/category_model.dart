@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/supplication_model.dart';
 
-class CategoryModel {
+class CategoryModel extends Equatable {
   final int id;
   final int weight;
   final String name;
@@ -8,7 +9,7 @@ class CategoryModel {
   final bool favorite;
   final List<SupplicationModel> supplications;
 
-  CategoryModel({
+ const CategoryModel({
     required this.id,
     required this.weight,
     required this.name,
@@ -21,9 +22,10 @@ class CategoryModel {
     Map<String, dynamic> json,
     List<SupplicationModel> allSupplications,
   ) {
-    final supplications = (json['supplications'] as List)
-        .map((s) => allSupplications.firstWhere((a) => a.id == s['id']))
-        .toList();
+    final supplications =
+        (json['supplications'] as List)
+            .map((s) => allSupplications.firstWhere((a) => a.id == s['id']))
+            .toList();
 
     return CategoryModel(
       id: json['id'],
@@ -34,4 +36,13 @@ class CategoryModel {
       supplications: supplications,
     );
   }
-  }
+  @override
+  List<Object?> get props => [
+    id,
+    weight,
+    name,
+    nameSearch,
+    favorite,
+    supplications,
+  ];
+}

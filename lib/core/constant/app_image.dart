@@ -1,22 +1,22 @@
 class AppImage {
-  static final basmalaImage = "assets/images/Basmala.webp";
-  static final surahFramImage = "assets/images/surah_fram.webp";
-  static final quranImage = "assets/images/quran.webp";
-  static final hadithImage = "assets/images/hadith_image.webp";
-  static final beadsImage = "assets/images/beads.webp";
-  static final kaabaImage = "assets/images/kaaba.webp";
-  static final azkarImage = "assets/images/azkar.webp";
-  static final prayingImage = "assets/images/praying.webp";
-  static final micImage = "assets/images/mic.webp";
-  static final audioImage = "assets/images/audio.webp";
-  static final radioImage = "assets/images/radio.webp";
-  static final splashImageLight = 'assets/images/splash_image_light.webp';
-  static final splashImageDark = 'assets/images/splash_image_dark.webp';
-  static final congratulationsImage =
+  static const basmalaImage = "assets/images/Basmala.webp";
+  static const surahFramImage = "assets/images/surah_fram.webp";
+  static const quranImage = "assets/images/quran.webp";
+  static const hadithImage = "assets/images/hadith_image.webp";
+  static const beadsImage = "assets/images/beads.webp";
+  static const kaabaImage = "assets/images/kaaba.webp";
+  static const azkarImage = "assets/images/azkar.webp";
+  static const prayingImage = "assets/images/praying.webp";
+  static const micImage = "assets/images/mic.webp";
+  static const audioImage = "assets/images/audio.webp";
+  static const radioImage = "assets/images/radio.webp";
+  static const splashImageLight = 'assets/images/splash_image_light.webp';
+  static const splashImageDark = 'assets/images/splash_image_dark.webp';
+  static const congratulationsImage =
       'assets/images/congratulations_images.webp';
-  static final gpsImage = 'assets/images/gps.webp';
-  static final compassDarkImage = 'assets/images/CompassDark.svg';
-  static final compassImage = 'assets/images/Compass.svg';
-  static final needleImage = 'assets/images/needle.svg';
-  static final quranCoverImage = 'assets/images/quran_cover.webp';
+  static const gpsImage = 'assets/images/gps.webp';
+  static const compassDarkImage = 'assets/images/CompassDark.svg';
+  static const compassImage = 'assets/images/Compass.svg';
+  static const needleImage = 'assets/images/needle.svg';
+  static const quranCoverImage = 'assets/images/quran_cover.webp';
 }

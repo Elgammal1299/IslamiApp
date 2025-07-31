@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/constant/app_image.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -46,7 +47,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: AppBar(title: Text('قائمة التشغيل')),
+          appBar: AppBar(title: const Text('قائمة التشغيل')),
           body: FadeTransition(
             opacity: _fadeAnimation,
             child: _buildPlaylist(state),
@@ -107,7 +108,10 @@ class _PlaylistScreenState extends State<PlaylistScreen>
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            border: isCurrentItem ? Border.all(color: Colors.black) : Border(),
+            border:
+                isCurrentItem
+                    ? Border.all(color: Colors.black)
+                    : const Border(),
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.all(12),
@@ -125,14 +129,15 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                           item.title,
                           style:
                               isCurrentItem
-                                  ? Theme.of(context).textTheme.titleLarge!
-                                      .copyWith(color: AppColors.black)
-                                  : Theme.of(context).textTheme.titleLarge,
+                                  ? context.textTheme.titleLarge!.copyWith(
+                                    color: AppColors.black,
+                                  )
+                                  : context.textTheme.titleLarge,
 
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Expanded(
                           flex: 4,
                           child: Text(
@@ -140,9 +145,10 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                             item.displayTitle ?? '',
                             style:
                                 isCurrentItem
-                                    ? Theme.of(context).textTheme.bodyLarge!
-                                        .copyWith(color: AppColors.black)
-                                    : Theme.of(context).textTheme.bodyLarge,
+                                    ? context.textTheme.bodyLarge!.copyWith(
+                                      color: AppColors.black,
+                                    )
+                                    : context.textTheme.bodyLarge,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -154,10 +160,10 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                       item.artist ?? 'فنان غير معروف',
                       style:
                           isCurrentItem
-                              ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              ? context.textTheme.bodyLarge!.copyWith(
                                 color: AppColors.black,
                               )
-                              : Theme.of(context).textTheme.bodyLarge,
+                              : context.textTheme.bodyLarge,
                     ),
                   ],
                 ),

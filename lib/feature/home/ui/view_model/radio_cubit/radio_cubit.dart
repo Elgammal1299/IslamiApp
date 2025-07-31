@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:islami_app/feature/home/data/model/radio_model.dart';
 import 'package:islami_app/feature/home/data/repo/radio_repository.dart';
 import 'package:meta/meta.dart';
@@ -10,11 +11,11 @@ class RadioCubit extends Cubit<RadioState> {
   final RadioRepository radioRepository;
   final AudioPlayer _audioPlayer = AudioPlayer();
   List<RadioModel> radioStations = [];
-String? _currentUrl;
+  String? _currentUrl;
 
   RadioCubit(this.radioRepository) : super(RadioInitial());
 
-@override
+  @override
   Future<void> close() async {
     await _audioPlayer.dispose();
     return super.close();
@@ -23,9 +24,11 @@ String? _currentUrl;
   Future<void> loadRadioStations({String language = 'ar'}) async {
     try {
       emit(RadioLoading());
-      
-      final stations = await radioRepository.getRadioStations(language: language);
-      
+
+      final stations = await radioRepository.getRadioStations(
+        language: language,
+      );
+
       emit(RadioLoaded(stations));
     } catch (e) {
       emit(RadioError('حدث خطأ أثناء تحميل المحطات'));
@@ -37,7 +40,7 @@ String? _currentUrl;
       emit(RadioLoading());
       await _audioPlayer.stop();
       await _audioPlayer.setSourceUrl(url);
-      _currentUrl =url;
+      _currentUrl = url;
       await _audioPlayer.resume();
       emit(RadioPlaying(true, url));
     } catch (e) {
@@ -70,7 +73,7 @@ String? _currentUrl;
   Future<void> resumePlaying() async {
     try {
       await _audioPlayer.resume();
-      emit(RadioPlaying(true, _currentUrl?? ''));
+      emit(RadioPlaying(true, _currentUrl ?? ''));
     } catch (e) {
       emit(RadioError('حدث خطأ أثناء استئناف التشغيل'));
     }
@@ -83,9 +86,9 @@ String? _currentUrl;
       emit(RadioError('حدث خطأ أثناء تغيير مستوى الصوت'));
     }
   }
+
   Future<void> dispose() async {
     await stopPlaying();
     await _audioPlayer.dispose();
   }
-  
 }

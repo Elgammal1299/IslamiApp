@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
@@ -30,7 +31,6 @@ class SuraListViewItem extends StatelessWidget {
         child: Center(
           child: Text(
             suraNumber.toString(),
-
             style: Theme.of(
               context,
             ).textTheme.titleMedium!.copyWith(fontSize: 14),
@@ -51,7 +51,7 @@ class SuraListViewItem extends StatelessWidget {
       ),
       trailing: Text(
         "( $ayahCount ) ",
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 14),
+        style: context.textTheme.titleMedium!.copyWith(fontSize: 14),
       ),
 
       onTap: () async {

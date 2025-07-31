@@ -1,4 +1,6 @@
-class SupplicationModel {
+import 'package:equatable/equatable.dart';
+
+class SupplicationModel extends Equatable {
   final int id;
   final int repeat;
   final String body;
@@ -21,4 +23,6 @@ class SupplicationModel {
         bodyVocalized: json['bodyVocalized'],
         note: json['note'],
       );
+@override
+  List<Object?> get props => [id, repeat, body, bodyVocalized, note];
 }

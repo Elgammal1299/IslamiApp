@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 
 class CustomMiniPlayerItem extends StatelessWidget {
@@ -83,13 +84,13 @@ class CustomMiniPlayerItem extends StatelessWidget {
                     children: [
                       Text(
                         state.currentItem?.title ?? 'لا توجد أغنية',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: context.textTheme.titleLarge,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         '${formatDuration(position)} / ${formatDuration(duration)}',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: context.textTheme.bodyLarge,
                       ),
                     ],
                   ),

@@ -24,7 +24,7 @@ class IslamiApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [Locale('ar')],
+          supportedLocales: [const Locale('ar')],
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,

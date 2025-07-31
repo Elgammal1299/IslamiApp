@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_iItem.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_item.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_fram_widget.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as Quran;
@@ -102,7 +102,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.sizeOf(context);
 
     return Scaffold(
       body: PageView.builder(
@@ -185,7 +185,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
                                         );
                                         if (index != 187 && index != 1) {
                                           spans.add(
-                                            WidgetSpan(
+                                            const WidgetSpan(
                                               child: Basmallah(index: 0),
                                             ),
                                           );

@@ -9,9 +9,10 @@ class QuranWithTafsirRepo {
 
   QuranWithTafsirRepo(this.apiService);
 
-
   /// 🟢  جلب القرآن كاملًا مع تفسير معين
-  Future<Either<String, TafsirQuran>> getQuranWithTafsir(String editionIdentifier) async {
+  Future<Either<String, TafsirQuran>> getQuranWithTafsir(
+    String editionIdentifier,
+  ) async {
     try {
       final response = await apiService.getQuranWithTafsir(editionIdentifier);
       return Right(response);
@@ -19,7 +20,8 @@ class QuranWithTafsirRepo {
       return Left(handleError(e));
     }
   }
-    /// 🟢  جلب قائمة التفسيرات
+
+  /// 🟢  جلب قائمة التفسيرات
   Future<Either<String, TafsirModel>> getTafsirEditions() async {
     try {
       final response = await apiService.getTafsirEditions();

@@ -27,13 +27,13 @@ class AppTheme {
       activeTrackColor: AppColors.primary,
       inactiveTrackColor: AppColors.secondary,
       thumbColor: AppColors.primary,
-      overlayColor: AppColors.primary.withOpacity(0.2),
+      overlayColor: AppColors.primary.withValues(alpha: 0.2),
       trackHeight: 4,
       // ممكن تضيف كمان لو عايز:
       // valueIndicatorColor: AppColors.primary,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      floatingLabelStyle: TextStyle(color: AppColors.black),
+      floatingLabelStyle: const TextStyle(color: AppColors.black),
 
       filled: true,
       fillColor: AppColors.white,
@@ -139,7 +139,7 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.secondary,
-      floatingLabelStyle: TextStyle(color: AppColors.black),
+      floatingLabelStyle: const TextStyle(color: AppColors.black),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       labelStyle: const TextStyle(color: AppColors.primary),
       hintStyle: const TextStyle(color: AppColors.primary),

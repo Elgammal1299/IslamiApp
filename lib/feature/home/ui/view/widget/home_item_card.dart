@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
@@ -12,6 +14,7 @@ class HomeItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, item.route);
+        log('Navigating to ${item.route}', name: 'HomeItemCard');
       },
       child: Container(
         decoration: BoxDecoration(

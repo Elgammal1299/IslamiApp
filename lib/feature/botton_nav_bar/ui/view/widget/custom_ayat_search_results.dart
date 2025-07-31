@@ -1,5 +1,6 @@
 import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
@@ -41,9 +42,9 @@ class CustomAyatSearchResults extends StatelessWidget {
               children: [
                 Text(
                   "سورة ${getSurahNameArabic(result["surah"])} - الآية ${result["verse"]}",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.textTheme.titleLarge,
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
 
                 Text(
                   getVerse(
@@ -51,7 +52,7 @@ class CustomAyatSearchResults extends StatelessWidget {
                     result["verse"],
                     verseEndSymbol: true,
                   ),
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: context.textTheme.bodyLarge,
                 ),
               ],
             ),

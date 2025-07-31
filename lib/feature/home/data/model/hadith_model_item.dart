@@ -1,30 +1,22 @@
-enum HadithType {
-  bukhari,
-  muslim,
-  abuDaud,
-  tirmidzi,
-  ahmed,
-  ibnuMajah,
-  darimi,
-  malik,
-  nasai,
-}
+import 'package:equatable/equatable.dart';
 
-class HadithModelItem {
+class HadithModelItem extends Equatable {
   final String name;
-  final HadithType type;
+  final String englishName;
 
-  HadithModelItem({required this.name, required this.type});
+  const HadithModelItem({required this.name, required this.englishName});
+  @override
+  List<Object?> get props => [name, englishName];
 }
 
-final List<HadithModelItem> hadithItems = [
-  HadithModelItem(name: "البخارى", type: HadithType.bukhari),
-  HadithModelItem(name: "مسلم", type: HadithType.muslim),
-  HadithModelItem(name: "ابو داود", type: HadithType.abuDaud),
-  HadithModelItem(name: "الترمذي", type: HadithType.tirmidzi),
-  HadithModelItem(name: "احمد", type: HadithType.ahmed),
-  HadithModelItem(name: "ابن ماجا", type: HadithType.ibnuMajah),
-  HadithModelItem(name: "داريمي", type: HadithType.darimi),
-  HadithModelItem(name: "مالكي", type: HadithType.malik),
-  HadithModelItem(name: "نسائي", type: HadithType.nasai),
+const List<HadithModelItem> hadithItems = [
+  HadithModelItem(name: "البخارى", englishName: "bukhari"),
+  HadithModelItem(name: "مسلم", englishName: "muslim"),
+  HadithModelItem(name: "ابو داود", englishName: "abu-daud"),
+  HadithModelItem(name: "الترمذي", englishName: "tirmidzi"),
+  HadithModelItem(name: "احمد", englishName: "ahmad"),
+  HadithModelItem(name: "ابن ماجا", englishName: "ibnu-majah"),
+  HadithModelItem(name: "داريمي", englishName: "darimi"),
+  HadithModelItem(name: "مالكي", englishName: "malik"),
+  HadithModelItem(name: "نسائي", englishName: "nasai"),
 ];

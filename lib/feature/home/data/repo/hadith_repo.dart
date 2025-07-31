@@ -1,82 +1,43 @@
-import 'package:islami_app/core/services/api/download.dart';
-import 'package:islami_app/core/services/api/hadith_db.dart';
-import 'package:islami_app/feature/home/data/model/hadith.dart';
 
-class HadithRepo {
-  final HadithJsonServer jsonServer;
+import 'package:dartz/dartz.dart';
+import 'package:hive/hive.dart';
 
-  HadithRepo(this.jsonServer);
-  Future<List<HadithModel>> readJsonAbuDaud() async {
+import 'package:islami_app/core/services/api/hadith_service.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
+import 'package:islami_app/feature/home/data/repo/hadith_repoo.dart';
+
+class HadithRepo implements HadithRepoo {
+  final Box<List> _hadithBox = Hive.box<List>('hadiths');
+
+  @override
+  //* Fetches a list of Hadiths from the given endpoint.
+  //* If the Hadiths are cached in Hive, it will return the cached data. Otherwise,
+  //* it will fetch the data from the API and store it in Hive before returning it.
+  //* If there is an error fetching the data, it will return a Left containing the
+  //! error message.
+  //* If no Hadiths are found for the given endpoint, it will return a Left with
+  //* the message "No Hadith found for the given endpoint".
+  Future<Either<Failure, List<HadithModel>>> getHadith(String endpoint) async {
     try {
-     return await GetData.getData();
+  //* Check if Hadiths are cached in Hive
+      final cachedData = _hadithBox.get(endpoint);
+      if (cachedData != null && cachedData.isNotEmpty) {
+        final hadithList = cachedData.cast<HadithModel>();
 
-      // return await jsonServer.readJsonAbuDaud();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+        return Right(hadithList);
+      }
 
-  Future<List<HadithModel>> readJsonBukhari() async {
-    try {
-      return await jsonServer.readJsonBukhari();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+      //* Fetch Hadiths from the API
+      final hadithList = await HadithService.fetchHadiths(endpoint);
+      if (hadithList.isNotEmpty) {
+        await _hadithBox.put(endpoint, hadithList);
 
-  Future<List<HadithModel>> readJsonMuslim() async {
-    try {
-      return await jsonServer.readJsonMuslim();
+        return Right(hadithList);
+      } else {
+        return Left(Failure("No Hadith found for the given endpoint"));
+      }
     } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonAhmed() async {
-    try {
-      return await jsonServer.readJsonAhmed();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonIbnuMajah() async {
-    try {
-      return await jsonServer.readJsonIbnuMajah();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonNasai() async {
-    try {
-      return await jsonServer.readJsonNasai();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonMalik() async {
-    try {
-      return await jsonServer.readJsonMalik();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonDarimi() async {
-    try {
-      return await jsonServer.readJsonDarimi();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<HadithModel>> readJsonTirmidzi() async {
-    try {
-      return await jsonServer.readJsonTirmidzi();
-    } catch (e) {
-      throw Exception(e);
+      return Left(Failure("Failed to fetch Hadith: $e"));
     }
   }
 }
