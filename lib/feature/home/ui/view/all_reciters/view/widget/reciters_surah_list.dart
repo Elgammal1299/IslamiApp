@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/audio_app_wrapper.dart';
@@ -40,7 +41,7 @@ class _RecitersSurahListState extends State<RecitersSurahList> {
   }
 
   Future<void> _initAudio() async {
-    final artUri = await _copyAssetToTemp('assets/images/quran_cover.jpg');
+    final artUri = await _copyAssetToTemp(AppImage.quranCoverImage);
 
     List<int> numberSurahList =
         (widget.moshaf.surahList ?? '')

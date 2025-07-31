@@ -43,6 +43,7 @@ import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/qu
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
+import 'package:islami_app/feature/notification/ui/view/notification_view.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
 import 'package:islami_app/feature/splash_screen/splah_page.dart';
 
@@ -50,7 +51,13 @@ class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
+<<<<<<< HEAD
+        return MaterialPageRoute(builder: (_) => SplashScreen());
+      case AppRoutes.notificationViewRouter:
+        return MaterialPageRoute(builder: (_) => NotificationView());
+=======
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+>>>>>>> 85dea111c35d4994d9894f22cb97752a3098885b
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:

@@ -19,4 +19,5 @@ class AppRoutes {
   static const qiblahRouter = '/qiblahScreen';
   static const audioRecordingRouter = '/audioRecordingScreen';
   static const notificationScreenRouter = '/notificationScreen';
+  static const notificationViewRouter = '/notificationView';
 }
