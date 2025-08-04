@@ -6,6 +6,7 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 
 import 'package:islami_app/core/services/bookmark_manager.dart';
+import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/audio_bottom_sheet.dart';
 
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
@@ -112,7 +113,10 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             },
           ),
           FutureBuilder<bool>(
-            future: BookmarkManager.isBookmarked(widget.surah, widget.verse),
+            future: sl<BookmarkManager>().isBookmarked(
+              widget.surah,
+              widget.verse,
+            ),
             builder: (context, snapshot) {
               bool isBookmarked = snapshot.data ?? false;
               return ListTile(
@@ -125,12 +129,12 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
                 ),
                 onTap: () async {
                   if (isBookmarked) {
-                    await BookmarkManager.removeBookmark(
+                    await sl<BookmarkManager>().removeBookmark(
                       widget.surah,
                       widget.verse,
                     );
                   } else {
-                    await BookmarkManager.addBookmark(
+                    await sl<BookmarkManager>().addBookmark(
                       widget.surah,
                       widget.verse,
                     );

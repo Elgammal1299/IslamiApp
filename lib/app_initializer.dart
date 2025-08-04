@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:islami_app/core/constant/app_constant.dart';
 
-import 'package:islami_app/core/helper/audio_manager.dart';
 
 import 'package:islami_app/core/services/hive_service.dart';
-import 'package:islami_app/core/services/server_locator.dart';
+import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -36,7 +34,7 @@ class AppInitializer {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await setupServiceLocator();
-    final themeCubit = ThemeCubit();
+    final themeCubit = sl<ThemeCubit>();
     await themeCubit.loadTheme();
 
     await Firebase.initializeApp(
@@ -67,25 +65,20 @@ class AppInitializer {
     Hive.registerAdapter(RecordingModelAdapter());
     Hive.registerAdapter(NotificationModelAdapter());
 
-
-    final audioBox = HiveService.instanceFor<RecordingModel>(
-      boxName: AppConstant.hiveAudio,
-    );
+    final audioBox = sl<HiveService<RecordingModel>>();
     await audioBox.init();
 
-    final notificationsBox = HiveService.instanceFor<NotificationModel>(
-      boxName: AppConstant.hivenotifications,
-    );
+    final notificationsBox = sl<HiveService<NotificationModel>>();
     await notificationsBox.init();
 
     tz.initializeTimeZones();
     await LocalNotificationService.init();
-     Hive.registerAdapter(HadithModelAdapter());
+    Hive.registerAdapter(HadithModelAdapter());
     await Hive.openBox<List>('hadiths');
     runApp(
       MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => AudioCubit(AudioManager())),
+          BlocProvider(create: (context) => sl<AudioCubit>()),
           BlocProvider.value(value: themeCubit),
         ],
         child: ScreenUtilInit(

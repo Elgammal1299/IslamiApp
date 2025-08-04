@@ -55,7 +55,7 @@ class CustomMiniPlayerItem extends StatelessWidget {
                 data: SliderTheme.of(context).copyWith(
                   inactiveTrackColor: Theme.of(
                     context,
-                  ).colorScheme.primary.withOpacity(0.2),
+                  ).colorScheme.primary.withValues(alpha: 0.2),
                   trackHeight: 2.0,
                   thumbShape: const RoundSliderThumbShape(
                     enabledThumbRadius: 6.0,

@@ -5,9 +5,11 @@ class CounterBottonWidget extends StatelessWidget {
     : _counter = counter;
 
   final int _counter;
+ 
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
     return Container(
       width: 250,
       height: 250,
@@ -22,7 +24,7 @@ class CounterBottonWidget extends StatelessWidget {
           height: 200,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).secondaryHeaderColor,
+            color: theme.secondaryHeaderColor,
           ),
           child: Center(
             child: Text(
@@ -30,7 +32,7 @@ class CounterBottonWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 65,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+                color: theme.primaryColor,
               ),
             ),
           ),

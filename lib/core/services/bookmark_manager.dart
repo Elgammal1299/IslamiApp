@@ -1,37 +1,36 @@
-import 'package:islami_app/core/services/server_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookmarkManager {
   static const String _bookmarksKey = 'quran_bookmarks';
+  final SharedPreferences _prefs;
+
+  BookmarkManager(this._prefs);
 
   // إضافة آية للمفضلة
-  static Future<void> addBookmark(int surah, int ayah) async {
-    List<String> bookmarks =
-        sl<SharedPreferences>().getStringList(_bookmarksKey) ?? [];
+  Future<void> addBookmark(int surah, int ayah) async {
+    List<String> bookmarks = _prefs.getStringList(_bookmarksKey) ?? [];
     String bookmark = '$surah:$ayah';
     if (!bookmarks.contains(bookmark)) {
       bookmarks.add(bookmark);
-      await sl<SharedPreferences>().setStringList(_bookmarksKey, bookmarks);
+      await _prefs.setStringList(_bookmarksKey, bookmarks);
     }
   }
 
   // إزالة آية من المفضلة
-  static Future<void> removeBookmark(int surah, int ayah) async {
-    List<String> bookmarks =
-        sl<SharedPreferences>().getStringList(_bookmarksKey) ?? [];
+  Future<void> removeBookmark(int surah, int ayah) async {
+    List<String> bookmarks = _prefs.getStringList(_bookmarksKey) ?? [];
     bookmarks.remove('$surah:$ayah');
-    await sl<SharedPreferences>().setStringList(_bookmarksKey, bookmarks);
+    await _prefs.setStringList(_bookmarksKey, bookmarks);
   }
 
   // التحقق ما إذا كانت الآية في المفضلة
-  static Future<bool> isBookmarked(int surah, int ayah) async {
-    List<String> bookmarks =
-        sl<SharedPreferences>().getStringList(_bookmarksKey) ?? [];
+  Future<bool> isBookmarked(int surah, int ayah) async {
+    List<String> bookmarks = _prefs.getStringList(_bookmarksKey) ?? [];
     return bookmarks.contains('$surah:$ayah');
   }
 
   // الحصول على جميع الآيات المفضلة
-  static Future<List<String>> getAllBookmarks() async {
-    return sl<SharedPreferences>().getStringList(_bookmarksKey) ?? [];
+  Future<List<String>> getAllBookmarks() async {
+    return _prefs.getStringList(_bookmarksKey) ?? [];
   }
 }

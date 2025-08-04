@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:islami_app/app_initializer.dart';
 import 'package:islami_app/feature/notification/data/repo/notification_repo.dart';
-import 'package:islami_app/feature/notification/widget/handleNotification.dart';
+import 'package:islami_app/feature/notification/widget/handle_notification.dart';
 
 class MessagingConfig {
   static final FlutterLocalNotificationsPlugin

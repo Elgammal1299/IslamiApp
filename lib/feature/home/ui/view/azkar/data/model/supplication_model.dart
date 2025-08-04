@@ -7,7 +7,7 @@ class SupplicationModel extends Equatable {
   final String bodyVocalized;
   final String? note;
 
-  SupplicationModel({
+  const SupplicationModel({
     required this.id,
     required this.repeat,
     required this.body,

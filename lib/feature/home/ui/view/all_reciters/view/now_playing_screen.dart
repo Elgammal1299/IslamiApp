@@ -153,11 +153,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 activeTrackColor: Theme.of(context).colorScheme.primary,
                 inactiveTrackColor: Theme.of(
                   context,
-                ).colorScheme.primary.withOpacity(0.2),
+                ).colorScheme.primary.withValues(alpha: 0.2),
                 thumbColor: Theme.of(context).colorScheme.primary,
                 overlayColor: Theme.of(
                   context,
-                ).colorScheme.primary.withOpacity(0.1),
+                ).colorScheme.primary.withValues(alpha: 0.1),
                 trackHeight: 4.0,
                 thumbShape: const RoundSliderThumbShape(
                   enabledThumbRadius: 8.0,
@@ -239,7 +239,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             color: Theme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.5),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),

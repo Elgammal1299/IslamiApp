@@ -1,4 +1,4 @@
-List reciters = [
+List reciters = const [
   {
     "identifier": "ar.abdulbasitmurattal",
     "language": "ar",

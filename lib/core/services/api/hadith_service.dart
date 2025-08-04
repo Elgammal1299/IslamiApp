@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:dio/dio.dart';
 
 class HadithService {
-  static final Dio _dio = Dio();
+  // static final  _dio = sl<Dio>();
   static const String _baseUrl =
       'https://raw.githubusercontent.com/Elgammal1299/hadith/refs/heads/main/';
 
@@ -12,7 +13,7 @@ class HadithService {
     final String url = '$_baseUrl$endpoint.json';
 
     try {
-      final response = await _dio.get(url);
+      final response = await sl<Dio>().get(url);
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.data);

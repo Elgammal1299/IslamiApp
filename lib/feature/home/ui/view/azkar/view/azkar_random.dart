@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/home/ui/view/azkar/data/repo/azkar_random_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_random_cubit/azkar_random_cubit.dart';
+import 'package:islami_app/core/services/setup_service_locator.dart';
 
 class AzkarRandom extends StatelessWidget {
   const AzkarRandom({super.key});
@@ -12,7 +12,7 @@ class AzkarRandom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AzkarRandomCubit(AzkarRandomRepo())..loadAdhkar(),
+      create: (_) => sl<AzkarRandomCubit>()..loadAdhkar(),
       child: BlocBuilder<AzkarRandomCubit, AzkarRandomState>(
         builder: (context, state) {
           if (state is DikrLoading) {
@@ -26,15 +26,15 @@ class AzkarRandom extends StatelessWidget {
                 height: 170.h,
                 constraints: BoxConstraints(maxWidth: 500.w),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor.withOpacity(0.85),
+                  color: Theme.of(context).cardColor.withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     width: 1.w,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       blurRadius: 10.r,
                       offset: Offset(0, 4.h),
                     ),

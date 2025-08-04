@@ -58,13 +58,13 @@
 //                       decoration: BoxDecoration(
 //                         gradient: LinearGradient(
 //                           colors: [
-//                             Colors.purple.withOpacity(0.2),
-//                             Colors.blue.withOpacity(0.2),
+//                             Colors.purple.withValues(alpha:0.2),
+//                             Colors.blue.withValues(alpha:0.2),
 //                           ],
 //                         ),
 //                         borderRadius: BorderRadius.circular(15),
 //                         border: Border.all(
-//                           color: Colors.white.withOpacity(0.2),
+//                           color: Colors.white.withValues(alpha:0.2),
 //                           width: 1,
 //                         ),
 //                       ),
@@ -82,7 +82,7 @@
 //                               decoration: BoxDecoration(
 //                                 shape: BoxShape.circle,
 //                                 border: Border.all(
-//                                   color: Colors.white.withOpacity(0.5),
+//                                   color: Colors.white.withValues(alpha:0.5),
 //                                 ),
 //                               ),
 //                               child: Center(
@@ -112,7 +112,7 @@
 //                               height: 45,
 //                               decoration: BoxDecoration(
 //                                 shape: BoxShape.circle,
-//                                 color: Colors.white.withOpacity(0.1),
+//                                 color: Colors.white.withValues(alpha:0.1),
 //                               ),
 //                               child: IconButton(
 //                                 icon: Icon(

@@ -1,4 +1,4 @@
-List quran_text_normal = [
+List quran_text_normal = const [
   {"surah_number": 1, "verse_number": 1, "content": "بسم الله الرحمان الرحيم"},
   {"surah_number": 1, "verse_number": 2, "content": "الحمد لله رب العالمين"},
   {"surah_number": 1, "verse_number": 3, "content": "الرحمان الرحيم"},
