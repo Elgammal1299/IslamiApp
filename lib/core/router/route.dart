@@ -148,8 +148,8 @@ class AppRouter {
       case AppRoutes.radioPageRouter:
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider(
-                create: (context) => sl<RadioCubit>(),
+              (_) => BlocProvider.value(
+               value: sl<RadioCubit>(),
                 child: const RadioPage(),
               ),
         );

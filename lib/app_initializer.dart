@@ -35,7 +35,7 @@ class AppInitializer {
     WidgetsFlutterBinding.ensureInitialized();
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
-    await themeCubit.loadTheme();
+    // await themeCubit.loadTheme();
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
