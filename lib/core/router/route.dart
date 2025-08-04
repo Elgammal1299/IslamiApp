@@ -138,11 +138,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-<<<<<<< HEAD
+
                 create: (context) => sl<HadithCubit>(),
-=======
-                create: (context) => HadithCubit(HadithRepo()),
->>>>>>> 9ec86eddb24ee489c7e3364fdba5a5609493715a
+
                 child: const HadithPage(),
               ),
         );
