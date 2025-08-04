@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_card_body_azkar.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_count_azkar_button.dart';
@@ -33,6 +34,13 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
     }
   }
 
+  void _skipSupplication() {
+    setState(() {
+      currentIndex++;
+      repeatCount = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (currentIndex >= widget.supplications.length) {
@@ -60,16 +68,24 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
               140,
             ), // علشان نسيب مساحة للزر
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // الكارت
                 CustomCardBodyAzkar(current: current),
-
                 const SizedBox(height: 24),
                 //عدد الاذكار
                 CustomCountRepetItem(
                   currentIndex: currentIndex,
                   widget: widget,
                   maxCount: maxCount,
+                  currentCount: repeatCount,
+                ),
+
+                TextButton(
+                  onPressed: _skipSupplication,
+                  child: Text(
+                    'تخطي الذكر',
+                    style: context.textTheme.titleLarge,
+                  ),
                 ),
               ],
             ),

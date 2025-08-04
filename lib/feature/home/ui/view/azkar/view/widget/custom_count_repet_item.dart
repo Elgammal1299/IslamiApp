@@ -8,11 +8,13 @@ class CustomCountRepetItem extends StatelessWidget {
     required this.currentIndex,
     required this.widget,
     required this.maxCount,
+    required this.currentCount,
   });
 
   final int currentIndex;
   final SupplicationReaderScreen widget;
   final int maxCount;
+  final int currentCount;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class CustomCountRepetItem extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'التكرار: $maxCount مرة',
+                'التكرار: $currentCount من $maxCount مرة',
                 style: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).canvasColor,
@@ -56,7 +58,7 @@ class CustomCountRepetItem extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 12),
       ],
     );
   }

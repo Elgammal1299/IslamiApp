@@ -45,5 +45,82 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Location permissions for Qiblah direction and geolocation -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs location access to determine Qiblah direction and prayer times</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs location access to determine Qiblah direction and prayer times</string>
+	
+	<!-- Microphone permission for audio recording -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs microphone access to record audio</string>
+	
+	<!-- Camera permission (sometimes required by audio frameworks) -->
+	<key>NSCameraUsageDescription</key>
+	<string>This app may need camera access for future features</string>
+	
+	<!-- Apple Music permission for audio playback -->
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app needs access to music library to play Islamic audio content</string>
+	
+	<!-- Photo library permissions for sharing -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photos to share content</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs access to save images to your photo library</string>
+	
+	<!-- Motion and fitness permission -->
+	<key>NSMotionUsageDescription</key>
+	<string>This app may use motion sensors for interactive features</string>
+	
+	<!-- Speech recognition permission -->
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app may need speech recognition for future features</string>
+	
+	<!-- Contacts permission for sharing -->
+	<key>NSContactsUsageDescription</key>
+	<string>This app needs access to contacts to share content</string>
+	
+	<!-- Calendar permission for prayer times -->
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app needs access to calendar to add prayer time reminders</string>
+	
+	<!-- Reminders permission -->
+	<key>NSRemindersUsageDescription</key>
+	<string>This app needs access to reminders to set prayer alerts</string>
+	
+	<!-- Background modes for audio and notifications -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>background-processing</string>
+		<string>background-fetch</string>
+		<string>remote-notification</string>
+	</array>
+	
+	<!-- Audio session configuration -->
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	
+	<!-- Privacy manifest for tracking -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app uses data to improve user experience and provide personalized content</string>
+	
+	<!-- Bluetooth permission (for future features) -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app may use Bluetooth to connect to external devices</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app may use Bluetooth to connect to external devices</string>
+	
+	<!-- Network usage -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	
 </dict>
 </plist>
