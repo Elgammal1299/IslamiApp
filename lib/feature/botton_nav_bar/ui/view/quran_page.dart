@@ -66,7 +66,7 @@ class FontLoader {
   }
 
   static void dispose() {
-    loadedFontsNotifier.dispose();
+    // loadedFontsNotifier.dispose();
   }
 }
 

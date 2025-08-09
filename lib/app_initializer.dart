@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
@@ -77,10 +76,7 @@ class AppInitializer {
     await Hive.openBox<List>('hadiths');
     runApp(
       MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => sl<AudioCubit>()),
-          BlocProvider.value(value: themeCubit),
-        ],
+        providers: [BlocProvider.value(value: themeCubit)],
         child: ScreenUtilInit(
           designSize: const Size(402, 874),
           minTextAdapt: true,
@@ -94,37 +90,3 @@ class AppInitializer {
     );
   }
 }
-
-// class AppInitializer {
-//   static Future<void> init() async {
-//     WidgetsFlutterBinding.ensureInitialized();
-
-//     await setupServiceLocator();
-//     await Future.wait([
-//       sl<FirebaseInitializer>().init(),
-//       sl<HiveInitializer>().init(),
-//       sl<NotificationInitializer>().init(),
-//       sl<ThemeInitializer>().init(),
-//     ]);
-
-//     final themeCubit = sl<ThemeInitializer>().themeCubit;
-
-//     runApp(
-//       MultiBlocProvider(
-//         providers: [
-//           BlocProvider(create: (context) => AudioCubit(AudioManager())),
-//           BlocProvider.value(value: themeCubit),
-//         ],
-//         child: ScreenUtilInit(
-//           designSize: const Size(402, 874),
-//           minTextAdapt: true,
-//           splitScreenMode: true,
-//           useInheritedMediaQuery: true,
-//           ensureScreenSize: true,
-//           enableScaleText: () => true,
-//           builder: (context, child) => const IslamiApp(),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -20,4 +20,5 @@ class AppRoutes {
   static const audioRecordingRouter = '/audioRecordingScreen';
   static const notificationScreenRouter = '/notificationScreen';
   static const notificationViewRouter = '/notificationView';
+  static const nowPlayingScreenRouter = '/NowPlayingScreen';
 }

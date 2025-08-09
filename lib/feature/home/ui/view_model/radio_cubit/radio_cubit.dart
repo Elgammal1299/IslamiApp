@@ -24,28 +24,28 @@ class RadioCubit extends Cubit<RadioState> {
 
   Future<void> loadRadioStations({String language = 'ar'}) async {
     try {
-      emit(RadioLoading());
+      if (!isClosed) emit(RadioLoading());
 
       final stations = await radioRepository.getRadioStations(
         language: language,
       );
 
-      emit(RadioLoaded(stations));
+      if (!isClosed) emit(RadioLoaded(stations));
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء تحميل المحطات'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء تحميل المحطات'));
     }
   }
 
   Future<void> playStation(String url) async {
     try {
-      emit(RadioLoading());
+      if (!isClosed) emit(RadioLoading());
       await _audioPlayer.stop();
       await _audioPlayer.setSourceUrl(url);
       _currentUrl = url;
       await _audioPlayer.resume();
-      emit(RadioPlaying(true, url));
+      if (!isClosed) emit(RadioPlaying(true, url));
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء تشغيل المحطة'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء تشغيل المحطة'));
       await stopPlaying();
     }
   }
@@ -56,27 +56,27 @@ class RadioCubit extends Cubit<RadioState> {
       //  if (_currentUrl != null) {
       //   emit(RadioPlaying(false, _currentUrl!));
       // }
-      emit(RadioStopped());
+      if (!isClosed) emit(RadioStopped());
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء إيقاف المحطة'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء إيقاف المحطة'));
     }
   }
 
   Future<void> pausePlaying() async {
     try {
       await _audioPlayer.pause();
-      emit(RadioPaused());
+      if (!isClosed) emit(RadioPaused());
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء إيقاف المحطة مؤقتاً'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء إيقاف المحطة مؤقتاً'));
     }
   }
 
   Future<void> resumePlaying() async {
     try {
       await _audioPlayer.resume();
-      emit(RadioPlaying(true, _currentUrl ?? ''));
+      if (!isClosed) emit(RadioPlaying(true, _currentUrl ?? ''));
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء استئناف التشغيل'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء استئناف التشغيل'));
     }
   }
 
@@ -84,7 +84,7 @@ class RadioCubit extends Cubit<RadioState> {
     try {
       _audioPlayer.setVolume(volume);
     } catch (e) {
-      emit(RadioError('حدث خطأ أثناء تغيير مستوى الصوت'));
+      if (!isClosed) emit(RadioError('حدث خطأ أثناء تغيير مستوى الصوت'));
     }
   }
 

@@ -7,14 +7,143 @@ part 'reciter_state.dart';
 
 class ReciterCubit extends Cubit<ReciterState> {
   final ReciterRepo repository;
+  static const int pageSize = 20; // Number of items per page
+
+  List<Reciters> _allReciters = [];
+  List<Reciters> _filteredReciters = [];
+  String _currentSearchQuery = '';
+
   ReciterCubit(this.repository) : super(ReciterInitial());
 
-  void fetchReciters() async {
-    emit(ReciterLoading());
+  void fetchReciters({bool refresh = false}) async {
+    if (refresh) {
+      _allReciters.clear();
+      _filteredReciters.clear();
+      _currentSearchQuery = '';
+      if (!isClosed) emit(ReciterLoading());
+    } else if (_allReciters.isEmpty) {
+      if (!isClosed) emit(ReciterLoading());
+    }
+
     final result = await repository.getReciters();
+    if (isClosed) return;
+
     result.fold(
-      (error) => emit(ReciterError(error)),
-      (data) => emit(ReciterLoaded(data)),
+      (error) {
+        if (!isClosed) emit(ReciterError(error));
+      },
+      (data) {
+        if (isClosed) return;
+
+        _allReciters = data;
+        _filteredReciters = data;
+
+        // Load first page
+        final firstPageReciters = _getPageData(1);
+        if (!isClosed) {
+          emit(
+            ReciterLoaded(
+              reciters: firstPageReciters,
+              allReciters: _allReciters,
+              currentPage: 1,
+              hasMoreData: firstPageReciters.length == pageSize,
+              isRefreshing: refresh,
+            ),
+          );
+        }
+      },
     );
   }
+
+  void loadNextPage() async {
+    final currentState = state;
+    if (currentState is ReciterLoaded &&
+        currentState.hasMoreData &&
+        !isClosed) {
+      emit(
+        ReciterLoadingMore(
+          currentReciters: currentState.reciters,
+          currentPage: currentState.currentPage,
+          hasMoreData: currentState.hasMoreData,
+        ),
+      );
+
+      // Simulate network delay for better UX
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (isClosed) return;
+
+      final nextPage = currentState.currentPage + 1;
+      final nextPageReciters = _getPageData(nextPage);
+
+      final updatedReciters = [...currentState.reciters, ...nextPageReciters];
+
+      if (!isClosed) {
+        emit(
+          ReciterLoaded(
+            reciters: updatedReciters,
+            allReciters: currentState.allReciters,
+            currentPage: nextPage,
+            hasMoreData: nextPageReciters.length == pageSize,
+          ),
+        );
+      }
+    }
+  }
+
+  void searchReciters(String query) {
+    if (isClosed) return;
+
+    _currentSearchQuery = query;
+
+    if (query.isEmpty) {
+      _filteredReciters = _allReciters;
+    } else {
+      _filteredReciters =
+          _allReciters
+              .where(
+                (reciter) =>
+                    (reciter.name?.toLowerCase().contains(
+                          query.toLowerCase(),
+                        ) ??
+                        false),
+              )
+              .toList();
+    }
+
+    // Reset to first page with filtered results
+    final firstPageReciters = _getPageData(1);
+    if (!isClosed) {
+      emit(
+        ReciterLoaded(
+          reciters: firstPageReciters,
+          allReciters: _allReciters,
+          currentPage: 1,
+          hasMoreData: firstPageReciters.length == pageSize,
+        ),
+      );
+    }
+  }
+
+  void refresh() {
+    fetchReciters(refresh: true);
+  }
+
+  List<Reciters> _getPageData(int page) {
+    final startIndex = (page - 1) * pageSize;
+    final endIndex = startIndex + pageSize;
+
+    if (startIndex >= _filteredReciters.length) {
+      return [];
+    }
+
+    return _filteredReciters.sublist(
+      startIndex,
+      endIndex > _filteredReciters.length ? _filteredReciters.length : endIndex,
+    );
+  }
+
+  int get totalPages => (_filteredReciters.length / pageSize).ceil();
+  int get totalReciters => _filteredReciters.length;
+  bool get hasSearch => _currentSearchQuery.isNotEmpty;
 }

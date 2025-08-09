@@ -67,15 +67,7 @@ class _AudioAppWrapperState extends State<AudioAppWrapper> {
     }
   }
 
-  // void _openNowPlayingScreen(BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder:
-  //           (context) => NowPlayingScreen(audioManager: widget.audioManager),
-  //     ),
-  //   );
-  // }
+
 
   @override
   Widget build(BuildContext context) {

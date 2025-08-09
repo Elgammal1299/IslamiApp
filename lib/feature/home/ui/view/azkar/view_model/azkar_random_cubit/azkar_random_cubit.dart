@@ -15,19 +15,23 @@ class AzkarRandomCubit extends Cubit<AzkarRandomState> {
   int _currentIndex = 0;
 
   Future<void> loadAdhkar() async {
-    emit(DikrLoading());
+    if (!isClosed) emit(DikrLoading());
 
     try {
       _adhkar = await repository.loadAdhkarFromAssets();
       _currentIndex = 0;
-      emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
+      if (!isClosed) emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
 
       _timer = Timer.periodic(const Duration(seconds: 10), (_) {
+        if (isClosed) {
+          _timer?.cancel();
+          return;
+        }
         _currentIndex = (_currentIndex + 1) % _adhkar.length;
-        emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
+        if (!isClosed) emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
       });
     } catch (e) {
-      emit(AzkarRandomError(e.toString()));
+      if (!isClosed) emit(AzkarRandomError(e.toString()));
     }
   }
 
@@ -38,14 +42,14 @@ class AzkarRandomCubit extends Cubit<AzkarRandomState> {
   }
 
   void nextDikr() {
-    if (_adhkar.isEmpty) return;
+    if (_adhkar.isEmpty || isClosed) return;
     _currentIndex = (_currentIndex + 1) % _adhkar.length;
-    emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
+    if (!isClosed) emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
   }
 
   void previousDikr() {
-    if (_adhkar.isEmpty) return;
+    if (_adhkar.isEmpty || isClosed) return;
     _currentIndex = (_currentIndex - 1 + _adhkar.length) % _adhkar.length;
-    emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
+    if (!isClosed) emit(AzkarRandomLoaded(_adhkar[_currentIndex]));
   }
 }

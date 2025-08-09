@@ -16,6 +16,8 @@ class IslamiApp extends StatelessWidget {
       builder: (context, state) {
         final isDark = state is DarkThemeState;
         return MaterialApp(
+          themeAnimationCurve: Curves.easeInOutSine,
+          themeAnimationDuration: const Duration(seconds: 2),
           debugShowCheckedModeBanner: false,
           title: 'وَارْتَـقِ',
           locale: const Locale('ar'),

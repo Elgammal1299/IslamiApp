@@ -12,13 +12,13 @@ class SurahCubit extends Cubit<SurahState> {
 
   late final surahs;
   void getSurahs() async {
-    emit(SurahLoading());
+    if (!isClosed) emit(SurahLoading());
     try {
       surahs = await jsonRepository.readJson();
 
-      emit(SurahSuccess(surahs));
+      if (!isClosed) emit(SurahSuccess(surahs));
     } catch (e) {
-      emit(SurahError(e.toString()));
+      if (!isClosed) emit(SurahError(e.toString()));
     }
   }
 
@@ -38,7 +38,7 @@ class SurahCubit extends Cubit<SurahState> {
 
       await Share.share(surahText);
     } catch (e) {
-      emit(SurahError(e.toString()));
+      if (!isClosed) emit(SurahError(e.toString()));
     }
   }
 
@@ -54,7 +54,7 @@ class SurahCubit extends Cubit<SurahState> {
 
       await Share.share(shareText);
     } catch (e) {
-      emit(SurahError(e.toString()));
+      if (!isClosed) emit(SurahError(e.toString()));
     }
   }
 }

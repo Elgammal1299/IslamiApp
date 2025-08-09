@@ -258,14 +258,8 @@ Future<void> setupServiceLocator() async {
     return NotificationCubit();
   });
 
-  // ===== INITIALIZE SERVICES =====
-
-  // Initialize Hive services
-  await sl<HiveService<dynamic>>().init();
-  await sl<HiveService<String>>().init();
-  await sl<HiveService<Map>>().init();
-  await sl<HiveService<RecordingModel>>().init();
-  await sl<HiveService<NotificationModel>>().init();
+  // ===== NOTE: Services will be initialized lazily when first accessed =====
+  // No eager initialization - this improves app startup time significantly
 }
 
 /// Helper extension to make service locator usage more convenient

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
@@ -138,7 +140,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-
                 create: (context) => sl<HadithCubit>(),
 
                 child: const HadithPage(),
@@ -149,7 +150,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider.value(
-               value: sl<RadioCubit>(),
+                value: sl<RadioCubit>(),
                 child: const RadioPage(),
               ),
         );
@@ -199,6 +200,15 @@ class AppRouter {
                   BlocProvider(create: (context) => sl<AudioCubit>()),
                 ],
                 child: const RecitersScreen(),
+              ),
+        );
+      case AppRoutes.nowPlayingScreenRouter:
+        final audioManager = settings.arguments as AudioManager;
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<AudioCubit>(),
+                child: NowPlayingScreen(audioManager: audioManager),
               ),
         );
 
