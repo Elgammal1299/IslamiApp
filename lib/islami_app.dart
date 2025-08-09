@@ -5,6 +5,7 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/router/route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
+import 'package:islami_app/app_initializer.dart';
 
 class IslamiApp extends StatelessWidget {
   const IslamiApp({super.key});
@@ -20,6 +21,7 @@ class IslamiApp extends StatelessWidget {
           themeAnimationDuration: const Duration(seconds: 2),
           debugShowCheckedModeBanner: false,
           title: 'وَارْتَـقِ',
+          navigatorKey: navigatorKey,
           locale: const Locale('ar'),
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,

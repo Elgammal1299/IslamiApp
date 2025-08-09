@@ -42,7 +42,10 @@ class AppRouter {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.notificationViewRouter:
-        return MaterialPageRoute(builder: (_) => const NotificationView());
+        return MaterialPageRoute(
+          builder: (_) => const NotificationView(),
+          settings: settings,
+        );
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:

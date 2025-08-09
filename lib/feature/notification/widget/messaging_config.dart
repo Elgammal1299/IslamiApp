@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:islami_app/app_initializer.dart';
@@ -55,10 +57,10 @@ class MessagingConfig {
         initializationSettings,
         onDidReceiveNotificationResponse: (NotificationResponse response) {
           log("🔁 Notification clicked with payload: ${response.payload}");
-          if (response.payload != null) {
+          if (response.payload != null && navigatorKey.currentContext != null) {
             try {
               final Map<String, dynamic> payload = Map<String, dynamic>.from(
-                response.payload as Map,
+                jsonDecode(response.payload!),
               );
               handleNotification(navigatorKey.currentContext!, payload);
             } catch (e) {
@@ -72,25 +74,31 @@ class MessagingConfig {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         log("📲 Foreground message received: ${message.messageId}");
         await _showNotification(message);
-        if (navigatorKey.currentContext != null) {
-          handleNotification(navigatorKey.currentContext!, message.data);
-        } else {
-          log("⚠️ context is null, cannot handle notification now.");
-        }
+        // Do not auto-navigate in foreground; wait for user click
       });
 
       // 💤 التطبيق كان مقفول وفتح من إشعار
       FirebaseMessaging.instance.getInitialMessage().then((message) {
         if (message != null) {
           log("📦 Initial message received: ${message.messageId}");
-          handleNotification(navigatorKey.currentContext!, message.data);
+          final data = <String, dynamic>{'source': 'firebase', ...message.data};
+          if (navigatorKey.currentContext != null) {
+            handleNotification(navigatorKey.currentContext!, data);
+          } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (navigatorKey.currentContext != null) {
+                handleNotification(navigatorKey.currentContext!, data);
+              }
+            });
+          }
         }
       });
 
       // 🔁 المستخدم فتح الإشعار من الخلفية
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         log("➡️ Notification clicked (background): ${message.messageId}");
-        handleNotification(navigatorKey.currentContext!, message.data);
+        final data = <String, dynamic>{'source': 'firebase', ...message.data};
+        handleNotification(navigatorKey.currentContext!, data);
       });
 
       // Set foreground notification presentation options
@@ -109,7 +117,6 @@ class MessagingConfig {
   static Future<void> _showNotification(RemoteMessage message) async {
     try {
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
       log("📢 Showing notification: ${message.notification?.title}");
 
       if (notification != null) {
@@ -125,6 +132,7 @@ class MessagingConfig {
               channelDescription: '...',
               importance: Importance.max,
               priority: Priority.high,
+              visibility: NotificationVisibility.public,
               playSound: true,
               largeIcon: const DrawableResourceAndroidBitmap(
                 '@mipmap/ic_launcher',
@@ -150,7 +158,12 @@ class MessagingConfig {
                   'notifigation.mp3', // تأكد من وجود الملف في مجلد ios/Runner/Resources
             ),
           ),
-          payload: message.data.toString(),
+          payload: jsonEncode({
+            'source': 'firebase',
+            'title': notification.title,
+            'body': notification.body,
+            ...message.data,
+          }),
         );
         await NotificationRepo().logNotification(
           title: notification.title ?? 'بدون عنوان',
@@ -166,15 +179,62 @@ class MessagingConfig {
   /// لمعالجة الرسائل في الخلفية
   @pragma('vm:entry-point')
   static Future<void> messageHandler(RemoteMessage message) async {
-    log('�� Background message received: ${message.messageId}');
-    // Store the message data for later use when the app is opened
-    // You might want to use shared preferences or a local database
+    log('📥 Background message received: ${message.messageId}');
     try {
-      // Here you can store the message data to be processed when the app is opened
-      // For example, using SharedPreferences or a local database
-      log('Message data: ${message.data}');
+      // Create a local notifications plugin instance for the background isolate
+      final FlutterLocalNotificationsPlugin backgroundPlugin =
+          FlutterLocalNotificationsPlugin();
+
+      // Ensure the Android channel exists (safe to call multiple times)
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'custom_channel',
+        'Custom Notifications',
+        description: 'This channel plays a custom sound.',
+        importance: Importance.max,
+        sound: RawResourceAndroidNotificationSound('notifigation'),
+        playSound: true,
+        enableVibration: true,
+      );
+
+      await backgroundPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(channel);
+
+      final RemoteNotification? remote = message.notification;
+      final String title =
+          remote?.title ?? message.data['title'] ?? 'إشعار جديد';
+      final String body = remote?.body ?? message.data['body'] ?? '';
+
+      await backgroundPlugin.show(
+        message.hashCode,
+        title,
+        body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'custom_channel',
+            'Custom Notifications',
+            channelDescription: '...',
+            importance: Importance.max,
+            priority: Priority.high,
+            visibility: NotificationVisibility.public,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+            sound: RawResourceAndroidNotificationSound('notifigation'),
+            enableVibration: true,
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+            sound: 'notifigation.mp3',
+          ),
+        ),
+        payload: jsonEncode({'source': 'firebase', ...message.data}),
+      );
     } catch (e) {
-      log('❌ Error handling background message: $e');
+      log('❌ Error showing background notification: $e');
     }
   }
 }

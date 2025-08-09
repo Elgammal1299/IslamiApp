@@ -3,6 +3,7 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
+import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 
 class CustomNotificationItem extends StatelessWidget {
   final MapEntry<dynamic, dynamic> entry;
@@ -18,7 +19,16 @@ class CustomNotificationItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<NotificationCubit>().markAsRead(key);
-        Navigator.pushNamed(context, AppRoutes.homeRoute);
+        final NotificationModel model = entry.value;
+        if (model.type == 'scheduled') {
+          Navigator.pushNamed(context, AppRoutes.azkarYawmiScreen);
+        } else {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.notificationViewRouter,
+            arguments: {'title': model.title, 'body': model.body},
+          );
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
