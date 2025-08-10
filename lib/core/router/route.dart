@@ -19,6 +19,7 @@ import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cub
 import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
+import 'package:islami_app/feature/home/ui/view/prayer_times_screen.dart';
 import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_page.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
@@ -41,6 +42,8 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutes.prayertimesRouter:
+        return MaterialPageRoute(builder: (_) => const PrayerTimesScreen());
       case AppRoutes.notificationViewRouter:
         return MaterialPageRoute(
           builder: (_) => const NotificationView(),

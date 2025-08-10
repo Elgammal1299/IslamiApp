@@ -21,4 +21,5 @@ class AppRoutes {
   static const notificationScreenRouter = '/notificationScreen';
   static const notificationViewRouter = '/notificationView';
   static const nowPlayingScreenRouter = '/NowPlayingScreen';
+  static const prayertimesRouter = '/PrayertimesScreen';
 }

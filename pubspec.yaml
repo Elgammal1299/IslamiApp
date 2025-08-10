@@ -53,6 +53,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   event_bus: ^2.0.1
+  adhan: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:

@@ -40,9 +40,14 @@ final List<HomeItemModel> items =  [
     route: AppRoutes.azkarYawmiScreen,
   ),
   HomeItemModel(
-    name: "دعاء وذكر",
+    name: "حصن المؤمن",
     image: AppImage.prayingImage,
     route: AppRoutes.azkarPageRouter,
+  ),
+  HomeItemModel(
+    name: "مواقيت الصلاة",
+    image: AppImage.prayingImage,
+    route: AppRoutes.prayertimesRouter,
   ),
   HomeItemModel(
     name: "ريكورد",
