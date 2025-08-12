@@ -26,13 +26,13 @@ class IslamiApp extends StatelessWidget {
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate, 
           ],
           supportedLocales: [const Locale('ar')],
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: AppRoutes.splasahRouter,
+          initialRoute: AppRoutes.homeRoute,
           onGenerateRoute: AppRouter.generateRoute,
         );
       },
