@@ -475,7 +475,7 @@ class _QuranViewPageState extends State<QuranViewPage>
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
             child: CustomScrollView(
               physics: const ClampingScrollPhysics(),
               slivers: [

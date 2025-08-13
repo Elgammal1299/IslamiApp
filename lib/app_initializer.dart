@@ -33,21 +33,6 @@ class AppInitializer {
 
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
-
-    await Hive.initFlutter();
-
-    Hive
-      ..registerAdapter(RecordingModelAdapter())
-      ..registerAdapter(NotificationModelAdapter())
-      ..registerAdapter(HadithModelAdapter());
-
-    await sl<HiveService<RecordingModel>>().init();
-    await sl<HiveService<NotificationModel>>().init();
-    await Hive.openBox<List>('hadiths');
-
-    await Future.wait([_initFirebaseMessaging(), _initLocalNotifications()]);
-
-  
     runApp(
       MultiBlocProvider(
         providers: [BlocProvider.value(value: themeCubit)],
@@ -62,6 +47,19 @@ class AppInitializer {
         ),
       ),
     );
+
+    await Hive.initFlutter();
+
+    Hive
+      ..registerAdapter(RecordingModelAdapter())
+      ..registerAdapter(NotificationModelAdapter())
+      ..registerAdapter(HadithModelAdapter());
+
+    await sl<HiveService<RecordingModel>>().init();
+    await sl<HiveService<NotificationModel>>().init();
+    await Hive.openBox<List>('hadiths');
+
+    await Future.wait([_initFirebaseMessaging(), _initLocalNotifications()]);
   }
 
   /// Firebase & Messaging Init

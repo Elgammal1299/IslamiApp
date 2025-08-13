@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
@@ -59,7 +59,14 @@ class AppRouter {
         );
 
       case AppRoutes.homeRoute:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => sl<NavBarCubit>(),
+
+                child: const HomeScreen(),
+              ),
+        );
       case AppRoutes.audioRecordingRouter:
         return MaterialPageRoute(
           builder:
@@ -99,7 +106,7 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<SurahCubit>()..getSurahs(),
                   ),
-                  BlocProvider(create: (context) => sl<NavBarCubit>()),
+                  BlocProvider.value(value: sl<NavBarCubit>()),
                   BlocProvider(
                     create: (context) => sl<BookmarkCubit>()..loadBookmarks(),
                   ),

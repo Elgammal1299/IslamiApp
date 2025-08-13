@@ -30,7 +30,7 @@ import '../../feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/a
 import '../../feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 import '../../feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
-import '../../feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
+import '../../feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import '../../feature/notification/ui/view_model/cubit/notification_cubit.dart';

@@ -186,6 +186,7 @@ class _QuranSurahPageState extends State<QuranSurahPage> {
             ),
             Expanded(
               child: BlocBuilder<SurahCubit, SurahState>(
+             
                 builder: (context, state) {
                   if (state is SurahLoading) {
                     return const Center(child: CircularProgressIndicator());
