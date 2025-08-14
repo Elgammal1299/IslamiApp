@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_hadith_cart_item.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 
-class HadithDetailsPage extends StatelessWidget {
-  const HadithDetailsPage({super.key});
+class HadithDetailsScreen extends StatelessWidget {
+  const HadithDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class HadithDetailsPage extends StatelessWidget {
               },
             );
           }
-          return const SizedBox.shrink(); 
+          return const SizedBox.shrink();
         },
       ),
     );

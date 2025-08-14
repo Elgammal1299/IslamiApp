@@ -32,6 +32,7 @@ class AudioCubit extends Cubit<AudioState> {
       _handleShuffleMode,
     );
     _durationSub = _audioManager.duration.listen((duration) {
+      if (isClosed) return;
       final currentState = state;
       if (currentState is AudioPlaybackState) {
         emit(currentState.copyWith(duration: duration));
@@ -44,11 +45,13 @@ class AudioCubit extends Cubit<AudioState> {
 
   Future<void> _loadInitialState() async {
     try {
-      emit(const AudioLoading());
+      if (!isClosed) emit(const AudioLoading());
 
       await _audioManager.playbackState.firstWhere(
         (state) => state.processingState == AudioProcessingState.ready,
       );
+
+      if (isClosed) return;
 
       final queue = await _audioManager.queue.first;
       final currentItem = await _audioManager.currentMediaItem.first;
@@ -58,34 +61,38 @@ class AudioCubit extends Cubit<AudioState> {
       final loopMode = await _audioManager.loopModeStream.first;
       final isShuffled = await _audioManager.shuffleModeStream.first;
 
-      emit(
-        AudioPlaybackState(
-          playlist: queue,
-          currentItem: currentItem,
-          isPlaying: isPlaying,
-          position: position,
-          bufferedPosition: position,
-          duration: duration,
-          loopMode: loopMode,
-          isShuffled: isShuffled,
-        ),
-      );
+      if (!isClosed) {
+        emit(
+          AudioPlaybackState(
+            playlist: queue,
+            currentItem: currentItem,
+            isPlaying: isPlaying,
+            position: position,
+            bufferedPosition: position,
+            duration: duration,
+            loopMode: loopMode,
+            isShuffled: isShuffled,
+          ),
+        );
+      }
     } catch (e) {
-      emit(AudioError('Failed to load: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Failed to load: ${e.toString()}'));
     }
   }
 
   void _handlePlaybackState(PlaybackState state) {
+    if (isClosed) return;
+
     final currentState = this.state;
 
     if (state.processingState == AudioProcessingState.completed) {
-      if (currentState is AudioPlaybackState) {
+      if (currentState is AudioPlaybackState && !isClosed) {
         emit(AudioPlaybackCompleted(currentState.playlist));
       }
       return;
     }
 
-    if (currentState is AudioPlaybackState) {
+    if (currentState is AudioPlaybackState && !isClosed) {
       emit(
         currentState.copyWith(
           isPlaying: state.playing,
@@ -96,36 +103,46 @@ class AudioCubit extends Cubit<AudioState> {
   }
 
   void _handleCurrentItem(MediaItem? item) {
+    if (isClosed) return;
+
     final currentState = state;
-    if (currentState is AudioPlaybackState && item != null) {
+    if (currentState is AudioPlaybackState && item != null && !isClosed) {
       emit(currentState.copyWith(currentItem: item));
     }
   }
 
   void _handleQueue(List<MediaItem> queue) {
+    if (isClosed) return;
+
     final currentState = state;
-    if (currentState is AudioPlaybackState) {
+    if (currentState is AudioPlaybackState && !isClosed) {
       emit(currentState.copyWith(playlist: queue));
     }
   }
 
   void _handlePosition(Duration position) {
+    if (isClosed) return;
+
     final currentState = state;
-    if (currentState is AudioPlaybackState) {
+    if (currentState is AudioPlaybackState && !isClosed) {
       emit(currentState.copyWith(position: position));
     }
   }
 
   void _handleLoopMode(LoopMode mode) {
+    if (isClosed) return;
+
     final currentState = state;
-    if (currentState is AudioPlaybackState) {
+    if (currentState is AudioPlaybackState && !isClosed) {
       emit(currentState.copyWith(loopMode: mode));
     }
   }
 
   void _handleShuffleMode(bool isShuffled) {
+    if (isClosed) return;
+
     final currentState = state;
-    if (currentState is AudioPlaybackState) {
+    if (currentState is AudioPlaybackState && !isClosed) {
       emit(currentState.copyWith(isShuffled: isShuffled));
     }
   }
@@ -133,10 +150,11 @@ class AudioCubit extends Cubit<AudioState> {
   // ========== واجهة التحكم الأساسية ==========
   Future<void> loadPlaylist(List<MediaItem> playlist) async {
     try {
-      emit(const AudioLoading());
+      if (!isClosed) emit(const AudioLoading());
       await _audioManager.loadPlaylist(playlist);
     } catch (e) {
-      emit(AudioError('Failed to load playlist: ${e.toString()}'));
+      if (!isClosed)
+        emit(AudioError('Failed to load playlist: ${e.toString()}'));
       rethrow;
     }
   }
@@ -145,7 +163,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.play();
     } catch (e) {
-      emit(AudioError('Play failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Play failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -154,7 +172,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.pause();
     } catch (e) {
-      emit(AudioError('Pause failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Pause failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -170,7 +188,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.skipToNext();
     } catch (e) {
-      emit(AudioError('Skip next failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Skip next failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -179,7 +197,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.skipToPrevious();
     } catch (e) {
-      emit(AudioError('Skip previous failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Skip previous failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -188,7 +206,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.seek(position);
     } catch (e) {
-      emit(AudioError('Seek failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Seek failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -197,7 +215,8 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.setLoopMode(mode);
     } catch (e) {
-      emit(AudioError('Loop mode change failed: ${e.toString()}'));
+      if (!isClosed)
+        emit(AudioError('Loop mode change failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -206,7 +225,8 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.setShuffle(enabled);
     } catch (e) {
-      emit(AudioError('Shuffle mode change failed: ${e.toString()}'));
+      if (!isClosed)
+        emit(AudioError('Shuffle mode change failed: ${e.toString()}'));
       rethrow;
     }
   }
@@ -215,7 +235,7 @@ class AudioCubit extends Cubit<AudioState> {
     try {
       await _audioManager.skipToIndex(index);
     } catch (e) {
-      emit(AudioError('Skip to index failed: ${e.toString()}'));
+      if (!isClosed) emit(AudioError('Skip to index failed: ${e.toString()}'));
       rethrow;
     }
   }

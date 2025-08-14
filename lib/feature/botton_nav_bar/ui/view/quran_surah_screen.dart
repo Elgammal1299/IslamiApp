@@ -7,14 +7,14 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_it
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:quran/quran.dart';
 
-class QuranSurahPage extends StatefulWidget {
-  const QuranSurahPage({super.key});
+class QuranSurahScreen extends StatefulWidget {
+  const QuranSurahScreen({super.key});
 
   @override
-  State<QuranSurahPage> createState() => _QuranSurahPageState();
+  State<QuranSurahScreen> createState() => _QuranSurahScreenState();
 }
 
-class _QuranSurahPageState extends State<QuranSurahPage> {
+class _QuranSurahScreenState extends State<QuranSurahScreen> {
   final ValueNotifier<List<SurahModel>> searchedForSurah = ValueNotifier([]);
   final ValueNotifier<dynamic> searchedForAyats = ValueNotifier(null);
   final ValueNotifier<bool> isSearching = ValueNotifier(false);

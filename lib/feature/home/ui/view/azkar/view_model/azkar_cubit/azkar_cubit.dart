@@ -9,12 +9,12 @@ class AzkarCubit extends Cubit<AzkarState> {
   AzkarCubit(this._repository) : super(AzkarInitial());
   final AzkarRepo _repository;
   Future<void> loadAzkar() async {
-    emit(AzkarLoading());
+    if (!isClosed) emit(AzkarLoading());
     try {
       final sections = await _repository.loadSections();
-      emit(AzkarLoaded(sections));
+      if (!isClosed) emit(AzkarLoaded(sections));
     } catch (e) {
-      emit(AzkarError(e.toString()));
+      if (!isClosed) emit(AzkarError(e.toString()));
     }
   }
 }

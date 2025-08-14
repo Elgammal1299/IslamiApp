@@ -5,6 +5,7 @@ import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 
@@ -95,14 +96,9 @@ class _PlaylistScreenState extends State<PlaylistScreen>
             await context.read<AudioCubit>().skipToIndex(index);
           }
           if (mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) =>
-                        NowPlayingScreen(audioManager: widget.audioManager),
-              ),
-            );
+            Navigator.pushNamed(context, AppRoutes.nowPlayingScreenRouter,
+                arguments: widget.audioManager);
+         
           }
         },
         borderRadius: BorderRadius.circular(12),

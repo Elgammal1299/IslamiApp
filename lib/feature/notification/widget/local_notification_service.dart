@@ -1,5 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:islami_app/app_initializer.dart';
 import 'package:islami_app/feature/notification/data/repo/notification_repo.dart';
+import 'package:islami_app/feature/notification/widget/handle_notification.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -24,9 +26,22 @@ class LocalNotificationService {
     await _plugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        print('Notification clicked with payload: ${response.payload}');
+        try {
+          if (navigatorKey.currentContext != null) {
+            handleNotification(navigatorKey.currentContext!, {
+              'source': 'local',
+            });
+          }
+        } catch (_) {}
       },
     );
+
+    // Handle app launched by tapping a local notification (terminated state)
+    final launchDetails = await _plugin.getNotificationAppLaunchDetails();
+    if ((launchDetails?.didNotificationLaunchApp ?? false) &&
+        navigatorKey.currentContext != null) {
+      handleNotification(navigatorKey.currentContext!, {'source': 'local'});
+    }
 
     // 3. طلب صلاحيات Android 13+
     final androidImpl =
@@ -97,12 +112,14 @@ class LocalNotificationService {
           channelDescription: 'Notifications that appear at a set time',
           importance: Importance.max,
           priority: Priority.high,
+          visibility: NotificationVisibility.public,
+          icon: '@mipmap/ic_launcher',
         ),
         iOS: DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: repeat,
-      payload: payload ?? 'custom_payload',
+      payload: payload ?? '{"source":"local"}',
     );
     await NotificationRepo().logNotification(
       title: title,

@@ -1,13 +1,14 @@
-
 import 'package:dartz/dartz.dart';
-import 'package:hive/hive.dart';
-
 import 'package:islami_app/core/services/api/hadith_service.dart';
+import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/repo/hadith_repoo.dart';
 
 class HadithRepo implements HadithRepoo {
-  final Box<List> _hadithBox = Hive.box<List>('hadiths');
+  final HiveService<List> _hadithService = HiveService.instanceFor<List>(
+    boxName: 'hadiths',
+    enableLogging: true,
+  );
 
   @override
   //* Fetches a list of Hadiths from the given endpoint.
@@ -19,19 +20,22 @@ class HadithRepo implements HadithRepoo {
   //* the message "No Hadith found for the given endpoint".
   Future<Either<Failure, List<HadithModel>>> getHadith(String endpoint) async {
     try {
-  //* Check if Hadiths are cached in Hive
-      final cachedData = _hadithBox.get(endpoint);
+      // Ensure the service is initialized
+      if (!_hadithService.isOpen) {
+        await _hadithService.init();
+      }
+
+      //* Check if Hadiths are cached in Hive
+      final cachedData = _hadithService.get(endpoint);
       if (cachedData != null && cachedData.isNotEmpty) {
         final hadithList = cachedData.cast<HadithModel>();
-
         return Right(hadithList);
       }
 
       //* Fetch Hadiths from the API
       final hadithList = await HadithService.fetchHadiths(endpoint);
       if (hadithList.isNotEmpty) {
-        await _hadithBox.put(endpoint, hadithList);
-
+        await _hadithService.put(endpoint, hadithList);
         return Right(hadithList);
       } else {
         return Left(Failure("No Hadith found for the given endpoint"));

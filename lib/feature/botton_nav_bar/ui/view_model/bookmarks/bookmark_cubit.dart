@@ -11,21 +11,21 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   BookmarkCubit(this._bookmarkManager) : super(BookmarkInitial());
 
   Future<void> loadBookmarks() async {
-    emit(BookmarksLoading());
+    if (!isClosed) emit(BookmarksLoading());
     try {
       final bookmarks = await _bookmarkManager.getAllBookmarks();
-      emit(BookmarksLoaded(bookmarks));
+      if (!isClosed) emit(BookmarksLoaded(bookmarks));
     } catch (e) {
-      emit(BookmarksError(e.toString()));
+      if (!isClosed) emit(BookmarksError(e.toString()));
     }
   }
 
   Future<void> removeBookmark(int surah, int ayah) async {
     try {
       await _bookmarkManager.removeBookmark(surah, ayah);
-      loadBookmarks();
+      if (!isClosed) loadBookmarks();
     } catch (e) {
-      emit(BookmarksError(e.toString()));
+      if (!isClosed) emit(BookmarksError(e.toString()));
     }
   }
 }

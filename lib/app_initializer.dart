@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
-import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
@@ -33,54 +30,12 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class AppInitializer {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
+
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
-    // await themeCubit.loadTheme();
-
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await FirebaseMessaging.instance.subscribeToTopic('all');
-    log("✅ Subscribed to topic: all_users");
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-
-    await MessagingConfig.initFirebaseMessaging();
-    String? token = await FirebaseMessaging.instance.getToken();
-    log("📲 FCM Token: $token");
-
-    NotificationSettings settings =
-        await FirebaseMessaging.instance.requestPermission();
-    log("🔔 Notification Permission Status: ${settings.authorizationStatus}");
-
-    // await SharedPreferences.getInstance();
-    await Hive.initFlutter();
-
-    Hive.registerAdapter(RecordingModelAdapter());
-    Hive.registerAdapter(NotificationModelAdapter());
-
-    final audioBox = sl<HiveService<RecordingModel>>();
-    await audioBox.init();
-
-    final notificationsBox = sl<HiveService<NotificationModel>>();
-    await notificationsBox.init();
-
-    tz.initializeTimeZones();
-    await LocalNotificationService.init();
-    Hive.registerAdapter(HadithModelAdapter());
-    await Hive.openBox<List>('hadiths');
     runApp(
       MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => sl<AudioCubit>()),
-          BlocProvider.value(value: themeCubit),
-        ],
+        providers: [BlocProvider.value(value: themeCubit)],
         child: ScreenUtilInit(
           designSize: const Size(402, 874),
           minTextAdapt: true,
@@ -92,39 +47,50 @@ class AppInitializer {
         ),
       ),
     );
+
+    await Hive.initFlutter();
+
+    Hive
+      ..registerAdapter(RecordingModelAdapter())
+      ..registerAdapter(NotificationModelAdapter())
+      ..registerAdapter(HadithModelAdapter());
+
+    await sl<HiveService<RecordingModel>>().init();
+    await sl<HiveService<NotificationModel>>().init();
+    await Hive.openBox<List>('hadiths');
+
+    await Future.wait([_initFirebaseMessaging(), _initLocalNotifications()]);
+  }
+
+  /// Firebase & Messaging Init
+  static Future<void> _initFirebaseMessaging() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await FirebaseMessaging.instance.subscribeToTopic('all');
+    log("✅ Subscribed to topic: all_users");
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+
+    await MessagingConfig.initFirebaseMessaging();
+
+    final token = await FirebaseMessaging.instance.getToken();
+    log("📲 FCM Token: $token");
+
+    final settings = await FirebaseMessaging.instance.requestPermission();
+    log("🔔 Notification Permission Status: ${settings.authorizationStatus}");
+  }
+
+  /// Local Notifications Init
+  static Future<void> _initLocalNotifications() async {
+    tz.initializeTimeZones();
+    await LocalNotificationService.init();
   }
 }
-
-// class AppInitializer {
-//   static Future<void> init() async {
-//     WidgetsFlutterBinding.ensureInitialized();
-
-//     await setupServiceLocator();
-//     await Future.wait([
-//       sl<FirebaseInitializer>().init(),
-//       sl<HiveInitializer>().init(),
-//       sl<NotificationInitializer>().init(),
-//       sl<ThemeInitializer>().init(),
-//     ]);
-
-//     final themeCubit = sl<ThemeInitializer>().themeCubit;
-
-//     runApp(
-//       MultiBlocProvider(
-//         providers: [
-//           BlocProvider(create: (context) => AudioCubit(AudioManager())),
-//           BlocProvider.value(value: themeCubit),
-//         ],
-//         child: ScreenUtilInit(
-//           designSize: const Size(402, 874),
-//           minTextAdapt: true,
-//           splitScreenMode: true,
-//           useInheritedMediaQuery: true,
-//           ensureScreenSize: true,
-//           enableScaleText: () => true,
-//           builder: (context, child) => const IslamiApp(),
-//         ),
-//       ),
-//     );
-//   }
-// }

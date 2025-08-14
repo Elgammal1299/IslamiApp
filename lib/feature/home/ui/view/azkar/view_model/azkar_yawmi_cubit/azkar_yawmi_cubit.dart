@@ -9,12 +9,12 @@ class AzkarYawmiCubit extends Cubit<AzkarYawmiState> {
   AzkarYawmiCubit(this.repository) : super(SupplicationInitial());
   final AzkarYawmiRepo repository;
   Future<void> loadSupplications() async {
-    emit(SupplicationLoading());
+    if (!isClosed) emit(SupplicationLoading());
     try {
       final data = await repository.loadSupplications();
-      emit(SupplicationLoaded(data));
+      if (!isClosed) emit(SupplicationLoaded(data));
     } catch (e) {
-      emit(SupplicationError('فشل تحميل الأذكار'));
+      if (!isClosed) emit(SupplicationError('فشل تحميل الأذكار'));
     }
   }
 }

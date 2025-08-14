@@ -11,12 +11,12 @@ class NotificationCubit extends Cubit<NotificationState> {
   final _repo = NotificationRepo();
 
   Future<void> init() async {
-    emit(NotificationLoading());
+    if (!isClosed) emit(NotificationLoading());
     try {
       final data = await _repo.getAllNotifications();
-      emit(NotificationLoaded(data));
+      if (!isClosed) emit(NotificationLoaded(data));
     } catch (e) {
-      emit(NotificationError(e.toString()));
+      if (!isClosed) emit(NotificationError(e.toString()));
     }
   }
 
@@ -28,9 +28,9 @@ class NotificationCubit extends Cubit<NotificationState> {
     try {
       await _repo.logNotification(title: title, body: body, type: type);
       final data = await _repo.getAllNotifications();
-      emit(NotificationLoaded(data));
+      if (!isClosed) emit(NotificationLoaded(data));
     } catch (e) {
-      emit(NotificationError(e.toString()));
+      if (!isClosed) emit(NotificationError(e.toString()));
     }
   }
 
@@ -38,18 +38,18 @@ class NotificationCubit extends Cubit<NotificationState> {
     try {
       await _repo.markAsRead(key);
       final data = await _repo.getAllNotifications();
-      emit(NotificationLoaded(data));
+      if (!isClosed) emit(NotificationLoaded(data));
     } catch (e) {
-      emit(NotificationError(e.toString()));
+      if (!isClosed) emit(NotificationError(e.toString()));
     }
   }
 
   Future<void> clearAll() async {
     try {
       await _repo.clearAll();
-      emit(NotificationLoaded([]));
+      if (!isClosed) emit(NotificationLoaded([]));
     } catch (e) {
-      emit(NotificationError(e.toString()));
+      if (!isClosed) emit(NotificationError(e.toString()));
     }
   }
 
@@ -57,9 +57,9 @@ class NotificationCubit extends Cubit<NotificationState> {
     try {
       await _repo.markAllAsRead();
       final data = await _repo.getAllNotifications();
-      emit(NotificationLoaded(data));
+      if (!isClosed) emit(NotificationLoaded(data));
     } catch (e) {
-      emit(NotificationError(e.toString()));
+      if (!isClosed) emit(NotificationError(e.toString()));
     }
   }
 }

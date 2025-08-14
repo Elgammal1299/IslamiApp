@@ -5,6 +5,7 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/router/route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
+import 'package:islami_app/app_initializer.dart';
 
 class IslamiApp extends StatelessWidget {
   const IslamiApp({super.key});
@@ -16,19 +17,22 @@ class IslamiApp extends StatelessWidget {
       builder: (context, state) {
         final isDark = state is DarkThemeState;
         return MaterialApp(
+          themeAnimationCurve: Curves.easeInOutSine,
+          themeAnimationDuration: const Duration(seconds: 2),
           debugShowCheckedModeBanner: false,
           title: 'وَارْتَـقِ',
+          navigatorKey: navigatorKey,
           locale: const Locale('ar'),
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate, 
           ],
           supportedLocales: [const Locale('ar')],
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: AppRoutes.splasahRouter,
+          initialRoute: AppRoutes.homeRoute,
           onGenerateRoute: AppRouter.generateRoute,
         );
       },

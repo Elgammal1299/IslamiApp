@@ -52,6 +52,9 @@ dependencies:
   get_it: ^8.0.3
   flutter_localizations:
     sdk: flutter
+  event_bus: ^2.0.1
+  adhan: ^2.0.0+1
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:

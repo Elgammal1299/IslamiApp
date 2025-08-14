@@ -122,13 +122,21 @@ class _QiblahScreenState extends State<QiblahScreen> {
                     height: 270,
                   ),
                 ),
+                Positioned(
+                  top: 0,
+                  child: Image.asset(
+                    AppImage.kaabaImage,
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
                 Transform.rotate(
                   angle: angleInRadians,
                   child: Transform.translate(
                     offset: const Offset(
                       0,
                       -170,
-                    ), // المسافة من المركز (سالب للأعلى)
+                    ),
                     child: Image.asset(
                       AppImage.kaabaImage,
                       width: 40,

@@ -9,7 +9,7 @@ class HomeItemModel {
   HomeItemModel({required this.name, required this.image, required this.route});
 }
 
-final List<HomeItemModel> items =  [
+final List<HomeItemModel> items = [
   HomeItemModel(
     name: "القرآن الكريم",
     image: AppImage.quranImage,
@@ -28,11 +28,6 @@ final List<HomeItemModel> items =  [
 
     route: AppRoutes.sebhaPageRouter,
   ),
-  HomeItemModel(
-    name: "القبلة",
-    image: AppImage.kaabaImage,
-    route: AppRoutes.qiblahRouter,
-  ),
 
   HomeItemModel(
     name: "ذكر يومي",
@@ -40,10 +35,21 @@ final List<HomeItemModel> items =  [
     route: AppRoutes.azkarYawmiScreen,
   ),
   HomeItemModel(
-    name: "دعاء وذكر",
+    name: "مواقيت الصلاة",
+    image: AppImage.prayerTimesImages,
+    route: AppRoutes.prayertimesRouter,
+  ),
+  HomeItemModel(
+    name: "حصن المؤمن",
     image: AppImage.prayingImage,
     route: AppRoutes.azkarPageRouter,
   ),
+  HomeItemModel(
+    name: "القبلة",
+    image: AppImage.kaabaImage,
+    route: AppRoutes.qiblahRouter,
+  ),
+
   HomeItemModel(
     name: "ريكورد",
     image: AppImage.micImage,

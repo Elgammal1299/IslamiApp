@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
@@ -14,25 +13,35 @@ class QuranWithTafsirCubit extends Cubit<QuranWithTafsirState> {
 
   /// 🟢 جلب قائمة التفسيرات
   Future<void> fetchTafsirEditions() async {
-    emit(QuranWithTafsirLoading());
+    if (!isClosed) emit(QuranWithTafsirLoading());
 
     final result = await repository.getTafsirEditions();
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(QuranWithTafsirError(failure)),
-      (data) => emit(TafsirEditionsLoaded(data)),
+      (failure) {
+        if (!isClosed) emit(QuranWithTafsirError(failure));
+      },
+      (data) {
+        if (!isClosed) emit(TafsirEditionsLoaded(data));
+      },
     );
   }
 
   /// 🟢 جلب القرآن كاملًا مع تفسير معين
   Future<void> fetchQuranWithTafsir(String editionIdentifier) async {
-    emit(QuranWithTafsirLoading());
+    if (!isClosed) emit(QuranWithTafsirLoading());
 
     final result = await repository.getQuranWithTafsir(editionIdentifier);
+    if (isClosed) return;
 
     result.fold(
-      (failure) => emit(QuranWithTafsirError(failure)),
-      (data) => emit(QuranWithTafsirLoaded(data)),
+      (failure) {
+        if (!isClosed) emit(QuranWithTafsirError(failure));
+      },
+      (data) {
+        if (!isClosed) emit(QuranWithTafsirLoaded(data));
+      },
     );
   }
 }

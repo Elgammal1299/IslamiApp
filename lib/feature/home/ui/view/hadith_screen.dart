@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model_item.dart';
 import 'package:islami_app/feature/home/ui/view/widget/hadith_name_item.dart';
 
-class HadithPage extends StatelessWidget {
-  const HadithPage({super.key});
+class HadithScreen extends StatelessWidget {
+  const HadithScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

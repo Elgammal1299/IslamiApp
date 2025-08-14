@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_page.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_page.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/hadith_details_page.dart';
-import 'package:islami_app/feature/home/ui/view/hadith_page.dart';
+import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
+import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
+import 'package:islami_app/feature/home/ui/view/prayer_times_screen.dart';
 import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
-import 'package:islami_app/feature/home/ui/view/radio_page.dart';
-import 'package:islami_app/feature/home/ui/view/radio_player_page.dart';
+import 'package:islami_app/feature/home/ui/view/radio_screen.dart';
+import 'package:islami_app/feature/home/ui/view/radio_player_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
-import 'package:islami_app/feature/home/ui/view/sebha_page.dart';
-import 'package:islami_app/feature/home/ui/view/tafsir_page.dart';
+import 'package:islami_app/feature/home/ui/view/sebha_screen.dart';
+import 'package:islami_app/feature/home/ui/view/tafsir_screen.dart';
 import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
@@ -31,7 +34,7 @@ import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterC
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_view.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
-import 'package:islami_app/feature/splash_screen/splash_page.dart';
+import 'package:islami_app/feature/splash_screen/splash_screen.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 
 class AppRouter {
@@ -39,8 +42,13 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutes.prayertimesRouter:
+        return MaterialPageRoute(builder: (_) => const PrayerTimesScreen());
       case AppRoutes.notificationViewRouter:
-        return MaterialPageRoute(builder: (_) => const NotificationView());
+        return MaterialPageRoute(
+          builder: (_) => const NotificationView(),
+          settings: settings,
+        );
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
@@ -51,7 +59,14 @@ class AppRouter {
         );
 
       case AppRoutes.homeRoute:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => sl<NavBarCubit>(),
+
+                child: const HomeScreen(),
+              ),
+        );
       case AppRoutes.audioRecordingRouter:
         return MaterialPageRoute(
           builder:
@@ -62,7 +77,7 @@ class AppRouter {
         );
 
       case AppRoutes.sebhaPageRouter:
-        return MaterialPageRoute(builder: (_) => const SebhaPage());
+        return MaterialPageRoute(builder: (_) => const SebhaScreen());
 
       case AppRoutes.azkarPageRouter:
         return MaterialPageRoute(
@@ -91,12 +106,12 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<SurahCubit>()..getSurahs(),
                   ),
-                  BlocProvider(create: (context) => sl<NavBarCubit>()),
+                  BlocProvider.value(value: sl<NavBarCubit>()),
                   BlocProvider(
                     create: (context) => sl<BookmarkCubit>()..loadBookmarks(),
                   ),
                 ],
-                child: const BottomNavbarPage(),
+                child: const BottomNavbarScreen(),
               ),
         );
 
@@ -104,7 +119,7 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder:
-              (_) => QuranViewPage(
+              (_) => QuranViewScreen(
                 jsonData: args?['jsonData'],
                 pageNumber: args?['pageNumber'],
               ),
@@ -116,7 +131,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider(
                 create: (context) => sl<TafsirCubit>(),
-                child: TafsirDetailsPage(
+                child: TafsirDetailsScreen(
                   tafsirIdentifier: args?['tafsirIdentifier'],
                   verse: args?['verse'],
                   text: args?['text'],
@@ -130,7 +145,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider.value(
                 value: hadithCubit,
-                child: const HadithDetailsPage(),
+                child: const HadithDetailsScreen(),
               ),
         );
 
@@ -138,10 +153,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-
                 create: (context) => sl<HadithCubit>(),
 
-                child: const HadithPage(),
+                child: const HadithScreen(),
               ),
         );
 
@@ -149,8 +163,8 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider.value(
-               value: sl<RadioCubit>(),
-                child: const RadioPage(),
+                value: sl<RadioCubit>(),
+                child: const RadioScreen(),
               ),
         );
 
@@ -166,7 +180,7 @@ class AppRouter {
             }
             return BlocProvider.value(
               value: radioCubit,
-              child: RadioPlayerPage(station: station),
+              child: RadioPlayerScreen(station: station),
             );
           },
         );
@@ -176,7 +190,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider(
                 create: (context) => sl<QuranWithTafsirCubit>(),
-                child: const TafsirPage(),
+                child: const TafsirScreen(),
               ),
         );
 
@@ -199,6 +213,15 @@ class AppRouter {
                   BlocProvider(create: (context) => sl<AudioCubit>()),
                 ],
                 child: const RecitersScreen(),
+              ),
+        );
+      case AppRoutes.nowPlayingScreenRouter:
+        final audioManager = settings.arguments as AudioManager;
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<AudioCubit>(),
+                child: NowPlayingScreen(audioManager: audioManager),
               ),
         );
 

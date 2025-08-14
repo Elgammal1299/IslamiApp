@@ -4,14 +4,14 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 
-class RadioPage extends StatefulWidget {
-  const RadioPage({super.key});
+class RadioScreen extends StatefulWidget {
+  const RadioScreen({super.key});
 
   @override
-  State<RadioPage> createState() => _RadioPageState();
+  State<RadioScreen> createState() => _RadioScreenState();
 }
 
-class _RadioPageState extends State<RadioPage> {
+class _RadioScreenState extends State<RadioScreen> {
   @override
   void initState() {
     super.initState();

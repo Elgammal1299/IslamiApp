@@ -35,9 +35,14 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
   }
 
   Future<void> _loadRecordings() async {
-    if (!audioService.isOpen) await audioService.init();
-    final data = await audioService.getAll();
-    setState(() => recordings = data);
+    try {
+      if (!audioService.isOpen) await audioService.init();
+      final data = await audioService.getAll();
+      setState(() => recordings = data);
+    } catch (e) {
+      // Handle error gracefully - maybe show a snackbar or log
+      print('Error loading recordings: $e');
+    }
   }
 
   @override

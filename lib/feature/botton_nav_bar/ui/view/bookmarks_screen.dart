@@ -6,8 +6,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.d
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 
-class BookmarksPage extends StatelessWidget {
-  const BookmarksPage({super.key});
+class BookmarksScreen extends StatelessWidget {
+  const BookmarksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

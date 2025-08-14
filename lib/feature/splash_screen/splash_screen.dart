@@ -13,22 +13,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
   final AudioPlayer _audioPlayer = AudioPlayer();
   final ValueNotifier<bool> isMuted = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-
-    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _controller.forward();
 
     _playSplashAudio();
 
@@ -56,7 +46,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
     _audioPlayer.dispose();
     isMuted.dispose();
     super.dispose();
@@ -73,20 +62,18 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FadeTransition(
-                  opacity: _animation,
-                  child: CircleAvatar(
-                    radius: 120,
-                    backgroundColor: Colors.green,
-                    child: Image.asset(
-                      isDark
-                          ? AppImage.splashImageDark
-                          : AppImage.splashImageLight,
-                      width: 300,
-                      height: 300,
-                    ),
+                CircleAvatar(
+                  radius: 120,
+                  backgroundColor: Color(0xff008000),
+                  child: Image.asset(
+                    isDark
+                        ? AppImage.splashImageDark
+                        : AppImage.splashImageLight,
+                    width: 300,
+                    height: 300,
                   ),
                 ),
+
                 const SizedBox(height: 16),
                 Text('وَارْتَـقِ', style: context.textTheme.titleLarge),
                 const SizedBox(height: 10),
@@ -117,5 +104,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-
-

@@ -66,7 +66,7 @@ class FontLoader {
   }
 
   static void dispose() {
-    loadedFontsNotifier.dispose();
+    // loadedFontsNotifier.dispose();
   }
 }
 
@@ -75,13 +75,13 @@ class VerseData {
   final int surah;
   final int verse;
   final String text;
-  final bool isFirstVerse;
+  final bool isSurahStart;
 
   VerseData({
     required this.surah,
     required this.verse,
     required this.text,
-    required this.isFirstVerse,
+    required this.isSurahStart,
   });
 }
 
@@ -160,21 +160,21 @@ class PageConfig {
   }
 }
 
-class QuranViewPage extends StatefulWidget {
+class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
   final List<SurahModel> jsonData;
 
-  const QuranViewPage({
+  const QuranViewScreen({
     super.key,
     required this.pageNumber,
     required this.jsonData,
   });
 
   @override
-  State<QuranViewPage> createState() => _QuranViewPageState();
+  State<QuranViewScreen> createState() => _QuranViewScreenState();
 }
 
-class _QuranViewPageState extends State<QuranViewPage>
+class _QuranViewScreenState extends State<QuranViewScreen>
     with WidgetsBindingObserver {
   late final PageController _pageController;
   late final QuranAppState _appState;
@@ -326,7 +326,7 @@ class _QuranViewPageState extends State<QuranViewPage>
             continue;
           }
 
-          // Add special formatting for first verse
+          // Add special formatting for first verse on the page segment
           if (verseNumber == start && verseText.isNotEmpty) {
             verseText =
                 "${verseText.substring(0, 1)}\u200A${verseText.substring(1)}";
@@ -337,7 +337,8 @@ class _QuranViewPageState extends State<QuranViewPage>
               surah: surah,
               verse: verseNumber,
               text: verseText,
-              isFirstVerse: verseNumber == start,
+              // Mark if this is the first ayah of the Surah (ayah 1)
+              isSurahStart: verseNumber == 1,
             ),
           );
         }
@@ -388,39 +389,67 @@ class _QuranViewPageState extends State<QuranViewPage>
                   fontSize: PageConfig.getFontSize(pageIndex),
                 ),
                 children:
-                    verses.map((verse) {
+                    verses.expand((verse) {
+                      final List<InlineSpan> spans = [];
+
+                      // Insert Header and Basmallah at Surah start within the text
+                      if (verse.isSurahStart) {
+                        spans.add(
+                          WidgetSpan(
+                            child: HeaderWidget(
+                              e: {"surah": verse.surah},
+                              jsonData: widget.jsonData,
+                            ),
+                          ),
+                        );
+                        if (pageIndex != 187 && pageIndex != 1) {
+                          spans.add(
+                            const WidgetSpan(child: Basmallah(index: 0)),
+                          );
+                        }
+                        if (pageIndex == 187) {
+                          spans.add(
+                            const WidgetSpan(child: SizedBox(height: 10)),
+                          );
+                        }
+                      }
+
                       final isHighlighted = _appState.verseHighlighter
                           .isHighlighted(verse.surah, verse.verse);
 
-                      return TextSpan(
-                        text: verse.text,
-                        style: TextStyle(
-                          backgroundColor:
-                              isHighlighted
-                                  ? Colors.orange.withValues(alpha: 0.6)
-                                  : Colors.transparent,
-                        ),
-                        recognizer: () {
-                          final recognizer = LongPressGestureRecognizer();
-                          recognizer.onLongPress =
-                              () => _handleVerseLongPress(
-                                verse.surah,
-                                verse.verse,
+                      spans.add(
+                        TextSpan(
+                          text: verse.text,
+                          style: TextStyle(
+                            backgroundColor:
+                                isHighlighted
+                                    ? Colors.orange.withValues(alpha: 0.6)
+                                    : Colors.transparent,
+                          ),
+                          recognizer: () {
+                            final recognizer = LongPressGestureRecognizer();
+                            recognizer.onLongPress =
+                                () => _handleVerseLongPress(
+                                  verse.surah,
+                                  verse.verse,
+                                );
+                            recognizer.onLongPressDown = (_) {
+                              _appState.setSelectedSpan(
+                                "${verse.surah}${verse.verse}",
                               );
-                          recognizer.onLongPressDown = (_) {
-                            _appState.setSelectedSpan(
-                              "${verse.surah}${verse.verse}",
-                            );
-                          };
-                          recognizer.onLongPressUp = () {
-                            _appState.setSelectedSpan("");
-                          };
-                          recognizer.onLongPressCancel = () {
-                            _appState.setSelectedSpan("");
-                          };
-                          return recognizer;
-                        }(),
+                            };
+                            recognizer.onLongPressUp = () {
+                              _appState.setSelectedSpan("");
+                            };
+                            recognizer.onLongPressCancel = () {
+                              _appState.setSelectedSpan("");
+                            };
+                            return recognizer;
+                          }(),
+                        ),
                       );
+
+                      return spans;
                     }).toList(),
               ),
             );
@@ -430,36 +459,9 @@ class _QuranViewPageState extends State<QuranViewPage>
     );
   }
 
+  // Header widgets are now inserted inline within the Quran text where a Surah starts.
   Widget _buildHeaderWidgets(int pageIndex) {
-    try {
-      List<dynamic> pageData;
-      try {
-        pageData = getPageData(pageIndex);
-      } catch (e) {
-        debugPrint(
-          'Error getting page data for headers on page $pageIndex: $e',
-        );
-        return const SizedBox.shrink();
-      }
-
-      if (pageData.isEmpty) return const SizedBox.shrink();
-
-      final firstSurahData = pageData.first;
-      if (firstSurahData == null || firstSurahData is! Map) {
-        return const SizedBox.shrink();
-      }
-
-      return Column(
-        children: [
-          HeaderWidget(e: firstSurahData, jsonData: widget.jsonData),
-          if (pageIndex != 187 && pageIndex != 1) const Basmallah(index: 0),
-          if (pageIndex == 187) Container(height: 10),
-        ],
-      );
-    } catch (e) {
-      debugPrint('Error building headers for page $pageIndex: $e');
-      return const SizedBox.shrink();
-    }
+    return const SizedBox.shrink();
   }
 
   // Build page content with RepaintBoundary and CustomScrollView
@@ -473,7 +475,7 @@ class _QuranViewPageState extends State<QuranViewPage>
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
             child: CustomScrollView(
               physics: const ClampingScrollPhysics(),
               slivers: [
