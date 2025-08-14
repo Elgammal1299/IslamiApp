@@ -55,7 +55,6 @@ android {
 
         }
        
-<<<<<<< HEAD
 release {
     // توقيع النسخة تم تعطيله مؤقتًا
    signingConfig = signingConfigs.getByName("release")
@@ -66,15 +65,6 @@ release {
 
 
 
-=======
-        release {
-            // توقيع النسخة تم تعطيله مؤقتًا
-            signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        } 
->>>>>>> b722926d50699bfe8be135f0a7b5e3ed06fa4cb6
     }
    
 }
