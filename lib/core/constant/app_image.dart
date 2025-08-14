@@ -1,7 +1,7 @@
 class AppImage {
   static const basmalaImage = "assets/images/Basmala.webp";
   static const surahFramImage = "assets/images/surah_fram.webp";
-  static const quranImage = "assets/images/quran.webp";
+  static const quranImage = "assets/images/quran.png";
   static const hadithImage = "assets/images/hadith_image.webp";
   static const beadsImage = "assets/images/beads.webp";
   static const kaabaImage = "assets/images/kaaba.webp";
@@ -19,4 +19,5 @@ class AppImage {
   static const compassImage = 'assets/images/Compass.svg';
   static const needleImage = 'assets/images/needle.svg';
   static const quranCoverImage = 'assets/images/quran_cover.webp';
+  static const prayerTimesImages = 'assets/images/prayer_times_images.png';
 }
