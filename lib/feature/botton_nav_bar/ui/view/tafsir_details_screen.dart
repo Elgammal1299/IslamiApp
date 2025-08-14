@@ -4,12 +4,12 @@ import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
-class TafsirDetailsPage extends StatefulWidget {
+class TafsirDetailsScreen extends StatefulWidget {
   final String tafsirIdentifier;
   final int verse;
   final String text;
 
-  const TafsirDetailsPage({
+  const TafsirDetailsScreen({
     super.key,
     required this.verse,
     required this.text,
@@ -17,10 +17,10 @@ class TafsirDetailsPage extends StatefulWidget {
   });
 
   @override
-  _TafsirDetailsPageState createState() => _TafsirDetailsPageState();
+  _TafsirDetailsScreenState createState() => _TafsirDetailsScreenState();
 }
 
-class _TafsirDetailsPageState extends State<TafsirDetailsPage> {
+class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
   @override
   void initState() {
     context.read<TafsirCubit>().fetchAyahTafsir(

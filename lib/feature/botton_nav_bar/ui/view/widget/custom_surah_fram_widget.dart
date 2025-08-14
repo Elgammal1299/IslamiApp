@@ -2,7 +2,7 @@ import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_page.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:quran/quran.dart';
 
 class CustomSurahFramWidget extends StatelessWidget {
@@ -12,7 +12,7 @@ class CustomSurahFramWidget extends StatelessWidget {
     required this.index,
   });
 
-  final QuranViewPage widget;
+  final QuranViewScreen widget;
   final int index;
 
   @override

@@ -5,14 +5,14 @@ import 'package:islami_app/feature/home/ui/view/widget/dhikr_input_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/sebha_counter_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/sebha_controls_widget.dart';
 
-class SebhaPage extends StatefulWidget {
-  const SebhaPage({super.key});
+class SebhaScreen extends StatefulWidget {
+  const SebhaScreen({super.key});
 
   @override
-  State<SebhaPage> createState() => _SebhaPageState();
+  State<SebhaScreen> createState() => _SebhaScreenState();
 }
 
-class _SebhaPageState extends State<SebhaPage>
+class _SebhaScreenState extends State<SebhaScreen>
     with SingleTickerProviderStateMixin {
   int _counter = 0;
   late AnimationController _controller;

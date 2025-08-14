@@ -4,14 +4,14 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 
-class TafsirPage extends StatefulWidget {
-  const TafsirPage({super.key});
+class TafsirScreen extends StatefulWidget {
+  const TafsirScreen({super.key});
 
   @override
-  State<TafsirPage> createState() => _TafsirPageState();
+  State<TafsirScreen> createState() => _TafsirScreenState();
 }
 
-class _TafsirPageState extends State<TafsirPage> {
+class _TafsirScreenState extends State<TafsirScreen> {
   @override
   void initState() {
     context.read<QuranWithTafsirCubit>().fetchTafsirEditions();

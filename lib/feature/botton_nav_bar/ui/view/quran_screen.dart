@@ -160,21 +160,21 @@ class PageConfig {
   }
 }
 
-class QuranViewPage extends StatefulWidget {
+class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
   final List<SurahModel> jsonData;
 
-  const QuranViewPage({
+  const QuranViewScreen({
     super.key,
     required this.pageNumber,
     required this.jsonData,
   });
 
   @override
-  State<QuranViewPage> createState() => _QuranViewPageState();
+  State<QuranViewScreen> createState() => _QuranViewScreenState();
 }
 
-class _QuranViewPageState extends State<QuranViewPage>
+class _QuranViewScreenState extends State<QuranViewScreen>
     with WidgetsBindingObserver {
   late final PageController _pageController;
   late final QuranAppState _appState;
@@ -475,7 +475,7 @@ class _QuranViewPageState extends State<QuranViewPage>
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
             child: CustomScrollView(
               physics: const ClampingScrollPhysics(),
               slivers: [
