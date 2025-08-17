@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:adhan/adhan.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/foundation.dart';
 
 /// Encapsulates all Adhan logic: location, calculation method, madhab, etc.
 class PrayerTimesService {
@@ -90,5 +91,163 @@ class PrayerTimesService {
       if (t != null) result[p] = t;
     }
     return result;
+  }
+}
+
+/// Shared provider for prayer times that can be used across multiple screens
+class SharedPrayerTimesProvider extends ChangeNotifier {
+  static SharedPrayerTimesProvider? _instance;
+  static SharedPrayerTimesProvider get instance =>
+      _instance ??= SharedPrayerTimesProvider._();
+
+  SharedPrayerTimesProvider._();
+
+  final PrayerTimesService _prayerService = PrayerTimesService();
+
+  PrayerTimes? _todayTimes;
+  Map<Prayer, DateTime> _namedTimes = {};
+  Prayer? _currentPrayer;
+  Prayer? _nextPrayer;
+  Duration _countdown = Duration.zero;
+  Timer? _timer;
+
+  // Getters
+  PrayerTimes? get todayTimes => _todayTimes;
+  Map<Prayer, DateTime> get namedTimes => _namedTimes;
+  Prayer? get currentPrayer => _currentPrayer;
+  Prayer? get nextPrayer => _nextPrayer;
+  Duration get countdown => _countdown;
+
+  static const Duration summerOffset = Duration(hours: 1);
+
+  /// Initialize and start the provider
+  Future<void> initialize() async {
+    await _loadPrayerTimes();
+    _startTimer();
+  }
+
+  /// Dispose the provider and clean up resources
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _timer = null;
+    super.dispose();
+  }
+
+  /// Load prayer times for today
+  Future<void> _loadPrayerTimes() async {
+    try {
+      final times = await _prayerService.getTodayPrayerTimes();
+      _setTimes(times);
+    } catch (e) {
+      // Handle error silently
+    }
+  }
+
+  /// Set the prayer times and calculate current/next prayers
+  void _setTimes(PrayerTimes times) {
+    _todayTimes = times;
+
+    // Apply summer time offset
+    _namedTimes = _applyOffset(
+      _prayerService.getNamedTimes(times),
+      summerOffset,
+    );
+
+    _refreshPrayers();
+    notifyListeners();
+  }
+
+  /// Apply time offset to prayer times
+  Map<Prayer, DateTime> _applyOffset(
+    Map<Prayer, DateTime> times,
+    Duration offset,
+  ) {
+    return times.map((p, t) => MapEntry(p, t.add(offset)));
+  }
+
+  /// Refresh current and next prayer information
+  void _refreshPrayers() {
+    if (_todayTimes == null) return;
+
+    final t = _todayTimes!;
+    _currentPrayer = _prayerService.currentPrayer(t);
+    _nextPrayer = _prayerService.nextPrayer(t);
+
+    final DateTime? nextTime =
+        _nextPrayer != null
+            ? _prayerService.timeForPrayer(t, _nextPrayer!)
+            : null;
+
+    if (nextTime != null && nextTime.isAfter(DateTime.now())) {
+      _countdown = nextTime.add(summerOffset).difference(DateTime.now());
+    } else {
+      _countdown = Duration.zero;
+    }
+  }
+
+  /// Start the countdown timer
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      _updateCountdown();
+    });
+  }
+
+  /// Update the countdown timer
+  void _updateCountdown() {
+    if (_nextPrayer != null && _todayTimes != null) {
+      final nextTime = _prayerService.timeForPrayer(_todayTimes!, _nextPrayer!);
+      if (nextTime != null) {
+        final adjustedTime = nextTime.add(summerOffset);
+        if (adjustedTime.isAfter(DateTime.now())) {
+          _countdown = adjustedTime.difference(DateTime.now());
+          notifyListeners();
+        } else {
+          // Prayer time has passed, reload to get next prayer
+          _loadPrayerTimes();
+        }
+      }
+    }
+  }
+
+  /// Get prayer name in Arabic
+  String getPrayerName(Prayer prayer) {
+    switch (prayer) {
+      case Prayer.fajr:
+        return 'الفجر';
+      case Prayer.sunrise:
+        return 'الشروق';
+      case Prayer.dhuhr:
+        return 'الظهر';
+      case Prayer.asr:
+        return 'العصر';
+      case Prayer.maghrib:
+        return 'المغرب';
+      case Prayer.isha:
+        return 'العشاء';
+      case Prayer.none:
+        return 'انتهت الصلوات';
+    }
+  }
+
+  /// Format time as HH:MM
+  String formatTime(DateTime time) {
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  /// Format countdown as HH:MM:SS
+  String formatCountdown() {
+    final hours = _countdown.inHours.toString().padLeft(2, '0');
+    final minutes = (_countdown.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (_countdown.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
+  }
+
+  /// Refresh prayer times (for pull-to-refresh)
+  Future<void> refresh() async {
+    await _loadPrayerTimes();
   }
 }

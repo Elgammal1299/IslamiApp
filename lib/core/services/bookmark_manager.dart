@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 class BookmarkManager {
   static const String _bookmarksKey = 'quran_bookmarks';
@@ -10,9 +11,15 @@ class BookmarkManager {
   Future<void> addBookmark(int surah, int ayah) async {
     List<String> bookmarks = _prefs.getStringList(_bookmarksKey) ?? [];
     String bookmark = '$surah:$ayah';
+    debugPrint('🔖 BookmarkManager: Current bookmarks: $bookmarks');
+    debugPrint('🔖 BookmarkManager: Adding bookmark: $bookmark');
+
     if (!bookmarks.contains(bookmark)) {
       bookmarks.add(bookmark);
       await _prefs.setStringList(_bookmarksKey, bookmarks);
+      debugPrint('✅ BookmarkManager: Bookmark added. New list: $bookmarks');
+    } else {
+      debugPrint('ℹ️ BookmarkManager: Bookmark already exists');
     }
   }
 
@@ -31,6 +38,8 @@ class BookmarkManager {
 
   // الحصول على جميع الآيات المفضلة
   Future<List<String>> getAllBookmarks() async {
-    return _prefs.getStringList(_bookmarksKey) ?? [];
+    final bookmarks = _prefs.getStringList(_bookmarksKey) ?? [];
+    debugPrint('📚 BookmarkManager: Retrieved bookmarks: $bookmarks');
+    return bookmarks;
   }
 }

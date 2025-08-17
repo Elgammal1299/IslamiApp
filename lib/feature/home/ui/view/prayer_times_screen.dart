@@ -27,6 +27,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   Timer? _ticker;
 
+  static const Duration summerOffset = Duration(hours: 1);
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,11 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   @override
   void dispose() {
+    // Cancel timer first to prevent updates to disposed ValueNotifiers
     _ticker?.cancel();
+    _ticker = null;
+
+    // Then dispose all ValueNotifiers
     todayTimes.dispose();
     namedTimes.dispose();
     currentPrayer.dispose();
@@ -49,7 +55,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     try {
       await _notificationService.init();
       final PrayerTimes times = await _prayerService.getTodayPrayerTimes();
-      _updateStateWithTimes(times);
+      _setTimes(times);
       await _scheduleTodayAndTomorrow();
       _startTicker();
     } catch (e) {
@@ -61,12 +67,45 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     }
   }
 
-  void _updateStateWithTimes(PrayerTimes times) {
+  Map<Prayer, DateTime> _applyOffset(
+    Map<Prayer, DateTime> times,
+    Duration offset,
+  ) {
+    return times.map((p, t) => MapEntry(p, t.add(offset)));
+  }
+
+  void _setTimes(PrayerTimes times) {
     todayTimes.value = times;
-    namedTimes.value = _prayerService.getNamedTimes(times);
-    currentPrayer.value = _prayerService.currentPrayer(times);
-    nextPrayer.value = _prayerService.nextPrayer(times);
-    _updateCountdown();
+
+    // هنا نزود ساعة (التوقيت الصيفي)
+    namedTimes.value = _applyOffset(
+      _prayerService.getNamedTimes(times),
+      summerOffset,
+    );
+
+    _refreshPrayers();
+  }
+
+  void _refreshPrayers() {
+    // Check if widget is still mounted before updating ValueNotifiers
+    if (!mounted || todayTimes.value == null) return;
+
+    final PrayerTimes t = todayTimes.value!;
+    currentPrayer.value = _prayerService.currentPrayer(t);
+    nextPrayer.value = _prayerService.nextPrayer(t);
+
+    final DateTime? nextTime =
+        nextPrayer.value != null
+            ? _prayerService
+                .timeForPrayer(t, nextPrayer.value!)
+                ?.add(summerOffset)
+            : null;
+
+    if (nextTime != null && nextTime.isAfter(DateTime.now())) {
+      countdown.value = nextTime.difference(DateTime.now());
+    } else {
+      countdown.value = Duration.zero;
+    }
   }
 
   Future<void> _scheduleTodayAndTomorrow() async {
@@ -74,7 +113,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     final DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime tomorrow = today.add(const Duration(days: 1));
 
-    // Today: schedule only future times
+    // Schedule today
     await _notificationService.scheduleForDay(
       prayerTimes: namedTimes.value,
       day: today,
@@ -82,7 +121,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       prayerName: _displayName,
     );
 
-    // Tomorrow: compute times using same coordinates
+    // Schedule tomorrow
     try {
       final pos = await _prayerService.getCurrentPosition();
       final tmrTimes = _prayerService.getPrayerTimesForDate(
@@ -90,50 +129,34 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         longitude: pos.longitude,
         date: tomorrow,
       );
-      final tmrNamed = _prayerService.getNamedTimes(tmrTimes);
+      final tmrNamed = _applyOffset(
+        _prayerService.getNamedTimes(tmrTimes),
+        summerOffset,
+      );
       await _notificationService.scheduleForDay(
         prayerTimes: tmrNamed,
         day: tomorrow,
         preReminderEnabled: preReminderEnabled.value,
         prayerName: _displayName,
       );
-    } catch (_) {
-      // Ignore tomorrow scheduling failure silently
+    } catch (e) {
+      if (kDebugMode) debugPrint("Tomorrow scheduling failed: $e");
     }
   }
 
   void _startTicker() {
+    // Cancel any existing timer
     _ticker?.cancel();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (todayTimes.value == null) return;
-      final Prayer newCurrent = _prayerService.currentPrayer(todayTimes.value!);
-      final Prayer newNext = _prayerService.nextPrayer(todayTimes.value!);
-      if (newCurrent != currentPrayer.value) {
-        currentPrayer.value = newCurrent;
-      }
-      if (newNext != nextPrayer.value) {
-        nextPrayer.value = newNext;
-      }
-      _updateCountdown();
-    });
-  }
 
-  void _updateCountdown() {
-    if (todayTimes.value == null || nextPrayer.value == null) {
-      countdown.value = Duration.zero;
-      return;
+    // Only start timer if widget is still mounted
+    if (mounted) {
+      _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+        // Check if still mounted before calling _refreshPrayers
+        if (mounted) {
+          _refreshPrayers();
+        }
+      });
     }
-    final DateTime? nextTime = _prayerService.timeForPrayer(
-      todayTimes.value!,
-      nextPrayer.value!,
-    );
-    if (nextTime == null) {
-      countdown.value = Duration.zero;
-      return;
-    }
-    final now = DateTime.now();
-    countdown.value =
-        nextTime.isAfter(now) ? nextTime.difference(now) : Duration.zero;
   }
 
   String _displayName(Prayer p) {
@@ -151,11 +174,16 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       case Prayer.isha:
         return 'العشاء';
       case Prayer.none:
-        return '—';
+        return 'انتهت الصلوات';
     }
   }
 
-  String _format(DateTime dt) => DateFormat.jm().format(dt);
+  String _format(DateTime dt) => DateFormat('h:mm a', 'ar').format(dt);
+
+  // String _format(DateTime dt) =>
+  //     DateFormat.Hm('en').format(dt.add(summerOffset));
+
+  // .. نفس الكود اللي عندك فوق
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +217,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                 ),
                 const SizedBox(height: 24),
                 _buildReminderSwitch(),
+                const SizedBox(height: 24),
               ],
             ),
           );
@@ -260,13 +289,12 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('التذكير قبل الصلاة ب 10 دقائق'),
+            const Text('التذكير قبل الصلاة بدقيقة واحدة'),
             Switch(
               value: enabled,
               onChanged: (v) async {
                 preReminderEnabled.value = v;
                 if (todayTimes.value != null) {
-                  // Simply reschedule today/tomorrow to reflect toggle change
                   await _notificationService.cancelAll();
                   await _scheduleTodayAndTomorrow();
                 }

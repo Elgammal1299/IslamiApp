@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.wartaqi.islamiapp"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -20,21 +20,22 @@ android {
 
     }
     dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+    
+
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.wartaqi.islamiapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = 3
         versionName = "1.0.2"
@@ -55,13 +56,19 @@ android {
 
         }
        
-release {
-    // توقيع النسخة تم تعطيله مؤقتًا
-   signingConfig = signingConfigs.getByName("release")
-    isMinifyEnabled = false
-    isShrinkResources = false
-    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        release {
+            // توقيع النسخة تم تعطيله مؤقتًا
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            
+            // Add build optimizations
+            ndk {
+    debugSymbolLevel = "FULL"
 }
+
+        }
 
 
 

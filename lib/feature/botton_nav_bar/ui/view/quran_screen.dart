@@ -2,11 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_reading_service.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_item.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_fram_widget.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -186,6 +189,8 @@ class _QuranViewScreenState extends State<QuranViewScreen>
   void initState() {
     super.initState();
     _initializeApp();
+
+    QuranPageIndex.ensureBuilt();
   }
 
   void _initializeApp() {
@@ -198,6 +203,9 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
     // Load initial font and preload adjacent fonts
     _loadFontsForPage(widget.pageNumber);
+
+    // ✅ Record initial reading position when entering Quran screen
+    _recordInitialReadingPosition();
   }
 
   void _configureSystemUI() {
@@ -213,6 +221,9 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
   @override
   void dispose() {
+    // ✅ Record final reading position before disposing
+    _recordFinalReadingPosition();
+
     _cleanupResources();
 
     super.dispose();
@@ -237,6 +248,89 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // ✅ Ensure reading progress is up to date when dependencies change
+    // This helps when returning to the screen from other screens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _recordCurrentReadingPosition();
+    });
+  }
+
+  // ✅ Record current reading position (helper method)
+  Future<void> _recordCurrentReadingPosition() async {
+    try {
+      final currentPage = _appState.currentPage;
+      final pos = QuranPageIndex.firstAyahOnPage(currentPage);
+
+      final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
+        context,
+        listen: false,
+      );
+      await readingProgressCubit.updateReadingProgress(
+        pos.surah,
+        pos.ayah,
+        currentPage,
+      );
+
+      debugPrint(
+        '✅ Current reading position recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $currentPage',
+      );
+    } catch (e) {
+      debugPrint('❌ Error recording current reading position: $e');
+    }
+  }
+
+  // ✅ Record final reading position when leaving Quran screen
+  Future<void> _recordFinalReadingPosition() async {
+    try {
+      final currentPage = _appState.currentPage;
+      final pos = QuranPageIndex.firstAyahOnPage(currentPage);
+
+      final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
+        context,
+        listen: false,
+      );
+      await readingProgressCubit.updateReadingProgress(
+        pos.surah,
+        pos.ayah,
+        currentPage,
+      );
+
+      debugPrint(
+        '✅ Final reading position recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $currentPage',
+      );
+    } catch (e) {
+      debugPrint('❌ Error recording final reading position: $e');
+    }
+  }
+
+  // ✅ Record initial reading position when entering Quran screen
+  Future<void> _recordInitialReadingPosition() async {
+    try {
+      // Get the first ayah on the initial page
+      final pos = QuranPageIndex.firstAyahOnPage(widget.pageNumber);
+
+      // Update reading progress using the cubit
+      final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
+        context,
+        listen: false,
+      );
+      await readingProgressCubit.updateReadingProgress(
+        pos.surah,
+        pos.ayah,
+        widget.pageNumber,
+      );
+
+      debugPrint(
+        '✅ Initial reading position recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page ${widget.pageNumber}',
+      );
+    } catch (e) {
+      debugPrint('❌ Error recording initial reading position: $e');
+    }
+  }
+
   // Utility methods
   int _getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
     try {
@@ -251,14 +345,38 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     }
   }
 
-  void _handlePageChanged(int pageIndex) {
+  void _handlePageChanged(int pageIndex) async {
     if (_appState.currentPage != pageIndex) {
       _appState.setCurrentPage(pageIndex);
       _appState.setSelectedSpan("");
       _appState.verseHighlighter.clear();
 
-      // Load fonts for new page
       _loadFontsForPage(pageIndex);
+
+      // ✅ احسب رقم صفحة المصحف الفعلي
+      final pageNumber = pageIndex; // عدّلها لو عندك ترقيم مختلف
+
+      // ✅ هات أول آية في الصفحة دي من الفهرس
+      final pos = QuranPageIndex.firstAyahOnPage(pageNumber);
+
+      // ✅ خزّن آخر قراءة باستخدام الكيوبت
+      try {
+        final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
+          context,
+          listen: false,
+        );
+        await readingProgressCubit.updateReadingProgress(
+          pos.surah,
+          pos.ayah,
+          pageNumber,
+        );
+
+        debugPrint(
+          '✅ Page change recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $pageNumber',
+        );
+      } catch (e) {
+        debugPrint('❌ Error recording page change: $e');
+      }
     }
   }
 
@@ -533,21 +651,66 @@ class _QuranViewScreenState extends State<QuranViewScreen>
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
     final them = Theme.of(context);
-    return Scaffold(
-      body: ValueListenableBuilder<int>(
-        valueListenable: _appState.currentPageNotifier,
-        builder: (context, currentPage, child) {
-          return PageView.builder(
-            controller: _pageController,
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            onPageChanged: _handlePageChanged,
-            itemCount: PageConfig.totalPages + 1,
-            itemBuilder:
-                (context, index) => _buildPageContent(index, height, them),
-          );
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        // ✅ Record reading position before navigating back
+        await _recordFinalReadingPosition();
+        return true;
+      },
+      child: Scaffold(
+        body: ValueListenableBuilder<int>(
+          valueListenable: _appState.currentPageNotifier,
+          builder: (context, currentPage, child) {
+            return PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              onPageChanged: _handlePageChanged,
+              itemCount: PageConfig.totalPages,
+              itemBuilder:
+                  (context, index) => _buildPageContent(index, height, them),
+            );
+          },
+        ),
       ),
     );
+  }
+}
+
+// quran_page_index.dart
+class AyahPosition {
+  final int surah;
+  final int ayah;
+  const AyahPosition(this.surah, this.ayah);
+}
+
+class QuranPageIndex {
+  static Map<int, AyahPosition>? _firstAyahByPage;
+
+  /// ابني خريطة: رقم الصفحة -> أول (سورة/آية) بتبدأ فيها الصفحة
+  static void ensureBuilt() {
+    if (_firstAyahByPage != null) return;
+
+    final map = <int, AyahPosition>{};
+    for (int s = 1; s <= 114; s++) {
+      // لو مكتبتك ما فيهاش getVerseCount(s) استخدم طول آيات السورة من surahs بدل السطر ده
+      final ayahCount = quran.getVerseCount(s);
+      for (int a = 1; a <= ayahCount; a++) {
+        final p = quran.getPageNumber(s, a);
+        // بنسجّل أول آية تظهر في الصفحة p فقط
+        map.putIfAbsent(p, () => AyahPosition(s, a));
+      }
+    }
+    _firstAyahByPage = map;
+  }
+
+  static AyahPosition firstAyahOnPage(int page) {
+    final idx = _firstAyahByPage;
+    if (idx == null) {
+      throw StateError(
+        'Call QuranPageIndex.ensureBuilt() before using firstAyahOnPage',
+      );
+    }
+    return idx[page] ?? const AyahPosition(1, 1);
   }
 }

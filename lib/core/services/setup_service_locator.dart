@@ -33,6 +33,7 @@ import '../../feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dar
 import '../../feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
+import '../../feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import '../../feature/notification/ui/view_model/cubit/notification_cubit.dart';
 
 // Additional repositories needed for cubits
@@ -256,6 +257,11 @@ Future<void> setupServiceLocator() async {
   // Notification Cubit
   sl.registerLazySingleton<NotificationCubit>(() {
     return NotificationCubit();
+  });
+
+  // Reading Progress Cubit
+  sl.registerLazySingleton<ReadingProgressCubit>(() {
+    return ReadingProgressCubit();
   });
 
   // ===== NOTE: Services will be initialized lazily when first accessed =====

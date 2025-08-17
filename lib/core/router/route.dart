@@ -9,6 +9,7 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
@@ -61,9 +62,12 @@ class AppRouter {
       case AppRoutes.homeRoute:
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider(
-                create: (context) => sl<NavBarCubit>(),
-
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => sl<NavBarCubit>()),
+                  BlocProvider.value(value: sl<SurahCubit>()),
+                  BlocProvider.value(value: sl<ReadingProgressCubit>()),
+                ],
                 child: const HomeScreen(),
               ),
         );
@@ -119,9 +123,12 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder:
-              (_) => QuranViewScreen(
-                jsonData: args?['jsonData'],
-                pageNumber: args?['pageNumber'],
+              (_) => BlocProvider.value(
+                value: sl<ReadingProgressCubit>(),
+                child: QuranViewScreen(
+                  jsonData: args?['jsonData'],
+                  pageNumber: args?['pageNumber'],
+                ),
               ),
         );
 

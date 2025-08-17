@@ -149,17 +149,17 @@ class PrayerNotificationService {
         scheduled.add({'id': id, 'time': target});
       }
       if (preReminderEnabled) {
-        final DateTime pre = target.subtract(const Duration(minutes: 10));
+        final DateTime pre = target.subtract(const Duration(minutes: 1));
         if (pre.isAfter(now)) {
           final int preId = nsBase + 100 + p.index;
           await scheduleOneShot(
             id: preId,
             title:
-                '${(prayerName != null ? prayerName(p) : p.name)} in 10 minutes',
+                '${(prayerName != null ? prayerName(p) : p.name)} in 1 minute',
             body:
                 'Get ready for ${(prayerName != null ? prayerName(p) : p.name)}',
             scheduledTime: pre,
-            withSound: false,
+            withSound: true,
           );
           scheduled.add({'id': preId, 'time': pre});
         }

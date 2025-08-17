@@ -6,11 +6,40 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.d
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 
-class BookmarksScreen extends StatelessWidget {
+class BookmarksScreen extends StatefulWidget {
   const BookmarksScreen({super.key});
 
   @override
+  State<BookmarksScreen> createState() => _BookmarksScreenState();
+}
+
+class _BookmarksScreenState extends State<BookmarksScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load bookmarks when screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BookmarkCubit>().loadBookmarks();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh bookmarks when dependencies change (e.g., returning to this screen)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BookmarkCubit>().loadBookmarks();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
+
     return Column(
       children: [
         Expanded(
@@ -46,20 +75,24 @@ class BookmarksScreen extends StatelessWidget {
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: state.bookmarks.length,
-                    itemBuilder: (context, index) {
-                      List<String> parts = state.bookmarks[index].split(':');
-                      int surah = int.parse(parts[0]);
-                      int ayah = int.parse(parts[1]);
-
-                      return BookmarkCard(
-                        surahs: BlocProvider.of<SurahCubit>(context).surahs,
-
-                        surah: surah,
-                        ayah: ayah,
-                      );
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<BookmarkCubit>().loadBookmarks();
                     },
+                    child: ListView.builder(
+                      itemCount: state.bookmarks.length,
+                      itemBuilder: (context, index) {
+                        List<String> parts = state.bookmarks[index].split(':');
+                        int surah = int.parse(parts[0]);
+                        int ayah = int.parse(parts[1]);
+
+                        return BookmarkCard(
+                          surahs: BlocProvider.of<SurahCubit>(context).surahs,
+                          surah: surah,
+                          ayah: ayah,
+                        );
+                      },
+                    ),
                   ),
                 );
               }

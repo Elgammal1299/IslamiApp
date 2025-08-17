@@ -8,9 +8,11 @@ part 'surah_state.dart';
 
 class SurahCubit extends Cubit<SurahState> {
   final JsonRepository jsonRepository;
-  SurahCubit(this.jsonRepository) : super(SurahInitial());
+  SurahCubit(this.jsonRepository) : super(SurahInitial()) {
+    getSurahs();
+  }
 
-  late final surahs;
+  late var surahs;
   void getSurahs() async {
     if (!isClosed) emit(SurahLoading());
     try {
