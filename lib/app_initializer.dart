@@ -10,6 +10,8 @@ import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
+import 'package:islami_app/feature/home/services/notification_service.dart';
+import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
@@ -48,6 +50,9 @@ class AppInitializer {
       ),
     );
 
+    final notificationService = PrayerNotificationService();
+    final provider = SharedPrayerTimesProvider.instance;
+    await provider.initialize();
     await Hive.initFlutter();
 
     Hive
@@ -60,6 +65,13 @@ class AppInitializer {
     await Hive.openBox<List>('hadiths');
 
     await Future.wait([_initFirebaseMessaging(), _initLocalNotifications()]);
+    await notificationService.init();
+    await notificationService.scheduleForDay(
+      prayerTimes: provider.namedTimes,
+      day: DateTime.now(),
+      preReminderEnabled: true,
+      prayerName: provider.getPrayerName,
+    );
   }
 
   /// Firebase & Messaging Init

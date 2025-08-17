@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart' as Prayer;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
@@ -228,18 +229,28 @@ class NextPrayerWidget extends StatelessWidget {
           },
           child: Row(
             children: [
-              Text(
-                'متبقي على صلاة${provider.getPrayerName(provider.nextPrayer!)}',
-                style: theme.textTheme.titleLarge,
-              ),
-              const Spacer(),
-              Text(
-                provider.formatCountdown(),
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
+              // ignore: unrelated_type_equality_checks
+              provider.nextPrayer == Prayer.none
+                  ? Column(
+                    children: [
+                      Text(
+                        'متبقي على صلاة${provider.getPrayerName(provider.nextPrayer!)}',
+                        style: theme.textTheme.titleLarge,
+                      ),
+                      const Spacer(),
+                      Text(
+                        provider.formatCountdown(),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  )
+                  : Text(
+                    'الصلاة الحالية : ${provider.getPrayerName(provider.currentPrayer!)}',
+                    style: theme.textTheme.titleLarge,
+                  ),
             ],
           ),
         );
