@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_ayat_search_results.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_item_list_view.dart';
@@ -191,7 +192,11 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state is SurahError) {
-                    return Center(child: Text(state.message));
+                    return customErrorWidget(
+                  onPressed: () {
+                   BlocProvider.of<SurahCubit>(context).surahs;
+                  },
+                );
                   }
                   if (state is SurahSuccess) {
                     return ValueListenableBuilder<dynamic>(

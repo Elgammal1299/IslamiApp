@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_random_cubit/azkar_random_cubit.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 
@@ -107,7 +108,11 @@ class AzkarRandom extends StatelessWidget {
               ),
             );
           } else if (state is AzkarRandomError) {
-            return Center(child: Text('حدث خطأ: ${state.message}'));
+            return customErrorWidget(
+              onPressed: () {
+                sl<AzkarRandomCubit>().loadAdhkar();
+              },
+            );
           }
 
           return const SizedBox.shrink();

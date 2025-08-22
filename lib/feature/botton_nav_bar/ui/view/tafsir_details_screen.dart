@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
+import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 
 class TafsirDetailsScreen extends StatefulWidget {
@@ -65,11 +66,13 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
               child: BlocBuilder<TafsirCubit, TafsirByAyahState>(
                 builder: (context, state) {
                   if (state is TafsirByAyahError) {
-                    return Center(
-                      child: Text(
-                        "خطأ: ${state.message}",
-                        style: const TextStyle(fontSize: 20, color: Colors.red),
-                      ),
+                    return customErrorWidget(
+                      onPressed: () {
+                        context.read<TafsirCubit>().fetchAyahTafsir(
+                          widget.verse.toString(),
+                          widget.tafsirIdentifier,
+                        );
+                      },
                     );
                   } else if (state is TafsirByAyahLoaded) {
                     return Padding(
