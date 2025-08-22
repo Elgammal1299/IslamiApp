@@ -34,7 +34,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
@@ -45,9 +45,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       Text(
                         supplication.body,
                         textAlign: TextAlign.right,
-                        style: context.textTheme.titleLarge!.copyWith(
-                          color: AppColors.white,
-                        ),
+                        style: context.textTheme.titleLarge,
                       ),
                       const SizedBox(height: 12),
                       if (supplication.note != null &&
@@ -64,7 +62,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).secondaryHeaderColor,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
@@ -76,7 +74,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       IconButton(
                         icon: Icon(
                           Icons.share,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                         ),
                         tooltip: "مشاركة",
                         onPressed: () {
@@ -87,7 +85,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       IconButton(
                         icon: Icon(
                           Icons.copy,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                         ),
                         tooltip: "نسخ",
                         onPressed: () {

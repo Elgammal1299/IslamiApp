@@ -24,7 +24,7 @@ class NotificationView extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(20),
                 ),
@@ -36,19 +36,15 @@ class NotificationView extends StatelessWidget {
                     title,
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.justify,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge!.copyWith(color: AppColors.white),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
-                  const Divider(color: AppColors.background),
+                  const Divider(color: AppColors.black),
                   SelectableText(
                     body,
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.justify,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge!.copyWith(color: AppColors.white),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),
@@ -56,7 +52,7 @@ class NotificationView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Theme.of(context).secondaryHeaderColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -69,7 +65,7 @@ class NotificationView extends StatelessWidget {
                     tooltip: 'مشاركة',
                     icon: Icon(
                       Icons.share,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
                       // ignore: prefer_interpolation_to_compose_strings
@@ -81,7 +77,7 @@ class NotificationView extends StatelessWidget {
                     tooltip: 'نسخ',
                     icon: Icon(
                       Icons.copy,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
                       // ignore: prefer_interpolation_to_compose_strings

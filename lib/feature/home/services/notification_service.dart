@@ -83,12 +83,12 @@ class PrayerNotificationService {
       payload: 'prayer',
     );
     // Also trigger playback when the time comes
-    final Duration delay = tzTime.difference(tz.TZDateTime.now(tz.local));
-    if (!delay.isNegative) {
-      Future.delayed(delay, () async {
-        await AzanPlayer.play();
-      });
-    }
+    // final Duration delay = tzTime.difference(tz.TZDateTime.now(tz.local));
+    // if (!delay.isNegative) {
+    //   Future.delayed(delay, () async {
+    //     await AzanPlayer.play();
+    //   });
+    // }
   }
 
   Future<void> scheduleDaily({

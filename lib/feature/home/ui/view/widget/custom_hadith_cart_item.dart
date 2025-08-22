@@ -23,22 +23,22 @@ class CustomHadithCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
               ),
               child: SelectableText(
                 hadithModel.arab,
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.justify,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge!.copyWith(color: AppColors.white),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Theme.of(context).secondaryHeaderColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -51,7 +51,7 @@ class CustomHadithCard extends StatelessWidget {
                     tooltip: 'مشاركة',
                     icon: Icon(
                       Icons.share,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
                       Share.share(hadithModel.arab);
@@ -62,7 +62,7 @@ class CustomHadithCard extends StatelessWidget {
                     tooltip: 'نسخ',
                     icon: Icon(
                       Icons.copy,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: hadithModel.arab));
