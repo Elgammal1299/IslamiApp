@@ -216,7 +216,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                _buildReminderSwitch(),
+                // _buildReminderSwitch(),
                 const SizedBox(height: 24),
               ],
             ),
@@ -282,29 +282,29 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     );
   }
 
-  Widget _buildReminderSwitch() {
-    return ValueListenableBuilder<bool>(
-      valueListenable: preReminderEnabled,
-      builder: (context, enabled, _) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('التذكير قبل الصلاة بدقيقة واحدة'),
-            Switch(
-              value: enabled,
-              onChanged: (v) async {
-                preReminderEnabled.value = v;
-                if (todayTimes.value != null) {
-                  await _notificationService.cancelAll();
-                  await _scheduleTodayAndTomorrow();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Widget _buildReminderSwitch() {
+  //   return ValueListenableBuilder<bool>(
+  //     valueListenable: preReminderEnabled,
+  //     builder: (context, enabled, _) {
+  //       return Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           const Text('التذكير قبل الصلاة بدقيقة واحدة'),
+  //           Switch(
+  //             value: enabled,
+  //             onChanged: (v) async {
+  //               preReminderEnabled.value = v;
+  //               if (todayTimes.value != null) {
+  //                 await _notificationService.cancelAll();
+  //                 await _scheduleTodayAndTomorrow();
+  //               }
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   IconData _iconFor(Prayer p) {
     switch (p) {

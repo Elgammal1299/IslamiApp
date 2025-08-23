@@ -12,10 +12,9 @@ class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit()
     : super(
         ThemeInitial(
-          isDark: sl<SharedPreferences>().getBool(_themeKey) ?? false,
+          isDark: (sl<SharedPreferences>().getBool(_themeKey)) ?? false,
         ),
       );
-
 
   /// التبديل بين الثيمات + الحفظ
   Future<void> toggleTheme() async {
@@ -30,10 +29,10 @@ class ThemeCubit extends Cubit<ThemeState> {
 
   /// تعيين الوضع الليلي مع الحفظ
   Future<void> setDark() async {
-    // await sl<SharedPreferences>().setBool(_themeKey, true);
+    await sl<SharedPreferences>().setBool(_themeKey, true);
     emit(
-      DarkThemeState(
-        isDark: await sl<SharedPreferences>().setBool(_themeKey, true),
+      const DarkThemeState(
+        isDark: false, //await sl<SharedPreferences>().setBool(_themeKey, true),
       ),
     );
   }
@@ -43,8 +42,8 @@ class ThemeCubit extends Cubit<ThemeState> {
     await sl<SharedPreferences>().setBool(_themeKey, false);
 
     emit(
-      LightThemeState(
-        isDark: await sl<SharedPreferences>().setBool(_themeKey, false),
+      const LightThemeState(
+        isDark: false, //sl<SharedPreferences>().setBool(_themeKey, false),
       ),
     );
   }

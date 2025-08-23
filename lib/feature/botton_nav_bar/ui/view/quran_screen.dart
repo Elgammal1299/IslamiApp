@@ -137,7 +137,7 @@ class QuranAppState {
 
 // Configuration class for page-specific settings
 class PageConfig {
-  static const int totalPages = 604;
+  static const int totalPages = 604 + 1;
   static const Set<int> specialPages = {1, 2, 187};
   static const Set<int> centerAlignedPages = {1, 2};
   static const Set<int> largeFontPages = {1, 2};

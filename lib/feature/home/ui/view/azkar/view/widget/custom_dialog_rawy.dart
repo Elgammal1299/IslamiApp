@@ -57,7 +57,7 @@ class CustomDialogRawy extends StatelessWidget {
         children: [
           Text(" الراوي", style: context.textTheme.titleMedium),
           const SizedBox(width: 8),
-          Icon(Icons.person_rounded, color: Theme.of(context).cardColor),
+          Icon(Icons.person_rounded, color: Theme.of(context).primaryColorDark),
         ],
       ),
     );

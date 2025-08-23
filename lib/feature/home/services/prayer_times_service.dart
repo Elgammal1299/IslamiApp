@@ -118,8 +118,6 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
   Prayer? get nextPrayer => _nextPrayer;
   Duration get countdown => _countdown;
 
-  static const Duration summerOffset = Duration(hours: 1);
-
   /// Initialize and start the provider
   Future<void> initialize() async {
     await _loadPrayerTimes();
@@ -149,23 +147,14 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
     _todayTimes = times;
 
     // Apply summer time offset
-    _namedTimes = _applyOffset(
-      _prayerService.getNamedTimes(times),
-      summerOffset,
-    );
+    _namedTimes = _prayerService.getNamedTimes(times);
 
     _refreshPrayers();
     notifyListeners();
   }
 
   /// Apply time offset to prayer times
-  Map<Prayer, DateTime> _applyOffset(
-    Map<Prayer, DateTime> times,
-    Duration offset,
-  ) {
-    return times.map((p, t) => MapEntry(p, t.add(offset)));
-  }
-
+ 
   /// Refresh current and next prayer information
   void _refreshPrayers() {
     if (_todayTimes == null) return;
@@ -180,7 +169,7 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
             : null;
 
     if (nextTime != null && nextTime.isAfter(DateTime.now())) {
-      _countdown = nextTime.add(summerOffset).difference(DateTime.now());
+      _countdown = nextTime.difference(DateTime.now());
     } else {
       _countdown = Duration.zero;
     }
@@ -199,7 +188,8 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
     if (_nextPrayer != null && _todayTimes != null) {
       final nextTime = _prayerService.timeForPrayer(_todayTimes!, _nextPrayer!);
       if (nextTime != null) {
-        final adjustedTime = nextTime.add(summerOffset);
+        final adjustedTime = nextTime;
+
         if (adjustedTime.isAfter(DateTime.now())) {
           _countdown = adjustedTime.difference(DateTime.now());
           notifyListeners();
