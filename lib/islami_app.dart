@@ -32,7 +32,7 @@ class IslamiApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: AppRoutes.homeRoute,
+          initialRoute: AppRoutes.splasahRouter,
           onGenerateRoute: AppRouter.generateRoute,
         );
       },
