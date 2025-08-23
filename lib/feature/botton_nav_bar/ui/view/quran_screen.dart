@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_reading_service.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/botton_sheet_item.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_fram_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
@@ -493,6 +492,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
           valueListenable: _appState.verseHighlighter.highlightedVerseNotifier,
           builder: (context, highlightedVerse, child) {
             return RichText(
+              // textAlign: TextAlign.justify,
               textDirection: m.TextDirection.rtl,
               textAlign: PageConfig.getTextAlign(pageIndex),
               softWrap: true,

@@ -15,7 +15,7 @@ class IslamiApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
-        final isDark = state is DarkThemeState;
+        final isDark = state is ThemeChanged ? state.isDark : false;
         return MaterialApp(
           themeAnimationCurve: Curves.easeInOutSine,
           themeAnimationDuration: const Duration(seconds: 2),
@@ -26,7 +26,7 @@ class IslamiApp extends StatelessWidget {
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate, 
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: [const Locale('ar')],
           theme: AppTheme.lightTheme,

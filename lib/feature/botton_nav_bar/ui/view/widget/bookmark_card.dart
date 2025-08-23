@@ -46,6 +46,7 @@ class BookmarkCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
+                    
                     'سورة ${quran.getSurahNameArabic(surah)} ($ayah)',
                     style: Theme.of(
                       context,
@@ -82,6 +83,7 @@ class BookmarkCard extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(16),
               child: Text(
+                
                 quran.getVerse(surah, ayah),
                 style: Theme.of(
                   context,

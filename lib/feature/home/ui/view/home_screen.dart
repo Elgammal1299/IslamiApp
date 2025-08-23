@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart' as Prayer;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
@@ -31,7 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.watch<ThemeCubit>().state is DarkThemeState;
+    // final isDark = context.watch<ThemeCubit>().state is ThemeChanged;
+
+    // final isDark =
+    //     context.watch<ThemeCubit>().state is ThemeChanged &&
+    //     (context.watch<ThemeCubit>().state as ThemeChanged).isDark;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,10 +46,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-          onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+        leading: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            final isDark = state is ThemeChanged ? state.isDark : false;
+
+            return IconButton(
+              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+              onPressed: () => context.read<ThemeCubit>().changeTheme(),
+            );
+          },
         ),
+        // leading: IconButton(
+        //   icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+        //   onPressed: () => context.read<ThemeCubit>().changeTheme(),
+        // ),
         actions: [
           IconButton(
             onPressed: () {

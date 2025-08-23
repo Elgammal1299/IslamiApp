@@ -23,6 +23,7 @@ class CustomSurahFramWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          
           // ✅ الجزء الأيسر: زر الرجوع واسم السورة
           SizedBox(
             width: 0.35.sw, // 35% من عرض الشاشة
