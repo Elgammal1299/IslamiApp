@@ -604,7 +604,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       CustomSurahFramWidget(widget: widget, index: pageIndex),
                       if (PageConfig.specialPages.contains(pageIndex))
                         SizedBox(height: h * 0.15),
-                      const SizedBox(height: 30),
+                      // const SizedBox(height: 30),
                       _buildHeaderWidgets(pageIndex),
                     ],
                   ),
