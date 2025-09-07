@@ -20,13 +20,17 @@ class _QiblahScreenState extends State<QiblahScreen> {
   @override
   void initState() {
     super.initState();
-    _checkLocationPermission();
+
+    // _checkLocationPermission();
+    FlutterQiblah.requestPermissions();
   }
 
+  late Position position;
   Future<void> _checkLocationPermission() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() => _locationEnabled = false);
+
       return;
     }
 
@@ -45,39 +49,39 @@ class _QiblahScreenState extends State<QiblahScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_locationEnabled) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('القبلة')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(AppImage.gpsImage),
-              Text("!! يرجى تفعيل الموقع", style: context.textTheme.titleLarge),
-            ],
-          ),
-        ),
-      );
-    }
+    // if (!FlutterQiblah.checkLocationStatus()) {
+    //   return Scaffold(
+    //     appBar: AppBar(title: const Text('القبلة')),
+    //     body: Center(
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         crossAxisAlignment: CrossAxisAlignment.center,
+    //         children: [
+    //           Image.asset(AppImage.gpsImage),
+    //           Text("!! يرجى تفعيل الموقع", style: context.textTheme.titleLarge),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
-    if (!_hasPermission) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(AppImage.gpsImage, width: 300, height: 300),
-              Text(
-                "يجب منح إذن الوصول للموقع",
-                style: context.textTheme.titleLarge,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    // if (!_hasPermission) {
+    //   return Scaffold(
+    //     body: Center(
+    //       child: Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         crossAxisAlignment: CrossAxisAlignment.center,
+    //         children: [
+    //           Image.asset(AppImage.gpsImage, width: 300, height: 300),
+    //           Text(
+    //             "يجب منح إذن الوصول للموقع",
+    //             style: context.textTheme.titleLarge,
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return Scaffold(
       appBar: AppBar(title: const Text("اتجاه القبلة")),
@@ -133,10 +137,7 @@ class _QiblahScreenState extends State<QiblahScreen> {
                 Transform.rotate(
                   angle: angleInRadians,
                   child: Transform.translate(
-                    offset: const Offset(
-                      0,
-                      -170,
-                    ),
+                    offset: const Offset(0, -170),
                     child: Image.asset(
                       AppImage.kaabaImage,
                       width: 40,

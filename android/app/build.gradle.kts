@@ -35,7 +35,7 @@ android {
         applicationId = "com.wartaqi.islamiapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = 3
         versionName = "1.0.2"
@@ -44,7 +44,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("islami-keystore.jks") // موجود في نفس المجلد
+            storeFile = file("islami-keystore.jks") 
             storePassword = "Strong#1299"
             keyAlias = "islami"
             keyPassword = "Strong#1299"
@@ -57,7 +57,7 @@ android {
         }
        
         release {
-            // توقيع النسخة تم تعطيله مؤقتًا
+        
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
