@@ -639,7 +639,14 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       _buildHeaderWidgets(pageIndex),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.all(8.w),
+                          padding: EdgeInsets.only(
+                            left: 8.w,
+                            right: 8.w,
+                            top:
+                                PageConfig.specialPages.contains(pageIndex)
+                                    ? 0
+                                    : 30.h, // ✅ هنا المسافة
+                          ),
                           child: SizedBox(
                             width: double.infinity,
                             child: _buildOptimizedQuranText(pageIndex, theme),
