@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
@@ -26,6 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
+  if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
+    Hive.registerAdapter(HadithModelAdapter());
+  }
+
+
+  if (!Hive.isBoxOpen('hadiths')) {
+    Hive.openBox<List>('hadiths');
+  }
   }
 
   @override
