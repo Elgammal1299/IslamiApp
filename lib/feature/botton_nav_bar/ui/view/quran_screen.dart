@@ -601,42 +601,8 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     return const SizedBox.shrink();
   }
 
-  // Build page content with RepaintBoundary and CustomScrollView
-  // Widget _buildPageContent(
-  //   int pageIndex,
-  //   double screenHeight,
-  //   ThemeData theme,
-  // ) {
-  //   if (pageIndex == 0) return _buildPlaceholderPage();
-
-  //   return RepaintBoundary(
-  //     child: Scaffold(
-  //       resizeToAvoidBottomInset: false,
-  //       body: SafeArea(
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(10),
-  //           child: Column(
-  //             children: [
-  //               CustomSurahFramWidget(widget: widget, index: pageIndex),
-  //               SizedBox(height: 20.h),
-  //               _buildHeaderWidgets(pageIndex),
-  //               Expanded(
-  //                 child: Padding(
-  //                   padding: EdgeInsets.symmetric(horizontal: 8.w),
-  //                   child: SizedBox(
-  //                     width: double.infinity,
-  //                     child: _buildOptimizedQuranText(pageIndex, theme),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   bool _showAppBar = false; // تعريف في الكلاس
+  bool _showBottomSlider = false;
 
   Widget _buildPageContent(
     int pageIndex,
@@ -654,6 +620,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
             onTap: () {
               setState(() {
                 _showAppBar = !_showAppBar; // toggle
+                _showBottomSlider = !_showBottomSlider;
               });
             },
             child: Stack(
@@ -697,6 +664,69 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       ),
                     ),
                   ),
+                if (_showBottomSlider)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      color: Colors.black.withOpacity(0.6), // خلفية شفافة بسيطة
+                      child: ValueListenableBuilder<int>(
+                        valueListenable: _appState.currentPageNotifier,
+                        builder: (context, currentPage, _) {
+                          final pos = QuranPageIndex.firstAyahOnPage(
+                            currentPage,
+                          );
+                          final surahName = quran.getSurahNameArabic(pos.surah);
+
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "سورة $surahName (صفحة $currentPage)",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+
+                              Slider(
+                                value: currentPage.clamp(1, 605).toDouble(),
+                                min: 1,
+                                max: 605,
+                                divisions: 604,
+                                // 👇 يظهر اسم السورة + الصفحة عند السحب
+                                // label:
+                                //     "سورة $surahName - صفحة ${currentPage - 1}",
+                                onChanged: (value) {
+                                  _appState.currentPageNotifier.value =
+                                      value.toInt();
+                                },
+                                onChangeEnd: (value) {
+                                  final targetPage =
+                                      value.toInt() -
+                                      1; // PageView صفرية البداية
+                                  if (targetPage >= 1 && targetPage < 605) {
+                                    _pageController.animateToPage(
+                                      targetPage,
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -704,45 +734,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
       ),
     );
   }
-
-  // Widget _buildPageContent(
-  //   int pageIndex,
-  //   double screenHeight,
-  //   ThemeData theme,
-  // ) {
-  //   if (pageIndex == 0) return _buildPlaceholderPage();
-
-  //   return RepaintBoundary(
-  //     child: Scaffold(
-  //       resizeToAvoidBottomInset: false,
-  //       body: SafeArea(
-  //         child: Padding(
-  //           padding: EdgeInsets.symmetric(
-  //             horizontal: 10.w, // متناسب مع العرض
-  //             vertical: 10.h, // متناسب مع الطول
-  //           ),
-  //           child: Column(
-  //             children: [
-  //               CustomSurahFramWidget(widget: widget, index: pageIndex),
-  //               if (PageConfig.specialPages.contains(pageIndex))
-  //                 SizedBox(height: 20.h),
-  //               _buildHeaderWidgets(pageIndex),
-  //               Expanded(
-  //                 child: Padding(
-  //                   padding: EdgeInsets.all(8.w),
-  //                   child: SizedBox(
-  //                     width: double.infinity,
-  //                     child: _buildOptimizedQuranText(pageIndex, theme),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildPlaceholderPage() {
     return RepaintBoundary(

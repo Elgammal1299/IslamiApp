@@ -1,11 +1,11 @@
-import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:quran/quran.dart';
 
-class CustomSurahFramWidget extends StatelessWidget {
+class CustomSurahFramWidget extends StatelessWidget
+    implements PreferredSizeWidget {
   const CustomSurahFramWidget({
     super.key,
     required this.widget,
@@ -17,61 +17,51 @@ class CustomSurahFramWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 1.sw, // عرض الشاشة بالكامل
+    final surahName = widget.jsonData[getPageData(index)[0]["surah"] - 1].name;
 
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          
-          // ✅ الجزء الأيسر: زر الرجوع واسم السورة
-          SizedBox(
-            width: 0.35.sw, // 35% من عرض الشاشة
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 20.sp,
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    widget.jsonData[getPageData(index)[0]["surah"] - 1].name,
-                    style: context.textTheme.titleLarge?.copyWith(
-                      fontSize: 18.sp,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
+    int surah = getPageData(index)[0]["surah"];
+    int ayah = getPageData(index)[0]["start"];
+    int juz = getJuzNumber(surah, ayah);
+
+    return AppBar(
+      elevation: 0,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: Text(
+        surahName,
+        overflow: TextOverflow.ellipsis,
+        style: context.textTheme.titleLarge?.copyWith(
+          fontSize: 18.sp,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15), // خلفية شفافة بسيطة
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: Colors.white24),
             ),
-          ),
-
-          // ✅ الجزء الأيمن: صندوق رقم الصفحة
-          EasyContainer(
-            borderRadius: 10.r,
-            color: Theme.of(context).secondaryHeaderColor,
-            showBorder: true,
-            height: 28.h,
-            width: 110.w,
-            padding: 0,
-            margin: 0,
-            child: Center(
-              child: Text(
-                "صفحة $index",
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+            child: Text(
+              "صفحة $index | جزء $juz",
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
