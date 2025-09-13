@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/widget/basmallah.dart';
 import 'package:islami_app/core/widget/header_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
@@ -143,15 +144,30 @@ class PageConfig {
   static const Set<int> mediumFontPages = {145, 201, 532, 533};
 
   static double getFontSize(int pageIndex) {
-    if (largeFontPages.contains(pageIndex)) return 28.0;
-    if (pageIndex == 145 || pageIndex == 201) return 22.4;
-    if (pageIndex == 532 || pageIndex == 533) return 22.5;
-    return 23.1;
+    if (largeFontPages.contains(pageIndex)) return 28.sp;
+    if (pageIndex == 145 || pageIndex == 201) return 22.4.sp;
+    if (pageIndex == 532 || pageIndex == 533) return 22.5.sp;
+    return 23.sp;
   }
 
-  static double getLineHeight(int pageIndex) {
-    return largeFontPages.contains(pageIndex) ? 2.0 : 1.95;
+  static double getLineHeight(int pageIndex, double screenHeight) {
+    // على الموبايلات الصغيرة نخليها زي ما هي
+    if (screenHeight < 700) {
+      return largeFontPages.contains(pageIndex) ? 2.0 : 1.8;
+    }
+
+    // على الموبايلات الكبيرة نزود المسافة بين السطور
+    if (screenHeight < 900) {
+      return largeFontPages.contains(pageIndex) ? 2 : 2.25;
+    }
+
+    // على التابلت أو الشاشات الكبيرة جدًا نزود أكتر
+    return largeFontPages.contains(pageIndex) ? 2.4 : 2.2;
   }
+
+  // static double getLineHeight(int pageIndex) {
+  //   return largeFontPages.contains(pageIndex) ? 2.0.sp : 1.95.sp;
+  // }
 
   static TextAlign getTextAlign(int pageIndex) {
     return TextAlign.center;
@@ -500,7 +516,12 @@ class _QuranViewScreenState extends State<QuranViewScreen>
               text: TextSpan(
                 style: TextStyle(
                   color: theme.primaryColorDark,
-                  height: PageConfig.getLineHeight(pageIndex),
+                  height: PageConfig.getLineHeight(
+                    pageIndex,
+                    MediaQuery.of(context).size.height,
+                  ),
+
+                  // height: PageConfig.getLineHeight(pageIndex),
                   letterSpacing: 0,
                   wordSpacing: 0,
                   fontFamily: fontFamily,
@@ -526,9 +547,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                           );
                         }
                         if (pageIndex == 187) {
-                          spans.add(
-                            const WidgetSpan(child: SizedBox(height: 10)),
-                          );
+                          spans.add(WidgetSpan(child: SizedBox(height: 10.h)));
                         }
                       }
 
@@ -583,46 +602,101 @@ class _QuranViewScreenState extends State<QuranViewScreen>
   }
 
   // Build page content with RepaintBoundary and CustomScrollView
-  Widget _buildPageContent(int pageIndex, double h, ThemeData them) {
-    if (pageIndex == 0) {
-      return _buildPlaceholderPage();
-    }
+  // Widget _buildPageContent(
+  //   int pageIndex,
+  //   double screenHeight,
+  //   ThemeData theme,
+  // ) {
+  //   if (pageIndex == 0) return _buildPlaceholderPage();
+
+  //   return RepaintBoundary(
+  //     child: Scaffold(
+  //       resizeToAvoidBottomInset: false,
+  //       body: SafeArea(
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(10),
+  //           child: Column(
+  //             children: [
+  //               CustomSurahFramWidget(widget: widget, index: pageIndex),
+  //               SizedBox(height: 20.h),
+  //               _buildHeaderWidgets(pageIndex),
+  //               Expanded(
+  //                 child: Padding(
+  //                   padding: EdgeInsets.symmetric(horizontal: 8.w),
+  //                   child: SizedBox(
+  //                     width: double.infinity,
+  //                     child: _buildOptimizedQuranText(pageIndex, theme),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  bool _showAppBar = false; // تعريف في الكلاس
+
+  Widget _buildPageContent(
+    int pageIndex,
+    double screenHeight,
+    ThemeData theme,
+  ) {
+    if (pageIndex == 0) return _buildPlaceholderPage();
 
     return RepaintBoundary(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
-            child: CustomScrollView(
-              physics: const ClampingScrollPhysics(),
-              slivers: [
-                // Header section
-                SliverToBoxAdapter(
+          bottom: false,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _showAppBar = !_showAppBar; // toggle
+              });
+            },
+            child: Stack(
+              children: [
+                // النص والمحتوى
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 10.h,
+                  ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      CustomSurahFramWidget(widget: widget, index: pageIndex),
                       if (PageConfig.specialPages.contains(pageIndex))
-                        SizedBox(height: h * 0.15),
-                      const SizedBox(height: 30),
+                        SizedBox(height: 20.h),
                       _buildHeaderWidgets(pageIndex),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.w),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: _buildOptimizedQuranText(pageIndex, theme),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
 
-                // Main Quran text
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: _buildOptimizedQuranText(pageIndex, them),
+                // الـ AppBar يطفو فوق
+                if (_showAppBar)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomSurahFramWidget(
+                        widget: widget,
+                        index: pageIndex,
+                      ),
                     ),
                   ),
-                ),
-
-                // Bottom padding
-                const SliverToBoxAdapter(child: SizedBox(height: 50)),
               ],
             ),
           ),
@@ -630,6 +704,45 @@ class _QuranViewScreenState extends State<QuranViewScreen>
       ),
     );
   }
+
+  // Widget _buildPageContent(
+  //   int pageIndex,
+  //   double screenHeight,
+  //   ThemeData theme,
+  // ) {
+  //   if (pageIndex == 0) return _buildPlaceholderPage();
+
+  //   return RepaintBoundary(
+  //     child: Scaffold(
+  //       resizeToAvoidBottomInset: false,
+  //       body: SafeArea(
+  //         child: Padding(
+  //           padding: EdgeInsets.symmetric(
+  //             horizontal: 10.w, // متناسب مع العرض
+  //             vertical: 10.h, // متناسب مع الطول
+  //           ),
+  //           child: Column(
+  //             children: [
+  //               CustomSurahFramWidget(widget: widget, index: pageIndex),
+  //               if (PageConfig.specialPages.contains(pageIndex))
+  //                 SizedBox(height: 20.h),
+  //               _buildHeaderWidgets(pageIndex),
+  //               Expanded(
+  //                 child: Padding(
+  //                   padding: EdgeInsets.all(8.w),
+  //                   child: SizedBox(
+  //                     width: double.infinity,
+  //                     child: _buildOptimizedQuranText(pageIndex, theme),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPlaceholderPage() {
     return RepaintBoundary(

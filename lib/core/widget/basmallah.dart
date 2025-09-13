@@ -19,8 +19,8 @@ class _BasmallahState extends State<Basmallah> {
         padding: EdgeInsets.only(
           left: (screenSize.width * .2),
           right: (screenSize.width * .2),
-          top: 8,
-          bottom: 2,
+          // top: 8,
+          // bottom: 2,
         ),
         child: Image.asset(
           AppImage.basmalaImage,
