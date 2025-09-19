@@ -14,8 +14,8 @@ class QiblahScreen extends StatefulWidget {
 }
 
 class _QiblahScreenState extends State<QiblahScreen> {
-  bool _hasPermission = false;
-  bool _locationEnabled = false;
+  // bool _hasPermission = false;
+  // bool _locationEnabled = false;
 
   @override
   void initState() {
@@ -26,26 +26,26 @@ class _QiblahScreenState extends State<QiblahScreen> {
   }
 
   late Position position;
-  Future<void> _checkLocationPermission() async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      setState(() => _locationEnabled = false);
+  // Future<void> _checkLocationPermission() async {
+  //   final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     setState(() => _locationEnabled = false);
 
-      return;
-    }
+  //     return;
+  //   }
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //   }
 
-    setState(() {
-      _hasPermission =
-          permission == LocationPermission.always ||
-          permission == LocationPermission.whileInUse;
-      _locationEnabled = serviceEnabled;
-    });
-  }
+  //   setState(() {
+  //     _hasPermission =
+  //         permission == LocationPermission.always ||
+  //         permission == LocationPermission.whileInUse;
+  //     _locationEnabled = serviceEnabled;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

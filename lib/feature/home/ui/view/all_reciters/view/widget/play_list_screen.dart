@@ -96,9 +96,11 @@ class _PlaylistScreenState extends State<PlaylistScreen>
             await context.read<AudioCubit>().skipToIndex(index);
           }
           if (mounted) {
-            Navigator.pushNamed(context, AppRoutes.nowPlayingScreenRouter,
-                arguments: widget.audioManager);
-         
+            Navigator.pushNamed(
+              context,
+              AppRoutes.nowPlayingScreenRouter,
+              arguments: widget.audioManager,
+            );
           }
         },
         borderRadius: BorderRadius.circular(12),

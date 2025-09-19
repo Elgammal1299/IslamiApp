@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:adhan/adhan.dart';
-import 'package:islami_app/feature/home/services/azan_player.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -73,6 +71,8 @@ class PrayerNotificationService {
     bool withSound = true,
   }) async {
     final tz.TZDateTime tzTime = tz.TZDateTime.from(scheduledTime, tz.local);
+
+    // Notification will handle the sound itself
     await _plugin.zonedSchedule(
       id,
       title,
@@ -82,13 +82,6 @@ class PrayerNotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       payload: 'prayer',
     );
-    // Also trigger playback when the time comes
-    // final Duration delay = tzTime.difference(tz.TZDateTime.now(tz.local));
-    // if (!delay.isNegative) {
-    //   Future.delayed(delay, () async {
-    //     await AzanPlayer.play();
-    //   });
-    // }
   }
 
   Future<void> scheduleDaily({
@@ -98,7 +91,6 @@ class PrayerNotificationService {
     required DateTime time,
     bool withSound = true,
   }) async {
-    // Deprecated in favor of scheduleForDay one-shot scheduling
     final DateTime now = DateTime.now();
     DateTime target = DateTime(
       now.year,
@@ -117,7 +109,6 @@ class PrayerNotificationService {
     );
   }
 
-  /// One-day scheduler for all prayers (and optional pre-reminders).
   Future<List<Map<String, dynamic>>> scheduleForDay({
     required Map<Prayer, DateTime> prayerTimes,
     required DateTime day,
@@ -136,6 +127,7 @@ class PrayerNotificationService {
         t.hour,
         t.minute,
       );
+
       if (target.isAfter(now)) {
         final int id = nsBase + p.index;
         await scheduleOneShot(
@@ -148,6 +140,7 @@ class PrayerNotificationService {
         );
         scheduled.add({'id': id, 'time': target});
       }
+
       if (preReminderEnabled) {
         final DateTime pre = target.subtract(const Duration(minutes: 1));
         if (pre.isAfter(now)) {

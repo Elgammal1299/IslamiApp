@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:islami_app/core/constant/app_constant.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/services/hive_service.dart';
@@ -26,12 +27,23 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
 
   List<RecordingModel> recordings = [];
   String? currentlyPlayingKey;
+  bool permissionGranted = false;
 
   @override
   void initState() {
     super.initState();
     recorderController = RecorderController();
-    _loadRecordings();
+    _checkPermissionAndLoad();
+  }
+
+  Future<void> _checkPermissionAndLoad() async {
+    permissionGranted = await Permission.microphone.isGranted;
+    if (!permissionGranted) {
+      final status = await Permission.microphone.request();
+      permissionGranted = status.isGranted;
+    }
+
+    await _loadRecordings();
   }
 
   Future<void> _loadRecordings() async {
@@ -40,7 +52,6 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
       final data = await audioService.getAll();
       setState(() => recordings = data);
     } catch (e) {
-      // Handle error gracefully - maybe show a snackbar or log
       print('Error loading recordings: $e');
     }
   }
@@ -73,27 +84,19 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
             ],
           ),
     );
+
     if (confirmed == true) {
       await audioService.delete(rec.key);
       _loadRecordings();
     }
   }
 
-  // String _formatDuration(Duration d) {
-  //   String twoDigits(int n) => n.toString().padLeft(2, '0');
-  //   if (d.inHours > 0) {
-  //     return "${d.inHours}:${twoDigits(d.inMinutes % 60)}:${twoDigits(d.inSeconds % 60)}";
-  //   } else {
-  //     return "${d.inMinutes}:${twoDigits(d.inSeconds % 60)}";
-  //   }
-  // }
-
-  // WhatsApp-style date formatting
   String formatWhatsAppDate(DateTime date) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final aDate = DateTime(date.year, date.month, date.day);
     final diff = today.difference(aDate).inDays;
+
     if (diff == 0) {
       return 'اليوم، ${DateFormat('HH:mm').format(date)}';
     } else if (diff == 1) {
@@ -119,6 +122,30 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
     }
   }
 
+  Future<void> _handleRecord() async {
+    if (!permissionGranted) {
+      final status = await Permission.microphone.request();
+      if (!status.isGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('يرجى السماح بالوصول للميكروفون')),
+        );
+        return;
+      }
+      permissionGranted = true;
+    }
+
+    final state = context.read<AudioRecordingCubit>().state;
+    final isRecording = state is AudioRecording;
+
+    if (isRecording) {
+      context.read<AudioRecordingCubit>().stopRecording();
+      await recorderController.stop();
+    } else {
+      context.read<AudioRecordingCubit>().startRecording();
+      await recorderController.record();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,18 +163,11 @@ class _AudioRecordingScreenState extends State<AudioRecordingScreen> {
                   final isRecording = state is AudioRecording;
                   final error =
                       state is AudioRecordingError ? state.message : null;
+
                   return RecordingInputWidget(
                     isRecording: isRecording,
                     error: error,
-                    onRecord: () {
-                      if (isRecording) {
-                        context.read<AudioRecordingCubit>().stopRecording();
-                        recorderController.stop();
-                      } else {
-                        context.read<AudioRecordingCubit>().startRecording();
-                        recorderController.record();
-                      }
-                    },
+                    onRecord: _handleRecord,
                     recorderController: recorderController,
                   );
                 },
