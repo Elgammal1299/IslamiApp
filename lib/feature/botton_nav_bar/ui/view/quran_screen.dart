@@ -135,7 +135,7 @@ class QuranAppState {
   }
 }
 
-// Configuration class for page-specific settings
+// Configuration class for page-specific settings 
 class PageConfig {
   static const int totalPages = 604 + 1;
   static const Set<int> specialPages = {1, 2, 187};
@@ -145,8 +145,9 @@ class PageConfig {
 
   static double getFontSize(int pageIndex) {
     if (largeFontPages.contains(pageIndex)) return 28.sp;
-    if (pageIndex == 145 || pageIndex == 201) return 22.4.sp;
-    if (pageIndex == 532 || pageIndex == 533) return 22.5.sp;
+    if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200)
+      return 23.5.sp;
+    if (pageIndex == 532 || pageIndex == 533) return 23.5.sp;
     return 23.sp;
   }
 
@@ -158,7 +159,7 @@ class PageConfig {
 
     // على الموبايلات الكبيرة نزود المسافة بين السطور
     if (screenHeight < 900) {
-      return largeFontPages.contains(pageIndex) ? 2 : 2.25;
+      return largeFontPages.contains(pageIndex) ? 2 : 2.2;
     }
 
     // على التابلت أو الشاشات الكبيرة جدًا نزود أكتر
@@ -626,7 +627,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
             child: Stack(
               children: [
                 // النص والمحتوى
-                Padding(
+                m.Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 10.w,
                     vertical: 10.h,
@@ -640,8 +641,8 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(
-                            left: 8.w,
-                            right: 8.w,
+                            left: 6.w,
+                            right: 6.w,
                             top:
                                 PageConfig.specialPages.contains(pageIndex)
                                     ? 0
