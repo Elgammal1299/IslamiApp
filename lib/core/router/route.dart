@@ -11,7 +11,9 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubi
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
@@ -217,11 +219,28 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<ReciterCubit>()..fetchReciters(),
                   ),
-                  BlocProvider(create: (context) => sl<AudioCubit>()),
+                  BlocProvider.value(value: sl<AudioCubit>()),
                 ],
                 child: const RecitersScreen(),
               ),
         );
+      case AppRoutes.recitersSurahListRouter:
+        final args = settings.arguments as Map<String, dynamic>?;
+        final moshaf = args?['moshaf'] as Moshaf?;
+        final name = args?['name'] as String?;
+
+        if (moshaf == null || name == null) {
+          throw ArgumentError('moshaf and name are required');
+        }
+
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<AudioCubit>(),
+                child: RecitersSurahList(moshaf: moshaf, name: name),
+              ),
+        );
+
       case AppRoutes.nowPlayingScreenRouter:
         final audioManager = settings.arguments as AudioManager;
         return MaterialPageRoute(

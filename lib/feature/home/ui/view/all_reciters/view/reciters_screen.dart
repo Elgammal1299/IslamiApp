@@ -35,13 +35,24 @@ class _RecitersScreenState extends State<RecitersScreen> {
   }
 
   void _onScroll() {
+    // Load more when user is 200px from the bottom
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      // Load more when user is 200px from the bottom
       final cubit = context.read<ReciterCubit>();
       final state = cubit.state;
+
+      // Debug scroll trigger
+      print(
+        '📜 Scroll triggered - Pixels: ${_scrollController.position.pixels}, Max: ${_scrollController.position.maxScrollExtent}',
+      );
+
       if (state is ReciterLoaded && state.hasMoreData) {
+        print('🔄 Triggering loadNextPage...');
         cubit.loadNextPage();
+      } else if (state is ReciterLoaded && !state.hasMoreData) {
+        print('✅ No more data to load');
+      } else {
+        print('⚠️ State is not ReciterLoaded or no more data');
       }
     }
   }
@@ -52,6 +63,10 @@ class _RecitersScreenState extends State<RecitersScreen> {
 
   Future<void> _onRefresh() async {
     context.read<ReciterCubit>().refresh();
+    // Reset expanded cards on refresh
+    setState(() {
+      expandedCards.clear();
+    });
   }
 
   @override
@@ -146,6 +161,10 @@ class _RecitersScreenState extends State<RecitersScreen> {
                     reciter: reciter,
                     onTap: () {
                       setState(() {
+                        // Close all other expanded cards when opening a new one
+                        if (!isExpanded) {
+                          expandedCards.clear();
+                        }
                         expandedCards[reciter.id ?? 0] = !isExpanded;
                       });
                     },
