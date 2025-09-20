@@ -135,7 +135,7 @@ class QuranAppState {
   }
 }
 
-// Configuration class for page-specific settings 
+// Configuration class for page-specific settings
 class PageConfig {
   static const int totalPages = 604 + 1;
   static const Set<int> specialPages = {1, 2, 187};
@@ -614,6 +614,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
     return RepaintBoundary(
       child: Scaffold(
+        backgroundColor: const Color(0xFFF8F3E7),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           bottom: false,

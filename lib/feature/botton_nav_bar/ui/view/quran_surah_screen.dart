@@ -193,10 +193,10 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
                   }
                   if (state is SurahError) {
                     return customErrorWidget(
-                  onPressed: () {
-                   BlocProvider.of<SurahCubit>(context).surahs;
-                  },
-                );
+                      onPressed: () {
+                        BlocProvider.of<SurahCubit>(context).surahs;
+                      },
+                    );
                   }
                   if (state is SurahSuccess) {
                     return ValueListenableBuilder<dynamic>(

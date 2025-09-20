@@ -157,7 +157,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
 
   @override
   m.Widget build(m.BuildContext context) {
-    final ayahText = quran.getVerse(widget.surah, widget.verse);
+    // final ayahText = quran.getVerse(widget.surah, widget.verse);
 
     return Container(
       padding: const EdgeInsets.all(16),
