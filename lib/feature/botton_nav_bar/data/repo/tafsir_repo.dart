@@ -25,6 +25,7 @@ class TafsirByAyahRepository {
   }
 }
 
+
 /// 🛑 دالة خاصة للتعامل مع الأخطاء
 String handleError(dynamic error) {
   if (error is DioException) {

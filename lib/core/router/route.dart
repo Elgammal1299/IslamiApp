@@ -28,10 +28,8 @@ import 'package:islami_app/feature/home/ui/view/radio_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_screen.dart';
-import 'package:islami_app/feature/home/ui/view/tafsir_screen.dart';
 import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
-import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
@@ -194,23 +192,6 @@ class AppRouter {
           },
         );
 
-      case AppRoutes.tafsirByQuranPageRouter:
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => sl<QuranWithTafsirCubit>(),
-                child: const TafsirScreen(),
-              ),
-        );
-
-      case AppRoutes.tafsirByQuranContentRouter:
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder:
-              (_) => TafsirContentView(
-                identifier: args?['identifier'] ?? "ar.muyassar",
-              ),
-        );
       case AppRoutes.recitersPageRouter:
         return MaterialPageRoute(
           builder:

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
-import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 part 'quran_audio_api.g.dart';

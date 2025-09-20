@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
-import 'package:islami_app/feature/home/data/model/tafsir_quran.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'tafsir_service.g.dart';
@@ -26,9 +25,9 @@ abstract class TafsirService {
     @Path("editionIdentifier") String editionIdentifier,
   );
 
-  // 4️⃣ جلب القرآن كاملًا مع تفسير معين
-  @GET("/quran/{editionIdentifier}")
-  Future<TafsirQuran> getQuranWithTafsir(
-    @Path("editionIdentifier") String editionIdentifier,
-  );
+  // // 4️⃣ جلب القرآن كاملًا مع تفسير معين
+  // @GET("/quran/{editionIdentifier}")
+  // Future<TafsirQuran> getQuranWithTafsir(
+  //   @Path("editionIdentifier") String editionIdentifier,
+  // );
 }
