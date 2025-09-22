@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
+import 'package:islami_app/core/router/router_transitions.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
@@ -44,12 +45,9 @@ class AppRouter {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.prayertimesRouter:
-        return MaterialPageRoute(builder: (_) => const PrayerTimesScreen());
+        return RouterTransitions.buildHorizontal(const PrayerTimesScreen());
       case AppRoutes.notificationViewRouter:
-        return MaterialPageRoute(
-          builder: (_) => const NotificationView(),
-          settings: settings,
-        );
+        return RouterTransitions.buildHorizontal(const NotificationView());
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
