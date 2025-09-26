@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
+import 'package:islami_app/core/widget/location_permission_gate.dart';
 
 class PrayerTimesScreen extends StatefulWidget {
   const PrayerTimesScreen({super.key});
@@ -32,7 +33,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
   }
 
   @override
@@ -191,37 +191,40 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('مواقيت الصلاة')),
-      body: ValueListenableBuilder<PrayerTimes?>(
-        valueListenable: todayTimes,
-        builder: (context, times, _) {
-          if (times == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return RefreshIndicator(
-            onRefresh: _load,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildHeader(theme),
-                const SizedBox(height: 16),
-                ValueListenableBuilder<Map<Prayer, DateTime>>(
-                  valueListenable: namedTimes,
-                  builder: (context, prayers, _) {
-                    return Column(
-                      children:
-                          prayers.entries
-                              .map((e) => _buildTile(e.key, e.value))
-                              .toList(),
-                    );
-                  },
-                ),
-                const SizedBox(height: 24),
-                // _buildReminderSwitch(),
-                const SizedBox(height: 24),
-              ],
-            ),
-          );
-        },
+      body: LocationPermissionGate(
+        onGrantedOnce: _load,
+        child: ValueListenableBuilder<PrayerTimes?>(
+          valueListenable: todayTimes,
+          builder: (context, times, _) {
+            if (times == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return RefreshIndicator(
+              onRefresh: _load,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  _buildHeader(theme),
+                  const SizedBox(height: 16),
+                  ValueListenableBuilder<Map<Prayer, DateTime>>(
+                    valueListenable: namedTimes,
+                    builder: (context, prayers, _) {
+                      return Column(
+                        children:
+                            prayers.entries
+                                .map((e) => _buildTile(e.key, e.value))
+                                .toList(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  // _buildReminderSwitch(),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
