@@ -32,7 +32,7 @@ android {
         applicationId = "com.wartaqi.islamiapp"
         minSdk = flutter.minSdkVersion   // ✅ صح
         targetSdk = flutter.targetSdkVersion // ✅ صح
-        versionCode = 3
+        versionCode = 4
         versionName = "1.0.2"
     }
 
