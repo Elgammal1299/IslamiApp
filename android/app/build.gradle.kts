@@ -30,8 +30,8 @@ android {
 
     defaultConfig {
         applicationId = "com.wartaqi.islamiapp"
-        minSdk = flutter.minSdkVersion   // ✅ صح
-        targetSdk = flutter.targetSdkVersion // ✅ صح
+        minSdk = flutter.minSdkVersion   
+        targetSdk = flutter.targetSdkVersion 
         versionCode = 4
         versionName = "1.0.2"
     }
