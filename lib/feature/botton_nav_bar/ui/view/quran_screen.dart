@@ -145,10 +145,10 @@ class PageConfig {
 
   static double getFontSize(int pageIndex) {
     if (largeFontPages.contains(pageIndex)) return 28.sp;
-    if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200)
-      return 23.5.sp;
-    if (pageIndex == 532 || pageIndex == 533) return 23.5.sp;
-    return 23.1.sp;
+    if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200) return 24.sp;
+    if (pageIndex == 532 || pageIndex == 533) return 23.8.sp;
+    if (pageIndex == 568 || pageIndex == 569) return 23.5.sp;
+    return 23.8.sp;
   }
 
   static double getLineHeight(int pageIndex, double screenHeight) {
@@ -617,7 +617,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
         backgroundColor: Theme.of(context).focusColor,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-          bottom: false,
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -629,10 +628,8 @@ class _QuranViewScreenState extends State<QuranViewScreen>
               children: [
                 // النص والمحتوى
                 m.Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 10.h,
-                  ),
+                  padding: EdgeInsets.only(right: 5.w, left: 5.w, bottom: 10.h),
+
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -647,7 +644,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                             top:
                                 PageConfig.specialPages.contains(pageIndex)
                                     ? 0
-                                    : 30.h, // ✅ هنا المسافة
+                                    : 30.h,
                           ),
                           child: SizedBox(
                             width: double.infinity,
@@ -775,9 +772,10 @@ class _QuranViewScreenState extends State<QuranViewScreen>
           valueListenable: _appState.currentPageNotifier,
           builder: (context, currentPage, child) {
             return PageView.builder(
+              padEnds: false,
               controller: _pageController,
               scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
+              physics: const PageScrollPhysics(),
               onPageChanged: _handlePageChanged,
               itemCount: PageConfig.totalPages,
               itemBuilder:
