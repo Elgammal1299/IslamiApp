@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
-import 'package:islami_app/core/widget/location_permission_gate.dart';
 
 class PrayerTimesScreen extends StatefulWidget {
   const PrayerTimesScreen({super.key});
@@ -24,15 +23,18 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   final ValueNotifier<Prayer?> currentPrayer = ValueNotifier(null);
   final ValueNotifier<Prayer?> nextPrayer = ValueNotifier(null);
   final ValueNotifier<Duration> countdown = ValueNotifier(Duration.zero);
-  final ValueNotifier<bool> preReminderEnabled = ValueNotifier(true);
+  // Removed preReminderEnabled since pre-reminders are disabled
 
   Timer? _ticker;
+  DateTime? _lastUpdate;
 
-  static const Duration summerOffset = Duration(hours: 1);
+  // Dynamic summer offset based on DST detection
+  Duration get summerOffset => _prayerService.getTimeOffset();
 
   @override
   void initState() {
     super.initState();
+    _load();
   }
 
   @override
@@ -47,13 +49,26 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     currentPrayer.dispose();
     nextPrayer.dispose();
     countdown.dispose();
-    preReminderEnabled.dispose();
     super.dispose();
   }
 
   Future<void> _load() async {
     try {
       await _notificationService.init();
+
+      // Ensure all permissions are granted for reliable notifications
+      final permissionsGranted = await _notificationService.ensurePermissions();
+      if (!permissionsGranted) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('إعداد الإشعارات مطلوب لضمان عمل الأذان'),
+              duration: Duration(seconds: 5),
+            ),
+          );
+        }
+      }
+
       final PrayerTimes times = await _prayerService.getTodayPrayerTimes();
       _setTimes(times);
       await _scheduleTodayAndTomorrow();
@@ -67,20 +82,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     }
   }
 
-  Map<Prayer, DateTime> _applyOffset(
-    Map<Prayer, DateTime> times,
-    Duration offset,
-  ) {
-    return times.map((p, t) => MapEntry(p, t.add(offset)));
-  }
-
   void _setTimes(PrayerTimes times) {
     todayTimes.value = times;
-
-    // هنا نزود ساعة (التوقيت الصيفي)
-    namedTimes.value = _applyOffset(
-      _prayerService.getNamedTimes(times),
-      summerOffset,
+    _lastUpdate = DateTime.now();
+    // Apply summer time offset consistently
+    namedTimes.value = _prayerService.getNamedTimes(
+      times,
+      offset: summerOffset,
     );
 
     _refreshPrayers();
@@ -96,13 +104,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
     final DateTime? nextTime =
         nextPrayer.value != null
-            ? _prayerService
-                .timeForPrayer(t, nextPrayer.value!)
-                ?.add(summerOffset)
+            ? _prayerService.timeForPrayer(t, nextPrayer.value!)
             : null;
 
     if (nextTime != null && nextTime.isAfter(DateTime.now())) {
-      countdown.value = nextTime.difference(DateTime.now());
+      // Apply summer offset to countdown calculation for consistency
+      final adjustedTime = nextTime.add(summerOffset);
+      countdown.value = adjustedTime.difference(DateTime.now());
     } else {
       countdown.value = Duration.zero;
     }
@@ -117,7 +125,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     await _notificationService.scheduleForDay(
       prayerTimes: namedTimes.value,
       day: today,
-      preReminderEnabled: preReminderEnabled.value,
+      preReminderEnabled: false, // Pre-reminders are disabled
       prayerName: _displayName,
     );
 
@@ -129,14 +137,11 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         longitude: pos.longitude,
         date: tomorrow,
       );
-      final tmrNamed = _applyOffset(
-        _prayerService.getNamedTimes(tmrTimes),
-        summerOffset,
-      );
+      final tmrNamed = _prayerService.getNamedTimes(tmrTimes);
       await _notificationService.scheduleForDay(
         prayerTimes: tmrNamed,
         day: tomorrow,
-        preReminderEnabled: preReminderEnabled.value,
+        preReminderEnabled: false, // Pre-reminders are disabled
         prayerName: _displayName,
       );
     } catch (e) {
@@ -153,10 +158,29 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
         // Check if still mounted before calling _refreshPrayers
         if (mounted) {
-          _refreshPrayers();
+          _checkAndRefreshIfNeeded();
         }
       });
     }
+  }
+
+  void _checkAndRefreshIfNeeded() {
+    // Check if we need to refresh for new day
+    final now = DateTime.now();
+
+    if (_lastUpdate != null) {
+      final isNewDay =
+          now.day != _lastUpdate!.day ||
+          now.month != _lastUpdate!.month ||
+          now.year != _lastUpdate!.year;
+
+      if (isNewDay) {
+        _load(); // Reload prayer times for new day
+        return;
+      }
+    }
+
+    _refreshPrayers();
   }
 
   String _displayName(Prayer p) {
@@ -180,51 +204,43 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   String _format(DateTime dt) => DateFormat('h:mm a', 'ar').format(dt);
 
-  // String _format(DateTime dt) =>
-  //     DateFormat.Hm('en').format(dt.add(summerOffset));
-
-  // .. نفس الكود اللي عندك فوق
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('مواقيت الصلاة')),
-      body: LocationPermissionGate(
-        onGrantedOnce: _load,
-        child: ValueListenableBuilder<PrayerTimes?>(
-          valueListenable: todayTimes,
-          builder: (context, times, _) {
-            if (times == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return RefreshIndicator(
-              onRefresh: _load,
-              child: ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _buildHeader(theme),
-                  const SizedBox(height: 16),
-                  ValueListenableBuilder<Map<Prayer, DateTime>>(
-                    valueListenable: namedTimes,
-                    builder: (context, prayers, _) {
-                      return Column(
-                        children:
-                            prayers.entries
-                                .map((e) => _buildTile(e.key, e.value))
-                                .toList(),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  // _buildReminderSwitch(),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            );
-          },
-        ),
+      body: ValueListenableBuilder<PrayerTimes?>(
+        valueListenable: todayTimes,
+        builder: (context, times, _) {
+          if (times == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return RefreshIndicator(
+            onRefresh: _load,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildHeader(theme),
+                const SizedBox(height: 16),
+                ValueListenableBuilder<Map<Prayer, DateTime>>(
+                  valueListenable: namedTimes,
+                  builder: (context, prayers, _) {
+                    return Column(
+                      children:
+                          prayers.entries
+                              .map((e) => _buildTile(e.key, e.value))
+                              .toList(),
+                    );
+                  },
+                ),
+                const SizedBox(height: 24),
+                _buildDebugSection(),
+                const SizedBox(height: 24),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -285,30 +301,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     );
   }
 
-  // Widget _buildReminderSwitch() {
-  //   return ValueListenableBuilder<bool>(
-  //     valueListenable: preReminderEnabled,
-  //     builder: (context, enabled, _) {
-  //       return Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           const Text('التذكير قبل الصلاة بدقيقة واحدة'),
-  //           Switch(
-  //             value: enabled,
-  //             onChanged: (v) async {
-  //               preReminderEnabled.value = v;
-  //               if (todayTimes.value != null) {
-  //                 await _notificationService.cancelAll();
-  //                 await _scheduleTodayAndTomorrow();
-  //               }
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   IconData _iconFor(Prayer p) {
     switch (p) {
       case Prayer.fajr:
@@ -326,6 +318,62 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       case Prayer.none:
         return Icons.more_horiz;
     }
+  }
+
+  Widget _buildDebugSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'إعدادات الإشعارات',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await _notificationService.testNotification();
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('تم إرسال إشعار تجريبي'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('اختبار الإشعار'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final pending =
+                          await _notificationService.getPendingNotifications();
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'الإشعارات المجدولة: ${pending.length}',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('التحقق من الجدولة'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
