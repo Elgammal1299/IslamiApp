@@ -148,7 +148,7 @@ class PageConfig {
     if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200)
       return 23.5.sp;
     if (pageIndex == 532 || pageIndex == 533) return 23.5.sp;
-    return 23.sp;
+    return 23.1.sp;
   }
 
   static double getLineHeight(int pageIndex, double screenHeight) {
@@ -614,7 +614,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
     return RepaintBoundary(
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8F3E7),
+        backgroundColor: Theme.of(context).focusColor,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           bottom: false,

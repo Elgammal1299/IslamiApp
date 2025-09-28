@@ -7,6 +7,7 @@ class AppTheme {
 
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    focusColor: const Color(0xFFF8F3E7),
     scaffoldBackgroundColor: AppColors.background,
     primaryColor: AppColors.primary,
     cardColor: AppColors.cardBackground,
@@ -120,6 +121,8 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
+    focusColor: AppColors.darkBackground,
+
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.darkBackground,
     primaryColor: AppColors.darkPrimary,

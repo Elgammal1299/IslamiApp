@@ -70,7 +70,15 @@ class PrayerNotificationService {
     required DateTime scheduledTime,
     bool withSound = true,
   }) async {
-    final tz.TZDateTime tzTime = tz.TZDateTime.from(scheduledTime, tz.local);
+    // final tz.TZDateTime tzTime = tz.TZDateTime.from(scheduledTime, tz.local);
+    final tz.TZDateTime tzTime = tz.TZDateTime(
+      scheduledTime.year as tz.Location,
+      scheduledTime.month,
+      scheduledTime.day,
+      scheduledTime.hour,
+      scheduledTime.minute,
+      scheduledTime.second,
+    );
 
     // Notification will handle the sound itself
     await _plugin.zonedSchedule(
