@@ -29,9 +29,7 @@ class HadithDetailsScreen extends StatelessWidget {
               ),
             );
           } else if (state is HadithSuccess) {
-            // Assuming you have a list of hadiths in the state
             final hadiths = state.hadiths;
-
             return ListView.builder(
               itemCount: hadiths.length,
               itemBuilder: (context, index) {

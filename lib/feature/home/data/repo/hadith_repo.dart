@@ -33,7 +33,7 @@ class HadithRepo implements HadithRepoo {
       }
 
       //* Fetch Hadiths from the API
-      final hadithList = await HadithService.fetchHadiths(endpoint);
+      final hadithList = await HadithService.fetchHadith(endpoint);
       if (hadithList.isNotEmpty) {
         await _hadithService.put(endpoint, hadithList);
         return Right(hadithList);
