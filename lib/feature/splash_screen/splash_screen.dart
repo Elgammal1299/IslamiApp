@@ -74,12 +74,9 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _initHive() {
-  
-      Hive.registerAdapter(RecordingModelAdapter());
+    Hive.registerAdapter(RecordingModelAdapter());
 
-   
-      Hive.registerAdapter(NotificationModelAdapter());
-
+    Hive.registerAdapter(NotificationModelAdapter());
 
     sl<HiveService<RecordingModel>>().init();
     sl<HiveService<NotificationModel>>().init();
@@ -186,6 +183,8 @@ class _SplashScreenState extends State<SplashScreen>
 }
 
 // لازم تكون معرف handler ل Firebase Messaging
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   log("📩 رسالة جديدة في الخلفية: ${message.messageId}");
 }

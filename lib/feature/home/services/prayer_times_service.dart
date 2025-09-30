@@ -8,10 +8,12 @@ import 'package:flutter/foundation.dart';
 class PrayerTimesService {
   final CalculationMethod calculationMethod;
   final Madhab madhab;
+  final Duration? customOffset;
 
   PrayerTimesService({
     this.calculationMethod = CalculationMethod.muslim_world_league,
     this.madhab = Madhab.shafi,
+    this.customOffset,
   });
 
   /// Requests location permission if needed and returns current [Position].
@@ -42,6 +44,26 @@ class PrayerTimesService {
   /// Returns today's [PrayerTimes] for the user's current location.
   Future<PrayerTimes> getTodayPrayerTimes() async {
     final Position position = await _getCurrentPosition();
+
+    // Use optimal calculation method for the location
+    final optimalMethod = getOptimalCalculationMethod(
+      position.latitude,
+      position.longitude,
+    );
+    if (optimalMethod != calculationMethod) {
+      // Create a new instance with optimal method if different
+      final optimalService = PrayerTimesService(
+        calculationMethod: optimalMethod,
+        madhab: madhab,
+        customOffset: customOffset,
+      );
+      return optimalService.getPrayerTimesForDate(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        date: DateTime.now(),
+      );
+    }
+
     return getPrayerTimesForDate(
       latitude: position.latitude,
       longitude: position.longitude,
@@ -61,6 +83,28 @@ class PrayerTimesService {
         calculationMethod.getParameters()..madhab = madhab;
 
     return PrayerTimes(coordinates, dateComponents, params);
+  }
+
+  /// Get timezone-aware current time
+  DateTime getCurrentTime() {
+    return DateTime.now();
+  }
+
+  /// Check if daylight saving time is active
+  bool isDaylightSavingTime() {
+    final now = DateTime.now();
+    final january = DateTime(now.year, 1, 1);
+    final july = DateTime(now.year, 7, 1);
+
+    // Simple DST check - this is a basic implementation
+    // In production, you might want to use a more sophisticated approach
+    return now.isAfter(january.add(const Duration(days: 60))) &&
+        now.isBefore(july.add(const Duration(days: 90)));
+  }
+
+  /// Get appropriate time offset based on DST
+  Duration getTimeOffset() {
+    return isDaylightSavingTime() ? const Duration(hours: 1) : Duration.zero;
   }
 
   /// Ordered list of the six main prayers we display/schedule.
@@ -84,13 +128,62 @@ class PrayerTimesService {
       times.timeForPrayer(prayer);
 
   /// Returns a map of prayer names to times for rendering.
-  Map<Prayer, DateTime> getNamedTimes(PrayerTimes times) {
+  Map<Prayer, DateTime> getNamedTimes(PrayerTimes times, {Duration? offset}) {
     final Map<Prayer, DateTime> result = {};
     for (final Prayer p in displayPrayers) {
       final DateTime? t = times.timeForPrayer(p);
-      if (t != null) result[p] = t;
+      if (t != null) {
+        result[p] = offset != null ? t.add(offset) : t;
+      }
     }
     return result;
+  }
+
+  /// Apply time offset to prayer times
+  Map<Prayer, DateTime> applyOffset(
+    Map<Prayer, DateTime> times,
+    Duration offset,
+  ) {
+    return times.map((p, t) => MapEntry(p, t.add(offset)));
+  }
+
+  /// Get optimal calculation method based on location
+  static CalculationMethod getOptimalCalculationMethod(
+    double latitude,
+    double longitude,
+  ) {
+    // Simple geographic-based method selection
+    if (latitude > 20 && latitude < 40 && longitude > -120 && longitude < -60) {
+      // North America - use ISNA method
+      return CalculationMethod.muslim_world_league; // Fallback to MWL
+    } else if (latitude > 10 &&
+        latitude < 40 &&
+        longitude > 20 &&
+        longitude < 60) {
+      // Middle East and North Africa
+      return CalculationMethod.muslim_world_league;
+    } else if (latitude > 25 &&
+        latitude < 40 &&
+        longitude > 60 &&
+        longitude < 80) {
+      // South Asia
+      return CalculationMethod.karachi;
+    } else if (latitude > -40 &&
+        latitude < 10 &&
+        longitude > 110 &&
+        longitude < 160) {
+      // Southeast Asia
+      return CalculationMethod.singapore;
+    } else if (latitude > 40 &&
+        latitude < 70 &&
+        longitude > -10 &&
+        longitude < 40) {
+      // Europe - use France method
+      return CalculationMethod.muslim_world_league; // Fallback to MWL
+    } else {
+      // Default to Muslim World League
+      return CalculationMethod.muslim_world_league;
+    }
   }
 }
 
@@ -110,6 +203,7 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
   Prayer? _nextPrayer;
   Duration _countdown = Duration.zero;
   Timer? _timer;
+  DateTime? _lastUpdate;
 
   // Getters
   PrayerTimes? get todayTimes => _todayTimes;
@@ -117,6 +211,9 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
   Prayer? get currentPrayer => _currentPrayer;
   Prayer? get nextPrayer => _nextPrayer;
   Duration get countdown => _countdown;
+
+  // Dynamic summer offset based on DST detection
+  Duration get summerOffset => _prayerService.getTimeOffset();
 
   /// Initialize and start the provider
   Future<void> initialize() async {
@@ -137,6 +234,7 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
     try {
       final times = await _prayerService.getTodayPrayerTimes();
       _setTimes(times);
+      _lastUpdate = DateTime.now();
     } catch (e) {
       // Handle error silently
     }
@@ -147,14 +245,12 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
     _todayTimes = times;
 
     // Apply summer time offset
-    _namedTimes = _prayerService.getNamedTimes(times);
+    _namedTimes = _prayerService.getNamedTimes(times, offset: summerOffset);
 
     _refreshPrayers();
     notifyListeners();
   }
 
-  /// Apply time offset to prayer times
- 
   /// Refresh current and next prayer information
   void _refreshPrayers() {
     if (_todayTimes == null) return;
@@ -169,7 +265,7 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
             : null;
 
     if (nextTime != null && nextTime.isAfter(DateTime.now())) {
-      _countdown = nextTime.difference(DateTime.now());
+      _countdown = nextTime.add(summerOffset).difference(DateTime.now());
     } else {
       _countdown = Duration.zero;
     }
@@ -185,11 +281,13 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
 
   /// Update the countdown timer
   void _updateCountdown() {
+    // Check if we need to refresh for new day
+    autoRefreshIfNeeded();
+
     if (_nextPrayer != null && _todayTimes != null) {
       final nextTime = _prayerService.timeForPrayer(_todayTimes!, _nextPrayer!);
       if (nextTime != null) {
-        final adjustedTime = nextTime;
-
+        final adjustedTime = nextTime.add(summerOffset);
         if (adjustedTime.isAfter(DateTime.now())) {
           _countdown = adjustedTime.difference(DateTime.now());
           notifyListeners();
@@ -239,5 +337,24 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
   /// Refresh prayer times (for pull-to-refresh)
   Future<void> refresh() async {
     await _loadPrayerTimes();
+  }
+
+  /// Check if we need to refresh prayer times (new day)
+  bool shouldRefreshPrayerTimes() {
+    if (_todayTimes == null || _lastUpdate == null) return true;
+
+    final now = DateTime.now();
+
+    // Check if it's a new day
+    return now.day != _lastUpdate!.day ||
+        now.month != _lastUpdate!.month ||
+        now.year != _lastUpdate!.year;
+  }
+
+  /// Auto-refresh if needed
+  Future<void> autoRefreshIfNeeded() async {
+    if (shouldRefreshPrayerTimes()) {
+      await _loadPrayerTimes();
+    }
   }
 }

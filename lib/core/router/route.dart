@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
+import 'package:islami_app/core/router/router_transitions.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
@@ -11,7 +12,9 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubi
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/audio_recording_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
@@ -26,10 +29,8 @@ import 'package:islami_app/feature/home/ui/view/radio_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/reciters_screen.dart';
 import 'package:islami_app/feature/home/ui/view/sebha_screen.dart';
-import 'package:islami_app/feature/home/ui/view/tafsir_screen.dart';
 import 'package:islami_app/feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
-import 'package:islami_app/feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import 'package:islami_app/feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
@@ -44,12 +45,9 @@ class AppRouter {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.prayertimesRouter:
-        return MaterialPageRoute(builder: (_) => const PrayerTimesScreen());
+        return RouterTransitions.buildHorizontal(const PrayerTimesScreen());
       case AppRoutes.notificationViewRouter:
-        return MaterialPageRoute(
-          builder: (_) => const NotificationView(),
-          settings: settings,
-        );
+        return RouterTransitions.buildHorizontal(const NotificationView());
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
@@ -192,23 +190,6 @@ class AppRouter {
           },
         );
 
-      case AppRoutes.tafsirByQuranPageRouter:
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => sl<QuranWithTafsirCubit>(),
-                child: const TafsirScreen(),
-              ),
-        );
-
-      case AppRoutes.tafsirByQuranContentRouter:
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder:
-              (_) => TafsirContentView(
-                identifier: args?['identifier'] ?? "ar.muyassar",
-              ),
-        );
       case AppRoutes.recitersPageRouter:
         return MaterialPageRoute(
           builder:
@@ -217,11 +198,28 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<ReciterCubit>()..fetchReciters(),
                   ),
-                  BlocProvider(create: (context) => sl<AudioCubit>()),
+                  BlocProvider.value(value: sl<AudioCubit>()),
                 ],
                 child: const RecitersScreen(),
               ),
         );
+      case AppRoutes.recitersSurahListRouter:
+        final args = settings.arguments as Map<String, dynamic>?;
+        final moshaf = args?['moshaf'] as Moshaf?;
+        final name = args?['name'] as String?;
+
+        if (moshaf == null || name == null) {
+          throw ArgumentError('moshaf and name are required');
+        }
+
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<AudioCubit>(),
+                child: RecitersSurahList(moshaf: moshaf, name: name),
+              ),
+        );
+
       case AppRoutes.nowPlayingScreenRouter:
         final audioManager = settings.arguments as AudioManager;
         return MaterialPageRoute(

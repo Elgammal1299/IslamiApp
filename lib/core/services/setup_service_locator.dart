@@ -23,7 +23,6 @@ import '../../feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_random_cubit/azkar_random_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
-import '../../feature/home/ui/view_model/quran_with_tafsir_cubit/quran_with_tafsir_cubit.dart';
 import '../../feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -40,7 +39,6 @@ import '../../feature/notification/ui/view_model/cubit/notification_cubit.dart';
 import '../../feature/home/ui/view/azkar/data/repo/azkar_yawmi_repo.dart';
 import '../../feature/home/ui/view/azkar/data/repo/azkar_random_repo.dart';
 import '../../feature/home/ui/view/azkar/data/repo/azkar_repo.dart';
-import '../../feature/home/data/repo/quran_with_tafsir.dart';
 import '../../feature/home/data/repo/hadith_repo.dart';
 import '../../feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 
@@ -169,9 +167,7 @@ Future<void> setupServiceLocator() async {
     return AzkarRepo();
   });
 
-  sl.registerLazySingleton<QuranWithTafsirRepo>(() {
-    return QuranWithTafsirRepo(sl<TafsirService>());
-  });
+ 
 
   sl.registerLazySingleton<HadithRepo>(() {
     return HadithRepo();
@@ -211,10 +207,7 @@ Future<void> setupServiceLocator() async {
     return AzkarCubit(sl<AzkarRepo>());
   });
 
-  // Quran and Tafsir Cubits
-  sl.registerLazySingleton<QuranWithTafsirCubit>(() {
-    return QuranWithTafsirCubit(sl<QuranWithTafsirRepo>());
-  });
+
 
   sl.registerLazySingleton<TafsirCubit>(() {
     return TafsirCubit(sl<TafsirByAyahRepository>());

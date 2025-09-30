@@ -1,8 +1,10 @@
-
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'hadith_model.dart';
 
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class HadithModelAdapter extends TypeAdapter<HadithModel> {
   @override
@@ -32,4 +34,14 @@ class HadithModelAdapter extends TypeAdapter<HadithModel> {
       ..writeByte(2)
       ..write(obj.id);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is HadithModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

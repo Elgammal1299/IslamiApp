@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
@@ -12,6 +13,7 @@ class ReciterCubit extends Cubit<ReciterState> {
   List<Reciters> _allReciters = [];
   List<Reciters> _filteredReciters = [];
   String _currentSearchQuery = '';
+  bool _isLoadingMore = false; // Prevent multiple simultaneous load requests
 
   ReciterCubit(this.repository) : super(ReciterInitial());
 
@@ -40,13 +42,20 @@ class ReciterCubit extends Cubit<ReciterState> {
 
         // Load first page
         final firstPageReciters = _getPageData(1);
+        final hasMoreData = firstPageReciters.length < _filteredReciters.length;
+
+        // Debug information
+        print(
+          '🚀 Initial load: ${firstPageReciters.length} items, Total: ${_filteredReciters.length}, HasMore: $hasMoreData',
+        );
+
         if (!isClosed) {
           emit(
             ReciterLoaded(
               reciters: firstPageReciters,
               allReciters: _allReciters,
               currentPage: 1,
-              hasMoreData: firstPageReciters.length == pageSize,
+              hasMoreData: hasMoreData,
               isRefreshing: refresh,
             ),
           );
@@ -57,9 +66,18 @@ class ReciterCubit extends Cubit<ReciterState> {
 
   void loadNextPage() async {
     final currentState = state;
-    if (currentState is ReciterLoaded &&
-        currentState.hasMoreData &&
-        !isClosed) {
+
+    // Prevent multiple simultaneous load requests
+    if (_isLoadingMore ||
+        currentState is! ReciterLoaded ||
+        !currentState.hasMoreData ||
+        isClosed) {
+      return;
+    }
+
+    _isLoadingMore = true;
+
+    try {
       emit(
         ReciterLoadingMore(
           currentReciters: currentState.reciters,
@@ -76,6 +94,17 @@ class ReciterCubit extends Cubit<ReciterState> {
       final nextPage = currentState.currentPage + 1;
       final nextPageReciters = _getPageData(nextPage);
 
+      // Debug information
+      print('📄 Loading page $nextPage: ${nextPageReciters.length} items');
+      print(
+        '📊 Current loaded: ${currentState.reciters.length}, Total available: ${_filteredReciters.length}',
+      );
+
+      // Check if there are actually more items to load
+      final hasMoreItems =
+          (currentState.reciters.length + nextPageReciters.length) <
+          _filteredReciters.length;
+
       final updatedReciters = [...currentState.reciters, ...nextPageReciters];
 
       if (!isClosed) {
@@ -84,10 +113,12 @@ class ReciterCubit extends Cubit<ReciterState> {
             reciters: updatedReciters,
             allReciters: currentState.allReciters,
             currentPage: nextPage,
-            hasMoreData: nextPageReciters.length == pageSize,
+            hasMoreData: hasMoreItems,
           ),
         );
       }
+    } finally {
+      _isLoadingMore = false;
     }
   }
 
@@ -113,13 +144,15 @@ class ReciterCubit extends Cubit<ReciterState> {
 
     // Reset to first page with filtered results
     final firstPageReciters = _getPageData(1);
+    final hasMoreData = firstPageReciters.length < _filteredReciters.length;
+
     if (!isClosed) {
       emit(
         ReciterLoaded(
           reciters: firstPageReciters,
           allReciters: _allReciters,
           currentPage: 1,
-          hasMoreData: firstPageReciters.length == pageSize,
+          hasMoreData: hasMoreData,
         ),
       );
     }

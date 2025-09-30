@@ -17,8 +17,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
-
     }
+
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
         coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
@@ -27,53 +27,43 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
-    
-
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.wartaqi.islamiapp"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23
-        targetSdk = flutter.targetSdkVersion
-        versionCode = 3
+        minSdk = flutter.minSdkVersion   
+        targetSdk = flutter.targetSdkVersion 
+        versionCode = 4
         versionName = "1.0.2"
-  
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file("islami-keystore.jks") 
+            storeFile = file("islami-keystore.jks")
             storePassword = "Strong#1299"
             keyAlias = "islami"
             keyPassword = "Strong#1299"
-        } 
+        }
     }
 
     buildTypes {
         debug {
-
+            // أي إعدادات خاصة بالـ debug
         }
-       
+
         release {
-        
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            
-            // Add build optimizations
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
             ndk {
-    debugSymbolLevel = "FULL"
-}
-
+                debugSymbolLevel = "FULL"
+            }
         }
-
-
-
     }
-   
 }
 
 flutter {

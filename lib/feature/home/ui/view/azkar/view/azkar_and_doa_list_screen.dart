@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_dialog_rawy.dart';

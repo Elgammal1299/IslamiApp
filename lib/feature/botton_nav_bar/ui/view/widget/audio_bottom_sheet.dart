@@ -6,6 +6,7 @@ import 'package:islami_app/core/extension/theme_text.dart';
 class AudioBottomSheet extends StatefulWidget {
   final String audioUrl;
   final String ayah;
+
   const AudioBottomSheet({
     super.key,
     required this.audioUrl,
@@ -13,7 +14,7 @@ class AudioBottomSheet extends StatefulWidget {
   });
 
   @override
-  _AudioBottomSheetState createState() => _AudioBottomSheetState();
+  State<AudioBottomSheet> createState() => _AudioBottomSheetState();
 }
 
 class _AudioBottomSheetState extends State<AudioBottomSheet> {
@@ -26,44 +27,57 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   void initState() {
     super.initState();
 
-    // الاستماع لتغير مدة التشغيل الكلية
+    // مدة الملف
     _audioPlayer.onDurationChanged.listen((newDuration) {
-      setState(() {
-        _duration = newDuration;
-      });
+      if (!mounted) return;
+      setState(() => _duration = newDuration);
     });
 
-    // الاستماع لتغير مدة التشغيل الحالية
+    // موقع التشغيل الحالي
     _audioPlayer.onPositionChanged.listen((newPosition) {
-      setState(() {
-        _position = newPosition;
-      });
+      if (!mounted) return;
+      setState(() => _position = newPosition);
     });
 
-    // يمكنك الاستماع لإنهاء التشغيل إذا أردت
-    _audioPlayer.onPlayerComplete.listen((event) {
+    // عند انتهاء الملف
+    _audioPlayer.onPlayerComplete.listen((_) {
+      if (!mounted) return;
       setState(() {
         _isPlaying = false;
         _position = Duration.zero;
+      });
+    });
+
+    // متابعة حالة التشغيل
+    _audioPlayer.onPlayerStateChanged.listen((state) {
+      if (!mounted) return;
+      setState(() {
+        _isPlaying = state == PlayerState.playing;
       });
     });
   }
 
   @override
   void dispose() {
+    _audioPlayer.stop();
     _audioPlayer.dispose();
     super.dispose();
   }
 
-  void _togglePlay() async {
+  Future<void> _togglePlay() async {
     if (_isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(UrlSource(widget.audioUrl));
+      try {
+        await _audioPlayer.play(UrlSource(widget.audioUrl));
+      } catch (e) {
+        debugPrint("❌ Audio error: $e");
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("تعذر تشغيل الملف الصوتي")),
+        );
+      }
     }
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
   }
 
   void _seekTo(double seconds) {
@@ -73,57 +87,62 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                textDirection: TextDirection.rtl,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // الآية
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  widget.ayah,
+                  textDirection: TextDirection.rtl,
+                  style: context.textTheme.titleLarge,
+                  textAlign: TextAlign.justify,
+                ),
+              ),
 
-                widget.ayah,
+              // زر التشغيل
+              IconButton(
+                icon: Icon(
+                  _isPlaying ? Icons.pause : Icons.play_arrow,
+                  size: 40,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                onPressed: _togglePlay,
+              ),
+
+              // شريط التقدم
+              Slider(
+                activeColor: AppColors.primary,
+                inactiveColor: AppColors.secondary,
+                min: 0,
+                max:
+                    _duration.inSeconds > 0
+                        ? _duration.inSeconds.toDouble()
+                        : 1,
+                value:
+                    _position.inSeconds
+                        .clamp(0, _duration.inSeconds)
+                        .toDouble(),
+                onChanged: (value) => _seekTo(value),
+              ),
+
+              // الوقت الحالي / الكلي
+              Text(
+                "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
                 style: context.textTheme.titleLarge,
-                textAlign: TextAlign.justify,
               ),
-            ),
-            // زر التشغيل/الإيقاف المؤقت
-            IconButton(
-              icon: Icon(
-                _isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 40,
-                color: Theme.of(context).primaryColorDark,
-              ),
-              onPressed: _togglePlay,
-            ),
-            // شريط التمرير الذي يعرض حالة التشغيل ويسمح بالتقديم أو التأخير
-            Slider(
-              activeColor: AppColors.primary,
-              inactiveColor: AppColors.secondary,
-              min: 0,
-              max: _duration.inSeconds.toDouble(),
-              value: _position.inSeconds.toDouble().clamp(
-                0,
-                _duration.inSeconds.toDouble(),
-              ),
-              onChanged: (value) {
-                _seekTo(value);
-              },
-            ),
-            // عرض الوقت الحالي والمدى الكلي
-            Text(
-              "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
-              style: context.textTheme.titleLarge,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // دالة لتنسيق مدة التشغيل في شكل hh:mm:ss
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final hours = duration.inHours;

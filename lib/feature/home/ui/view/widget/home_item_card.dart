@@ -34,7 +34,7 @@ class HomeItemCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(color: Theme.of(context).cardColor),
                   padding: const EdgeInsets.all(12),
-                  child: Image.asset(item.image, fit: BoxFit.contain),
+                  child: Image.asset(item.image, fit: BoxFit.contain,semanticLabel: 'sssssssss',),
                 ),
               ),
 

@@ -43,7 +43,6 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
   final List<Data> tafsirIdentifiers = [];
   late String audioURL;
   late AudioPlayer audioPlayer;
-
   @override
   void initState() {
     super.initState();
@@ -59,8 +58,107 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
     super.dispose();
   }
 
+  // Future<void> _shareAyahAsImage(
+  //   String ayahText,
+  //   String surahName,
+  //   int verseNumber,
+  //   int totalVerses,
+  //   BuildContext context,
+  // ) async {
+  //   Navigator.pop(context);
+  //   try {
+  //     final recorder = ui.PictureRecorder();
+  //     final canvas = Canvas(recorder);
+  //     const double padding = 24.0;
+
+  //     // إعدادات نص الآية
+  //     const ayahStyle = TextStyle(
+  //       fontSize: 35,
+  //       color: Colors.black,
+  //       fontWeight: FontWeight.bold,
+  //       height: 2.0, // زيادة المسافة بين السطور
+  //     );
+
+  //     // إعدادات نص الفريم العلوي
+  //     const headerStyle = TextStyle(
+  //       fontSize: 22,
+  //       fontWeight: FontWeight.bold,
+  //       color: Colors.black87,
+  //     );
+
+  //     // رسم الفريم العلوي
+  //     final headerText = 'سورة $surahName - آية $verseNumber';
+  //     final headerSpan = TextSpan(text: headerText, style: headerStyle);
+  //     final headerPainter = TextPainter(
+  //       text: headerSpan,
+
+  //       textAlign: TextAlign.right,
+  //       textDirection: TextDirection.ltr,
+  //     );
+  //     headerPainter.layout(maxWidth: 800);
+
+  //     // رسم نص الآية
+  //     final ayahSpan = TextSpan(text: ayahText, style: ayahStyle);
+  //     final ayahPainter = TextPainter(
+  //       text: ayahSpan,
+  //       textDirection: TextDirection.rtl,
+  //       textAlign: TextAlign.justify,
+  //     );
+  //     ayahPainter.layout(maxWidth: 800);
+
+  //     // حساب حجم الصورة
+  //     final width =
+  //         (ayahPainter.width > headerPainter.width
+  //             ? ayahPainter.width
+  //             : headerPainter.width) +
+  //         padding * 2;
+  //     final height = headerPainter.height + ayahPainter.height + padding * 5;
+
+  //     // رسم الخلفية البيضاء
+  //     final paint = Paint()..color = Colors.white;
+  //     canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
+
+  //     // رسم الفريم العلوي (مثلاً باللون الرمادي الفاتح)
+  //     final headerBgPaint = Paint()..color = Colors.grey.shade200;
+  //     canvas.drawRect(
+  //       Rect.fromLTWH(0, 0, width, headerPainter.height + padding * 1.2),
+  //       headerBgPaint,
+  //     );
+
+  //     // رسم نص الفريم العلوي
+  //     headerPainter.paint(canvas, const Offset(padding, padding / 2));
+
+  //     // رسم نص الآية أسفل الفريم
+  //     ayahPainter.paint(
+  //       canvas,
+  //       Offset(padding, headerPainter.height + padding * 2),
+  //     );
+
+  //     // تحويل الرسم إلى صورة
+  //     final picture = recorder.endRecording();
+  //     final img = await picture.toImage(width.toInt(), height.toInt());
+  //     final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+  //     final pngBytes = byteData!.buffer.asUint8List();
+
+  //     // حفظ الصورة مؤقتًا
+  //     final tempDir = await getTemporaryDirectory();
+  //     final file = await File('${tempDir.path}/ayah.png').create();
+  //     await file.writeAsBytes(pngBytes);
+
+  //     // مشاركة الصورة
+  //     await Share.shareXFiles([XFile(file.path)], text: 'الآية');
+  //   } catch (e) {
+  //     print('Error sharing ayah image: $e');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('حدث خطأ أثناء مشاركة الآية')),
+  //     );
+  //   }
+  // }
+
   @override
   m.Widget build(m.BuildContext context) {
+    // final ayahText = quran.getVerse(widget.surah, widget.verse);
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -112,6 +210,18 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
               ).showSnackBar(const SnackBar(content: Text('تم نسخ الآية')));
             },
           ),
+          // ListTile(
+          //   leading: const Icon(Icons.image),
+          //   title: const Text('مشاركة الآية كصورة'),
+          //   onTap:
+          //       () => _shareAyahAsImage(
+          //         ayahText,
+          //         quran.getSurahNameArabic(widget.surah),
+          //         widget.verse,
+          //         quran.getVerseCount(widget.surah),
+          //         context,
+          //       ),
+          // ),
           FutureBuilder<bool>(
             future: sl<BookmarkManager>().isBookmarked(
               widget.surah,

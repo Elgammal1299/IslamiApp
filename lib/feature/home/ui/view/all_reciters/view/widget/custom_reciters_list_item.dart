@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
-import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
-import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
-import 'package:islami_app/core/services/setup_service_locator.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 
 class CustomRecitersListItem extends StatelessWidget {
   const CustomRecitersListItem({
@@ -53,21 +50,16 @@ class CustomRecitersListItem extends StatelessWidget {
                         Icons.play_arrow,
                         color: AppColors.white,
                       ),
-                      onTap:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return BlocProvider(
-                                  create: (context) => sl<AudioCubit>(),
-                                  child: RecitersSurahList(
-                                    moshaf: moshaf,
-                                    name: reciter.name ?? '',
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.recitersSurahListRouter,
+                          arguments: {
+                            'moshaf': moshaf,
+                            'name': reciter.name ?? '',
+                          },
+                        );
+                      },
                     );
                   }).toList(),
             ),
