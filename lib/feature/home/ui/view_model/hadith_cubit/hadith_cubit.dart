@@ -14,7 +14,6 @@ class HadithCubit extends Cubit<HadithState> {
     if (!isClosed) emit(HadithLoading());
     final result = await jsonRepository.getHadith(name);
     if (isClosed) return;
-
     result.fold(
       (l) {
         if (!isClosed) emit(HadithError(l.toString()));
