@@ -137,7 +137,7 @@ class QuranAppState {
 
 // Configuration class for page-specific settings
 class PageConfig {
-  static const int totalPages = 604 + 1;
+  static const int totalPages = 604;
   static const Set<int> specialPages = {1, 2, 187};
   static const Set<int> centerAlignedPages = {1, 2};
   static const Set<int> largeFontPages = {1, 2};
@@ -211,8 +211,11 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
   void _initializeApp() {
     _appState = QuranAppState();
+    // Adjust for zero-based indexing (page 1 = index 0)
     _appState.setCurrentPage(widget.pageNumber);
-    _pageController = PageController(initialPage: widget.pageNumber);
+    _pageController = PageController(
+      initialPage: widget.pageNumber - 1,
+    ); // Subtract 1
 
     WidgetsBinding.instance.addObserver(this);
     _configureSystemUI();
@@ -362,20 +365,19 @@ class _QuranViewScreenState extends State<QuranViewScreen>
   }
 
   void _handlePageChanged(int pageIndex) async {
-    if (_appState.currentPage != pageIndex) {
-      _appState.setCurrentPage(pageIndex);
+    final actualPage = pageIndex + 1; // Convert index to actual page number
+
+    if (_appState.currentPage != actualPage) {
+      _appState.setCurrentPage(actualPage);
       _appState.setSelectedSpan("");
       _appState.verseHighlighter.clear();
 
-      _loadFontsForPage(pageIndex);
+      _loadFontsForPage(actualPage);
 
-      // ✅ احسب رقم صفحة المصحف الفعلي
-      final pageNumber = pageIndex; // عدّلها لو عندك ترقيم مختلف
+      // ✅ Get first ayah on this page
+      final pos = QuranPageIndex.firstAyahOnPage(actualPage);
 
-      // ✅ هات أول آية في الصفحة دي من الفهرس
-      final pos = QuranPageIndex.firstAyahOnPage(pageNumber);
-
-      // ✅ خزّن آخر قراءة باستخدام الكيوبت
+      // ✅ Store reading progress
       try {
         final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
           context,
@@ -384,11 +386,11 @@ class _QuranViewScreenState extends State<QuranViewScreen>
         await readingProgressCubit.updateReadingProgress(
           pos.surah,
           pos.ayah,
-          pageNumber,
+          actualPage,
         );
 
         debugPrint(
-          '✅ Page change recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $pageNumber',
+          '✅ Page change recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $actualPage',
         );
       } catch (e) {
         debugPrint('❌ Error recording page change: $e');
@@ -610,7 +612,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     double screenHeight,
     ThemeData theme,
   ) {
-    if (pageIndex == 0) return _buildPlaceholderPage();
+    final actualPage = pageIndex + 1; // Convert index to actual page number
 
     return RepaintBoundary(
       child: Scaffold(
@@ -620,7 +622,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
           child: GestureDetector(
             onTap: () {
               setState(() {
-                _showAppBar = !_showAppBar; // toggle
+                _showAppBar = !_showAppBar;
                 _showBottomSlider = !_showBottomSlider;
               });
             },
@@ -629,26 +631,25 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                 // النص والمحتوى
                 m.Padding(
                   padding: EdgeInsets.only(right: 5.w, left: 5.w, bottom: 10.h),
-
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      if (PageConfig.specialPages.contains(pageIndex))
+                      if (PageConfig.specialPages.contains(actualPage))
                         SizedBox(height: 20.h),
-                      _buildHeaderWidgets(pageIndex),
+                      _buildHeaderWidgets(actualPage),
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(
                             left: 6.w,
                             right: 6.w,
                             top:
-                                PageConfig.specialPages.contains(pageIndex)
+                                PageConfig.specialPages.contains(actualPage)
                                     ? 0
                                     : 30.h,
                           ),
                           child: SizedBox(
                             width: double.infinity,
-                            child: _buildOptimizedQuranText(pageIndex, theme),
+                            child: _buildOptimizedQuranText(actualPage, theme),
                           ),
                         ),
                       ),
@@ -666,7 +667,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       padding: const EdgeInsets.all(8.0),
                       child: CustomSurahFramWidget(
                         widget: widget,
-                        index: pageIndex,
+                        index: actualPage,
                       ),
                     ),
                   ),
@@ -680,7 +681,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      color: Colors.black.withOpacity(0.6), // خلفية شفافة بسيطة
+                      color: Colors.black.withOpacity(0.6),
                       child: ValueListenableBuilder<int>(
                         valueListenable: _appState.currentPageNotifier,
                         builder: (context, currentPage, _) {
@@ -699,24 +700,18 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                                   fontSize: 16,
                                 ),
                               ),
-
                               Slider(
-                                value: currentPage.clamp(1, 605).toDouble(),
+                                value: currentPage.clamp(1, 604).toDouble(),
                                 min: 1,
-                                max: 605,
-                                divisions: 604,
-                                // 👇 يظهر اسم السورة + الصفحة عند السحب
-                                // label:
-                                //     "سورة $surahName - صفحة ${currentPage - 1}",
+                                max: 604,
+                                divisions: 603,
                                 onChanged: (value) {
                                   _appState.currentPageNotifier.value =
                                       value.toInt();
                                 },
                                 onChangeEnd: (value) {
-                                  final targetPage =
-                                      value.toInt() -
-                                      1; // PageView صفرية البداية
-                                  if (targetPage >= 1 && targetPage < 605) {
+                                  final targetPage = value.toInt() - 1;
+                                  if (targetPage >= 0 && targetPage < 604) {
                                     _pageController.animateToPage(
                                       targetPage,
                                       duration: const Duration(
@@ -763,7 +758,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     final them = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        // ✅ Record reading position before navigating back
         await _recordFinalReadingPosition();
         return true;
       },
@@ -775,7 +769,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
               padEnds: false,
               controller: _pageController,
               scrollDirection: Axis.horizontal,
-              physics: const PageScrollPhysics(),
+              physics: const BouncingScrollPhysics(), // ✅ Changed here
               onPageChanged: _handlePageChanged,
               itemCount: PageConfig.totalPages,
               itemBuilder:

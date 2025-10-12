@@ -5,8 +5,8 @@ import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:dio/dio.dart';
 
 class HadithService {
-  static const String _baseUrl ="https://raw.githubusercontent.com/ahmedAbdElsasalm/hadith/refs/heads/main/"  ;
-    
+  static const String _baseUrl =
+      "https://raw.githubusercontent.com/Elgammal1299/hadith/main/";
 
   static Future<List<HadithModel>> fetchHadith(String endpoint) async {
     final String url = '$_baseUrl$endpoint.json';
