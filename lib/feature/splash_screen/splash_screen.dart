@@ -16,9 +16,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 // Notifications
-import 'package:timezone/data/latest.dart' as tz;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

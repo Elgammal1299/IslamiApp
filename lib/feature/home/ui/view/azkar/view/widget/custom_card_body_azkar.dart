@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 import 'package:share_plus/share_plus.dart';
 

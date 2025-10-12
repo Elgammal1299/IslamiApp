@@ -159,6 +159,9 @@ class PageConfig {
 
     // على الموبايلات الكبيرة نزود المسافة بين السطور
     if (screenHeight < 900) {
+      if (pageIndex == 506 || pageIndex == 207) {
+        return 2.35;
+      }
       return largeFontPages.contains(pageIndex) ? 2 : 2.2;
     }
 
@@ -630,7 +633,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
               children: [
                 // النص والمحتوى
                 m.Padding(
-                  padding: EdgeInsets.only(right: 5.w, left: 5.w, bottom: 10.h),
+                  padding: EdgeInsets.only(right: 5.w, left: 5.w),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -645,7 +648,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                             top:
                                 PageConfig.specialPages.contains(actualPage)
                                     ? 0
-                                    : 30.h,
+                                    : 20.h,
                           ),
                           child: SizedBox(
                             width: double.infinity,
@@ -736,21 +739,21 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     );
   }
 
-  Widget _buildPlaceholderPage() {
-    return RepaintBoundary(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            width: 1,
-            height: double.infinity,
-            color: Colors.red,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildPlaceholderPage() {
+  //   return RepaintBoundary(
+  //     child: Align(
+  //       alignment: Alignment.centerRight,
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16),
+  //         child: Container(
+  //           width: 1,
+  //           height: double.infinity,
+  //           color: Colors.red,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
