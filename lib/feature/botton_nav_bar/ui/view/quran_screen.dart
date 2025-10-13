@@ -526,8 +526,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                     pageIndex,
                     MediaQuery.of(context).size.height,
                   ),
-
-                  // height: PageConfig.getLineHeight(pageIndex),
                   letterSpacing: 0,
                   wordSpacing: 0,
                   fontFamily: fontFamily,
