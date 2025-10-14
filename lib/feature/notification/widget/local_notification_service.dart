@@ -89,6 +89,24 @@ class LocalNotificationService {
               : eveningTime,
       repeat: DateTimeComponents.time,
     );
+    int daysUntilFriday = DateTime.friday - now.weekday;
+    if (daysUntilFriday < 0) daysUntilFriday += 7; 
+
+    final fridayTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      15,
+      
+    ).add(Duration(days: daysUntilFriday));
+
+    await scheduleNotification(
+      id: 3,
+      title: 'جمعة مباركة 🌸',
+      body: 'لا تنس قرءاة سورة الكهف ❤️',
+      dateTime: fridayTime,
+      repeat: DateTimeComponents.dayOfWeekAndTime, // تكرار أسبوعي
+    );
   }
 
   /// 🔁 جدولة إشعار مخصص

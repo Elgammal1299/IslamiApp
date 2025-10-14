@@ -28,14 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
-  if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
-    Hive.registerAdapter(HadithModelAdapter());
-  }
+    if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
+      Hive.registerAdapter(HadithModelAdapter());
+    }
 
-
-  if (!Hive.isBoxOpen('hadiths')) {
-    Hive.openBox<List>('hadiths');
-  }
+    if (!Hive.isBoxOpen('hadiths')) {
+      Hive.openBox<List>('hadiths');
+    }
   }
 
   @override
@@ -150,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
     );
@@ -264,7 +264,6 @@ class NextPrayerWidget extends StatelessWidget {
                   color: AppColors.primary,
                 ),
               ),
-          
             ],
           ),
         );
