@@ -40,7 +40,7 @@ class LocalNotificationService {
     final launchDetails = await _plugin.getNotificationAppLaunchDetails();
     if ((launchDetails?.didNotificationLaunchApp ?? false) &&
         navigatorKey.currentContext != null) {
-      handleNotification(navigatorKey.currentContext!, {'source': 'local'});
+      handleNotification(navigatorKey.currentContext!, {'source': 'firebase'});
     }
 
     // 3. طلب صلاحيات Android 13+
@@ -90,14 +90,13 @@ class LocalNotificationService {
       repeat: DateTimeComponents.time,
     );
     int daysUntilFriday = DateTime.friday - now.weekday;
-    if (daysUntilFriday < 0) daysUntilFriday += 7; 
+    if (daysUntilFriday < 0) daysUntilFriday += 7;
 
     final fridayTime = DateTime(
       now.year,
       now.month,
       now.day,
       15,
-      
     ).add(Duration(days: daysUntilFriday));
 
     await scheduleNotification(
