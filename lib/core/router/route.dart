@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/router/router_transitions.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/search_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
@@ -144,6 +145,14 @@ class AppRouter {
               ),
         );
 
+      case AppRoutes.searchRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => sl<SurahCubit>()..getSurahs(),
+                child: const SearchScreen(),
+              ),
+        );
       case AppRoutes.hadithDetailsRouter:
         final hadithCubit = settings.arguments as HadithCubit;
         return MaterialPageRoute(

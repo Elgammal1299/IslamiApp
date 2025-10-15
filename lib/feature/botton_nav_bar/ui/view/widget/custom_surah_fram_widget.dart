@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:quran/quran.dart';
 
@@ -24,6 +25,7 @@ class CustomSurahFramWidget extends StatelessWidget
     int juz = getJuzNumber(surah, ayah);
 
     return AppBar(
+      centerTitle: false,
       elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.white),
@@ -40,7 +42,7 @@ class CustomSurahFramWidget extends StatelessWidget
       ),
       actions: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
@@ -56,6 +58,16 @@ class CustomSurahFramWidget extends StatelessWidget
                 fontWeight: FontWeight.w500,
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+
+          child: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.searchRouter);
+            },
+            icon: const Icon(Icons.search),
           ),
         ),
       ],
