@@ -29,7 +29,7 @@ class LocalNotificationService {
         try {
           if (navigatorKey.currentContext != null) {
             handleNotification(navigatorKey.currentContext!, {
-              'source': 'local',
+              'source': 'firebase',
             });
           }
         } catch (_) {}
