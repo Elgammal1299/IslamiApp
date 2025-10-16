@@ -21,6 +21,7 @@ import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
@@ -45,6 +46,8 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.splasahRouter:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutes.downloadsRouter:
+        return MaterialPageRoute(builder: (_) => const DownloadsScreen());
       case AppRoutes.prayertimesRouter:
         return RouterTransitions.buildHorizontal(const PrayerTimesScreen());
       case AppRoutes.notificationViewRouter:

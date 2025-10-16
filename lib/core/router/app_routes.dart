@@ -24,4 +24,5 @@ class AppRoutes {
   static const nowPlayingScreenRouter = '/NowPlayingScreen';
   static const prayertimesRouter = '/PrayertimesScreen';
   static const searchRouter = '/searchScreen';
+  static const downloadsRouter = '/DownloadsScreen';
 }
