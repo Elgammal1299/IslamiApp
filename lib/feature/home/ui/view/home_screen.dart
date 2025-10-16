@@ -10,7 +10,6 @@ import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
-import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:quran/quran.dart' as quran;
 

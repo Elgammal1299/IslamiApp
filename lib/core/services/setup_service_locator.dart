@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Services
@@ -121,6 +123,21 @@ Future<void> setupServiceLocator() async {
     );
   });
 
+  sl.registerLazySingleton<HiveService<DownloadModel>>(() {
+    return HiveService.instanceFor<DownloadModel>(
+      boxName: 'download',
+      enableLogging: true,
+    );
+  });
+
+  // بعد كده سجل DownloadCubit واستخدم HiveService اللي اتسجل
+  sl.registerLazySingleton<DownloadCubit>(() {
+    return DownloadCubit(
+      DownloadManager(),
+      sl<HiveService<DownloadModel>>(), // استدعاء الـ singleton اللي اتسجل
+    );
+  });
+
   sl.registerLazySingleton<HiveService<Map>>(() {
     return HiveService.instanceFor<Map>(
       boxName: 'user_data',
@@ -167,8 +184,6 @@ Future<void> setupServiceLocator() async {
     return AzkarRepo();
   });
 
- 
-
   sl.registerLazySingleton<HadithRepo>(() {
     return HadithRepo();
   });
@@ -206,8 +221,6 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<AzkarCubit>(() {
     return AzkarCubit(sl<AzkarRepo>());
   });
-
-
 
   sl.registerLazySingleton<TafsirCubit>(() {
     return TafsirCubit(sl<TafsirByAyahRepository>());

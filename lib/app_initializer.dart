@@ -72,6 +72,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:islami_app/core/services/setup_service_locator.dart';
+import 'package:islami_app/core/services/hive_service.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
@@ -128,10 +130,20 @@ class AppInitializer {
 
     // ✅ 8. Initialize Hive
     await Hive.initFlutter();
+    // Register Hive adapters
+    try {
+      if (!Hive.isAdapterRegistered(31)) {
+        Hive.registerAdapter(DownloadModelAdapter());
+      }
+    } catch (_) {}
 
     // ✅ 9. Setup service locator
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
+    // Ensure the downloads Hive box is opened before creating DownloadCubit
+    try {
+      await sl<HiveService<DownloadModel>>().init();
+    } catch (_) {}
 
     // ✅ 10. Set orientations
     await SystemChrome.setPreferredOrientations([
