@@ -11,6 +11,10 @@ class DownloadInitial extends DownloadState {
   const DownloadInitial();
 }
 
+class DownloadLoading extends DownloadState {
+  const DownloadLoading();
+}
+
 class DownloadLoaded extends DownloadState {
   final List<DownloadModel> downloads;
 
@@ -32,6 +36,14 @@ class DownloadInProgress extends DownloadState {
   });
 
   double get percentage => total > 0 ? (progress / total) * 100 : 0;
+
+  String get formattedPercentage => '${percentage.toStringAsFixed(0)}%';
+
+  String get formattedProgress {
+    final progressMB = (progress / (1024 * 1024)).toStringAsFixed(2);
+    final totalMB = (total / (1024 * 1024)).toStringAsFixed(2);
+    return '$progressMB / $totalMB MB';
+  }
 
   @override
   List<Object?> get props => [id, progress, total];
@@ -57,12 +69,13 @@ class DownloadFailed extends DownloadState {
 }
 
 class DownloadAlreadyExists extends DownloadState {
+  final String id;
   final String message;
 
-  const DownloadAlreadyExists(this.message);
+  const DownloadAlreadyExists(this.id, this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [id, message];
 }
 
 class DownloadDeleted extends DownloadState {
@@ -72,4 +85,26 @@ class DownloadDeleted extends DownloadState {
 
   @override
   List<Object?> get props => [id];
+}
+
+class DownloadAllDeleted extends DownloadState {
+  const DownloadAllDeleted();
+}
+
+class DownloadCancelled extends DownloadState {
+  final String id;
+
+  const DownloadCancelled(this.id);
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class DownloadError extends DownloadState {
+  final String message;
+
+  const DownloadError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

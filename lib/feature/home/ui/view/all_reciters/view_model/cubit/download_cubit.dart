@@ -10,19 +10,21 @@ class DownloadCubit extends Cubit<DownloadState> {
   final HiveService<DownloadModel> _hiveService;
 
   DownloadCubit(this._downloadManager, this._hiveService)
-    : super(const DownloadInitial()) {
+      : super(const DownloadInitial()) {
     _loadDownloadedFiles();
   }
 
   List<DownloadModel> _downloadedFiles = [];
+  final Map<String, double> _downloadProgress = {};
 
   void _loadDownloadedFiles() async {
     try {
+      emit(const DownloadLoading());
       final files = await _hiveService.getAll();
       _downloadedFiles = files;
       emit(DownloadLoaded(_downloadedFiles));
     } catch (e) {
-      print('Error loading downloads: $e');
+      emit(DownloadError('فشل تحميل الملفات: ${e.toString()}'));
     }
   }
 
@@ -35,10 +37,13 @@ class DownloadCubit extends Cubit<DownloadState> {
     try {
       // Check if already downloaded
       if (_isAlreadyDownloaded(id)) {
-        emit(const DownloadAlreadyExists('هذا الملف محمل بالفعل'));
+        emit(DownloadAlreadyExists(id, 'هذا الملف محمل بالفعل'));
+        emit(DownloadLoaded(_downloadedFiles));
         return;
       }
 
+      // Initialize progress
+      _downloadProgress[id] = 0.0;
       emit(DownloadInProgress(id: id, progress: 0, total: 1));
 
       final filePath = await _downloadManager.downloadFile(
@@ -46,12 +51,16 @@ class DownloadCubit extends Cubit<DownloadState> {
         filename: id,
         onProgress: (count, total) {
           if (!isClosed) {
+            final percentage = (count / total * 100).clamp(0.0, 100.0);
+            _downloadProgress[id] = percentage;
             emit(DownloadInProgress(id: id, progress: count, total: total));
           }
         },
         onError: (error) {
           if (!isClosed) {
+            _downloadProgress.remove(id);
             emit(DownloadFailed(id: id, error: error));
+            emit(DownloadLoaded(_downloadedFiles));
           }
         },
       );
@@ -73,14 +82,17 @@ class DownloadCubit extends Cubit<DownloadState> {
       // Save to Hive
       await _hiveService.put(id, downloadModel);
       _downloadedFiles.add(downloadModel);
+      _downloadProgress.remove(id);
 
       if (!isClosed) {
         emit(DownloadCompleted(downloadModel));
         emit(DownloadLoaded(_downloadedFiles));
       }
     } catch (e) {
+      _downloadProgress.remove(id);
       if (!isClosed) {
         emit(DownloadFailed(id: id, error: 'فشل التحميل: ${e.toString()}'));
+        emit(DownloadLoaded(_downloadedFiles));
       }
     }
   }
@@ -91,10 +103,12 @@ class DownloadCubit extends Cubit<DownloadState> {
       await _downloadManager.deleteFile(download.localPath);
       await _hiveService.delete(id);
       _downloadedFiles.removeWhere((d) => d.id == id);
+      _downloadProgress.remove(id);
       emit(DownloadDeleted(id));
       emit(DownloadLoaded(_downloadedFiles));
     } catch (e) {
-      print('Error deleting download: $e');
+      emit(DownloadError('فشل حذف الملف: ${e.toString()}'));
+      emit(DownloadLoaded(_downloadedFiles));
     }
   }
 
@@ -105,10 +119,20 @@ class DownloadCubit extends Cubit<DownloadState> {
         await _hiveService.delete(download.id);
       }
       _downloadedFiles.clear();
+      _downloadProgress.clear();
+      emit(const DownloadAllDeleted());
       emit(DownloadLoaded(_downloadedFiles));
     } catch (e) {
-      print('Error deleting all downloads: $e');
+      emit(DownloadError('فشل حذف جميع الملفات: ${e.toString()}'));
+      emit(DownloadLoaded(_downloadedFiles));
     }
+  }
+
+  void cancelDownload(String id) {
+    _downloadManager.cancelCurrentDownload();
+    _downloadProgress.remove(id);
+    emit(DownloadCancelled(id));
+    emit(DownloadLoaded(_downloadedFiles));
   }
 
   bool _isAlreadyDownloaded(String id) {
@@ -116,6 +140,10 @@ class DownloadCubit extends Cubit<DownloadState> {
   }
 
   bool isDownloaded(String id) => _isAlreadyDownloaded(id);
+
+  bool isDownloading(String id) => _downloadProgress.containsKey(id);
+
+  double getDownloadProgress(String id) => _downloadProgress[id] ?? 0.0;
 
   DownloadModel? getDownload(String id) {
     try {
@@ -131,7 +159,15 @@ class DownloadCubit extends Cubit<DownloadState> {
     return _downloadedFiles.fold(0, (sum, d) => sum + d.fileSize);
   }
 
-  void cancelCurrentDownload() {
-    _downloadManager.cancelCurrentDownload();
+  String getFormattedTotalSize() {
+    final totalBytes = getTotalDownloadSize();
+    if (totalBytes < 1024 * 1024) {
+      return '${(totalBytes / 1024).toStringAsFixed(2)} KB';
+    }
+    return '${(totalBytes / (1024 * 1024)).toStringAsFixed(2)} MB';
+  }
+
+  void refresh() {
+    _loadDownloadedFiles();
   }
 }
