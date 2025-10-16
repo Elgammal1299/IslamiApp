@@ -1646,7 +1646,7 @@ flutter:
 
     - family: QCF_P391
       fonts:
-        - asset: assets\fonts\QCF2BSMLfonts\p390.woff
+        - asset: assets\fonts\QCF2BSMLfonts\p391.woff
 
     - family: QCF_P392
       fonts:

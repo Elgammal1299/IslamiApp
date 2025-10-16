@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
@@ -69,6 +68,9 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         child: Column(
           children: [
             TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               controller: _searchTextSurahController,
               cursorColor: AppColors.black,
               style: const TextStyle(color: AppColors.black),

@@ -10,7 +10,7 @@ class CustomCountAzkarButton extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 80),
+        padding: const EdgeInsets.only(bottom: 50),
         child: GestureDetector(
           onTap: onTap,
           child: Stack(

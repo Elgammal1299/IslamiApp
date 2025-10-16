@@ -147,7 +147,7 @@ class PageConfig {
     if (largeFontPages.contains(pageIndex)) return 28.sp;
     if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200) return 24.sp;
     if (pageIndex == 532 || pageIndex == 533) return 23.8.sp;
-    if (pageIndex == 568 || pageIndex == 569) return 23.5.sp;
+    if (pageIndex == 568 || pageIndex == 569 || pageIndex == 34) return 23.5.sp;
     return 23.8.sp;
   }
 
@@ -159,10 +159,42 @@ class PageConfig {
 
     // على الموبايلات الكبيرة نزود المسافة بين السطور
     if (screenHeight < 900) {
-      if (pageIndex == 506 || pageIndex == 207) {
+      if (pageIndex == 506 ||
+          pageIndex == 207 ||
+          pageIndex == 76 ||
+          pageIndex == 557 ||
+          pageIndex == 584 ||
+          pageIndex == 498 ||
+          pageIndex == 452 ||
+          pageIndex == 445 ||
+          pageIndex == 417 ||
+          pageIndex == 414 ||
+          pageIndex == 376 ||
+          pageIndex == 366 ||
+          pageIndex == 349 ||
+          pageIndex == 341 ||
+          pageIndex == 331) {
         return 2.35;
       }
-      return largeFontPages.contains(pageIndex) ? 2 : 2.2;
+      if (pageIndex == 77 ||
+          pageIndex == 208 ||
+          pageIndex == 507 ||
+          pageIndex == 556 ||
+          pageIndex == 558 ||
+          pageIndex == 585 ||
+          pageIndex == 499 ||
+          pageIndex == 453 ||
+          pageIndex == 446 ||
+          pageIndex == 350 ||
+          pageIndex == 342 ||
+          pageIndex == 332 ||
+          pageIndex == 377 ||
+          pageIndex == 415 ||
+          pageIndex == 418 ||
+          pageIndex == 367) {
+        return 2.17;
+      }
+      return largeFontPages.contains(pageIndex) ? 2 : 2.26;
     }
 
     // على التابلت أو الشاشات الكبيرة جدًا نزود أكتر
@@ -619,118 +651,112 @@ class _QuranViewScreenState extends State<QuranViewScreen>
       child: Scaffold(
         backgroundColor: Theme.of(context).focusColor,
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showAppBar = !_showAppBar;
-                _showBottomSlider = !_showBottomSlider;
-              });
-            },
-            child: Stack(
-              children: [
-                // النص والمحتوى
-                m.Padding(
-                  padding: EdgeInsets.only(right: 5.w, left: 5.w),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      if (PageConfig.specialPages.contains(actualPage))
-                        SizedBox(height: 20.h),
-                      _buildHeaderWidgets(actualPage),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 6.w,
-                            right: 6.w,
-                            top:
-                                PageConfig.specialPages.contains(actualPage)
-                                    ? 0
-                                    : 20.h,
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: _buildOptimizedQuranText(actualPage, theme),
-                          ),
+        body: GestureDetector(
+          onTap: () {
+            setState(() {
+              _showAppBar = !_showAppBar;
+              _showBottomSlider = !_showBottomSlider;
+            });
+          },
+          child: Stack(
+            children: [
+              m.Padding(
+                padding: EdgeInsets.only(right: 5.w, left: 5.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (PageConfig.specialPages.contains(actualPage))
+                      SizedBox(height: 20.h),
+                    if (PageConfig.largeFontPages.contains(actualPage))
+                      SizedBox(height: 200.h),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 6.w,
+                          right: 6.w,
+                          top:
+                              PageConfig.specialPages.contains(actualPage)
+                                  ? 0
+                                  : 20.h,
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: _buildOptimizedQuranText(actualPage, theme),
                         ),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // الـ AppBar يطفو فوق
+              if (_showAppBar)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomSurahFramWidget(
+                      widget: widget,
+                      index: actualPage,
+                    ),
                   ),
                 ),
+              if (_showBottomSlider)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    color: Colors.black.withOpacity(0.6),
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: _appState.currentPageNotifier,
+                      builder: (context, currentPage, _) {
+                        final pos = QuranPageIndex.firstAyahOnPage(currentPage);
+                        final surahName = quran.getSurahNameArabic(pos.surah);
 
-                // الـ AppBar يطفو فوق
-                if (_showAppBar)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomSurahFramWidget(
-                        widget: widget,
-                        index: actualPage,
-                      ),
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "سورة $surahName (صفحة $currentPage)",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Slider(
+                              value: currentPage.clamp(1, 604).toDouble(),
+                              min: 1,
+                              max: 604,
+                              divisions: 603,
+                              onChanged: (value) {
+                                _appState.currentPageNotifier.value =
+                                    value.toInt();
+                              },
+                              onChangeEnd: (value) {
+                                final targetPage = value.toInt() - 1;
+                                if (targetPage >= 0 && targetPage < 604) {
+                                  _pageController.animateToPage(
+                                    targetPage,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
-                if (_showBottomSlider)
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      color: Colors.black.withOpacity(0.6),
-                      child: ValueListenableBuilder<int>(
-                        valueListenable: _appState.currentPageNotifier,
-                        builder: (context, currentPage, _) {
-                          final pos = QuranPageIndex.firstAyahOnPage(
-                            currentPage,
-                          );
-                          final surahName = quran.getSurahNameArabic(pos.surah);
-
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "سورة $surahName (صفحة $currentPage)",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Slider(
-                                value: currentPage.clamp(1, 604).toDouble(),
-                                min: 1,
-                                max: 604,
-                                divisions: 603,
-                                onChanged: (value) {
-                                  _appState.currentPageNotifier.value =
-                                      value.toInt();
-                                },
-                                onChangeEnd: (value) {
-                                  final targetPage = value.toInt() - 1;
-                                  if (targetPage >= 0 && targetPage < 604) {
-                                    _pageController.animateToPage(
-                                      targetPage,
-                                      duration: const Duration(
-                                        milliseconds: 300,
-                                      ),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),

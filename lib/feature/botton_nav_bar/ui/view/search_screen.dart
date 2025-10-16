@@ -78,6 +78,9 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               focusNode: _searchFocusNode,
               controller: _searchTextAyatController,
               cursorColor: Theme.of(context).primaryColorDark,
