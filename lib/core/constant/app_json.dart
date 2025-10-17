@@ -9,10 +9,10 @@ class AppJson {
   static const nasaiJson = "assets/json/nasai.json";
   static const tirmidziJson = "assets/json/tirmidzi.json";
   static const surahsJson = "assets/json/surahs.json";
-  static const tsabihJson = 'assets/json/tsabih.json';
+  // static const tsabihJson = 'assets/json/tsabih.json';
   static const azkarSupplicationJson = 'assets/json/Azkar/Supplication.json';
   static const azkarCategoryJson = 'assets/json/Azkar/Category.json';
   static const azkarSectionJson = 'assets/json/Azkar/Section.json';
   static const azkarYawmiJson = 'assets/json/azkar.json';
-  static const hadithNawawiJson = 'assets/json/40_hadith_nawawi.json';
+  // static const hadithNawawiJson = 'assets/json/40_hadith_nawawi.json';
 }
