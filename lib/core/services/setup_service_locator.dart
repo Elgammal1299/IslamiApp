@@ -212,9 +212,7 @@ Future<void> setupServiceLocator() async {
     return AzkarYawmiCubit(sl<AzkarYawmiRepo>());
   });
 
-  // sl.registerLazySingleton<AzkarRandomCubit>(() {
-  //   return AzkarRandomCubit(sl<AzkarRandomRepo>());
-  // });
+
 
   sl.registerLazySingleton<AzkarCubit>(() {
     return AzkarCubit(sl<AzkarRepo>());
