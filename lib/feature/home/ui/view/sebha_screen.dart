@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/widget/dhikr_display_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/dhikr_input_widget.dart';
+import 'package:islami_app/feature/home/ui/view/widget/dhikr_selection_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/sebha_counter_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/sebha_controls_widget.dart';
 
@@ -22,8 +23,91 @@ class _SebhaScreenState extends State<SebhaScreen>
   String _dhikrText = "";
   int _targetCount = 0;
   bool _showDhikrInput = false;
+  bool _showDhikrSelection = false;
+  DhikrItem? _selectedDhikr;
   final TextEditingController _dhikrController = TextEditingController();
   final TextEditingController _targetController = TextEditingController();
+
+  // Predefined dhikr list
+  final List<DhikrItem> _dhikrList = [
+    DhikrItem(text: "سُبْحَانَ اللَّهِ", suggestedCount: 33),
+    DhikrItem(text: "اَلْحَمْدُ لِلّٰه", suggestedCount: 33),
+    DhikrItem(text: "اَللهُ أَكْبَر", suggestedCount: 33),
+    DhikrItem(text: "أَسْتَغْفِرُ الله", suggestedCount: 100),
+    DhikrItem(
+      text:
+          "لَا إِلٰهَ إِلَّا أَنْتَ سُبْحانَکَ، إِنِّيْ کُنْتُ مِنَ الظَّالِمِیْنَ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِالله",
+      suggestedCount: 100,
+    ),
+    DhikrItem(text: "لَا إِلٰهَ إِلَّا الله", suggestedCount: 100),
+    DhikrItem(
+      text:
+          "رَبِّ اغْفِرْ لِيْ وَتُبْ عَلَيَّ، إنَّكَ أَنْتَ التَّوَّابُ الرَّحِيْمُ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(text: "سُبْحَانَ اللهِ وَبِحَمْدِه", suggestedCount: 100),
+    DhikrItem(
+      text:
+          "سُبْحَانَ اللهِ، وَالْحَمْدُ لِلّٰهِ، وَلَا اِلٰهَ إِلَّا اللهُ، وَاللهُ أَكْبَر",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "اَللّٰهُمَّ اِغْفِرْ لِيْ ، وَارْحَمْنِي، وَاهْدِنِي، وَارْزُقْنِي",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "سُبْحَانَ اللهِ، وَالْحَمْدُ لِلّٰهِ، وَلَا اِلٰهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَعَلَىٰ كُلِّ شَىْءٍ قَدِيْرٌ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text: "سُبْحَانَ اللهِ وَبِحَمْدِهِ، سُبْحَانَ اللهِ الْعَظِيْم",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "بِسْمِ اللهِ الَّذِيْ لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ، وَهُوَ السَّمِيْعُ الْعَلِيْمُ",
+      suggestedCount: 3,
+    ),
+    DhikrItem(
+      text: "يَا حَيُّ يَا قَيُّوْمُ بِرَحْمَتِكَ أَسْتَغِيْثُ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "أَعُـوْذُ بِكَلِمَـاتِ اللهِ التَّـامَّـاتِ مِنْ شَـرِّ ما خَلَـقَ",
+      suggestedCount: 3,
+    ),
+    DhikrItem(
+      text: "سُوْرَةُ الإِخْلَاصِ، سُوْرَةُ الفَلَقِ، سُوْرَةُ النَّاسِ",
+      suggestedCount: 3,
+    ),
+    DhikrItem(
+      text:
+          "اَللّٰهُمَّ أَعِنِّيْ عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+      suggestedCount: 100,
+    ),
+    DhikrItem(
+      text:
+          "اَللّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ، وَعَلَىٰ آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيْمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيْدٌ مَّجِيْدٌ. اَللّٰهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ، وَعَلَىٰ آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيْمَ وَعَلَىٰ آلِ إِبْرَاهِيْمَ، إِنَّكَ حَمِيْدٌ مَّجِيْدٌ",
+      suggestedCount: 100,
+    ),
+  ];
 
   @override
   void initState() {
@@ -66,12 +150,105 @@ class _SebhaScreenState extends State<SebhaScreen>
   void _toggleDhikrInput() {
     setState(() {
       _showDhikrInput = !_showDhikrInput;
+      _showDhikrSelection = false;
       if (_showDhikrInput) {
         _dhikrController.text = _dhikrText;
         _targetController.text =
             _targetCount > 0 ? _targetCount.toString() : '';
+        _targetController.clear();
+        _dhikrController.clear();
       }
     });
+  }
+
+  void _toggleDhikrSelection() {
+    setState(() {
+      _showDhikrSelection = !_showDhikrSelection;
+      _showDhikrInput = false;
+    });
+  }
+
+  void _selectDhikr(DhikrItem dhikr) {
+    setState(() {
+      _selectedDhikr = dhikr;
+      _dhikrText = dhikr.text;
+      _targetCount = dhikr.suggestedCount ?? 0;
+      _showDhikrSelection = false;
+      _counter = 0; // Reset counter when selecting new dhikr
+    });
+  }
+
+  void _showDhikrOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder:
+          (context) => Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "اختر نوع الذكر",
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _toggleDhikrSelection();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          "أذكار جاهزة",
+                          style: context.textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _toggleDhikrInput();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).secondaryHeaderColor,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onSurface,
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          "ذكر مخصص",
+                          style: context.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+    );
   }
 
   void _saveDhikr() {
@@ -164,6 +341,22 @@ class _SebhaScreenState extends State<SebhaScreen>
               const SizedBox(height: 20),
             ],
 
+            // اختيار الذكر من القائمة الجاهزة
+            if (_showDhikrSelection) ...[
+              DhikrSelectionWidget(
+                dhikrList: _dhikrList,
+                selectedDhikr: _selectedDhikr,
+                onDhikrSelected: _selectDhikr,
+                onCustomDhikr: () {
+                  setState(() {
+                    _showDhikrSelection = false;
+                    _showDhikrInput = true;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
+
             // دائرة السبحة الرئيسية
             SebhaCounterWidget(
               counter: _counter,
@@ -190,7 +383,7 @@ class _SebhaScreenState extends State<SebhaScreen>
             // أزرار التحكم
             SebhaControlsWidget(
               onReset: _resetCounter,
-              onSettings: _toggleDhikrInput,
+              onSettings: _showDhikrOptions,
               hasCustomDhikr: _dhikrText.isNotEmpty,
             ),
           ],
@@ -199,79 +392,3 @@ class _SebhaScreenState extends State<SebhaScreen>
     );
   }
 }
-// [
-//     {
-//         "dikr": "سُبْحَانَ اللَّهِ"
-//     },
-//     {
-//         "dikr": "اَلْحَمْدُ لِلّٰه"
-//     },
-//     {
-//         "dikr": "اَللهُ أَكْبَر"
-//     },
-//     {
-//         "dikr": "أَسْتَغْفِرُ الله"
-//     },
-//     {
-//         "dikr": "لَا إِلٰهَ إِلَّا أَنْتَ سُبْحانَکَ، إِنِّيْ کُنْتُ مِنَ الظَّالِمِیْنَ"
-//     },
-//     {
-//         "dikr": "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِالله"
-//     },
-//     {
-//         "dikr": "سُبْحَانَ اللَّهِ"
-//     },
-//     {
-//         "dikr": "لَا إِلٰهَ إِلَّا الله"
-//     },
-//     {
-//         "dikr": "رَبِّ اغْفِرْ لِيْ وَتُبْ عَلَيَّ، إنَّكَ أَنْتَ التَّوَّابُ الرَّحِيْمُ"
-//     },
-//     {
-//         "dikr": "سُبْحَانَ اللهِ وَبِحَمْدِه"
-//     },
-//     {
-//         "dikr": "سُبْحَانَ اللهِ وَبِحَمْدِه"
-//     },
-//     {
-//         "dikr": "سُبْحَانَ اللهِ، وَالْحَمْدُ لِلّٰهِ، وَلَا اِلٰهَ إِلَّا اللهُ، وَاللهُ أَكْبَر"
-//     },
-//     {
-//         "dikr": "سُبْحَانَ اللهِ، وَالْحَمْدُ لِلّٰهِ، وَلَا اِلٰهَ إِلَّا اللهُ، وَاللهُ أَكْبَر"
-//     },
-//     {
-//         "dikr": "اَللّٰهُمَّ اِغْفِرْ لِيْ ، وَارْحَمْنِي، وَاهْدِنِي، وَارْزُقْنِي"
-//     },
-//     {
-//         "dikr":"سُبْحَانَ اللهِ، وَالْحَمْدُ لِلّٰهِ، وَلَا اِلٰهَ إِلَّا اللهُ، وَاللهُ أَكْبَرُ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ"
-//     },
-//     {
-//         "dikr":"لَا إِلٰهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَعَلَىٰ كُلِّ شَىْءٍ قَدِيْرٌ"
-//     },
-//     {
-//         "dikr":"سُبْحَانَ اللهِ وَبِحَمْدِهِ، سُبْحَانَ اللهِ الْعَظِيْم"
-//     },
-//     {
-//         "dikr":"بِسْمِ اللهِ الَّذِيْ لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ، وَهُوَ السَّمِيْعُ الْعَلِيْمُ"
-//     },
-//     {
-//         "dikr":"يَا حَيُّ يَا قَيُّوْمُ بِرَحْمَتِكَ أَسْتَغِيْثُ"
-//     },
-//     {
-//         "dikr":"أَعُـوْذُ بِكَلِمَـاتِ اللهِ التَّـامَّـاتِ مِنْ شَـرِّ ما خَلَـقَ"
-//     },
-//     {
-//         "dikr":"سُوْرَةُ الإِخْلَاصِ، سُوْرَةُ الفَلَقِ، سُوْرَةُ النَّاسِ"
-//     },
-//     {
-//         "dikr":"اَللّٰهُمَّ أَعِنِّيْ عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ"
-//     }
-//     ,
-//     {
-//         "dikr":"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ"
-//     },
-//     {
-//         "dikr":"اَللّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ، وَعَلَىٰ آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَىٰ إِبْرَاهِيْمَ وَعَلَىٰ آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيْدٌ مَّجِيْدٌ. اَللّٰهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍ، وَعَلَىٰ آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَىٰ إِبْرَاهِيْمَ وَعَلَىٰ آلِ إِبْرَاهِيْمَ، إِنَّكَ حَمِيْدٌ مَّجِيْدٌ"
-//     }
-
-// ]

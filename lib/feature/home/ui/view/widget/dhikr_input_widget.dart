@@ -41,6 +41,8 @@ class DhikrInputWidget extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           TextField(
+            autofocus: true,
+
             onTapOutside: (event) {
               FocusScope.of(context).unfocus();
             },
