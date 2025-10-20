@@ -30,9 +30,10 @@ void handleNotification(BuildContext context, Map<String, dynamic> payload) {
     }
 
     log('📨 Firebase notification -> NotificationView');
-    Navigator.of(context).pushNamed(
+    Navigator.pushNamed(
+      context,
       AppRoutes.notificationViewRouter,
-      arguments: {'title': title, 'body': body, ...payload},
+      arguments: {'title': title, 'body': body},
     );
   } catch (e) {
     log('❌ Error in handleNotification: $e');

@@ -20,4 +20,6 @@ class AppImage {
   static const needleImage = 'assets/images/needle.svg';
   static const quranCoverImage = 'assets/images/quran_cover.webp';
   static const prayerTimesImages = 'assets/images/prayer_times_images.png';
+  static const whatsIcon = 'assets/images/whatsIcon.svg';
+  static const telegramIcon = 'assets/images/telegram.svg';
 }

@@ -25,4 +25,6 @@ class AppRoutes {
   static const prayertimesRouter = '/PrayertimesScreen';
   static const searchRouter = '/searchScreen';
   static const downloadsRouter = '/DownloadsScreen';
+  static const aboutAppRouter = '/AboutAppScreen';
+  static const aboutUsRouter = '/AboutUsScreen';
 }

@@ -63,6 +63,7 @@
 // }
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -75,11 +76,46 @@ import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
+import 'package:islami_app/feature/notification/data/model/notification_model.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
 import 'package:islami_app/islami_app.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+/// Check if device has internet connectivity
+Future<bool> _hasInternetConnection() async {
+  try {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi);
+  } catch (e) {
+    log('❌ Error checking connectivity: $e');
+    return false;
+  }
+}
+
+/// Initialize Firebase messaging features (non-blocking)
+Future<void> _initializeFirebaseMessagingFeatures() async {
+  try {
+    // Check connectivity first
+    final hasConnection = await _hasInternetConnection();
+    if (!hasConnection) {
+      log('📱 No internet connection - skipping Firebase messaging features');
+      return;
+    }
+
+    // ✅ Subscribe to topic
+    await FirebaseMessaging.instance.subscribeToTopic('all');
+    log('✅ Subscribed to topic: all');
+
+    // ✅ Get and log token
+    final token = await FirebaseMessaging.instance.getToken();
+    log('📲 FCM Token: $token');
+  } catch (e) {
+    log('❌ Error initializing Firebase messaging features: $e');
+  }
+}
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -93,7 +129,7 @@ class AppInitializer {
     // ✅ 1. Initialize Flutter binding FIRST
     WidgetsFlutterBinding.ensureInitialized();
 
-    // ✅ 2. Initialize Firebase EARLY (before anything else)
+    // ✅ 2. Initialize Firebase (non-blocking)
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -105,11 +141,7 @@ class AppInitializer {
         _firebaseMessagingBackgroundHandler,
       );
 
-      // ✅ 4. Subscribe to topic immediately
-      await FirebaseMessaging.instance.subscribeToTopic('all');
-      log('✅ Subscribed to topic: all');
-
-      // ✅ 5. Request permissions
+      // ✅ 4. Request permissions (this is local, doesn't need network)
       final settings = await FirebaseMessaging.instance.requestPermission(
         alert: true,
         badge: true,
@@ -117,27 +149,29 @@ class AppInitializer {
       );
       log('🔔 Notification Permission Status: ${settings.authorizationStatus}');
 
-      // ✅ 6. Get and log token
-      final token = await FirebaseMessaging.instance.getToken();
-      log('📲 FCM Token: $token');
-
-      // ✅ 7. Initialize messaging config
+      // ✅ 5. Initialize messaging config (local setup)
       await MessagingConfig.initFirebaseMessaging();
+
+      // ✅ 6. Initialize network-dependent features in background (non-blocking)
+      _initializeFirebaseMessagingFeatures();
     } catch (e) {
       log('❌ Firebase initialization error: $e');
       // Don't throw - let app continue without Firebase
     }
 
-    // ✅ 8. Initialize Hive
+    // ✅ 7. Initialize Hive
     await Hive.initFlutter();
     // Register Hive adapters
     try {
       if (!Hive.isAdapterRegistered(31)) {
         Hive.registerAdapter(DownloadModelAdapter());
       }
+      if (!Hive.isAdapterRegistered(1)) {
+        Hive.registerAdapter(NotificationModelAdapter());
+      }
     } catch (_) {}
 
-    // ✅ 9. Setup service locator
+    // ✅ 8. Setup service locator
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
     // Ensure the downloads Hive box is opened before creating DownloadCubit
@@ -145,13 +179,13 @@ class AppInitializer {
       await sl<HiveService<DownloadModel>>().init();
     } catch (_) {}
 
-    // ✅ 10. Set orientations
+    // ✅ 9. Set orientations
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
-    // ✅ 11. Run app
+    // ✅ 10. Run app
     runApp(
       MultiBlocProvider(
         providers: [BlocProvider.value(value: themeCubit)],

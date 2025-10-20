@@ -12,6 +12,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/about_app_screen.dart';
+import 'package:islami_app/feature/home/ui/view/about_us_Screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -57,8 +59,18 @@ class AppRouter {
         );
       case AppRoutes.prayertimesRouter:
         return RouterTransitions.buildHorizontal(const PrayerTimesScreen());
+      case AppRoutes.aboutAppRouter:
+        return RouterTransitions.buildHorizontal(const AboutAppScreen());
+      case AppRoutes.aboutUsRouter:
+        return RouterTransitions.buildHorizontal(const AboutUsScreen());
       case AppRoutes.notificationViewRouter:
-        return RouterTransitions.buildHorizontal(const NotificationView());
+        final args = settings.arguments as Map<String, dynamic>?;
+
+        final title = args?['title'] ?? '';
+        final body = args?['body'] ?? '';
+        return RouterTransitions.buildHorizontal(
+          NotificationView(title: title, body: body),
+        );
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:

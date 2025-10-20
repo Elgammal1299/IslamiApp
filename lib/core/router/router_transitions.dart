@@ -20,8 +20,12 @@ class RouterTransitions {
     );
   }
 
-  static PageRouteBuilder buildHorizontal(Widget widget) {
+  static PageRouteBuilder buildHorizontal(
+    Widget widget, {
+    RouteSettings? settings,
+  }) {
     return PageRouteBuilder(
+      settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => widget,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);

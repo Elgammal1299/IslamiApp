@@ -108,7 +108,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               title: 'عن التطبيق',
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/about');
+                Navigator.pushNamed(context, AppRoutes.aboutAppRouter);
               },
             ),
             _DrawerItem(
@@ -116,7 +116,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               title: 'من نحن',
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/about_us');
+                Navigator.pushNamed(context, AppRoutes.aboutUsRouter);
               },
             ),
 
