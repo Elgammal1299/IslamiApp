@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
+import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_ayat_search_results.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_item_list_view.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:quran/quran.dart';
@@ -17,55 +17,18 @@ class QuranSurahScreen extends StatefulWidget {
 
 class _QuranSurahScreenState extends State<QuranSurahScreen> {
   final ValueNotifier<List<SurahModel>> searchedForSurah = ValueNotifier([]);
-  final ValueNotifier<dynamic> searchedForAyats = ValueNotifier(null);
-  final ValueNotifier<bool> isSearching = ValueNotifier(false);
-
   final _searchTextSurahController = TextEditingController();
-  final _searchTextAyatController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void dispose() {
     _searchTextSurahController.dispose();
-    _searchTextAyatController.dispose();
-    _searchFocusNode.dispose();
     searchedForSurah.dispose();
-    searchedForAyats.dispose();
-    isSearching.dispose();
     super.dispose();
-  }
-
-  Widget _buildSearchField() {
-    return TextField(
-      focusNode: _searchFocusNode,
-      controller: _searchTextAyatController,
-      cursorColor: Theme.of(context).primaryColorDark,
-      decoration: InputDecoration(
-        hintText: 'ابحث في الآيات...',
-        border: InputBorder.none,
-        hintStyle: TextStyle(color: Theme.of(context).cardColor, fontSize: 18),
-      ),
-      style: const TextStyle(color: AppColors.black, fontSize: 18),
-      onChanged: (searchedCharacter) {
-        _searchTextSurahController.clear();
-        addSearchedForAyatsToSearchedList(searchedCharacter);
-      },
-    );
-  }
-
-  void addSearchedForAyatsToSearchedList(String searchQuery) {
-    if (searchQuery.isNotEmpty && searchQuery.length > 3 ||
-        searchQuery.contains(" ")) {
-      searchedForAyats.value = searchWords(searchQuery);
-    } else {
-      searchedForAyats.value = null;
-    }
   }
 
   void addSearchedForSurahToSearchedList(String searchQuery) {
     final surahCubit = BlocProvider.of<SurahCubit>(context).surahs;
     if (searchQuery.isNotEmpty) {
-      _searchTextAyatController.clear();
       searchedForSurah.value =
           surahCubit.where((sura) {
             final suraName = sura.englishName.toLowerCase();
@@ -74,7 +37,6 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
             return suraName.contains(searchQuery.toLowerCase()) ||
                 suraNameTranslated.contains(searchQuery.toLowerCase());
           }).toList();
-      searchedForAyats.value = null;
     } else {
       searchedForSurah.value = [];
     }
@@ -82,83 +44,22 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
 
   List<Widget> _buildAppBarActions() {
     return [
-      ValueListenableBuilder<bool>(
-        valueListenable: isSearching,
-        builder: (context, value, _) {
-          return IconButton(
-            onPressed: value ? _clearSearch : _startSearch,
-            icon: Icon(
-              value ? Icons.clear : Icons.search,
-              color: AppColors.secondary,
-            ),
-          );
+      IconButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.searchRouter);
         },
+        icon: const Icon(Icons.search, color: AppColors.secondary),
       ),
     ];
   }
 
-  void _startSearch() {
-    ModalRoute.of(
-      context,
-    )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
-    isSearching.value = true;
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (mounted) {
-        FocusScope.of(context).requestFocus(_searchFocusNode);
-      }
-    });
-  }
-
-  void _stopSearching() {
-    _clearSearch();
-    isSearching.value = false;
-  }
-
-  void _clearSearch() {
-    _searchTextAyatController.clear();
-    _searchTextSurahController.clear();
-    searchedForAyats.value = null;
-    searchedForSurah.value = [];
-  }
-
   Widget _buildAppBarTitle() => const Text('القرآن الكريم');
-
-  Widget _buildVerseSearchResults(List<SurahModel> surahs) {
-    final ayats = searchedForAyats.value;
-    if (ayats == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (ayats["occurences"] == 0) {
-      return Center(
-        child: Text(
-          'لا توجد نتائج بحث',
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge!.copyWith(color: AppColors.black),
-        ),
-      );
-    }
-    return CustomAyatSearchResults(searchedForAyats: ayats, surahs: surahs);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: ValueListenableBuilder<bool>(
-          valueListenable: isSearching,
-          builder:
-              (context, value, _) =>
-                  value
-                      ? const BackButton(color: AppColors.secondary)
-                      : const SizedBox.shrink(),
-        ),
-        title: ValueListenableBuilder<bool>(
-          valueListenable: isSearching,
-          builder:
-              (context, value, _) =>
-                  value ? _buildSearchField() : _buildAppBarTitle(),
-        ),
+        title: _buildAppBarTitle(),
         actions: _buildAppBarActions(),
         centerTitle: true,
       ),
@@ -166,23 +67,24 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            ValueListenableBuilder<bool>(
-              valueListenable: isSearching,
-              builder: (context, value, _) {
-                return !value
-                    ? TextField(
-                      controller: _searchTextSurahController,
-                      cursorColor: AppColors.black,
-                      style: const TextStyle(color: AppColors.black),
-                      decoration: const InputDecoration(
-                        hintText: 'ابحث عن سورة...',
-                        border: InputBorder.none,
-                      ),
-                      onChanged: (searchedSurah) {
-                        addSearchedForSurahToSearchedList(searchedSurah);
-                      },
-                    )
-                    : const SizedBox.shrink();
+            TextField(
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
+              controller: _searchTextSurahController,
+              cursorColor: AppColors.black,
+              // style: const TextStyle(color: AppColors.black),
+              decoration: const InputDecoration(
+                hintText: 'ابحث عن سورة...',
+                border: InputBorder.none,
+              ),
+              onChanged: (searchedSurah) {
+                addSearchedForSurahToSearchedList(searchedSurah);
               },
             ),
             Expanded(
@@ -199,22 +101,14 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
                     );
                   }
                   if (state is SurahSuccess) {
-                    return ValueListenableBuilder<dynamic>(
-                      valueListenable: searchedForAyats,
-                      builder: (context, value, _) {
-                        return value != null
-                            ? _buildVerseSearchResults(state.surahs)
-                            : ValueListenableBuilder<List<SurahModel>>(
-                              valueListenable: searchedForSurah,
-                              builder: (context, filteredSurahs, _) {
-                                return CustomSurahItemListView(
-                                  surahs: state.surahs,
-                                  searchTextSurahController:
-                                      _searchTextSurahController,
-                                  searchedForSurah: filteredSurahs,
-                                );
-                              },
-                            );
+                    return ValueListenableBuilder<List<SurahModel>>(
+                      valueListenable: searchedForSurah,
+                      builder: (context, filteredSurahs, _) {
+                        return CustomSurahItemListView(
+                          surahs: state.surahs,
+                          searchTextSurahController: _searchTextSurahController,
+                          searchedForSurah: filteredSurahs,
+                        );
                       },
                     );
                   }

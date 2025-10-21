@@ -23,13 +23,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   final ValueNotifier<Prayer?> currentPrayer = ValueNotifier(null);
   final ValueNotifier<Prayer?> nextPrayer = ValueNotifier(null);
   final ValueNotifier<Duration> countdown = ValueNotifier(Duration.zero);
-  // Removed preReminderEnabled since pre-reminders are disabled
+  final ValueNotifier<bool> preReminderEnabled = ValueNotifier(true);
 
   Timer? _ticker;
-  DateTime? _lastUpdate;
-
-  // Dynamic summer offset based on DST detection
-  Duration get summerOffset => _prayerService.getTimeOffset();
 
   @override
   void initState() {
@@ -39,36 +35,21 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   @override
   void dispose() {
-    // Cancel timer first to prevent updates to disposed ValueNotifiers
     _ticker?.cancel();
     _ticker = null;
 
-    // Then dispose all ValueNotifiers
     todayTimes.dispose();
     namedTimes.dispose();
     currentPrayer.dispose();
     nextPrayer.dispose();
     countdown.dispose();
+    preReminderEnabled.dispose();
     super.dispose();
   }
 
   Future<void> _load() async {
     try {
       await _notificationService.init();
-
-      // Ensure all permissions are granted for reliable notifications
-      final permissionsGranted = await _notificationService.ensurePermissions();
-      if (!permissionsGranted) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('إعداد الإشعارات مطلوب لضمان عمل الأذان'),
-              duration: Duration(seconds: 5),
-            ),
-          );
-        }
-      }
-
       final PrayerTimes times = await _prayerService.getTodayPrayerTimes();
       _setTimes(times);
       await _scheduleTodayAndTomorrow();
@@ -84,18 +65,11 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   void _setTimes(PrayerTimes times) {
     todayTimes.value = times;
-    _lastUpdate = DateTime.now();
-    // Apply summer time offset consistently
-    namedTimes.value = _prayerService.getNamedTimes(
-      times,
-      offset: summerOffset,
-    );
-
+    namedTimes.value = _prayerService.getNamedTimes(times);
     _refreshPrayers();
   }
 
   void _refreshPrayers() {
-    // Check if widget is still mounted before updating ValueNotifiers
     if (!mounted || todayTimes.value == null) return;
 
     final PrayerTimes t = todayTimes.value!;
@@ -108,9 +82,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
             : null;
 
     if (nextTime != null && nextTime.isAfter(DateTime.now())) {
-      // Apply summer offset to countdown calculation for consistency
-      final adjustedTime = nextTime.add(summerOffset);
-      countdown.value = adjustedTime.difference(DateTime.now());
+      countdown.value = nextTime.difference(DateTime.now());
     } else {
       countdown.value = Duration.zero;
     }
@@ -121,15 +93,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     final DateTime today = DateTime(now.year, now.month, now.day);
     final DateTime tomorrow = today.add(const Duration(days: 1));
 
-    // Schedule today
     await _notificationService.scheduleForDay(
       prayerTimes: namedTimes.value,
       day: today,
-      preReminderEnabled: false, // Pre-reminders are disabled
+      preReminderEnabled: preReminderEnabled.value,
       prayerName: _displayName,
     );
 
-    // Schedule tomorrow
     try {
       final pos = await _prayerService.getCurrentPosition();
       final tmrTimes = _prayerService.getPrayerTimesForDate(
@@ -141,7 +111,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       await _notificationService.scheduleForDay(
         prayerTimes: tmrNamed,
         day: tomorrow,
-        preReminderEnabled: false, // Pre-reminders are disabled
+        preReminderEnabled: preReminderEnabled.value,
         prayerName: _displayName,
       );
     } catch (e) {
@@ -150,37 +120,15 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   }
 
   void _startTicker() {
-    // Cancel any existing timer
     _ticker?.cancel();
 
-    // Only start timer if widget is still mounted
     if (mounted) {
       _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-        // Check if still mounted before calling _refreshPrayers
         if (mounted) {
-          _checkAndRefreshIfNeeded();
+          _refreshPrayers();
         }
       });
     }
-  }
-
-  void _checkAndRefreshIfNeeded() {
-    // Check if we need to refresh for new day
-    final now = DateTime.now();
-
-    if (_lastUpdate != null) {
-      final isNewDay =
-          now.day != _lastUpdate!.day ||
-          now.month != _lastUpdate!.month ||
-          now.year != _lastUpdate!.year;
-
-      if (isNewDay) {
-        _load(); // Reload prayer times for new day
-        return;
-      }
-    }
-
-    _refreshPrayers();
   }
 
   String _displayName(Prayer p) {
@@ -234,8 +182,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
-                _buildDebugSection(),
                 const SizedBox(height: 24),
               ],
             ),
@@ -319,65 +265,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         return Icons.more_horiz;
     }
   }
-
-  Widget _buildDebugSection() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'إعدادات الإشعارات',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await _notificationService.testNotification();
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم إرسال إشعار تجريبي'),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('اختبار الإشعار'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final pending =
-                          await _notificationService.getPendingNotifications();
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'الإشعارات المجدولة: ${pending.length}',
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('التحقق من الجدولة'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
-/// Helper for listening to two ValueNotifiers at once
 class ValueListenableBuilder2<A, B> extends StatelessWidget {
   final ValueListenable<A> first;
   final ValueListenable<B> second;

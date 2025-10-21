@@ -1,6 +1,5 @@
 class AppRoutes {
-  static const splasahRouter = '/';
-  static const homeRoute = '/home';
+  static const homeRoute = '/';
   static const navBarRoute = '/NavBarScreen';
   static const quranViewRouter = '/quranView';
   static const tafsirDetailsByAyahRouter = '/tafsirDetails';
@@ -23,4 +22,8 @@ class AppRoutes {
   static const notificationViewRouter = '/notificationView';
   static const nowPlayingScreenRouter = '/NowPlayingScreen';
   static const prayertimesRouter = '/PrayertimesScreen';
+  static const searchRouter = '/searchScreen';
+  static const downloadsRouter = '/DownloadsScreen';
+  static const aboutAppRouter = '/AboutAppScreen';
+  static const aboutUsRouter = '/AboutUsScreen';
 }

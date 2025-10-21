@@ -137,7 +137,7 @@ class QuranAppState {
 
 // Configuration class for page-specific settings
 class PageConfig {
-  static const int totalPages = 604 + 1;
+  static const int totalPages = 604;
   static const Set<int> specialPages = {1, 2, 187};
   static const Set<int> centerAlignedPages = {1, 2};
   static const Set<int> largeFontPages = {1, 2};
@@ -147,7 +147,7 @@ class PageConfig {
     if (largeFontPages.contains(pageIndex)) return 28.sp;
     if (pageIndex == 145 || pageIndex == 201 || pageIndex == 200) return 24.sp;
     if (pageIndex == 532 || pageIndex == 533) return 23.8.sp;
-    if (pageIndex == 568 || pageIndex == 569) return 23.5.sp;
+    if (pageIndex == 568 || pageIndex == 569 || pageIndex == 34) return 23.5.sp;
     return 23.8.sp;
   }
 
@@ -159,7 +159,42 @@ class PageConfig {
 
     // على الموبايلات الكبيرة نزود المسافة بين السطور
     if (screenHeight < 900) {
-      return largeFontPages.contains(pageIndex) ? 2 : 2.2;
+      if (pageIndex == 506 ||
+          pageIndex == 207 ||
+          pageIndex == 76 ||
+          pageIndex == 557 ||
+          pageIndex == 584 ||
+          pageIndex == 498 ||
+          pageIndex == 452 ||
+          pageIndex == 445 ||
+          pageIndex == 417 ||
+          pageIndex == 414 ||
+          pageIndex == 376 ||
+          pageIndex == 366 ||
+          pageIndex == 349 ||
+          pageIndex == 341 ||
+          pageIndex == 331) {
+        return 2.35;
+      }
+      if (pageIndex == 77 ||
+          pageIndex == 208 ||
+          pageIndex == 507 ||
+          pageIndex == 556 ||
+          pageIndex == 558 ||
+          pageIndex == 585 ||
+          pageIndex == 499 ||
+          pageIndex == 453 ||
+          pageIndex == 446 ||
+          pageIndex == 350 ||
+          pageIndex == 342 ||
+          pageIndex == 332 ||
+          pageIndex == 377 ||
+          pageIndex == 415 ||
+          pageIndex == 418 ||
+          pageIndex == 367) {
+        return 2.17;
+      }
+      return largeFontPages.contains(pageIndex) ? 2 : 2.26;
     }
 
     // على التابلت أو الشاشات الكبيرة جدًا نزود أكتر
@@ -211,8 +246,11 @@ class _QuranViewScreenState extends State<QuranViewScreen>
 
   void _initializeApp() {
     _appState = QuranAppState();
+    // Adjust for zero-based indexing (page 1 = index 0)
     _appState.setCurrentPage(widget.pageNumber);
-    _pageController = PageController(initialPage: widget.pageNumber);
+    _pageController = PageController(
+      initialPage: widget.pageNumber - 1,
+    ); // Subtract 1
 
     WidgetsBinding.instance.addObserver(this);
     _configureSystemUI();
@@ -362,20 +400,19 @@ class _QuranViewScreenState extends State<QuranViewScreen>
   }
 
   void _handlePageChanged(int pageIndex) async {
-    if (_appState.currentPage != pageIndex) {
-      _appState.setCurrentPage(pageIndex);
+    final actualPage = pageIndex + 1; // Convert index to actual page number
+
+    if (_appState.currentPage != actualPage) {
+      _appState.setCurrentPage(actualPage);
       _appState.setSelectedSpan("");
       _appState.verseHighlighter.clear();
 
-      _loadFontsForPage(pageIndex);
+      _loadFontsForPage(actualPage);
 
-      // ✅ احسب رقم صفحة المصحف الفعلي
-      final pageNumber = pageIndex; // عدّلها لو عندك ترقيم مختلف
+      // ✅ Get first ayah on this page
+      final pos = QuranPageIndex.firstAyahOnPage(actualPage);
 
-      // ✅ هات أول آية في الصفحة دي من الفهرس
-      final pos = QuranPageIndex.firstAyahOnPage(pageNumber);
-
-      // ✅ خزّن آخر قراءة باستخدام الكيوبت
+      // ✅ Store reading progress
       try {
         final readingProgressCubit = BlocProvider.of<ReadingProgressCubit>(
           context,
@@ -384,11 +421,11 @@ class _QuranViewScreenState extends State<QuranViewScreen>
         await readingProgressCubit.updateReadingProgress(
           pos.surah,
           pos.ayah,
-          pageNumber,
+          actualPage,
         );
 
         debugPrint(
-          '✅ Page change recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $pageNumber',
+          '✅ Page change recorded: Surah ${pos.surah}, Ayah ${pos.ayah}, Page $actualPage',
         );
       } catch (e) {
         debugPrint('❌ Error recording page change: $e');
@@ -521,8 +558,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                     pageIndex,
                     MediaQuery.sizeOf(context).height,
                   ),
-
-                  // height: PageConfig.getLineHeight(pageIndex),
                   letterSpacing: 0,
                   wordSpacing: 0,
                   fontFamily: fontFamily,
@@ -610,66 +645,117 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     double screenHeight,
     ThemeData theme,
   ) {
-    if (pageIndex == 0) return _buildPlaceholderPage();
+    final actualPage = pageIndex + 1; // Convert index to actual page number
 
     return RepaintBoundary(
       child: Scaffold(
         backgroundColor: Theme.of(context).focusColor,
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showAppBar = !_showAppBar; // toggle
-                _showBottomSlider = !_showBottomSlider;
-              });
-            },
-            child: Stack(
-              children: [
-                // النص والمحتوى
-                m.Padding(
-                  padding: EdgeInsets.only(right: 5.w, left: 5.w, bottom: 10.h),
-
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      if (PageConfig.specialPages.contains(pageIndex))
-                        SizedBox(height: 20.h),
-                      _buildHeaderWidgets(pageIndex),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 6.w,
-                            right: 6.w,
-                            top:
-                                PageConfig.specialPages.contains(pageIndex)
-                                    ? 0
-                                    : 30.h,
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: _buildOptimizedQuranText(pageIndex, theme),
-                          ),
+        body: GestureDetector(
+          onTap: () {
+            setState(() {
+              _showAppBar = !_showAppBar;
+              _showBottomSlider = !_showBottomSlider;
+            });
+          },
+          child: Stack(
+            children: [
+              m.Padding(
+                padding: EdgeInsets.only(right: 5.w, left: 5.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (PageConfig.specialPages.contains(actualPage))
+                      SizedBox(height: 20.h),
+                    if (PageConfig.largeFontPages.contains(actualPage))
+                      SizedBox(height: 200.h),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 6.w,
+                          right: 6.w,
+                          top:
+                              PageConfig.specialPages.contains(actualPage)
+                                  ? 0
+                                  : 20.h,
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: _buildOptimizedQuranText(actualPage, theme),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
 
-                // الـ AppBar يطفو فوق
-                if (_showAppBar)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomSurahFramWidget(
-                        widget: widget,
-                        index: pageIndex,
-                      ),
+              // الـ AppBar يطفو فوق
+              if (_showAppBar)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomSurahFramWidget(
+                      widget: widget,
+                      index: actualPage,
                     ),
                   ),
+                ),
+              if (_showBottomSlider)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    color: Colors.black.withOpacity(0.6),
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: _appState.currentPageNotifier,
+                      builder: (context, currentPage, _) {
+                        final pos = QuranPageIndex.firstAyahOnPage(currentPage);
+                        final surahName = quran.getSurahNameArabic(pos.surah);
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "سورة $surahName (صفحة $currentPage)",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Slider(
+                              value: currentPage.clamp(1, 604).toDouble(),
+                              min: 1,
+                              max: 604,
+                              divisions: 603,
+                              onChanged: (value) {
+                                _appState.currentPageNotifier.value =
+                                    value.toInt();
+                              },
+                              onChangeEnd: (value) {
+                                final targetPage = value.toInt() - 1;
+                                if (targetPage >= 0 && targetPage < 604) {
+                                  _pageController.animateToPage(
+                                    targetPage,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+<<<<<<< HEAD
                 if (_showBottomSlider)
                   Positioned(
                     bottom: 0,
@@ -733,27 +819,31 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                   ),
               ],
             ),
+=======
+                ),
+            ],
+>>>>>>> 4c88314da42b5ea8d16cc8ff8b3089ad5c6d36a7
           ),
         ),
       ),
     );
   }
 
-  Widget _buildPlaceholderPage() {
-    return RepaintBoundary(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Container(
-            width: 1,
-            height: double.infinity,
-            color: Colors.red,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildPlaceholderPage() {
+  //   return RepaintBoundary(
+  //     child: Align(
+  //       alignment: Alignment.centerRight,
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16),
+  //         child: Container(
+  //           width: 1,
+  //           height: double.infinity,
+  //           color: Colors.red,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -761,7 +851,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     final them = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
-        // ✅ Record reading position before navigating back
         await _recordFinalReadingPosition();
         return true;
       },
@@ -773,7 +862,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
               padEnds: false,
               controller: _pageController,
               scrollDirection: Axis.horizontal,
-              physics: const PageScrollPhysics(),
+              physics: const BouncingScrollPhysics(), // ✅ Changed here
               onPageChanged: _handlePageChanged,
               itemCount: PageConfig.totalPages,
               itemBuilder:

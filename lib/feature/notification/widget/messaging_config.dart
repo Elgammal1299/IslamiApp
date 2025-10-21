@@ -100,7 +100,11 @@ class MessagingConfig {
         final data = <String, dynamic>{'source': 'firebase', ...message.data};
         handleNotification(navigatorKey.currentContext!, data);
       });
-
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        log("📲 RECEIVED Foreground message: ${message.notification?.title}");
+        log("📲 Message data: ${message.data}");
+        await _showNotification(message);
+      });
       // Set foreground notification presentation options
       await FirebaseMessaging.instance
           .setForegroundNotificationPresentationOptions(

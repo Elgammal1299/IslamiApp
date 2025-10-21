@@ -29,7 +29,7 @@ class LocalNotificationService {
         try {
           if (navigatorKey.currentContext != null) {
             handleNotification(navigatorKey.currentContext!, {
-              'source': 'local',
+              'source': 'firebase',
             });
           }
         } catch (_) {}
@@ -40,7 +40,7 @@ class LocalNotificationService {
     final launchDetails = await _plugin.getNotificationAppLaunchDetails();
     if ((launchDetails?.didNotificationLaunchApp ?? false) &&
         navigatorKey.currentContext != null) {
-      handleNotification(navigatorKey.currentContext!, {'source': 'local'});
+      handleNotification(navigatorKey.currentContext!, {'source': 'firebase'});
     }
 
     // 3. طلب صلاحيات Android 13+
@@ -88,6 +88,23 @@ class LocalNotificationService {
               ? eveningTime.add(const Duration(days: 1))
               : eveningTime,
       repeat: DateTimeComponents.time,
+    );
+    int daysUntilFriday = DateTime.friday - now.weekday;
+    if (daysUntilFriday < 0) daysUntilFriday += 7;
+
+    final fridayTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      15,
+    ).add(Duration(days: daysUntilFriday));
+
+    await scheduleNotification(
+      id: 3,
+      title: 'جمعة مباركة 🌸',
+      body: 'لا تنس قرءاة سورة الكهف ❤️',
+      dateTime: fridayTime,
+      repeat: DateTimeComponents.dayOfWeekAndTime, // تكرار أسبوعي
     );
   }
 

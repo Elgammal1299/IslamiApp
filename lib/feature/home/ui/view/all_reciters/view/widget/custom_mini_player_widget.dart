@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/custom_mini_player_item.dart';
-import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 
 class CustomMiniPlayerWidget extends StatefulWidget {

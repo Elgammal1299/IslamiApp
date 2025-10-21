@@ -8,10 +8,12 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubi
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
+import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
-import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:quran/quran.dart' as quran;
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,14 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
-  if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
-    Hive.registerAdapter(HadithModelAdapter());
-  }
+    if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
+      Hive.registerAdapter(HadithModelAdapter());
+    }
 
-
-  if (!Hive.isBoxOpen('hadiths')) {
-    Hive.openBox<List>('hadiths');
-  }
+    if (!Hive.isBoxOpen('hadiths')) {
+      Hive.openBox<List>('hadiths');
+    }
   }
 
   @override
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //     (context.watch<ThemeCubit>().state as ThemeChanged).isDark;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
@@ -56,29 +58,36 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         centerTitle: true,
-        leading: BlocBuilder<ThemeCubit, ThemeState>(
-          builder: (context, state) {
-            final isDark = state is ThemeChanged ? state.isDark : false;
-
-            return IconButton(
-              icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
-              onPressed: () => context.read<ThemeCubit>().changeTheme(),
-            );
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
           },
+          icon: const Icon(Icons.menu),
         ),
+        // leading: BlocBuilder<ThemeCubit, ThemeState>(
+        //   builder: (context, state) {
+        //     final isDark = state is ThemeChanged ? state.isDark : false;
+
+        //     return IconButton(
+        //       icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
+        //       onPressed: () => context.read<ThemeCubit>().changeTheme(),
+        //     );
+        //   },
+        // ),
         // leading: IconButton(
         //   icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
         //   onPressed: () => context.read<ThemeCubit>().changeTheme(),
         // ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.notificationScreenRouter);
-            },
-            icon: const Icon(Icons.notifications),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       Navigator.pushNamed(context, AppRoutes.notificationScreenRouter);
+        //     },
+        //     icon: const Icon(Icons.notifications),
+        //   ),
+        // ],
       ),
+      drawer: const CustomDrawer(),
 
       // Body with slivers
       body: CustomScrollView(
@@ -150,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
     );
@@ -264,28 +274,6 @@ class NextPrayerWidget extends StatelessWidget {
                   color: AppColors.primary,
                 ),
               ),
-              // ignore: unrelated_type_equality_checks
-              // provider.nextPrayer == Prayer.none
-              //     ? Column(
-              //       children: [
-              //         Text(
-              //           'متبقي على صلاة${provider.getPrayerName(provider.nextPrayer!)}',
-              //           style: theme.textTheme.titleLarge,
-              //         ),
-              //         const Spacer(),
-              //         Text(
-              //           provider.formatCountdown(),
-              //           style: theme.textTheme.titleLarge?.copyWith(
-              //             fontWeight: FontWeight.bold,
-              //             color: AppColors.primary,
-              //           ),
-              //         ),
-              //       ],
-              //     )
-              //     : Text(
-              //       'الصلاة الحالية : ${provider.getPrayerName(provider.currentPrayer!)}',
-              //       style: theme.textTheme.titleLarge,
-              //     ),
             ],
           ),
         );

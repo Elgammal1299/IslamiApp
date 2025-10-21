@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/router/router_transitions.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/search_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
@@ -11,6 +12,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/about_app_screen.dart';
+import 'package:islami_app/feature/home/ui/view/about_us_Screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -20,6 +23,8 @@ import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
@@ -36,18 +41,33 @@ import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterC
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_view.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
-import 'package:islami_app/feature/splash_screen/splash_screen.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoutes.splasahRouter:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutes.downloadsRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<DownloadCubit>(),
+                child: const DownloadsScreen(),
+              ),
+        );
       case AppRoutes.prayertimesRouter:
         return RouterTransitions.buildHorizontal(const PrayerTimesScreen());
+      case AppRoutes.aboutAppRouter:
+        return RouterTransitions.buildHorizontal(const AboutAppScreen());
+      case AppRoutes.aboutUsRouter:
+        return RouterTransitions.buildHorizontal(const AboutUsScreen());
       case AppRoutes.notificationViewRouter:
-        return RouterTransitions.buildHorizontal(const NotificationView());
+        final args = settings.arguments as Map<String, dynamic>?;
+
+        final title = args?['title'] ?? '';
+        final body = args?['body'] ?? '';
+        return RouterTransitions.buildHorizontal(
+          NotificationView(title: title, body: body),
+        );
       case AppRoutes.notificationScreenRouter:
         return MaterialPageRoute(
           builder:
@@ -144,6 +164,14 @@ class AppRouter {
               ),
         );
 
+      case AppRoutes.searchRouter:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => sl<SurahCubit>()..getSurahs(),
+                child: const SearchScreen(),
+              ),
+        );
       case AppRoutes.hadithDetailsRouter:
         final hadithCubit = settings.arguments as HadithCubit;
         return MaterialPageRoute(

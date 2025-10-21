@@ -90,7 +90,6 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
               ],
             ),
           ),
-          // الزرار الدائري ثابت أسفل الشاشة
           CustomCountAzkarButton(onTap: _handleTap, progress: progress),
         ],
       ),

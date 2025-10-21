@@ -4,15 +4,16 @@ import 'package:islami_app/core/constant/app_color.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NotificationView extends StatelessWidget {
-  const NotificationView({super.key});
+  const NotificationView({super.key, required this.title, required this.body});
+  final String title, body;
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    // final args =
+    //     ModalRoute.of(context)?.settings.arguments as Map<String, String>?;
 
-    final title = args?['title'] ?? 'لا يوجد عنوان';
-    final body = args?['body'] ?? 'لا يوجد محتوى';
+    // final title = args?['title'] ?? 'لا يوجد عنوان';
+    // final body = args?['body'] ?? 'لا يوجد محتوى';
 
     return Scaffold(
       appBar: AppBar(title: const Text('تفاصيل الإشعار')),
@@ -81,9 +82,7 @@ class NotificationView extends StatelessWidget {
                     ),
                     onPressed: () {
                       // ignore: prefer_interpolation_to_compose_strings
-                      Clipboard.setData(
-                        ClipboardData(text: title + '\n' + body),
-                      );
+                      Clipboard.setData(ClipboardData(text: '$title\n$body'));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("✅ تم النسخ")),
                       );

@@ -8,10 +8,9 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/audio_bottom_sheet.dart';
-
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
-import 'package:quran/quran.dart';
 import 'package:quran/quran.dart' as quran;
+import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class BottonSheetItem extends StatefulWidget {
@@ -43,6 +42,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
   final List<Data> tafsirIdentifiers = [];
   late String audioURL;
   late AudioPlayer audioPlayer;
+  final ScreenshotController screenshotController = ScreenshotController();
   @override
   void initState() {
     super.initState();
@@ -58,99 +58,57 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
     super.dispose();
   }
 
-  // Future<void> _shareAyahAsImage(
-  //   String ayahText,
-  //   String surahName,
-  //   int verseNumber,
-  //   int totalVerses,
-  //   BuildContext context,
-  // ) async {
-  //   Navigator.pop(context);
+  // Future<void> _shareVerseAsImage() async {
   //   try {
-  //     final recorder = ui.PictureRecorder();
-  //     final canvas = Canvas(recorder);
-  //     const double padding = 24.0;
+  //     // Get the verse text using QCF font
+  //     final verseText = quran.getVerseQCF(widget.surah, widget.verse);
+  //     final surahNameArabic = widget.surah;
+  //     int pageNumber = quran.getPageNumber(widget.surah, widget.verse);
 
-  //     // إعدادات نص الآية
-  //     const ayahStyle = TextStyle(
-  //       fontSize: 35,
-  //       color: Colors.black,
-  //       fontWeight: FontWeight.bold,
-  //       height: 2.0, // زيادة المسافة بين السطور
+  //     // Create the verse image widget
+  //     final verseImageWidget = VerseImageWidget(
+  //       surah: widget.surah,
+  //       verse: widget.verse,
+  //       verseText: verseText,
+  //       surahNumber: surahNameArabic,
+  //       pageIndex: pageNumber,
   //     );
 
-  //     // إعدادات نص الفريم العلوي
-  //     const headerStyle = TextStyle(
-  //       fontSize: 22,
-  //       fontWeight: FontWeight.bold,
-  //       color: Colors.black87,
+  //     // Capture screenshot
+  //     final image = await screenshotController.captureFromWidget(
+  //       verseImageWidget,
+  //       context: context,
+  //       pixelRatio: 3.0,
   //     );
 
-  //     // رسم الفريم العلوي
-  //     final headerText = 'سورة $surahName - آية $verseNumber';
-  //     final headerSpan = TextSpan(text: headerText, style: headerStyle);
-  //     final headerPainter = TextPainter(
-  //       text: headerSpan,
+  //     if (image.isNotEmpty) {
+  //       // Get temporary directory
+  //       final tempDir = await getTemporaryDirectory();
+  //       final fileName =
+  //           'verse_${widget.surah}_${widget.verse}_${DateTime.now().millisecondsSinceEpoch}.png';
+  //       final file = File('${tempDir.path}/$fileName');
 
-  //       textAlign: TextAlign.right,
-  //       textDirection: TextDirection.ltr,
-  //     );
-  //     headerPainter.layout(maxWidth: 800);
+  //       // Write image to file
+  //       await file.writeAsBytes(image);
 
-  //     // رسم نص الآية
-  //     final ayahSpan = TextSpan(text: ayahText, style: ayahStyle);
-  //     final ayahPainter = TextPainter(
-  //       text: ayahSpan,
-  //       textDirection: TextDirection.rtl,
-  //       textAlign: TextAlign.justify,
-  //     );
-  //     ayahPainter.layout(maxWidth: 800);
+  //       // Share the image
+  //       await Share.shareXFiles(
+  //         [XFile(file.path)],
+  //         text:
+  //             'سورة ${quran.getSurahNameArabic(widget.surah)} - آية ${widget.verse}',
+  //       );
 
-  //     // حساب حجم الصورة
-  //     final width =
-  //         (ayahPainter.width > headerPainter.width
-  //             ? ayahPainter.width
-  //             : headerPainter.width) +
-  //         padding * 2;
-  //     final height = headerPainter.height + ayahPainter.height + padding * 5;
-
-  //     // رسم الخلفية البيضاء
-  //     final paint = Paint()..color = Colors.white;
-  //     canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
-
-  //     // رسم الفريم العلوي (مثلاً باللون الرمادي الفاتح)
-  //     final headerBgPaint = Paint()..color = Colors.grey.shade200;
-  //     canvas.drawRect(
-  //       Rect.fromLTWH(0, 0, width, headerPainter.height + padding * 1.2),
-  //       headerBgPaint,
-  //     );
-
-  //     // رسم نص الفريم العلوي
-  //     headerPainter.paint(canvas, const Offset(padding, padding / 2));
-
-  //     // رسم نص الآية أسفل الفريم
-  //     ayahPainter.paint(
-  //       canvas,
-  //       Offset(padding, headerPainter.height + padding * 2),
-  //     );
-
-  //     // تحويل الرسم إلى صورة
-  //     final picture = recorder.endRecording();
-  //     final img = await picture.toImage(width.toInt(), height.toInt());
-  //     final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
-  //     final pngBytes = byteData!.buffer.asUint8List();
-
-  //     // حفظ الصورة مؤقتًا
-  //     final tempDir = await getTemporaryDirectory();
-  //     final file = await File('${tempDir.path}/ayah.png').create();
-  //     await file.writeAsBytes(pngBytes);
-
-  //     // مشاركة الصورة
-  //     await Share.shareXFiles([XFile(file.path)], text: 'الآية');
+  //       // Clean up the temporary file after sharing
+  //       if (await file.exists()) {
+  //         await file.delete();
+  //       }
+  //     }
   //   } catch (e) {
-  //     print('Error sharing ayah image: $e');
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('حدث خطأ أثناء مشاركة الآية')),
+  //     debugPrint('Error sharing verse as image: $e');
+  //     // Fallback to text sharing
+  //     Share.share(
+  //       '${quran.getVerse(widget.surah, widget.verse)}\n\n'
+  //       'سورة ${quran.getSurahNameArabic(widget.surah)} - آية ${widget.verse}',
   //     );
   //   }
   // }
@@ -168,7 +126,6 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             leading: const Icon(Icons.play_arrow),
             title: Text("استماع ", style: context.textTheme.titleLarge),
             onTap: () {
-              // await audioPlayer.play(UrlSource(audioURL));
               Navigator.pop(context);
               showModalBottomSheet(
                 scrollControlDisabledMaxHeightRatio: 1,
@@ -210,18 +167,7 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
               ).showSnackBar(const SnackBar(content: Text('تم نسخ الآية')));
             },
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.image),
-          //   title: const Text('مشاركة الآية كصورة'),
-          //   onTap:
-          //       () => _shareAyahAsImage(
-          //         ayahText,
-          //         quran.getSurahNameArabic(widget.surah),
-          //         widget.verse,
-          //         quran.getVerseCount(widget.surah),
-          //         context,
-          //       ),
-          // ),
+
           FutureBuilder<bool>(
             future: sl<BookmarkManager>().isBookmarked(
               widget.surah,
@@ -270,13 +216,25 @@ class _BottonSheetItemState extends State<BottonSheetItem> {
             title: Text('مشاركة الآية', style: context.textTheme.titleLarge),
             onTap: () {
               Share.share(
-                '${getVerse(widget.surah, widget.verse)}\n\n'
-                'سورة ${getSurahNameArabic(widget.surah)} - آية ${widget.verse}',
+                '${quran.getVerse(widget.surah, widget.verse)}\n\n'
+                'سورة ${quran.getSurahNameArabic(widget.surah)} - آية ${widget.verse}',
               );
 
               Navigator.pop(context);
             },
           ),
+
+          // ListTile(
+          //   leading: const Icon(Icons.share),
+          //   title: Text(
+          //     'مشاركة الآية كصورة',
+          //     style: context.textTheme.titleLarge,
+          //   ),
+          //   onTap: () async {
+          //     Navigator.pop(context);
+          //     await _shareVerseAsImage();
+          //   },
+          // ),
         ],
       ),
     );

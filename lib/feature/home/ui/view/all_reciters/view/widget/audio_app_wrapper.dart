@@ -5,6 +5,8 @@ import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/custom_mini_player_widget.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/play_list_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
+import 'package:islami_app/core/services/setup_service_locator.dart';
 
 class AudioAppWrapper extends StatefulWidget {
   final AudioManager audioManager;
@@ -68,27 +70,30 @@ class _AudioAppWrapperState extends State<AudioAppWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioCubit, AudioState>(
-      builder: (context, state) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              PlaylistScreen(audioManager: widget.audioManager),
-              if (_showMiniPlayer)
-                CustomMiniPlayerWidget(
-                  showMiniPlayer: _showMiniPlayer,
-                  dragStartDuration: _dragStartDuration,
-                  dragStartPosition: _dragStartPosition,
-                  duration: _duration,
-                  isUserDragging: _isUserDragging,
-                  miniPlayerProgress: _miniPlayerProgress,
-                  position: _position,
-                  audioManager: widget.audioManager,
-                ),
-            ],
-          ),
-        );
-      },
+    return BlocProvider.value(
+      value: sl<DownloadCubit>(),
+      child: BlocBuilder<AudioCubit, AudioState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                PlaylistScreen(audioManager: widget.audioManager),
+                if (_showMiniPlayer)
+                  CustomMiniPlayerWidget(
+                    showMiniPlayer: _showMiniPlayer,
+                    dragStartDuration: _dragStartDuration,
+                    dragStartPosition: _dragStartPosition,
+                    duration: _duration,
+                    isUserDragging: _isUserDragging,
+                    miniPlayerProgress: _miniPlayerProgress,
+                    position: _position,
+                    audioManager: widget.audioManager,
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
