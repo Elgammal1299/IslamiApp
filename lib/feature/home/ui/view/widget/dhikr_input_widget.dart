@@ -41,6 +41,11 @@ class DhikrInputWidget extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           TextField(
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
             autofocus: true,
 
             onTapOutside: (event) {
@@ -62,6 +67,11 @@ class DhikrInputWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                   controller: targetController,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,

@@ -23,10 +23,10 @@ class AboutUsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor: theme.colorScheme.primary.withOpacity(.12),
+                    backgroundColor: theme.colorScheme.primary,
                     child: Icon(
                       Icons.mosque,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.secondary,
                       size: 28,
                     ),
                   ),

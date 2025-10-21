@@ -1,6 +1,5 @@
 class AppRoutes {
-  static const splasahRouter = '/';
-  static const homeRoute = '/home';
+  static const homeRoute = '/';
   static const navBarRoute = '/NavBarScreen';
   static const quranViewRouter = '/quranView';
   static const tafsirDetailsByAyahRouter = '/tafsirDetails';

@@ -63,6 +63,7 @@
 // }
 import 'dart:developer';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -71,12 +72,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/core/services/hive_service.dart';
+import 'package:islami_app/feature/home/data/model/recording_model.dart';
+import 'package:islami_app/feature/home/services/notification_service.dart';
+import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/notification/data/model/notification_model.dart';
+import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
 import 'package:islami_app/islami_app.dart';
@@ -169,23 +175,32 @@ class AppInitializer {
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(NotificationModelAdapter());
       }
+      if (!Hive.isAdapterRegistered(0)) {
+        Hive.registerAdapter(RecordingModelAdapter());
+      }
     } catch (_) {}
 
     // ✅ 8. Setup service locator
     await setupServiceLocator();
     final themeCubit = sl<ThemeCubit>();
-    // Ensure the downloads Hive box is opened before creating DownloadCubit
+
+    // ✅ 9. Initialize Hive services
     try {
       await sl<HiveService<DownloadModel>>().init();
+      await sl<HiveService<RecordingModel>>().init();
+      await sl<HiveService<NotificationModel>>().init();
     } catch (_) {}
 
-    // ✅ 9. Set orientations
+    // ✅ 10. Initialize additional services in background (non-blocking)
+    _initializeAppServices();
+
+    // ✅ 11. Set orientations
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
-    // ✅ 10. Run app
+    // ✅ 12. Run app
     runApp(
       MultiBlocProvider(
         providers: [BlocProvider.value(value: themeCubit)],
@@ -201,4 +216,42 @@ class AppInitializer {
       ),
     );
   }
+
+  /// Initialize additional app services in background (non-blocking)
+  static void _initializeAppServices() async {
+    try {
+      // ✅ Initialize local notifications
+      await _initLocalNotifications();
+
+      // ✅ Initialize prayer times provider
+      final provider = SharedPrayerTimesProvider.instance;
+      await provider.initialize();
+
+      // ✅ Setup prayer notifications
+      final notificationService = PrayerNotificationService();
+      await notificationService.init();
+      await notificationService.scheduleForDay(
+        prayerTimes: provider.namedTimes,
+        day: DateTime.now(),
+        preReminderEnabled: true,
+        prayerName: provider.getPrayerName,
+      );
+
+
+      log('✅ App services initialized successfully');
+    } catch (e) {
+      log('❌ Error initializing app services: $e');
+    }
+  }
+
+  /// Initialize local notifications
+  static Future<void> _initLocalNotifications() async {
+    try {
+      tz.initializeTimeZones();
+      await LocalNotificationService.init();
+    } catch (e) {
+      log('❌ Error initializing local notifications: $e');
+    }
+  }
+
 }

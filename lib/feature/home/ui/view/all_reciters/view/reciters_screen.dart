@@ -79,11 +79,16 @@ class _RecitersScreenState extends State<RecitersScreen> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
+                   style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
               onTapOutside: (event) {
                 FocusScope.of(context).unfocus();
               },
               controller: _searchController,
-              style: const TextStyle(color: AppColors.black, fontSize: 18),
+              // style: const TextStyle(color: AppColors.black, fontSize: 18),
               decoration: InputDecoration(
                 labelText: "بحث عن قارئ",
                 border: const OutlineInputBorder(),

@@ -25,7 +25,7 @@ class DhikrSelectionWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.1),
+            color: Theme.of(context).shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -63,12 +63,12 @@ class DhikrSelectionWidget extends StatelessWidget {
                                 ? Theme.of(
                                   context,
                                 ).primaryColor.withOpacity(0.1)
-                                : Theme.of(context).secondaryHeaderColor,
+                                : Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10),
                         border:
                             isSelected
                                 ? Border.all(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).secondaryHeaderColor,
                                   width: 2,
                                 )
                                 : null,
@@ -85,7 +85,7 @@ class DhikrSelectionWidget extends StatelessWidget {
                                         : FontWeight.normal,
                                 color:
                                     isSelected
-                                        ? Theme.of(context).primaryColor
+                                        ? Theme.of(context).secondaryHeaderColor
                                         : Theme.of(
                                           context,
                                         ).colorScheme.onSurface,
@@ -114,7 +114,7 @@ class DhikrSelectionWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: onCustomDhikr,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Theme.of(context).colorScheme.onSurface,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(

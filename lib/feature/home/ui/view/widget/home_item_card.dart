@@ -28,17 +28,19 @@ class HomeItemCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           child: Column(
             children: [
-              // ✅ BODY: صورة فوق على خلفية فاتحة
               Expanded(
                 flex: 7,
                 child: Container(
                   decoration: BoxDecoration(color: Theme.of(context).cardColor),
                   padding: const EdgeInsets.all(12),
-                  child: Image.asset(item.image, fit: BoxFit.contain,semanticLabel: 'sssssssss',),
+                  child: Image.asset(
+                    item.image,
+                    fit: BoxFit.contain,
+                    semanticLabel: 'sssssssss',
+                  ),
                 ),
               ),
 
-              // ✅ FOOTER: اسم داخل شريط مزخرف أو لون متدرج
               Expanded(
                 flex: 2,
                 child: Container(

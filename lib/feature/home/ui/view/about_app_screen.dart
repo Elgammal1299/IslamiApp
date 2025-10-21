@@ -20,10 +20,10 @@ class AboutAppScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 28,
-                    backgroundColor: theme.colorScheme.primary.withOpacity(.12),
+                    backgroundColor: theme.colorScheme.primaryContainer,
                     child: Icon(
                       Icons.mosque,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.secondary,
                       size: 28,
                     ),
                   ),
@@ -113,7 +113,7 @@ class _FeatureItem extends StatelessWidget {
           Icon(
             Icons.check_circle,
             size: 20,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 8),
           Expanded(

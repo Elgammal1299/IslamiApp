@@ -78,6 +78,11 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             TextField(
+                   style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
               onTapOutside: (event) {
                 FocusScope.of(context).unfocus();
               },
@@ -92,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   fontSize: 18,
                 ),
               ),
-              style: const TextStyle(color: AppColors.black, fontSize: 18),
+              // style: const TextStyle(color: AppColors.black, fontSize: 18),
               onChanged: (searchedCharacter) {
                 addSearchedForAyatsToSearchedList(searchedCharacter);
               },

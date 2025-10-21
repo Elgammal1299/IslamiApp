@@ -1147,7 +1147,7 @@ packages:
       path: "quran-1.2.2"
       relative: true
     source: path
-    version: "1.2.2"
+    version: "1.2.3"
   record:
     dependency: "direct main"
     description:

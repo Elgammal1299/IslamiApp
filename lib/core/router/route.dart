@@ -41,14 +41,11 @@ import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/reciterC
 import 'package:islami_app/feature/notification/ui/view/notification_screen.dart';
 import 'package:islami_app/feature/notification/ui/view/notification_view.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
-import 'package:islami_app/feature/splash_screen/splash_screen.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoutes.splasahRouter:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.downloadsRouter:
         return MaterialPageRoute(
           builder:

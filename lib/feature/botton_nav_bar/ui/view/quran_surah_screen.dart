@@ -68,12 +68,17 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         child: Column(
           children: [
             TextField(
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
               onTapOutside: (event) {
                 FocusScope.of(context).unfocus();
               },
               controller: _searchTextSurahController,
               cursorColor: AppColors.black,
-              style: const TextStyle(color: AppColors.black),
+              // style: const TextStyle(color: AppColors.black),
               decoration: const InputDecoration(
                 hintText: 'ابحث عن سورة...',
                 border: InputBorder.none,
