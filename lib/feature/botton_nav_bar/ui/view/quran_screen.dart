@@ -431,7 +431,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     try {
       final List<VerseData> verses = [];
 
-      // التأكد من وجود البيانات قبل المعالجة
+     
       List<dynamic> pageData;
       try {
         pageData = getPageData(pageIndex);
@@ -519,7 +519,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                   color: theme.primaryColorDark,
                   height: PageConfig.getLineHeight(
                     pageIndex,
-                    MediaQuery.of(context).size.height,
+                    MediaQuery.sizeOf(context).height,
                   ),
 
                   // height: PageConfig.getLineHeight(pageIndex),
@@ -713,9 +713,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                                       value.toInt();
                                 },
                                 onChangeEnd: (value) {
-                                  final targetPage =
-                                      value.toInt() -
-                                      1; // PageView صفرية البداية
+                              final targetPage = value.toInt().clamp(1, 604);// PageView صفرية البداية
                                   if (targetPage >= 1 && targetPage < 605) {
                                     _pageController.animateToPage(
                                       targetPage,
