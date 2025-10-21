@@ -10,13 +10,13 @@ class HadithModelItem extends Equatable {
 }
 
 const List<HadithModelItem> hadithItems = [
-  HadithModelItem(name: "البخارى", englishName: "bukhari"),
-  HadithModelItem(name: "مسلم", englishName: "muslim"),
-  HadithModelItem(name: "أبي داود", englishName: "abu-daud"),
-  HadithModelItem(name: "الترمذي", englishName: "tirmidzi"),
-  HadithModelItem(name: "احمد", englishName: "ahmad"),
-  HadithModelItem(name: "ابن ماجه", englishName: "ibnu-majah"),
-  HadithModelItem(name: "الدارمي", englishName: "darimi"),
-  HadithModelItem(name: "مالك", englishName: "malik"),
-  HadithModelItem(name: "النسائي", englishName: "nasai"),
+  HadithModelItem(name: "صحيح البخاري", englishName: "bukhari"),
+  HadithModelItem(name: "صحيح مسلم", englishName: "muslim"),
+  HadithModelItem(name: "سنن أبي داود", englishName: "abu-daud"),
+  HadithModelItem(name: "سنن الترمذي", englishName: "tirmidzi"),
+  HadithModelItem(name: "مسند احمد", englishName: "ahmad"),
+  HadithModelItem(name: "سنن ابن ماجه", englishName: "ibnu-majah"),
+  HadithModelItem(name: "سنن الدارمي", englishName: "darimi"),
+  HadithModelItem(name: "موطأ مالك", englishName: "malik"),
+  HadithModelItem(name: "سنن النسائي", englishName: "nasai"),
 ];
