@@ -24,6 +24,7 @@ class PrayerNotificationService {
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
+      
     );
     const InitializationSettings initSettings = InitializationSettings(
       android: androidInit,
@@ -43,6 +44,7 @@ class PrayerNotificationService {
   NotificationDetails _details({bool withSound = true}) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
+        
         'prayer_times_channel',
         'Prayer Times',
         channelDescription: 'Azan notifications for prayer times',
@@ -50,6 +52,7 @@ class PrayerNotificationService {
         priority: Priority.high,
         visibility: NotificationVisibility.public,
         playSound: withSound,
+        
         sound:
             withSound
                 ? const RawResourceAndroidNotificationSound('azan')
@@ -57,6 +60,7 @@ class PrayerNotificationService {
         icon: '@mipmap/ic_launcher',
       ),
       iOS: DarwinNotificationDetails(
+        
         presentAlert: true,
         presentBadge: true,
         presentSound: withSound,

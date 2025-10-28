@@ -468,7 +468,6 @@ class _QuranViewScreenState extends State<QuranViewScreen>
     try {
       final List<VerseData> verses = [];
 
-     
       List<dynamic> pageData;
       try {
         pageData = getPageData(pageIndex);
@@ -703,6 +702,59 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                     ),
                   ),
                 ),
+
+              // if (_showBottomSlider)
+              //   Positioned(
+              //     bottom: 0,
+              //     left: 0,
+              //     right: 0,
+              //     child: Container(
+              //       padding: const EdgeInsets.symmetric(
+              //         horizontal: 16,
+              //         vertical: 8,
+              //       ),
+              //       color: Colors.black.withOpacity(0.6),
+              //       child: ValueListenableBuilder<int>(
+              //         valueListenable: _appState.currentPageNotifier,
+              //         builder: (context, currentPage, _) {
+              //           final pos = QuranPageIndex.firstAyahOnPage(currentPage);
+              //           final surahName = quran.getSurahNameArabic(pos.surah);
+
+              //           return Column(
+              //             mainAxisSize: MainAxisSize.min,
+              //             children: [
+              //               Text(
+              //                 "سورة $surahName (صفحة $currentPage)",
+              //                 style: const TextStyle(
+              //                   color: Colors.white,
+              //                   fontSize: 16,
+              //                 ),
+              //               ),
+              //               Slider(
+              //                 value: currentPage.clamp(1, 604).toDouble(),
+              //                 min: 1,
+              //                 max: 604,
+              //                 divisions: 603,
+              //                 onChanged: (value) {
+              //                   _appState.currentPageNotifier.value =
+              //                       value.toInt();
+              //                 },
+              //                 onChangeEnd: (value) {
+              //                   final targetPage = value.toInt() - 1;
+              //                   if (targetPage >= 0 && targetPage < 604) {
+              //                     _pageController.animateToPage(
+              //                       targetPage,
+              //                       duration: const Duration(milliseconds: 300),
+              //                       curve: Curves.easeInOut,
+              //                     );
+              //                   }
+              //                 },
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       ),
+              //     ),
               if (_showBottomSlider)
                 Positioned(
                   bottom: 0,
@@ -713,7 +765,7 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       horizontal: 16,
                       vertical: 8,
                     ),
-                    color: Colors.black.withOpacity(0.6),
+                    color: Colors.black.withOpacity(0.6), // خلفية شفافة بسيطة
                     child: ValueListenableBuilder<int>(
                       valueListenable: _appState.currentPageNotifier,
                       builder: (context, currentPage, _) {
@@ -730,18 +782,25 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                                 fontSize: 16,
                               ),
                             ),
+
                             Slider(
-                              value: currentPage.clamp(1, 604).toDouble(),
+                              value: currentPage.clamp(1, 605).toDouble(),
                               min: 1,
-                              max: 604,
-                              divisions: 603,
+                              max: 605,
+                              divisions: 604,
+                              // 👇 يظهر اسم السورة + الصفحة عند السحب
+                              // label:
+                              //     "سورة $surahName - صفحة ${currentPage - 1}",
                               onChanged: (value) {
                                 _appState.currentPageNotifier.value =
                                     value.toInt();
                               },
                               onChangeEnd: (value) {
-                                final targetPage = value.toInt() - 1;
-                                if (targetPage >= 0 && targetPage < 604) {
+                                final targetPage = value.toInt().clamp(
+                                  1,
+                                  604,
+                                ); // PageView صفرية البداية
+                                if (targetPage >= 1 && targetPage < 605) {
                                   _pageController.animateToPage(
                                     targetPage,
                                     duration: const Duration(milliseconds: 300),
@@ -755,74 +814,8 @@ class _QuranViewScreenState extends State<QuranViewScreen>
                       },
                     ),
                   ),
-<<<<<<< HEAD
-                if (_showBottomSlider)
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      color: Colors.black.withOpacity(0.6), // خلفية شفافة بسيطة
-                      child: ValueListenableBuilder<int>(
-                        valueListenable: _appState.currentPageNotifier,
-                        builder: (context, currentPage, _) {
-                          final pos = QuranPageIndex.firstAyahOnPage(
-                            currentPage,
-                          );
-                          final surahName = quran.getSurahNameArabic(pos.surah);
-
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "سورة $surahName (صفحة $currentPage)",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              Slider(
-                                value: currentPage.clamp(1, 605).toDouble(),
-                                min: 1,
-                                max: 605,
-                                divisions: 604,
-                                // 👇 يظهر اسم السورة + الصفحة عند السحب
-                                // label:
-                                //     "سورة $surahName - صفحة ${currentPage - 1}",
-                                onChanged: (value) {
-                                  _appState.currentPageNotifier.value =
-                                      value.toInt();
-                                },
-                                onChangeEnd: (value) {
-                              final targetPage = value.toInt().clamp(1, 604);// PageView صفرية البداية
-                                  if (targetPage >= 1 && targetPage < 605) {
-                                    _pageController.animateToPage(
-                                      targetPage,
-                                      duration: const Duration(
-                                        milliseconds: 300,
-                                      ),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-=======
                 ),
             ],
->>>>>>> 4c88314da42b5ea8d16cc8ff8b3089ad5c6d36a7
           ),
         ),
       ),

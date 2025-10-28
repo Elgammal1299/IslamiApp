@@ -3,41 +3,27 @@ import 'dart:async';
 import 'package:adhan/adhan.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
+import 'package:islami_app/feature/home/services/location_service.dart';
 
 /// Encapsulates all Adhan logic: location, calculation method, madhab, etc.
 class PrayerTimesService {
   final CalculationMethod calculationMethod;
   final Madhab madhab;
+  final LocationService locationService;
 
   PrayerTimesService({
     this.calculationMethod = CalculationMethod.muslim_world_league,
     this.madhab = Madhab.shafi,
+    required this.locationService,
   });
 
-  Future<Position> _getCurrentPosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw StateError('Location services are disabled');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-    if (permission == LocationPermission.deniedForever ||
-        permission == LocationPermission.denied) {
-      throw StateError('Location permissions are denied');
-    }
-
-    return Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+  /// Get current position using LocationService
+  Future<Position> getCurrentPosition() async {
+    return await locationService.initializeLocation();
   }
 
-  Future<Position> getCurrentPosition() => _getCurrentPosition();
-
   Future<PrayerTimes> getTodayPrayerTimes() async {
-    final Position position = await _getCurrentPosition();
+    final Position position = await getCurrentPosition();
     return getPrayerTimesForDate(
       latitude: position.latitude,
       longitude: position.longitude,
@@ -92,7 +78,17 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
 
   SharedPrayerTimesProvider._();
 
-  final PrayerTimesService _prayerService = PrayerTimesService();
+  late PrayerTimesService _prayerService;
+  late LocationService _locationService;
+
+  void setLocationService(LocationService locationService) {
+    _locationService = locationService;
+    _prayerService = PrayerTimesService(locationService: _locationService);
+  }
+
+  void setPrayerTimesService(PrayerTimesService service) {
+    _prayerService = service;
+  }
 
   PrayerTimes? _todayTimes;
   Map<Prayer, DateTime> _namedTimes = {};

@@ -28,7 +28,7 @@ import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
-import 'package:islami_app/feature/home/ui/view/prayer_times_screen.dart';
+import 'package:islami_app/feature/prayerTime/presentation/pages/prayer_times_screen.dart';
 import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_player_screen.dart';

@@ -2,9 +2,15 @@ import 'dart:async';
 import 'package:adhan/adhan.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:islami_app/core/services/setup_service_locator.dart';
+import 'package:islami_app/feature/home/services/location_service.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
+import 'package:islami_app/feature/prayerTime/presentation/widgets/location_card.dart';
+import 'package:islami_app/feature/prayerTime/presentation/widgets/prayer_header.dart';
+import 'package:islami_app/feature/prayerTime/presentation/widgets/prayer_tile.dart';
 
 class PrayerTimesScreen extends StatefulWidget {
   const PrayerTimesScreen({super.key});
@@ -14,7 +20,8 @@ class PrayerTimesScreen extends StatefulWidget {
 }
 
 class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
-  final PrayerTimesService _prayerService = PrayerTimesService();
+  late final PrayerTimesService _prayerService;
+  late final LocationService _locationService;
   final PrayerNotificationService _notificationService =
       PrayerNotificationService();
 
@@ -24,12 +31,17 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   final ValueNotifier<Prayer?> nextPrayer = ValueNotifier(null);
   final ValueNotifier<Duration> countdown = ValueNotifier(Duration.zero);
   final ValueNotifier<bool> preReminderEnabled = ValueNotifier(true);
+  final ValueNotifier<Position?> currentLocation = ValueNotifier(null);
+  final ValueNotifier<String?> locationName = ValueNotifier(null);
+  final ValueNotifier<bool> isUpdatingLocation = ValueNotifier(false);
 
   Timer? _ticker;
 
   @override
   void initState() {
     super.initState();
+    _locationService = sl<LocationService>();
+    _prayerService = PrayerTimesService(locationService: _locationService);
     _load();
   }
 
@@ -37,13 +49,15 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   void dispose() {
     _ticker?.cancel();
     _ticker = null;
-
     todayTimes.dispose();
     namedTimes.dispose();
     currentPrayer.dispose();
     nextPrayer.dispose();
     countdown.dispose();
     preReminderEnabled.dispose();
+    currentLocation.dispose();
+    locationName.dispose();
+    isUpdatingLocation.dispose();
     super.dispose();
   }
 
@@ -51,6 +65,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     try {
       await _notificationService.init();
       final PrayerTimes times = await _prayerService.getTodayPrayerTimes();
+
+      final position = _locationService.getStoredLocation();
+      if (position != null) currentLocation.value = position;
+
+      final storedLocationName = _locationService.getStoredLocationName();
+      if (storedLocationName != null) locationName.value = storedLocationName;
+
       _setTimes(times);
       await _scheduleTodayAndTomorrow();
       _startTicker();
@@ -58,8 +79,57 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
       }
+    }
+  }
+
+  Future<void> _updateLocation() async {
+    if (isUpdatingLocation.value) return;
+    try {
+      isUpdatingLocation.value = true;
+      final position = await _locationService.updateLocation();
+      currentLocation.value = position;
+
+      final updatedLocationName = _locationService.getStoredLocationName();
+      if (updatedLocationName != null) locationName.value = updatedLocationName;
+
+      await _load();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم تحديث الموقع بنجاح'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } on StateError catch (e) {
+      if (mounted) {
+        String errorMessage = 'خطأ في تحديث الموقع';
+        if (e.message.contains('disabled')) {
+          errorMessage = 'خدمة الموقع غير مفعلة. يرجى تفعيلها من الإعدادات';
+        } else if (e.message.contains('denied')) {
+          errorMessage = 'لا توجد أذونات للوصول للموقع. يرجى السماح بالوصول';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('خطأ غير متوقع: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      isUpdatingLocation.value = false;
     }
   }
 
@@ -121,12 +191,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   void _startTicker() {
     _ticker?.cancel();
-
     if (mounted) {
       _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-        if (mounted) {
-          _refreshPrayers();
-        }
+        if (mounted) _refreshPrayers();
       });
     }
   }
@@ -152,10 +219,28 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   String _format(DateTime dt) => DateFormat('h:mm a', 'ar').format(dt);
 
+  IconData _iconFor(Prayer p) {
+    switch (p) {
+      case Prayer.fajr:
+        return Icons.bedtime;
+      case Prayer.sunrise:
+        return Icons.wb_sunny_outlined;
+      case Prayer.dhuhr:
+        return Icons.wb_sunny;
+      case Prayer.asr:
+        return Icons.cloud_queue;
+      case Prayer.maghrib:
+        return Icons.wb_twilight;
+      case Prayer.isha:
+        return Icons.nights_stay;
+      case Prayer.none:
+        return Icons.more_horiz;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(title: const Text('مواقيت الصلاة')),
       body: ValueListenableBuilder<PrayerTimes?>(
@@ -169,20 +254,29 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _buildHeader(theme),
-                const SizedBox(height: 16),
-                ValueListenableBuilder<Map<Prayer, DateTime>>(
-                  valueListenable: namedTimes,
-                  builder: (context, prayers, _) {
-                    return Column(
-                      children:
-                          prayers.entries
-                              .map((e) => _buildTile(e.key, e.value))
-                              .toList(),
-                    );
-                  },
+                LocationCardWidget(
+                  locationName: locationName.value,
+                  isUpdating: isUpdatingLocation.value,
+                  onUpdate: _updateLocation,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+                PrayerHeaderWidget(
+                  currentPrayer: currentPrayer.value,
+                  nextPrayer: nextPrayer.value,
+                  countdown: countdown.value,
+                  displayName: _displayName,
+                ),
+                const SizedBox(height: 16),
+                ...namedTimes.value.entries.map((e) {
+                  return PrayerTileWidget(
+                    prayer: e.key,
+                    time: e.value,
+                    isCurrent: currentPrayer.value == e.key,
+                    displayName: _displayName,
+                    format: _format,
+                    iconFor: _iconFor,
+                  );
+                }),
               ],
             ),
           );
@@ -190,109 +284,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       ),
     );
   }
-
-  Widget _buildHeader(ThemeData theme) {
-    return ValueListenableBuilder2<Prayer?, Prayer?>(
-      first: currentPrayer,
-      second: nextPrayer,
-      builder: (context, current, next, _) {
-        return ValueListenableBuilder<Duration>(
-          valueListenable: countdown,
-          builder: (context, d, _) {
-            final String hh = d.inHours.toString().padLeft(2, '0');
-            final String mm = (d.inMinutes % 60).toString().padLeft(2, '0');
-            final String ss = (d.inSeconds % 60).toString().padLeft(2, '0');
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'الصلاة الحالية: ${current != null ? _displayName(current) : '-'}',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      next == null
-                          ? '—'
-                          : 'الصلاة التالية: ${_displayName(next)} بعد $hh:$mm:$ss',
-                      style: theme.textTheme.headlineSmall,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildTile(Prayer p, DateTime t) {
-    return ValueListenableBuilder<Prayer?>(
-      valueListenable: currentPrayer,
-      builder: (context, current, _) {
-        final bool isCurrent = current == p;
-        return Card(
-          elevation: isCurrent ? 2 : 0,
-          color: isCurrent ? Colors.green.withOpacity(0.08) : null,
-          child: ListTile(
-            leading: Icon(_iconFor(p), color: isCurrent ? Colors.green : null),
-            title: Text(_displayName(p)),
-            trailing: Text(_format(t)),
-          ),
-        );
-      },
-    );
-  }
-
-  IconData _iconFor(Prayer p) {
-    switch (p) {
-      case Prayer.fajr:
-        return Icons.bedtime;
-      case Prayer.sunrise:
-        return Icons.wb_sunny_outlined;
-      case Prayer.dhuhr:
-        return Icons.wb_sunny;
-      case Prayer.asr:
-        return Icons.cloud_queue;
-      case Prayer.maghrib:
-        return Icons.nightlight_round;
-      case Prayer.isha:
-        return Icons.nights_stay;
-      case Prayer.none:
-        return Icons.more_horiz;
-    }
-  }
 }
 
-class ValueListenableBuilder2<A, B> extends StatelessWidget {
-  final ValueListenable<A> first;
-  final ValueListenable<B> second;
-  final Widget Function(BuildContext, A, B, Widget?) builder;
-  final Widget? child;
-
-  const ValueListenableBuilder2({
-    super.key,
-    required this.first,
-    required this.second,
-    required this.builder,
-    this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<A>(
-      valueListenable: first,
-      builder: (context, a, _) {
-        return ValueListenableBuilder<B>(
-          valueListenable: second,
-          builder: (context, b, _) {
-            return builder(context, a, b, child);
-          },
-        );
-      },
-    );
-  }
-}
+//

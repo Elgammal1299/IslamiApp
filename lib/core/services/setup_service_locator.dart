@@ -14,6 +14,7 @@ import 'hive_service.dart';
 import 'radio_service.dart';
 import 'bookmark_manager.dart';
 import '../../core/helper/audio_manager.dart';
+import '../../feature/home/services/location_service.dart';
 
 // Repositories
 import '../../feature/home/data/repo/radio_repository.dart';
@@ -160,6 +161,11 @@ Future<void> setupServiceLocator() async {
   // BookmarkManager
   sl.registerLazySingleton<BookmarkManager>(() {
     return BookmarkManager(sl<SharedPreferences>());
+  });
+
+  // LocationService
+  sl.registerLazySingleton<LocationService>(() {
+    return LocationService();
   });
 
   // ===== REPOSITORIES =====

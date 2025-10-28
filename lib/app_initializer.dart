@@ -77,6 +77,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/recording_model.dart';
+import 'package:islami_app/feature/home/services/location_service.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
@@ -223,8 +224,10 @@ class AppInitializer {
       // ✅ Initialize local notifications
       await _initLocalNotifications();
 
-      // ✅ Initialize prayer times provider
+      // ✅ Initialize prayer times provider with LocationService
       final provider = SharedPrayerTimesProvider.instance;
+      final locationService = sl<LocationService>();
+      provider.setLocationService(locationService);
       await provider.initialize();
 
       // ✅ Setup prayer notifications
