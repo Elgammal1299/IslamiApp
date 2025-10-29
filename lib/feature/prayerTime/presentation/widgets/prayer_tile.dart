@@ -1,7 +1,4 @@
-
-
 import 'package:adhan/adhan.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PrayerTileWidget extends StatelessWidget {
@@ -24,43 +21,122 @@ class PrayerTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: isCurrent ? 2 : 0,
-      color: isCurrent ? Colors.green.withOpacity(0.08) : null,
-      child: ListTile(
-        leading: Icon(iconFor(prayer), color: isCurrent ? Colors.green : null),
-        title: Text(displayName(prayer)),
-        trailing: Text(format(time)),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: isCurrent ? 8 : 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: isCurrent ? 16 : 12,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color:
+              isCurrent
+                  ? Colors.white.withValues(alpha: 0.8)
+                  : Colors.white.withValues(alpha: 0.2),
+          width: isCurrent ? 2 : 1.5,
+        ),
+        color:
+            isCurrent
+                ? Colors.white.withValues(alpha: 0.1)
+                : Colors.transparent,
+
+        boxShadow:
+            isCurrent
+                ? [
+                  BoxShadow(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                  ),
+                ]
+                : null,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // اسم الصلاة
+          Expanded(
+            flex: 2,
+            child: Text(
+              displayName(prayer),
+              style: TextStyle(
+                fontSize: isCurrent ? 18 : 16,
+                fontWeight:
+                    isCurrent ? FontWeight.bold : FontWeight.w400, // bold
+                color:
+                    isCurrent
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.7),
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+
+          // الوقت المتبقي
+          Expanded(
+            flex: 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'متبقي : ',
+                  style: TextStyle(
+                    fontSize: isCurrent ? 15 : 14,
+                    color:
+                        isCurrent
+                            ? Colors.white.withValues(alpha: 0.9)
+                            : Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+                Text(
+                  _getTimeLeft(time),
+                  style: TextStyle(
+                    fontSize: isCurrent ? 15 : 14,
+                    fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w500,
+                    color:
+                        isCurrent
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // أيقونة الجرس
+          Icon(
+            Icons.notifications_outlined,
+            size: isCurrent ? 24 : 20,
+            color:
+                isCurrent ? Colors.white : Colors.white.withValues(alpha: 0.4),
+          ),
+        ],
       ),
     );
   }
-}
 
-/// 🔁 ValueListenableBuilder لاثنين
-class ValueListenableBuilder2<A, B> extends StatelessWidget {
-  final ValueListenable<A> first;
-  final ValueListenable<B> second;
-  final Widget Function(BuildContext, A, B, Widget?) builder;
-  final Widget? child;
+  String _getTimeLeft(DateTime prayerTime) {
+    final now = DateTime.now();
+    Duration diff = prayerTime.difference(now);
 
-  const ValueListenableBuilder2({
-    super.key,
-    required this.first,
-    required this.second,
-    required this.builder,
-    this.child,
-  });
+    if (diff.isNegative) {
+      // يعني الوقت فات
+      return 'تم الأذان';
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<A>(
-      valueListenable: first,
-      builder: (context, a, _) {
-        return ValueListenableBuilder<B>(
-          valueListenable: second,
-          builder: (context, b, _) => builder(context, a, b, child),
-        );
-      },
-    );
+    final hours = diff.inHours;
+    final minutes = diff.inMinutes.remainder(60);
+
+    if (hours == 0 && minutes == 0) {
+      return 'الآن';
+    } else if (hours == 0) {
+      return '$minutes دقيقة';
+    } else if (minutes == 0) {
+      return '$hours ساعة';
+    } else {
+      return '$hours ساعة و $minutes دقيقة';
+    }
   }
 }

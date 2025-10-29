@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+
+import 'package:islami_app/feature/prayerTime/presentation/widgets/arabic_date_time.dart';
 
 class LocationCardWidget extends StatelessWidget {
   final String? locationName;
@@ -15,65 +16,55 @@ class LocationCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'الموقع الحالي',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const ArabicDateTimeWidget(),
+              isUpdating
+                  ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                  : IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: onUpdate,
+                    tooltip: 'تحديث الموقع',
                   ),
+            ],
+          ),
+
+          if (locationName != null)
+            Row(
+              children: [
+                const Icon(Icons.location_on, size: 20, color: Colors.green),
+                const SizedBox(width: 8),
+                Expanded(child: Text(locationName!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                )),
+              ],
+            )
+          else
+            const Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
-                isUpdating
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: onUpdate,
-                        tooltip: 'تحديث الموقع',
-                      ),
+                SizedBox(width: 8),
+                Text('جاري تحديد الموقع...'),
               ],
             ),
-            const SizedBox(height: 8),
-            if (locationName != null)
-              Row(
-                children: [
-                  const Icon(Icons.location_on, size: 20, color: Colors.green),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      locationName!,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            else
-              const Row(
-                children: [
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  SizedBox(width: 8),
-                  Text('جاري تحديد الموقع...'),
-                ],
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

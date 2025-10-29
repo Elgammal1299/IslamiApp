@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:adhan/adhan.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/services/location_service.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
+import 'package:islami_app/feature/prayerTime/presentation/widgets/azan_display.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/location_card.dart';
-import 'package:islami_app/feature/prayerTime/presentation/widgets/prayer_header.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/prayer_tile.dart';
 
 class PrayerTimesScreen extends StatefulWidget {
@@ -238,11 +239,64 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     }
   }
 
+  // Function ترجع الـ gradient حسب الصلاة
+  LinearGradient _getGradientForPrayer(Prayer? prayer) {
+    if (prayer == null || prayer == Prayer.none) {
+      // Default - بنفسجي غامق
+      return const LinearGradient(
+        begin: Alignment(0.50, 0.00),
+        end: Alignment(0.50, 1.00),
+        colors: [Color(0xFF22166D), Color(0xFF22166D), Color(0xCE22166D)],
+      );
+    }
+
+    switch (prayer) {
+      case Prayer.fajr: // الفجر
+      case Prayer.isha: // العشاء
+        return LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF23176D),
+            const Color(0xFF23176D),
+            const Color(0xFF23176D).withValues(alpha: 0.81),
+          ],
+          stops: [0.0, 0.85, 1.0],
+        );
+      case Prayer.sunrise: // الشروق
+      case Prayer.dhuhr: // الظهر
+      case Prayer.asr: // العصر
+        return const LinearGradient(
+          begin: Alignment(0.50, 0.00),
+          end: Alignment(0.50, 1.00),
+          colors: [Color(0xFF0694D5), Colors.white],
+        );
+
+      case Prayer.maghrib: // المغرب
+        return const LinearGradient(
+          begin: Alignment(0.50, 0.00),
+          end: Alignment(0.50, 1.00),
+          colors: [
+            Color(0xFF8B0E61),
+            Color(0xFF8B0D4A),
+            Color(0xF7C64888),
+            Color(0xE5DF6299),
+            Color(0xCE8B0E61),
+          ],
+        );
+
+      case Prayer.none:
+        return const LinearGradient(
+          begin: Alignment(0.50, 0.00),
+          end: Alignment(0.50, 1.00),
+          colors: [Color(0xFF22166D), Color(0xFF22166D), Color(0xCE22166D)],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('مواقيت الصلاة')),
       body: ValueListenableBuilder<PrayerTimes?>(
         valueListenable: todayTimes,
         builder: (context, times, _) {
@@ -251,39 +305,158 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
           }
           return RefreshIndicator(
             onRefresh: _load,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                LocationCardWidget(
-                  locationName: locationName.value,
-                  isUpdating: isUpdatingLocation.value,
-                  onUpdate: _updateLocation,
-                ),
-                const SizedBox(height: 16),
-                PrayerHeaderWidget(
-                  currentPrayer: currentPrayer.value,
-                  nextPrayer: nextPrayer.value,
-                  countdown: countdown.value,
-                  displayName: _displayName,
-                ),
-                const SizedBox(height: 16),
-                ...namedTimes.value.entries.map((e) {
-                  return PrayerTileWidget(
-                    prayer: e.key,
-                    time: e.value,
-                    isCurrent: currentPrayer.value == e.key,
-                    displayName: _displayName,
-                    format: _format,
-                    iconFor: _iconFor,
-                  );
-                }),
-              ],
+            child: ValueListenableBuilder<Prayer?>(
+              valueListenable: currentPrayer,
+              builder: (context, current, _) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: ShapeDecoration(
+                    gradient: _getGradientForPrayer(current),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: ListView(
+                    children: [
+                      LocationCardWidget(
+                        locationName: locationName.value,
+                        isUpdating: isUpdatingLocation.value,
+                        onUpdate: _updateLocation,
+                      ),
+
+                      AzanDisplay(times: times, currentPrayer: current),
+
+                      Image.asset(
+                        "assets/images/Vector.png",
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        color: const Color(0xff0C222B),
+                      ),
+
+                      ColoredBox(
+                        color: const Color(0xff0C222B),
+                        child: ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: () {
+                            final entries = namedTimes.value.entries.toList();
+
+                            entries.sort((a, b) {
+                              if (a.key == currentPrayer.value) return -1;
+                              if (b.key == currentPrayer.value) return 1;
+                              return 0;
+                            });
+                            final current = entries.firstWhere(
+                              (e) => e.key == currentPrayer.value,
+                              orElse: () => entries.first,
+                            );
+
+                            return entries.take(3).map((e) {
+                              return PrayerTileWidget(
+                                prayer: e.key,
+                                time: e.value,
+                                isCurrent: current.key == e.key,
+                                displayName: _displayName,
+                                format: _format,
+                                iconFor: _iconFor,
+                              );
+                            }).toList();
+                          }(),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           );
         },
       ),
     );
   }
-}
 
-//
+  // Stack azanDisplay(PrayerTimes times, Prayer? currentPrayer) {
+  //   final imageData = _getImageForPrayerPosition(currentPrayer);
+  //   log('Current Prayer: $currentPrayer, Image: ${imageData.asset}');
+
+  //   return Stack(
+  //     clipBehavior: Clip.none,
+  //     children: [
+  //       Prayer.maghrib == currentPrayer
+  //           ? Positioned(
+  //             top: -25,
+
+  //             // right: 140,
+  //             child: Opacity(
+  //               opacity: .5,
+  //               child: Image.asset(
+  //                 "assets/images/m3rep.png",
+  //                 color: Colors.white.withValues(alpha: .2),
+
+  //                 fit: BoxFit.contain,
+  //               ),
+  //             ),
+  //           )
+  //           : const SizedBox(),
+  //       Positioned(
+  //         top: imageData.top,
+  //         bottom: imageData.bottom,
+  //         left: imageData.left,
+  //         right: imageData.right,
+  //         child: Opacity(
+  //           opacity: .5,
+  //           child: Image.asset(imageData.asset, fit: BoxFit.contain),
+  //         ),
+  //       ),
+  //       AzanGrid(todayTimes: times),
+  //     ],
+  //   );
+  // }
+
+  // _PrayerImageData _getImageForPrayerPosition(Prayer? prayer) {
+  //   switch (prayer) {
+  //     case Prayer.fajr:
+  //       return const _PrayerImageData(asset: "assets/images/stars.png", top: 0);
+  //     case Prayer.sunrise:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/Sun.png",
+
+  //         bottom: -150,
+
+  //         left: 5,
+  //       );
+  //     case Prayer.dhuhr:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/Sun.png",
+  //         top: -23,
+  //         right: 140,
+  //       );
+  //     case Prayer.asr:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/Sun.png",
+  //         bottom: -60,
+
+  //         right: 5,
+  //       );
+  //     case Prayer.maghrib:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/Sun.png",
+  //         bottom: -180,
+
+  //         right: 5,
+  //       );
+  //     case Prayer.isha:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/moon.png",
+  //         bottom: -160,
+  //       );
+  //     default:
+  //       return const _PrayerImageData(
+  //         asset: "assets/images/stars.png",
+  //         top: -10,
+  //       );
+  //   }
+  // }
+}
