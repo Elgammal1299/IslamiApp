@@ -143,10 +143,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider.value(
                 value: sl<ReadingProgressCubit>(),
-                child: QuranViewScreen(
-                  jsonData: args?['jsonData'],
-                  pageNumber: args?['pageNumber'],
-                ),
+                child: QuranViewScreen(pageNumber: args?['pageNumber']),
               ),
         );
 

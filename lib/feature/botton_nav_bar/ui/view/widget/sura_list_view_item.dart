@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
 
 class SuraListViewItem extends StatelessWidget {
@@ -12,7 +11,6 @@ class SuraListViewItem extends StatelessWidget {
     required this.suraNameEnglishTranslated,
     required this.ayahCount,
     required this.suraNumberInQuran,
-    required this.surahs,
   });
 
   final int suraNumber;
@@ -20,7 +18,6 @@ class SuraListViewItem extends StatelessWidget {
   final String suraNameEnglishTranslated;
   final int ayahCount;
   final int suraNumberInQuran;
-  final List<SurahModel> surahs;
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +55,7 @@ class SuraListViewItem extends StatelessWidget {
         Navigator.pushNamed(
           context,
           AppRoutes.quranViewRouter,
-          arguments: {
-            "jsonData": surahs,
-            "pageNumber": getPageNumber(suraNumberInQuran, 1),
-          },
+          arguments: {"pageNumber": getPageNumber(suraNumberInQuran, 1)},
         );
       },
     );

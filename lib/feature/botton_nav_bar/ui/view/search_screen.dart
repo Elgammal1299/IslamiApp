@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_ayat_search_results.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:quran/quran.dart';
@@ -35,15 +34,15 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void addSearchedForAyatsToSearchedList(String searchQuery) {
-    if (searchQuery.isNotEmpty && searchQuery.length > 1 ||
-        searchQuery.contains(" ")) {
+    if (searchQuery.isNotEmpty &&
+        (searchQuery.length > 1 || searchQuery.contains(" "))) {
       searchedForAyats.value = searchWords(searchQuery);
     } else {
       searchedForAyats.value = null;
     }
   }
 
-  Widget _buildVerseSearchResults(List<SurahModel> surahs) {
+  Widget _buildVerseSearchResults() {
     final ayats = searchedForAyats.value;
     if (ayats == null) {
       return const Center(child: CircularProgressIndicator());
@@ -60,7 +59,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     return CustomAyatSearchResults(
       searchedForAyats: ayats,
-      surahs: surahs,
       searchQuery: _searchTextAyatController.text,
     );
   }
@@ -78,11 +76,11 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             TextField(
-                   style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
               onTapOutside: (event) {
                 FocusScope.of(context).unfocus();
               },
@@ -97,7 +95,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   fontSize: 18,
                 ),
               ),
-              // style: const TextStyle(color: AppColors.black, fontSize: 18),
               onChanged: (searchedCharacter) {
                 addSearchedForAyatsToSearchedList(searchedCharacter);
               },
@@ -120,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 color: AppColors.primary,
                               ),
                               SizedBox(height: 10),
-                              Text(
+                              const Text(
                                 'ابدأ البحث عن الآيات',
                                 style: TextStyle(
                                   color: AppColors.black,
@@ -130,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           );
                         }
-                        return _buildVerseSearchResults(state.surahs);
+                        return _buildVerseSearchResults();
                       },
                     );
                   }

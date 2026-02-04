@@ -2,21 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:quran/quran.dart' as quran;
 
 class BookmarkCard extends StatelessWidget {
   final int surah;
   final int ayah;
-  final List<SurahModel> surahs;
 
-  const BookmarkCard({
-    super.key,
-    required this.surah,
-    required this.ayah,
-    required this.surahs,
-  });
+  const BookmarkCard({super.key, required this.surah, required this.ayah});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +19,7 @@ class BookmarkCard extends StatelessWidget {
         Navigator.pushNamed(
           context,
           AppRoutes.quranViewRouter,
-          arguments: {"jsonData": surahs, "pageNumber": pageNumber},
+          arguments: {"pageNumber": pageNumber},
         );
       },
       child: Card(
@@ -46,7 +39,6 @@ class BookmarkCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    
                     'سورة ${quran.getSurahNameArabic(surah)} ($ayah)',
                     style: Theme.of(
                       context,
@@ -72,7 +64,6 @@ class BookmarkCard extends StatelessWidget {
                 ],
               ),
             ),
-
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).secondaryHeaderColor,
@@ -83,7 +74,6 @@ class BookmarkCard extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(16),
               child: Text(
-                
                 quran.getVerse(surah, ayah),
                 style: Theme.of(
                   context,

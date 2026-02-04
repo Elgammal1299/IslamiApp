@@ -60,6 +60,7 @@ dependencies:
   connectivity_plus: ^7.0.0
   url_launcher: ^6.3.2
   screenshot: ^3.0.0
+  qcf_quran: ^0.0.3
 
 dev_dependencies:
   flutter_test:

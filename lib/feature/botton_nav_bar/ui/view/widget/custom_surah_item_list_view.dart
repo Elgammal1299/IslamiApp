@@ -33,7 +33,6 @@ class CustomSurahItemListView extends StatelessWidget {
           suraNameEnglishTranslated: surah.englishNameTranslation,
           ayahCount: getVerseCount(surah.number),
           suraNumberInQuran: surah.number,
-          surahs: surahs,
         );
       },
     );

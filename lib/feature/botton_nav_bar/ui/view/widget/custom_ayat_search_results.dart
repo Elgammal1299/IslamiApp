@@ -2,7 +2,6 @@ import 'package:easy_container/easy_container.dart';
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
-import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:quran/quran.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/highlighted_text.dart';
 
@@ -10,13 +9,12 @@ class CustomAyatSearchResults extends StatelessWidget {
   const CustomAyatSearchResults({
     super.key,
     required this.searchedForAyats,
-    required this.surahs,
     required this.searchQuery,
   });
 
   final dynamic searchedForAyats;
-  final List<SurahModel> surahs;
   final String searchQuery;
+
   String _normalizeArabic(String text) {
     // إزالة التشكيل والرموز الخاصة
     return text
@@ -48,7 +46,7 @@ class CustomAyatSearchResults extends StatelessWidget {
               Navigator.pushReplacementNamed(
                 context,
                 AppRoutes.quranViewRouter,
-                arguments: {"jsonData": surahs, "pageNumber": pageNumber},
+                arguments: {"pageNumber": pageNumber},
               );
             },
             child: Column(

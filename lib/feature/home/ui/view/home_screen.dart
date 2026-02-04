@@ -213,15 +213,10 @@ class CustomReadingQuran extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    final surahs = BlocProvider.of<SurahCubit>(context).surahs;
-
                     Navigator.pushNamed(
                       context,
                       AppRoutes.quranViewRouter,
-                      arguments: {
-                        "jsonData": surahs, // مرّر surahs هنا
-                        "pageNumber": pageNumber,
-                      },
+                      arguments: {"pageNumber": pageNumber},
                     );
                   },
                   child: Text(

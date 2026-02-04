@@ -5,7 +5,6 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/bookmark_card.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 
 class BookmarksScreen extends StatefulWidget {
   const BookmarksScreen({super.key});
@@ -91,11 +90,7 @@ class _BookmarksScreenState extends State<BookmarksScreen>
                         int surah = int.parse(parts[0]);
                         int ayah = int.parse(parts[1]);
 
-                        return BookmarkCard(
-                          surahs: BlocProvider.of<SurahCubit>(context).surahs,
-                          surah: surah,
-                          ayah: ayah,
-                        );
+                        return BookmarkCard(surah: surah, ayah: ayah);
                       },
                     ),
                   ),
