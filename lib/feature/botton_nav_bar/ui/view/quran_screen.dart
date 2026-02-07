@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:qcf_quran/qcf_quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../view_model/reading_progress_cubit.dart';
 import 'widget/custom_surah_fram_widget.dart';
+import '../view_model/verse_selection_cubit.dart';
+import 'widget/botton_sheet_item.dart';
+import 'widget/pageview_quran.dart';
 
 class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
@@ -38,8 +40,15 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     super.dispose();
   }
 
+  int _getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
+    int cumulativeNumber = 0;
+    for (int i = 1; i < surahNumber; i++) {
+      cumulativeNumber += quran.getVerseCount(i);
+    }
+    return cumulativeNumber + ayahNumber;
+  }
+
   void _onPageChanged(int page) async {
-    // PageviewQuran generates 1-based page numbers
     setState(() {
       _currentPage = page;
     });
@@ -51,44 +60,85 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xffFFF8EE),
-      body: GestureDetector(
-        onTap: () => setState(() => _showUI = !_showUI),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 20.h,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: PageviewQuran(
-                pageBackgroundColor: const Color(0xffFFF8EE),
-                controller: _controller,
-                onPageChanged: _onPageChanged,
-                initialPageNumber: widget.pageNumber,
-                
-                sp: 1.08.sp, // تقليل القيمة لتقليل المسافة الجانبية
-                h: 1.h,
-              
-                textColor: Colors.black,
-              ),
-            ),
-            if (_showUI)
+    return BlocProvider(
+      create: (context) => VerseSelectionCubit(),
+      child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        backgroundColor: const Color(0xffFFF8EE),
+        body: GestureDetector(
+          onTap: () => setState(() => _showUI = !_showUI),
+          child: Stack(
+            children: [
               Positioned(
-                top: 0,
+                top: 30.h,
                 left: 0,
                 right: 0,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: CustomSurahFramWidget(index: _currentPage),
+                bottom: 0,
+                child: MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: const TextScaler.linear(1.0)),
+                  child: BlocBuilder<VerseSelectionCubit, String?>(
+                    builder: (context, selectedVerseId) {
+                      return PageviewQuran(
+                        pageBackgroundColor: const Color(0xffFFF8EE),
+                        controller: _controller,
+                        onPageChanged: _onPageChanged,
+                        initialPageNumber: widget.pageNumber,
+                        sp: 1..sp,
+                        h: 1.4.h,
+                        textColor: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        onLongPress: (surah, ayah) {
+                          context.read<VerseSelectionCubit>().selectVerse(
+                            surah,
+                            ayah,
+                          );
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (_) {
+                              return BottonSheetItem(
+                                surah: surah,
+                                verse: ayah,
+                                cumulativeNumber: _getCumulativeAyahNumber(
+                                  surah,
+                                  ayah,
+                                ),
+                              );
+                            },
+                          ).then((_) {
+                            context
+                                .read<VerseSelectionCubit>()
+                                .clearSelection();
+                          });
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
-          ],
+              if (_showUI)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: CustomSurahFramWidget(index: _currentPage),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
