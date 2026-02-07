@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/router/router_transitions.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_surah_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/search_screen.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
-import 'package:islami_app/feature/botton_nav_bar/ui/view/bottom_navbar_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
@@ -128,12 +127,9 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<SurahCubit>()..getSurahs(),
                   ),
-                  BlocProvider.value(value: sl<NavBarCubit>()),
-                  BlocProvider(
-                    create: (context) => sl<BookmarkCubit>()..loadBookmarks(),
-                  ),
+                 
                 ],
-                child: const BottomNavbarScreen(),
+                child: const QuranSurahScreen(),
               ),
         );
 
