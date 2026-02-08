@@ -17,46 +17,48 @@ class SebhaCounterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Transform.rotate(
-            angle: animation.value * 2 * math.pi,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double sebhaSize = 200;
+
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AnimatedBuilder(
+                    animation: animation,
+                    builder: (context, child) {
+                      return Transform.rotate(
+                        angle: animation.value * 2 * math.pi,
+                        child: Image.asset(
+                          "assets/images/sebha.png",
+                          width: sebhaSize,
+                          height: sebhaSize,
+                        ),
+                      );
+                    },
+                  ),
+                  Image.asset(
+                    "assets/images/sebha2.png",
+                    width: sebhaSize * 0.5,
+                    height: sebhaSize * 0.5,
                   ),
                 ],
               ),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).secondaryHeaderColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      counter.toString(),
-                      style: TextStyle(
-                        fontSize: 65,
+
+              // الرقم في نصف الدائرة بدقة وعلى كل الأجهزة
+              Positioned(
+                top: sebhaSize * 0.33,
+                child: Text(
+                  counter.toString(),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
                       ),
-                    ),
-                  ),
                 ),
               ),
-            ),
+            ],
           );
         },
       ),
