@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:islami_app/core/constant/app_color.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 
 class HomeItemCard extends StatelessWidget {
@@ -11,6 +11,8 @@ class HomeItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, item.route);
@@ -20,49 +22,42 @@ class HomeItemCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: Theme.of(context).secondaryHeaderColor,
-            width: 2,
+            color: Theme.of(context).primaryColorDark.withOpacity(0.5),
+            width: 1,
+             
           ),
+
+        color:  Theme.of(context).cardColor,
+         
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 7,
-                child: Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  padding: const EdgeInsets.all(12),
-                  child: Image.asset(
-                    item.image,
-                    fit: BoxFit.contain,
-                    semanticLabel: 'sssssssss',
-                  ),
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Image section
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(item.image, fit: BoxFit.contain,),
               ),
+            ),
 
-              Expanded(
-                flex: 2,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                  ),
-
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      item.name,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge!.copyWith(color: AppColors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+            // Text section
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+              child: Text(
+                item.name,
+                style:  TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'uthmanic',
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

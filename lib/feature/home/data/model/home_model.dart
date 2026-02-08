@@ -50,12 +50,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.qiblahRouter,
   ),
 
-  HomeItemModel(
-    name: "ريكورد",
-    image: AppImage.micImage,
-
-    route: AppRoutes.audioRecordingRouter,
-  ),
+ 
   HomeItemModel(
     name: "صوتيات",
     image: AppImage.audioImage,

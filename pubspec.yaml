@@ -61,6 +61,7 @@ dependencies:
   url_launcher: ^6.3.2
   screenshot: ^3.0.0
   qcf_quran: ^0.0.3
+  hijri: ^3.0.0
 
 dev_dependencies:
   flutter_test:

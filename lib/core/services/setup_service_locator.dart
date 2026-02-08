@@ -29,7 +29,6 @@ import '../../feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import '../../feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
-import '../../feature/home/ui/view_model/audio_recording_cubit/audio_recording_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
@@ -44,7 +43,6 @@ import '../../feature/home/data/repo/hadith_repo.dart';
 import '../../feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 
 // Models
-import '../../feature/home/data/model/recording_model.dart';
 import '../../feature/notification/data/model/notification_model.dart';
 
 final sl = GetIt.instance;
@@ -144,12 +142,7 @@ Future<void> setupServiceLocator() async {
     );
   });
 
-  sl.registerLazySingleton<HiveService<RecordingModel>>(() {
-    return HiveService.instanceFor<RecordingModel>(
-      boxName: 'audio_recordings',
-      enableLogging: true,
-    );
-  });
+
 
   sl.registerLazySingleton<HiveService<NotificationModel>>(() {
     return HiveService.instanceFor<NotificationModel>(
@@ -237,9 +230,7 @@ Future<void> setupServiceLocator() async {
     return AudioCubit(sl<AudioManager>());
   });
 
-  sl.registerLazySingleton<AudioRecordingCubit>(() {
-    return AudioRecordingCubit();
-  });
+ 
 
   sl.registerLazySingleton<HadithCubit>(() {
     return HadithCubit(sl<HadithRepo>());

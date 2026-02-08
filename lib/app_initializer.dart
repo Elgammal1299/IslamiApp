@@ -11,7 +11,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/core/services/hive_service.dart';
-import 'package:islami_app/feature/home/data/model/recording_model.dart';
 import 'package:islami_app/feature/home/services/location_service.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
@@ -111,9 +110,7 @@ class AppInitializer {
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(NotificationModelAdapter());
       }
-      if (!Hive.isAdapterRegistered(0)) {
-        Hive.registerAdapter(RecordingModelAdapter());
-      }
+      
     } catch (_) {}
 
     // ✅ 8. Setup service locator
@@ -123,7 +120,6 @@ class AppInitializer {
     // ✅ 9. Initialize Hive services
     try {
       await sl<HiveService<DownloadModel>>().init();
-      await sl<HiveService<RecordingModel>>().init();
       await sl<HiveService<NotificationModel>>().init();
     } catch (_) {}
 
