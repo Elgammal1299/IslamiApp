@@ -20,11 +20,7 @@ class HomeItemCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: Theme.of(context).primaryColorDark.withOpacity(0.5),
-            width: 1,
-             
-          ),
+          
 
         color:  Theme.of(context).cardColor,
          
@@ -35,7 +31,7 @@ class HomeItemCard extends StatelessWidget {
             // Image section
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Image.asset(item.image, fit: BoxFit.contain,),
               ),
             ),
@@ -48,7 +44,6 @@ class HomeItemCard extends StatelessWidget {
                 style:  TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
                   fontFamily: 'uthmanic',
                 ),
                 textAlign: TextAlign.center,

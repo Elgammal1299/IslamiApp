@@ -58,11 +58,15 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-floatingActionButton: FloatingActionButton(onPressed:   () {
-        // Navigator.pushNamed(context, AppRoutes.quranBookmarksRouter);
-      },
-      child: const Icon(Icons.add, color: AppColors.white),
-    ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.khatmahListRouter);
+        },
+        label: const Text('ختماتي'),
+        icon: const Icon(Icons.bookmark_added),
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+      ),
       appBar: AppBar(
         title: _buildAppBarTitle(),
         actions: _buildAppBarActions(),

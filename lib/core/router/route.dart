@@ -26,6 +26,10 @@ import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
+import 'package:islami_app/feature/khatmah/view/ui/khatmah_details_screen.dart';
+import 'package:islami_app/feature/khatmah/view/ui/khatmah_screen.dart';
+import 'package:islami_app/feature/khatmah/view/widget/khatmah_list_screen.dart';
+import 'package:islami_app/feature/khatmah/view_model/khatmah_cubit.dart';
 import 'package:islami_app/feature/prayerTime/presentation/pages/prayer_times_screen.dart';
 import 'package:islami_app/feature/home/ui/view/qiblah_screen.dart';
 import 'package:islami_app/feature/home/ui/view/radio_screen.dart';
@@ -50,6 +54,36 @@ class AppRouter {
                 value: sl<DownloadCubit>(),
                 child: const DownloadsScreen(),
               ),
+        );
+      case AppRoutes.khatmahListRouter:
+        return RouterTransitions.buildHorizontal(
+          BlocProvider(
+            create: (_) => sl<KhatmahCubit>(),
+            child: const KhatmahListScreen(),
+          ),
+        );
+
+      case AppRoutes.createKhatmahRouter:
+        return RouterTransitions.buildHorizontal(
+          BlocProvider.value(
+            value: sl<KhatmahCubit>(),
+            child: const CreateKhatmahScreen(),
+          ),
+        );
+
+      case AppRoutes.khatmahDetailsRouter:
+        final args = settings.arguments as Map<String, dynamic>?;
+        final khatmahId = args?['khatmahId'] as String?;
+
+        if (khatmahId == null) {
+          throw ArgumentError('khatmahId is required');
+        }
+
+        return RouterTransitions.buildHorizontal(
+          BlocProvider.value(
+            value: sl<KhatmahCubit>(),
+            child: KhatmahDetailsScreen(khatmahId: khatmahId),
+          ),
         );
       case AppRoutes.prayertimesRouter:
         return RouterTransitions.buildHorizontal(const PrayerTimesScreen());

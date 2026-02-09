@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 
 part 'hadith_model.g.dart';
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 103)
 // ignore: must_be_immutable
 class HadithModel extends HiveObject with EquatableMixin {
   @HiveField(0)
@@ -17,17 +17,9 @@ class HadithModel extends HiveObject with EquatableMixin {
   @HiveField(2)
   final String id;
 
-  HadithModel({
-    required this.number,
-    required this.arab,
-    required this.id,
-  });
+  HadithModel({required this.number, required this.arab, required this.id});
 
-  HadithModel copyWith({
-    int? number,
-    String? arab,
-    String? id,
-  }) {
+  HadithModel copyWith({int? number, String? arab, String? id}) {
     return HadithModel(
       number: number ?? this.number,
       arab: arab ?? this.arab,
@@ -44,11 +36,7 @@ class HadithModel extends HiveObject with EquatableMixin {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'number': number,
-      'arab': arab,
-      'id': id,
-    };
+    return {'number': number, 'arab': arab, 'id': id};
   }
 
   @override

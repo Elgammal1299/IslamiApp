@@ -8,7 +8,7 @@ part of 'hadith_model.dart';
 
 class HadithModelAdapter extends TypeAdapter<HadithModel> {
   @override
-  final int typeId = 4;
+  final int typeId = 103;
 
   @override
   HadithModel read(BinaryReader reader) {

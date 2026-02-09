@@ -89,10 +89,13 @@ class KhatmahConstants {
   };
 
   // Hive box names
-  static const String khatmahBoxName = 'khatmahs';
+  // NOTE: bumped because of schema/ID conflicts. Current stable is v4.
+  static const String khatmahBoxName = 'khatmahs_v4';
+  static const String hadithBoxName = 'hadiths_v4';
 
-  // Type IDs for Hive
-  static const int khatmahModelTypeId = 0;
-  static const int dailyProgressTypeId = 1;
-  static const int juzProgressTypeId = 2;
+  // Type IDs for Hive (shifted to 100+ to avoid common conflicts)
+  static const int khatmahModelTypeId = 100;
+  static const int dailyProgressTypeId = 101;
+  static const int juzProgressTypeId = 102;
+  static const int hadithModelTypeId = 103;
 }

@@ -60,7 +60,36 @@ class HiveService<T> {
       }
     } catch (e) {
       _log('Error initializing box: $e', isError: true);
-      throw HiveServiceException('Failed to initialize box "$boxName": $e');
+      
+      // إذا كان الخطأ بسبب type mismatch (تغيير schema)، احذف الـ box القديم
+      final errorString = e.toString().toLowerCase();
+      if (errorString.contains('type') && 
+          (errorString.contains('subtype') || 
+           errorString.contains('is not a subtype') ||
+           errorString.contains('type cast'))) {
+        _log('Type mismatch detected. Deleting old box and recreating...', isError: true);
+        try {
+          // إغلاق الـ box إذا كان مفتوحاً
+          if (Hive.isBoxOpen(boxName)) {
+            try {
+              await Hive.box(boxName).close();
+            } catch (_) {
+              // تجاهل خطأ الإغلاق
+            }
+          }
+          // حذف الـ box القديم
+          await Hive.deleteBoxFromDisk(boxName);
+          _log('Old box deleted successfully. Reopening...');
+          // إعادة فتح الـ box الجديد
+          _box = await Hive.openBox<T>(boxName);
+          _log('Box recreated and opened successfully: $boxName');
+        } catch (deleteError) {
+          _log('Error deleting/recreating box: $deleteError', isError: true);
+          throw HiveServiceException('Failed to recreate box "$boxName": $deleteError');
+        }
+      } else {
+        throw HiveServiceException('Failed to initialize box "$boxName": $e');
+      }
     }
   }
 

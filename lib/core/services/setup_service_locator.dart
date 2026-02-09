@@ -2,6 +2,10 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
+import 'package:islami_app/feature/khatmah/data/repo/khatmah_repo.dart';
+import 'package:islami_app/feature/khatmah/data/model/khatmah_model.dart';
+import 'package:islami_app/feature/khatmah/view_model/khatmah_cubit.dart';
+import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Services
@@ -151,6 +155,14 @@ Future<void> setupServiceLocator() async {
     );
   });
 
+  // Khatmah HiveService
+  sl.registerLazySingleton<HiveService<KhatmahModel>>(() {
+    return HiveService.instanceFor<KhatmahModel>(
+      boxName: KhatmahConstants.khatmahBoxName,
+      enableLogging: true,
+    );
+  });
+
   // BookmarkManager
   sl.registerLazySingleton<BookmarkManager>(() {
     return BookmarkManager(sl<SharedPreferences>());
@@ -197,6 +209,11 @@ Future<void> setupServiceLocator() async {
   // TafsirRepository
   sl.registerLazySingleton<TafsirByAyahRepository>(() {
     return TafsirByAyahRepository(sl<TafsirService>());
+  });
+
+  // KhatmahRepository
+  sl.registerLazySingleton<KhatmahRepository>(() {
+    return KhatmahRepository(sl<HiveService<KhatmahModel>>());
   });
 
   // ===== CUBITS =====
@@ -262,7 +279,9 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ReadingProgressCubit>(() {
     return ReadingProgressCubit();
   });
-
+sl.registerLazySingleton<KhatmahCubit>(() {
+    return KhatmahCubit(sl<KhatmahRepository>());
+  });
   // ===== NOTE: Services will be initialized lazily when first accessed =====
   // No eager initialization - this improves app startup time significantly
 }

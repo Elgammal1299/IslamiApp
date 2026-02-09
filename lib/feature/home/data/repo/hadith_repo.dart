@@ -3,10 +3,11 @@ import 'package:islami_app/core/services/api/hadith_service.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/repo/hadith_repoo.dart';
+import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 
 class HadithRepo implements HadithRepoo {
   final HiveService<List> _hadithService = HiveService.instanceFor<List>(
-    boxName: 'hadiths',
+    boxName: KhatmahConstants.hadithBoxName,
     enableLogging: true,
   );
 

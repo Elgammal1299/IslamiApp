@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 part 'khatmah_model.g.dart';
 
 /// نموذج تقدم الجزء
-@HiveType(typeId: 2)
+@HiveType(typeId: 102)
 class JuzProgress extends Equatable {
   @HiveField(0)
   final int juzNumber;
@@ -56,7 +56,7 @@ class JuzProgress extends Equatable {
 }
 
 /// نموذج التقدم اليومي
-@HiveType(typeId: 1)
+@HiveType(typeId: 101)
 class DailyProgress extends Equatable {
   @HiveField(0)
   final int dayNumber;
@@ -96,7 +96,7 @@ class DailyProgress extends Equatable {
 }
 
 /// نموذج بيانات الختمة
-@HiveType(typeId: 0)
+@HiveType(typeId: 100)
 class KhatmahModel extends Equatable {
   @HiveField(0)
   final String id;

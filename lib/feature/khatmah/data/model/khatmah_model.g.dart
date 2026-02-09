@@ -8,7 +8,7 @@ part of 'khatmah_model.dart';
 
 class JuzProgressAdapter extends TypeAdapter<JuzProgress> {
   @override
-  final int typeId = 2;
+  final int typeId = 102;
 
   @override
   JuzProgress read(BinaryReader reader) {
@@ -54,7 +54,7 @@ class JuzProgressAdapter extends TypeAdapter<JuzProgress> {
 
 class DailyProgressAdapter extends TypeAdapter<DailyProgress> {
   @override
-  final int typeId = 1;
+  final int typeId = 101;
 
   @override
   DailyProgress read(BinaryReader reader) {
@@ -97,7 +97,7 @@ class DailyProgressAdapter extends TypeAdapter<DailyProgress> {
 
 class KhatmahModelAdapter extends TypeAdapter<KhatmahModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 100;
 
   @override
   KhatmahModel read(BinaryReader reader) {

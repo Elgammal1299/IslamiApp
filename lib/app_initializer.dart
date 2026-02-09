@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +16,9 @@ import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:islami_app/feature/notification/data/model/notification_model.dart';
+import 'package:islami_app/feature/home/data/model/hadith_model.dart';
+import 'package:islami_app/feature/khatmah/data/model/khatmah_model.dart';
+import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 import 'package:islami_app/feature/notification/widget/messaging_config.dart';
 import 'package:islami_app/firebase_options.dart';
@@ -110,7 +112,20 @@ class AppInitializer {
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(NotificationModelAdapter());
       }
-      
+      if (!Hive.isAdapterRegistered(2) && !Hive.isAdapterRegistered(103)) {
+        // Check both old and new
+        Hive.registerAdapter(HadithModelAdapter());
+      }
+      // Khatmah Adapters - يجب تسجيلها بالترتيب الصحيح
+      if (!Hive.isAdapterRegistered(KhatmahConstants.juzProgressTypeId)) {
+        Hive.registerAdapter(JuzProgressAdapter());
+      }
+      if (!Hive.isAdapterRegistered(KhatmahConstants.dailyProgressTypeId)) {
+        Hive.registerAdapter(DailyProgressAdapter());
+      }
+      if (!Hive.isAdapterRegistered(KhatmahConstants.khatmahModelTypeId)) {
+        Hive.registerAdapter(KhatmahModelAdapter());
+      }
     } catch (_) {}
 
     // ✅ 8. Setup service locator
@@ -122,6 +137,36 @@ class AppInitializer {
       await sl<HiveService<DownloadModel>>().init();
       await sl<HiveService<NotificationModel>>().init();
     } catch (_) {}
+
+    // Initialize Khatmah service
+    // NUCLEAR CLEANUP: Delete all potentially corrupted or conflicting boxes
+    try {
+      final boxesToClear = [
+        'khatmahs',
+        'khatmahs_v2',
+        'khatmahs_v3',
+        'hadiths',
+        'hadiths_v2',
+        'hadiths_v3',
+      ];
+
+      for (final box in boxesToClear) {
+        try {
+          if (Hive.isBoxOpen(box)) {
+            await Hive.box(box).close();
+          }
+          await Hive.deleteBoxFromDisk(box);
+        } catch (_) {}
+      }
+    } catch (_) {}
+
+    try {
+      await sl<HiveService<KhatmahModel>>().init();
+    } catch (e) {
+      log(
+        '⚠️ Error initializing khatmah box (${KhatmahConstants.khatmahBoxName}): $e',
+      );
+    }
 
     // ✅ 10. Initialize additional services in background (non-blocking)
     _initializeAppServices();
@@ -171,7 +216,6 @@ class AppInitializer {
         prayerName: provider.getPrayerName,
       );
 
-
       log('✅ App services initialized successfully');
     } catch (e) {
       log('❌ Error initializing app services: $e');
@@ -187,5 +231,4 @@ class AppInitializer {
       log('❌ Error initializing local notifications: $e');
     }
   }
-
 }

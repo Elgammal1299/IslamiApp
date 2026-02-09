@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hijri/hijri_calendar.dart' show HijriCalendar;
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
-import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
+import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:quran/quran.dart' as quran;
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,12 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
-    if (!Hive.isAdapterRegistered(HadithModelAdapter().typeId)) {
-      Hive.registerAdapter(HadithModelAdapter());
-    }
 
-    if (!Hive.isBoxOpen('hadiths')) {
-      Hive.openBox<List>('hadiths');
+    if (!Hive.isBoxOpen(KhatmahConstants.hadithBoxName)) {
+      Hive.openBox<List>(KhatmahConstants.hadithBoxName);
     }
   }
 
@@ -79,9 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Stack(
                   children: [
                     Image.asset('assets/images/banner.png'),
-                    const Positioned(
-                       bottom: 0,
-                      child: PrayerAndDateWidget()),
+                    const Positioned(bottom: 0, child: PrayerAndDateWidget()),
                     Positioned(
                       child: BlocBuilder<
                         ReadingProgressCubit,
@@ -120,19 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           // Prayer Times & Date Widget (Combined)
-          // SliverToBoxAdapter(
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(
-          //       horizontal: 8.0,
-          //       vertical: 4.0,
-          //     ),
-          //     child: const PrayerAndDateWidget(),
-          //   ),
-          // ),
+          const SliverToBoxAdapter(child: DateWidget()),
 
           // Grid of items
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((context, index) {
                 return HomeItemCard(item: items[index]);
@@ -141,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
-                childAspectRatio: 0.9,
               ),
             ),
           ),
@@ -237,50 +225,42 @@ class PrayerAndDateWidget extends StatefulWidget {
 }
 
 class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
-
-
- 
-
   @override
   Widget build(BuildContext context) {
-
     return ListenableBuilder(
       listenable: SharedPrayerTimesProvider.instance,
       builder: (context, child) {
         final provider = SharedPrayerTimesProvider.instance;
 
         return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-          ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
           child: Column(
             children: [
               // Prayer Times Section
               if (provider.nextPrayer != null && provider.namedTimes.isNotEmpty)
                 Row(
                   children: [
-                        Text(
-                          'الصلاة القادمة : ',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 22.sp,
-                            fontFamily: 'uthmanic',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          'صلاة ${provider.getPrayerName(provider.nextPrayer!)}',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'uthmanic',
-                          ),
-                        ),
-                      
-                    
+                    Text(
+                      'الصلاة القادمة : ',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 22.sp,
+                        fontFamily: 'uthmanic',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      'صلاة ${provider.getPrayerName(provider.nextPrayer!)}',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'uthmanic',
+                      ),
+                    ),
+
                     IconButton(
                       onPressed: () {
                         Navigator.pushNamed(
@@ -296,8 +276,6 @@ class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
                     ),
                   ],
                 ),
-
-              
             ],
           ),
         );
@@ -305,187 +283,90 @@ class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
     );
   }
 }
-// class PrayerAndDateWidget extends StatefulWidget {
-//   const PrayerAndDateWidget({super.key});
 
-//   @override
-//   State<PrayerAndDateWidget> createState() => _PrayerAndDateWidgetState();
-// }
+class DateWidget extends StatefulWidget {
+  const DateWidget({super.key});
 
-// class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
-//   bool _showHijri = true;
+  @override
+  State<DateWidget> createState() => _DateWidgetState();
+}
 
-//   String _getHijriDate() {
-//     HijriCalendar.setLocal('ar');
-//     var hijriDate = HijriCalendar.now();
-//     return '${hijriDate.hDay} ${hijriDate.getLongMonthName()} ${hijriDate.hYear} هـ';
-//   }
+class _DateWidgetState extends State<DateWidget> {
+  bool _showHijri = true;
 
-//   String _getGregorianDate() {
-//     final now = DateTime.now();
-//     final formatter = DateFormat('d MMMM yyyy', 'ar');
-//     return '${formatter.format(now)} م';
-//   }
+  String _getHijriDate() {
+    HijriCalendar.setLocal('ar');
+    var hijriDate = HijriCalendar.now();
+    return '${hijriDate.hDay} ${hijriDate.getLongMonthName()} ${hijriDate.hYear} هـ';
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final isDark = Theme.of(context).brightness == Brightness.dark;
+  String _getGregorianDate() {
+    final now = DateTime.now();
+    final formatter = DateFormat('d MMMM yyyy', 'ar');
+    return '${formatter.format(now)} م';
+  }
 
-//     return ListenableBuilder(
-//       listenable: SharedPrayerTimesProvider.instance,
-//       builder: (context, child) {
-//         final provider = SharedPrayerTimesProvider.instance;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
 
-//         return Container(
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(16),
-//             gradient: LinearGradient(
-//               colors:
-//                   isDark
-//                       ? [
-//                         AppColors.darkPrimary,
-//                         AppColors.darkPrimary.withOpacity(0.7),
-//                       ]
-//                       : [AppColors.primary, const Color(0xFF1E5A6B)],
-//               begin: Alignment.topRight,
-//               end: Alignment.bottomLeft,
-//             ),
-//             boxShadow: [
-//               BoxShadow(
-//                 color: AppColors.primary.withOpacity(0.4),
-//                 blurRadius: 12,
-//                 offset: const Offset(0, 6),
-//               ),
-//             ],
-//           ),
-//           padding: const EdgeInsets.all(16),
-//           child: Column(
-//             children: [
-//               // Prayer Times Section
-//               if (provider.nextPrayer != null && provider.namedTimes.isNotEmpty)
-//                 Column(
-//                   children: [
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               'الصلاة القادمة',
-//                               style: TextStyle(
-//                                 color: AppColors.white.withOpacity(0.85),
-//                                 fontSize: 13.sp,
-//                                 fontFamily: 'Cairo',
-//                               ),
-//                             ),
-//                             SizedBox(height: 4.h),
-//                             Text(
-//                               'صلاة ${provider.getPrayerName(provider.nextPrayer!)}',
-//                               style: TextStyle(
-//                                 color: AppColors.white,
-//                                 fontSize: 22.sp,
-//                                 fontWeight: FontWeight.bold,
-//                                 fontFamily: 'uthmanic',
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                         Container(
-//                           padding: EdgeInsets.symmetric(
-//                             horizontal: 16.w,
-//                             vertical: 8.h,
-//                           ),
-//                           decoration: BoxDecoration(
-//                             color: AppColors.white.withOpacity(0.2),
-//                             borderRadius: BorderRadius.circular(12),
-//                           ),
-//                           child: Text(
-//                             provider.formatCountdown(),
-//                             style: TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                               color: AppColors.white,
-//                               fontSize: 18.sp,
-//                               fontFamily: 'Cairo',
-//                             ),
-//                           ),
-//                         ),
-//                         IconButton(
-//                           onPressed: () {
-//                             Navigator.pushNamed(
-//                               context,
-//                               AppRoutes.prayertimesRouter,
-//                             );
-//                           },
-//                           icon: Icon(
-//                             Icons.arrow_circle_left_outlined,
-//                             color: AppColors.white,
-//                             size: 30.sp,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     SizedBox(height: 12.h),
-//                     Divider(
-//                       color: AppColors.white.withOpacity(0.2),
-//                       thickness: 1,
-//                     ),
-//                     SizedBox(height: 12.h),
-//                   ],
-//                 ),
-
-//               // Date Section (Toggleable)
-//               GestureDetector(
-//                 onTap: () {
-//                   setState(() {
-//                     _showHijri = !_showHijri;
-//                   });
-//                 },
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
-//                           style: TextStyle(
-//                             color: AppColors.white.withOpacity(0.85),
-//                             fontSize: 13.sp,
-//                             fontFamily: 'Cairo',
-//                           ),
-//                         ),
-//                         SizedBox(height: 4.h),
-//                         Text(
-//                           _showHijri ? _getHijriDate() : _getGregorianDate(),
-//                           style: TextStyle(
-//                             color: AppColors.white,
-//                             fontSize: 17.sp,
-//                             fontWeight: FontWeight.bold,
-//                             fontFamily: 'Cairo',
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     Container(
-//                       padding: EdgeInsets.all(8.w),
-//                       decoration: BoxDecoration(
-//                         color: AppColors.white.withOpacity(0.2),
-//                         borderRadius: BorderRadius.circular(8),
-//                       ),
-//                       child: Icon(
-//                         Icons.swap_horiz_rounded,
-//                         color: AppColors.white,
-//                         size: 20.sp,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
+        color: Theme.of(context).cardColor,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _showHijri = !_showHijri;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Uthmanic',
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      _showHijri ? _getHijriDate() : _getGregorianDate(),
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Uthmanic',
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.black.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.swap_horiz_rounded,
+                    color: AppColors.black,
+                    size: 20.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

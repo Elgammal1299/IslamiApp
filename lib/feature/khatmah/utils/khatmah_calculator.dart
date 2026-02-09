@@ -32,7 +32,7 @@ class KhatmahCalculator {
       final double endJuz = currentJuz + juzPerDay;
 
       // إضافة الأجزاء الكاملة
-      int fullJuzStart = startJuz.ceil();
+      int fullJuzStart = startJuz.toInt() + 1;
       int fullJuzEnd = endJuz.floor();
 
       // إذا كان هناك جزء جزئي في البداية
