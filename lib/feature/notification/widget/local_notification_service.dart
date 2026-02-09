@@ -29,7 +29,7 @@ class LocalNotificationService {
         try {
           if (navigatorKey.currentContext != null) {
             handleNotification(navigatorKey.currentContext!, {
-              'source': 'firebase',
+              'source': 'local',
             });
           }
         } catch (_) {}
@@ -40,7 +40,7 @@ class LocalNotificationService {
     final launchDetails = await _plugin.getNotificationAppLaunchDetails();
     if ((launchDetails?.didNotificationLaunchApp ?? false) &&
         navigatorKey.currentContext != null) {
-      handleNotification(navigatorKey.currentContext!, {'source': 'firebase'});
+      handleNotification(navigatorKey.currentContext!, {'source': 'local'});
     }
 
     // 3. طلب صلاحيات Android 13+

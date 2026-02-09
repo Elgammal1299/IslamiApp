@@ -1,15 +1,12 @@
 plugins {
     id("com.android.application")
-    // START: FlutterFire Configuration
-    id("com.google.gms.google-services")
-    // END: FlutterFire Configuration
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.wartaqi.islamiapp"
+    namespace = "com.islamic.wartaqi.app"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -29,19 +26,19 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.wartaqi.islamiapp"
+        applicationId = "com.islamic.wartaqi.app"
         minSdk = flutter.minSdkVersion   
         targetSdk = flutter.targetSdkVersion 
-        versionCode = 10
-        versionName = "1.0.2"
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file("islami-keystore.jks")
-            storePassword = "Strong#1299"
-            keyAlias = "islami"
-            keyPassword = "Strong#1299"
+            storeFile = file("wartaqi-new.jks")
+            storePassword = "WartaqiNew#2026"
+            keyAlias = "wartaqi_alias"
+            keyPassword = "WartaqiNew#2026"
         }
     }
 

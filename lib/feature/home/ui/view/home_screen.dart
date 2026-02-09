@@ -16,6 +16,7 @@ import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:quran/quran.dart' as quran;
 
+
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatefulWidget {
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
           style: context.textTheme.titleLarge!.copyWith(
             color: AppColors.white,
+            fontFamily: 'uthmanic',
             fontSize: 20,
           ),
         ),

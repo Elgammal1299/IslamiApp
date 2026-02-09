@@ -16,7 +16,7 @@ class NotificationRepo {
   }) async {
     final now = DateTime.now();
 
-    // ✅ تجنّب تكرار الإشعارات المجدولة عند استلام إشعار Firebase
+    // ✅ تجنّب تكرار الإشعارات المجدولة
     if (type == "scheduled") {
       final existing = _service.toEntries().where(
         (entry) =>
