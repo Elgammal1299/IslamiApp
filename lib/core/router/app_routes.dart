@@ -1,7 +1,7 @@
 class AppRoutes {
   static const homeRoute = '/';
   static const navBarRoute = '/NavBarScreen';
-    static const khatmahListRouter = '/khatmahList';
+  static const khatmahListRouter = '/khatmahList';
   static const createKhatmahRouter = '/createKhatmah';
   static const khatmahDetailsRouter = '/khatmahDetails';
   static const quranViewRouter = '/quranView';
@@ -28,4 +28,5 @@ class AppRoutes {
   static const downloadsRouter = '/DownloadsScreen';
   static const aboutAppRouter = '/AboutAppScreen';
   static const aboutUsRouter = '/AboutUsScreen';
+  static const verseSharePreviewRouter = '/verseSharePreview';
 }

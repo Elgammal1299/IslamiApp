@@ -36,7 +36,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: AppColors.primary,
               onPrimary: Colors.white,
               surface: AppColors.cardBackground,
@@ -91,23 +91,8 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // أيقونة القرآن
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(24.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.book,
-                    size: 64.sp,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
+             
 
-              SizedBox(height: 32.h),
 
               // اسم الختمة
               Text(
@@ -118,7 +103,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  hintText: 'مثال: ختمة رمضان 2024',
+                  hintText: 'مثال: ختمة رمضان',
                   prefixIcon: Icon(Icons.edit),
                 ),
                 validator: (value) {
@@ -129,7 +114,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                 },
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 20.h),
 
               // المدة
               Text(
@@ -192,7 +177,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                           ),
                         ],
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_drop_down,
                         color: AppColors.textSecondary,
                       ),

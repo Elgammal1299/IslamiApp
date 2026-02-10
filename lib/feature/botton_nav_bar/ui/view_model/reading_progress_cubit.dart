@@ -27,8 +27,10 @@ class ReadingProgressCubit extends Cubit<ReadingProgressState> {
           ),
         );
       } else {
-        debugPrint('📖 No saved reading progress found');
-        emit(const ReadingProgressInitial());
+        debugPrint(
+          '📖 No saved reading progress found, defaulting to Al-Fatiha',
+        );
+        emit(const ReadingProgressLoaded(surah: 1, ayah: 1, page: 1));
       }
     } catch (e) {
       debugPrint('❌ Failed to load reading progress: $e');

@@ -16,7 +16,6 @@ import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:quran/quran.dart' as quran;
 
-
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatefulWidget {

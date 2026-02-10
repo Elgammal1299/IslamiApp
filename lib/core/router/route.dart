@@ -43,6 +43,8 @@ import 'package:islami_app/feature/notification/ui/view/notification_screen.dart
 import 'package:islami_app/feature/notification/ui/view/notification_view.dart';
 import 'package:islami_app/feature/notification/ui/view_model/cubit/notification_cubit.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/verse_selection_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view/verse_share_preview_screen.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
@@ -120,7 +122,6 @@ class AppRouter {
                 child: const HomeScreen(),
               ),
         );
-    
 
       case AppRoutes.sebhaPageRouter:
         return MaterialPageRoute(builder: (_) => const SebhaScreen());
@@ -152,7 +153,6 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => sl<SurahCubit>()..getSurahs(),
                   ),
-                 
                 ],
                 child: const QuranSurahScreen(),
               ),
@@ -162,8 +162,11 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider.value(
-                value: sl<ReadingProgressCubit>(),
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: sl<ReadingProgressCubit>()),
+                  BlocProvider(create: (_) => VerseSelectionCubit()),
+                ],
                 child: QuranViewScreen(pageNumber: args?['pageNumber']),
               ),
         );
@@ -265,7 +268,6 @@ class AppRouter {
                 child: RecitersSurahList(moshaf: moshaf, name: name),
               ),
         );
-
       case AppRoutes.nowPlayingScreenRouter:
         final audioManager = settings.arguments as AudioManager;
         return MaterialPageRoute(
@@ -273,6 +275,15 @@ class AppRouter {
               (_) => BlocProvider.value(
                 value: sl<AudioCubit>(),
                 child: NowPlayingScreen(audioManager: audioManager),
+              ),
+        );
+      case AppRoutes.verseSharePreviewRouter:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder:
+              (_) => VerseSharePreviewScreen(
+                surah: args?['surah'],
+                ayah: args?['ayah'],
               ),
         );
 

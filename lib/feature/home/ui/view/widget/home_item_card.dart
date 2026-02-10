@@ -11,7 +11,6 @@ class HomeItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, item.route);
@@ -20,10 +19,8 @@ class HomeItemCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          
 
-        color:  Theme.of(context).cardColor,
-         
+          color: Theme.of(context).cardColor,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,8 +28,11 @@ class HomeItemCard extends StatelessWidget {
             // Image section
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                child: Image.asset(item.image, fit: BoxFit.contain,),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 10,
+                ),
+                child: Image.asset(item.image, fit: BoxFit.contain),
               ),
             ),
 
@@ -41,7 +41,7 @@ class HomeItemCard extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
               child: Text(
                 item.name,
-                style:  TextStyle(
+                style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: 20.sp,
                   fontFamily: 'uthmanic',
