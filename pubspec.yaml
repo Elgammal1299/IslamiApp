@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.4+2
+version: 1.1.1+2
 
 environment:
   sdk: ^3.7.0
@@ -91,6 +91,9 @@ flutter:
     - family: uthmanic
       fonts:
         - asset: assets\fonts\QCF2BSMLfonts\UthmanTN1 Ver10.otf
+    - family: Amiri
+      fonts:
+        - asset: assets\fonts\amiri-regular.ttf
 
     
   #       - asset: fonts/Schylerp1.woff
