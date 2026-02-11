@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hijri/hijri_calendar.dart' show HijriCalendar;
@@ -10,6 +11,7 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
@@ -134,9 +136,139 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          // const SliverToBoxAdapter(child: SizedBox(height: 100)),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(12, 0, 12, 16),
+              child: AnimatedAyahSwitcher(),
+            ),
+          ),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
+    );
+  }
+}
+
+class AnimatedAyahSwitcher extends StatelessWidget {
+  const AnimatedAyahSwitcher({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QuranDuaCubit, QuranDuaState>(
+      builder: (context, state) {
+        if (state is! QuranDuaLoaded) {
+          return const SizedBox.shrink();
+        }
+
+        final dua = state.duas[state.currentIndex];
+
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 700),
+          transitionBuilder: (child, animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, .25),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start  ,
+
+            children: [
+               Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, ),
+                 child:  const Text(
+                    'آية اليوم',
+                    textAlign: TextAlign.start,
+                    style:  TextStyle(
+                      fontFamily: 'Amiri',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      height: 1.4,
+                      color: AppColors.primary2,
+                    ),
+                  ),
+               ),
+                SizedBox(
+                  height: 10.h,
+                ),
+              Container(
+                key: ValueKey(state.currentIndex),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.success),
+                 
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start  ,
+                  children: [
+              
+                   
+                    Text(
+                      dua.content,
+                      textAlign: TextAlign.justify,
+                      style:  const TextStyle(
+                        fontFamily: 'uthmanic',
+                        fontWeight: FontWeight.bold,
+                        
+                        fontSize: 25,
+                        height: 1.4,
+                        color: AppColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            dua.reference,
+                            style:  const TextStyle(
+                        fontFamily: 'uthmanic',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        height: 1.4,
+                        color: AppColors.black,
+                      ),
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'نسخ الآية',
+                          icon: const Icon(Icons.copy_rounded, size: 24,color: AppColors.primary2,),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: dua.content));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('تم نسخ الآية'),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                      icon: const Icon(Icons.refresh_rounded, size: 22,color: AppColors.primary2,),
+                      tooltip: 'تغيير',
+                      onPressed: () {
+                        context.read<QuranDuaCubit>().nextManual();
+                      },
+                    ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

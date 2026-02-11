@@ -104,7 +104,9 @@ class AppInitializer {
     // ✅ 12. Run app
     runApp(
       MultiBlocProvider(
-        providers: [BlocProvider.value(value: themeCubit)],
+        providers: [BlocProvider.value(value: themeCubit),
+        
+        ],
         child: ScreenUtilInit(
           designSize: const Size(360, 780),
           minTextAdapt: true,

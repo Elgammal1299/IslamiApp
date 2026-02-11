@@ -17,11 +17,13 @@ import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_sc
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/data/repo/quran_dua_repo.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
+import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
@@ -118,6 +120,7 @@ class AppRouter {
                   BlocProvider(create: (context) => sl<NavBarCubit>()),
                   BlocProvider.value(value: sl<SurahCubit>()),
                   BlocProvider.value(value: sl<ReadingProgressCubit>()),
+                  BlocProvider(create: (_) => QuranDuaCubit(QuranDuaRepository())..load()),
                 ],
                 child: const HomeScreen(),
               ),
