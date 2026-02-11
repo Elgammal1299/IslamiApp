@@ -45,10 +45,14 @@ class PageviewQuran extends StatefulWidget {
   )?
   onLongPressDown;
 
+  /// The currently selected verse ID (format: "surah:verse")
+  final String? selectedVerseId;
+
   const PageviewQuran({
     super.key,
     this.initialPageNumber = 1,
     this.controller,
+    this.selectedVerseId,
     this.onPageChanged,
     this.fontSize,
     this.sp = 1,
@@ -114,6 +118,7 @@ class _PageviewQuranState extends State<PageviewQuran> {
               onLongPressUp: widget.onLongPressUp,
               onLongPressCancel: widget.onLongPressCancel,
               onLongPressDown: widget.onLongPressDown,
+              selectedVerseId: widget.selectedVerseId,
               sp: widget.sp,
               h: widget.h,
             );
@@ -146,6 +151,8 @@ class _PageContent extends StatelessWidget {
   )?
   onLongPressDown;
 
+  final String? selectedVerseId;
+
   const _PageContent({
     required this.pageNumber,
     required this.fontSize,
@@ -155,6 +162,7 @@ class _PageContent extends StatelessWidget {
     required this.onLongPressUp,
     required this.onLongPressCancel,
     required this.onLongPressDown,
+    this.selectedVerseId,
     required this.sp,
     required this.h,
   });
@@ -223,6 +231,8 @@ class _PageContent extends StatelessWidget {
         spanRecognizer.onLongPressEnd =
             (LongPressEndDetails d) => onLongPressCancel?.call(surah, v);
 
+        final isSelected = selectedVerseId == "$surah:$v";
+
         verseSpans.add(
           TextSpan(
             text:
@@ -230,6 +240,10 @@ class _PageContent extends StatelessWidget {
                     ? "${getVerseQCF(surah, v, verseEndSymbol: false).substring(0, 1)}\u200A${getVerseQCF(surah, v, verseEndSymbol: false).substring(1, getVerseQCF(surah, v, verseEndSymbol: false).length)}"
                     : getVerseQCF(surah, v, verseEndSymbol: false),
             recognizer: spanRecognizer,
+            style: TextStyle(
+              backgroundColor:
+                  isSelected ? Colors.yellow.withOpacity(0.3) : null,
+            ),
             children: [
               TextSpan(
                 text: getVerseNumberQCF(surah, v),
@@ -238,6 +252,8 @@ class _PageContent extends StatelessWidget {
                   package: 'qcf_quran',
                   color: Colors.brown,
                   height: 1.35 / h,
+                  backgroundColor:
+                      isSelected ? Colors.yellow.withOpacity(0.3) : null,
                 ),
               ),
             ],

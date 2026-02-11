@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:islami_app/feature/khatmah/view/widget/khatmah_progress_tracker.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../view_model/reading_progress_cubit.dart';
@@ -33,6 +34,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   @override
   void initState() {
     super.initState();
+    
     _currentPage = widget.pageNumber;
     _controller = PageController(initialPage: widget.pageNumber - 1);
 
@@ -50,6 +52,15 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
         );
       }
     });
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateKhatmahProgress(_currentPage);
+    });
+  }
+   void _updateKhatmahProgress(int pageNumber) {
+    KhatmahProgressTracker.updateCurrentPage(
+      context,
+      pageNumber: pageNumber,
+    );
   }
 
   @override
@@ -62,6 +73,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   void _onPageChanged(int page) async {
     setState(() {
       _currentPage = page;
+        _updateKhatmahProgress(_currentPage);
     });
 
     final pos = QuranPageIndex.firstAyahOnPage(page);

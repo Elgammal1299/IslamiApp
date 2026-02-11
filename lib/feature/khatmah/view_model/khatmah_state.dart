@@ -32,6 +32,20 @@ final class KhatmahCreated extends KhatmahState {
   List<Object?> get props => [khatmah];
 }
 
+/// حالة جديدة: عند إتمام الورد اليومي
+final class KhatmahDailyCompleted extends KhatmahState {
+  final int dayNumber;
+  final String khatmahId;
+
+  KhatmahDailyCompleted({
+    required this.dayNumber,
+    required this.khatmahId,
+  });
+
+  @override
+  List<Object?> get props => [dayNumber, khatmahId];
+}
+
 final class KhatmahError extends KhatmahState {
   final String message;
 

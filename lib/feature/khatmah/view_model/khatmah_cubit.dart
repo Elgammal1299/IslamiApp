@@ -68,13 +68,14 @@ class KhatmahCubit extends Cubit<KhatmahState> {
 
   /// حذف ختمة
   Future<void> deleteKhatmah(String khatmahId) async {
+    if (isClosed) return;
     try {
       await _repository.deleteKhatmah(khatmahId);
       debugPrint('✅ Khatmah deleted: $khatmahId');
       await loadKhatmahs();
     } catch (e) {
       debugPrint('❌ Error deleting khatmah: $e');
-      emit(KhatmahError('فشل حذف الختمة: $e'));
+      if (!isClosed) emit(KhatmahError('فشل حذف الختمة: $e'));
     }
   }
 
@@ -85,7 +86,18 @@ class KhatmahCubit extends Cubit<KhatmahState> {
     required int juzNumber,
     required int newPage,
   }) async {
+    if (isClosed) return;
     try {
+      // حفظ الحالة السابقة
+      final khatmahBefore = _repository.getKhatmah(khatmahId);
+      if (khatmahBefore == null) return;
+      
+      final dayBefore = khatmahBefore.dailyProgress.firstWhere(
+        (day) => day.dayNumber == dayNumber,
+      );
+      final wasDayCompleted = dayBefore.isCompleted;
+
+      // تحديث الصفحة
       await _repository.updateCurrentPage(
         khatmahId,
         dayNumber,
@@ -97,10 +109,64 @@ class KhatmahCubit extends Cubit<KhatmahState> {
         '✅ Updated page for Juz $juzNumber on Day $dayNumber to page $newPage',
       );
 
+      // التحقق من إتمام الورد اليومي
+      final khatmahAfter = _repository.getKhatmah(khatmahId);
+      if (khatmahAfter != null) {
+        final dayAfter = khatmahAfter.dailyProgress.firstWhere(
+          (day) => day.dayNumber == dayNumber,
+        );
+        
+        // إذا تم إكمال اليوم للتو (لم يكن مكتملاً من قبل والآن أصبح مكتملاً)
+        if (!wasDayCompleted && dayAfter.isCompleted) {
+          debugPrint('🎉 Daily ward completed for day $dayNumber!');
+          if (!isClosed) {
+            emit(KhatmahDailyCompleted(
+              dayNumber: dayNumber,
+              khatmahId: khatmahId,
+            ));
+          }
+        }
+      }
+
       await loadKhatmahs();
     } catch (e) {
       debugPrint('❌ Error updating current page: $e');
-      emit(KhatmahError('فشل تحديث الصفحة: $e'));
+      if (!isClosed) emit(KhatmahError('فشل تحديث الصفحة: $e'));
+    }
+  }
+
+  /// إتمام الورد اليومي
+  Future<void> completeDailyWard({
+    required String khatmahId,
+    required int dayNumber,
+  }) async {
+    if (isClosed) return;
+    try {
+      final khatmah = _repository.getKhatmah(khatmahId);
+      if (khatmah == null) return;
+
+      final updatedDailyProgress = khatmah.dailyProgress.map((day) {
+        if (day.dayNumber == dayNumber) {
+          return day.copyWith(isCompleted: true);
+        }
+        return day;
+      }).toList();
+
+      // التحقق من إكمال الختمة
+      final isCompleted = updatedDailyProgress.every((day) => day.isCompleted);
+
+      final updatedKhatmah = khatmah.copyWith(
+        dailyProgress: updatedDailyProgress,
+        isCompleted: isCompleted,
+      );
+
+      await _repository.updateKhatmah(updatedKhatmah);
+      debugPrint('✅ Daily ward completed and saved for day $dayNumber');
+
+      await loadKhatmahs();
+    } catch (e) {
+      debugPrint('❌ Error completing daily ward: $e');
+      if (!isClosed) emit(KhatmahError('فشل حفظ إتمام الورد: $e'));
     }
   }
 
@@ -111,6 +177,7 @@ class KhatmahCubit extends Cubit<KhatmahState> {
     required int juzNumber,
     required JuzProgress newJuzProgress,
   }) async {
+    if (isClosed) return;
     try {
       await _repository.updateJuzProgress(
         khatmahId,
@@ -124,7 +191,7 @@ class KhatmahCubit extends Cubit<KhatmahState> {
       await loadKhatmahs();
     } catch (e) {
       debugPrint('❌ Error updating juz progress: $e');
-      emit(KhatmahError('فشل تحديث التقدم: $e'));
+      if (!isClosed) emit(KhatmahError('فشل تحديث التقدم: $e'));
     }
   }
 
@@ -134,6 +201,7 @@ class KhatmahCubit extends Cubit<KhatmahState> {
     required int dayNumber,
     required DailyProgress newProgress,
   }) async {
+    if (isClosed) return;
     try {
       await _repository.updateDailyProgress(khatmahId, dayNumber, newProgress);
 
@@ -142,19 +210,20 @@ class KhatmahCubit extends Cubit<KhatmahState> {
       await loadKhatmahs();
     } catch (e) {
       debugPrint('❌ Error updating daily progress: $e');
-      emit(KhatmahError('فشل تحديث التقدم اليومي: $e'));
+      if (!isClosed) emit(KhatmahError('فشل تحديث التقدم اليومي: $e'));
     }
   }
 
   /// تحديث ختمة
   Future<void> updateKhatmah(KhatmahModel khatmah) async {
+    if (isClosed) return;
     try {
       await _repository.updateKhatmah(khatmah);
       debugPrint('✅ Khatmah updated: ${khatmah.name}');
       await loadKhatmahs();
     } catch (e) {
       debugPrint('❌ Error updating khatmah: $e');
-      emit(KhatmahError('فشل تحديث الختمة: $e'));
+      if (!isClosed) emit(KhatmahError('فشل تحديث الختمة: $e'));
     }
   }
 

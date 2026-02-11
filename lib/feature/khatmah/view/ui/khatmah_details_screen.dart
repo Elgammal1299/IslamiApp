@@ -8,6 +8,7 @@ import 'package:islami_app/feature/khatmah/data/model/khatmah_model.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_calculator.dart';
 import 'package:intl/intl.dart';
 import 'package:islami_app/feature/khatmah/view_model/khatmah_cubit.dart';
+import 'package:islami_app/feature/khatmah/view/widget/daily_ward_completion_dialog.dart';
 
 class KhatmahDetailsScreen extends StatefulWidget {
   final String khatmahId;
@@ -47,7 +48,16 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<KhatmahCubit, KhatmahState>(
+      body: BlocConsumer<KhatmahCubit, KhatmahState>(
+        listener: (context, state) {
+          // الاستماع لحالة إتمام الورد اليومي
+          if (state is KhatmahDailyCompleted) {
+            // التأكد من أن الختمة الحالية هي المقصودة
+            if (state.khatmahId == widget.khatmahId) {
+              _showDailyCompletionDialog(state.dayNumber);
+            }
+          }
+        },
         builder: (context, state) {
           final khatmah = context.read<KhatmahCubit>().getKhatmah(
             widget.khatmahId,
@@ -59,6 +69,21 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
 
           return _buildKhatmahDetails(khatmah);
         },
+      ),
+    );
+  }
+
+  /// عرض dialog إتمام الورد اليومي
+  void _showDailyCompletionDialog(int dayNumber) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // لا يمكن إغلاقه بالضغط خارجه
+      builder: (context) => BlocProvider.value(
+        value: context.read<KhatmahCubit>(),
+        child: DailyWardCompletionDialog( 
+          khatmahId: widget.khatmahId,
+          dayNumber: dayNumber,
+        ),
       ),
     );
   }
