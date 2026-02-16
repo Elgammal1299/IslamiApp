@@ -4,22 +4,12 @@ import 'package:islami_app/core/constant/app_json.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 
 class AzkarYawmiRepo {
-  Future<Map<String, List<AzkarYawmiModel>>> loadSupplications() async {
+  Future<List<AzkarCategoryModel>> loadSupplications() async {
     final jsonString = await rootBundle.loadString(AppJson.azkarYawmiJson);
-    final Map<String, dynamic> data = json.decode(jsonString);
+    final List<dynamic> data = json.decode(jsonString);
 
-    return data.map((key, value) {
-      final list = value as List;
-      final supplications =
-          list
-              .expand(
-                (item) =>
-                    item is List
-                        ? item.map((e) => AzkarYawmiModel.fromJson(e))
-                        : [AzkarYawmiModel.fromJson(item)],
-              )
-              .toList();
-      return MapEntry(key, supplications);
-    });
+    return data
+        .map((e) => AzkarCategoryModel.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

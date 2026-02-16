@@ -129,7 +129,7 @@ class _PageviewQuranState extends State<PageviewQuran> {
   }
 }
 
-class _PageContent extends StatelessWidget {
+class _PageContent extends StatefulWidget {
   final int pageNumber;
   final double? fontSize;
   final Color textColor;
@@ -168,13 +168,45 @@ class _PageContent extends StatelessWidget {
   });
 
   @override
+  State<_PageContent> createState() => _PageContentState();
+}
+
+class _PageContentState extends State<_PageContent>
+    with AutomaticKeepAliveClientMixin {
+  final List<LongPressGestureRecognizer> _recognizers = [];
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    for (final recognizer in _recognizers) {
+      recognizer.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ranges = getPageData(pageNumber);
-    final pageFont = "QCF_P${pageNumber.toString().padLeft(3, '0')}";
-    final baseFontSize = getFontSize(pageNumber, context) / sp;
+    super.build(context);
+
+    // Clear old recognizers when rebuilding (if any exist from a previous build that wasn't disposed,
+    // though usually build overwrites or widget is recreated.
+    // Ideally we should reuse them or dispose them if we are rebuilding this State.
+    // Since we are creating new TextSpans, we must create new recognizers or rebind them.
+    // Disposal of old ones is tricky inside build unless we track them.
+    // For simplicity in this optimization: dispose all previous recognizers before creating new ones.
+    for (final recognizer in _recognizers) {
+      recognizer.dispose();
+    }
+    _recognizers.clear();
+
+    final ranges = getPageData(widget.pageNumber);
+    final pageFont = "QCF_P${widget.pageNumber.toString().padLeft(3, '0')}";
+    final baseFontSize = getFontSize(widget.pageNumber, context) / widget.sp;
 
     final verseSpans = <InlineSpan>[];
-    if (pageNumber == 2 || pageNumber == 1) {
+    if (widget.pageNumber == 2 || widget.pageNumber == 1) {
       verseSpans.add(
         WidgetSpan(
           child: SizedBox(height: MediaQuery.of(context).size.height * .175),
@@ -189,7 +221,7 @@ class _PageContent extends StatelessWidget {
       for (int v = start; v <= end; v++) {
         if (v == start && v == 1) {
           verseSpans.add(WidgetSpan(child: HeaderWidget(suraNumber: surah)));
-          if (pageNumber != 1 && pageNumber != 187) {
+          if (widget.pageNumber != 1 && widget.pageNumber != 187) {
             if (surah != 97) {
               verseSpans.add(
                 TextSpan(
@@ -199,8 +231,8 @@ class _PageContent extends StatelessWidget {
                     package: 'qcf_quran',
                     fontSize:
                         getScreenType(context) == ScreenType.large
-                            ? 13.2 / sp
-                            : 24 / sp,
+                            ? 13.2 / widget.sp
+                            : 24 / widget.sp,
                     color: Colors.black,
                   ),
                 ),
@@ -214,8 +246,8 @@ class _PageContent extends StatelessWidget {
                     package: 'qcf_quran',
                     fontSize:
                         getScreenType(context) == ScreenType.large
-                            ? 13.2 / sp
-                            : 18 / sp,
+                            ? 13.2 / widget.sp
+                            : 18 / widget.sp,
                     color: Colors.black,
                   ),
                 ),
@@ -223,15 +255,20 @@ class _PageContent extends StatelessWidget {
             }
           }
         }
-        final spanRecognizer = LongPressGestureRecognizer();
-        spanRecognizer.onLongPress = () => onLongPress?.call(surah, v);
-        spanRecognizer.onLongPressStart =
-            (LongPressStartDetails d) => onLongPressDown?.call(surah, v, d);
-        spanRecognizer.onLongPressUp = () => onLongPressUp?.call(surah, v);
-        spanRecognizer.onLongPressEnd =
-            (LongPressEndDetails d) => onLongPressCancel?.call(surah, v);
 
-        final isSelected = selectedVerseId == "$surah:$v";
+        final spanRecognizer = LongPressGestureRecognizer();
+        _recognizers.add(spanRecognizer); // Track for disposal
+
+        spanRecognizer.onLongPress = () => widget.onLongPress?.call(surah, v);
+        spanRecognizer.onLongPressStart =
+            (LongPressStartDetails d) =>
+                widget.onLongPressDown?.call(surah, v, d);
+        spanRecognizer.onLongPressUp =
+            () => widget.onLongPressUp?.call(surah, v);
+        spanRecognizer.onLongPressEnd =
+            (LongPressEndDetails d) => widget.onLongPressCancel?.call(surah, v);
+
+        final isSelected = widget.selectedVerseId == "$surah:$v";
 
         verseSpans.add(
           TextSpan(
@@ -251,7 +288,7 @@ class _PageContent extends StatelessWidget {
                   fontFamily: pageFont,
                   package: 'qcf_quran',
                   color: Colors.brown,
-                  height: 1.35 / h,
+                  height: 1.35 / widget.h,
                   backgroundColor:
                       isSelected ? Colors.yellow.withOpacity(0.3) : null,
                 ),
@@ -274,10 +311,10 @@ class _PageContent extends StatelessWidget {
           fontFamily: pageFont,
           package: 'qcf_quran',
           fontSize: baseFontSize,
-          fontWeight: fontWeight ?? FontWeight.w600,
-          color: textColor,
+          fontWeight: widget.fontWeight ?? FontWeight.w600,
+          color: widget.textColor,
           height:
-              (pageNumber == 1 || pageNumber == 2)
+              (widget.pageNumber == 1 || widget.pageNumber == 2)
                   ? 2.2
                   : MediaQuery.of(context).systemGestureInsets.left > 0 == false
                   ? 2.2

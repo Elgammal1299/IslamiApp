@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/feature/khatmah/view/widget/khatmah_progress_tracker.dart';
+import 'package:islami_app/feature/khatmah/view_model/khatmah_cubit.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../view_model/reading_progress_cubit.dart';
@@ -34,7 +37,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     _currentPage = widget.pageNumber;
     _controller = PageController(initialPage: widget.pageNumber - 1);
 
@@ -52,15 +55,13 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
         );
       }
     });
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateKhatmahProgress(_currentPage);
     });
   }
-   void _updateKhatmahProgress(int pageNumber) {
-    KhatmahProgressTracker.updateCurrentPage(
-      context,
-      pageNumber: pageNumber,
-    );
+
+  void _updateKhatmahProgress(int pageNumber) {
+    KhatmahProgressTracker.updateCurrentPage(context, pageNumber: pageNumber);
   }
 
   @override
@@ -70,15 +71,38 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     super.dispose();
   }
 
-  void _onPageChanged(int page) async {
-    setState(() {
-      _currentPage = page;
-        _updateKhatmahProgress(_currentPage);
-    });
+  Timer? _debounce;
 
-    final pos = QuranPageIndex.firstAyahOnPage(page);
-    final cubit = context.read<ReadingProgressCubit>();
-    await cubit.updateReadingProgress(pos.surah, pos.ayah, page);
+  void _onPageChanged(int page) {
+    // تحديث المتغير المحلي فوراً عشان لو ال UI ظاهر يقرأ صح
+    _currentPage = page;
+
+    // لو ال UI ظاهر بس نعمل setState عشان نحدث العنوان والسلايدر
+    // لو مخفي، مفيش داعي نعيد بناء الشاشة كلها
+    if (_showUI) {
+      setState(() {});
+    }
+
+    // إلغاء أي عملية سابقة لسه مخلصتش (Debounce)
+    _debounce?.cancel();
+
+    // استنى نص ثانية قبل ما تحفظ في الداتابيز (Hive/SharedPrefs)
+    // عشان لو المستخدم بيقلب بسرعة ميعملش عمليات كتابة كتير ورا بعض
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      if (!mounted) return;
+
+      _updateKhatmahProgress(page);
+
+      final pos = QuranPageIndex.firstAyahOnPage(page);
+      // استخدام read بدلاً من watch أو استدعاء مباشر عشان ميعملش rebuild
+      if (context.mounted) {
+        context.read<ReadingProgressCubit>().updateReadingProgress(
+          pos.surah,
+          pos.ayah,
+          page,
+        );
+      }
+    });
   }
 
   void _onSliderChanged(int page) {
@@ -130,145 +154,166 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double scale = 393.72727272727275 / screenWidth;
+    
+    // print("Screen width: $screenWidth, Scale factor: $scale");
+
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
       backgroundColor: const Color(0xffFFF8EE),
-      body: GestureDetector(
-        onTap: () => setState(() => _showUI = !_showUI),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 30.h,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: MediaQuery(
-                data: MediaQuery.of(
-                  context,
-                ).copyWith(textScaler: const TextScaler.linear(1.0)),
-                child: BlocBuilder<VerseSelectionCubit, String?>(
-                  builder: (context, selectedVerseId) {
-                    Future<List<Widget>> getItems(int surah, int ayah) async {
-                      final isBookmarked = await sl<BookmarkManager>()
-                          .isBookmarked(surah, ayah);
-                      return [
-                        _buildMenuItem(Icons.play_arrow, "استماع", Colors.blue),
-                        _buildMenuItem(
-                          Icons.menu_book,
-                          "التفسير",
-                          Colors.green,
-                        ),
-                        _buildMenuItem(Icons.copy, "نسخ", Colors.orange),
-                        _buildMenuItem(
-                          isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                          isBookmarked ? "إزالة" : "حفظ",
-                          Colors.purple,
-                        ),
-                        _buildMenuItem(Icons.share, "نص", Colors.teal),
-                        _buildMenuItem(Icons.image, "صورة", Colors.redAccent),
-                      ];
-                    }
-
-                    return PageviewQuran(
-                      key: _pageViewKey,
-                      pageBackgroundColor: const Color(0xffFFF8EE),
-                      controller: _controller,
-                      onPageChanged: _onPageChanged,
-                      initialPageNumber: widget.pageNumber,
-                      selectedVerseId: selectedVerseId,
-                      sp: 1..sp,
-                      h: 1.4.h,
-                      textColor: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      onLongPressDown: (surah, ayah, details) async {
-                        context.read<VerseSelectionCubit>().selectVerse(
-                          surah,
-                          ayah,
-                        );
-
-                        final items = await getItems(surah, ayah);
-                        // final isBookmarked = await sl<BookmarkManager>()
-                        //     .isBookmarked(surah, ayah); // No longer needed here
-
-                        if (!context.mounted) return;
-
-                        StarMenuOverlay.displayStarMenu(
-                          context,
-                          StarMenu(
-                            parentContext: context,
-                            params: StarMenuParameters(
-                              shape: MenuShape.circle,
-                              circleShapeParams: CircleShapeParams(
-                                radiusX: 90.w,
-                                radiusY: 90.w,
-                                startAngle: -90,
-                                endAngle: 270,
-                              ),
-                              openDurationMs: 400,
-                              // Positioning the menu using centerOffset relative to screen center
-                              centerOffset:
-                                  details.globalPosition -
-                                  Offset(
-                                    MediaQuery.of(context).size.width / 2,
-                                    MediaQuery.of(context).size.height / 2,
-                                  ),
-                              useScreenCenter: true,
-                            ),
-                            onItemTapped: (index, controller) {
-                              controller.closeMenu!();
-                              VerseActionHandler.handleAction(
-                                index: index,
-                                context: context,
-                                surah: surah,
-                                ayah: ayah,
-                              );
-                            },
-                            items: items,
+      body: BlocListener<KhatmahCubit, KhatmahState>(
+        listener: (context, state) {
+          if (state is KhatmahDailyCompleted) {
+            KhatmahProgressTracker.showCompletionDialog(
+              context,
+              dayNumber: state.dayNumber,
+              khatmahId: state.khatmahId,
+              cubit: context.read<KhatmahCubit>(),
+            );
+          }
+        },
+        child: GestureDetector(
+          onTap: () => setState(() => _showUI = !_showUI),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 50,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: const TextScaler.linear(1.0)),
+                  child: BlocBuilder<VerseSelectionCubit, String?>(
+                    builder: (context, selectedVerseId) {
+                      Future<List<Widget>> getItems(int surah, int ayah) async {
+                        final isBookmarked = await sl<BookmarkManager>()
+                            .isBookmarked(surah, ayah);
+                        return [
+                          _buildMenuItem(
+                            Icons.play_arrow,
+                            "استماع",
+                            Colors.blue,
                           ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
+                          _buildMenuItem(
+                            Icons.menu_book,
+                            "التفسير",
+                            Colors.green,
+                          ),
+                          _buildMenuItem(Icons.copy, "نسخ", Colors.orange),
+                          _buildMenuItem(
+                            isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            isBookmarked ? "إزالة" : "حفظ",
+                            Colors.purple,
+                          ),
+                          _buildMenuItem(Icons.share, "نص", Colors.teal),
+                          _buildMenuItem(Icons.image, "صورة", Colors.redAccent),
+                        ];
+                      }
 
-            // Top UI (App Bar)
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              top: _showUI ? 0 : -120.h,
-              left: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () {}, // Prevent closing UI when clicking app bar
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: CustomSurahFramWidget(index: _currentPage),
+                      return PageviewQuran(
+                        key: _pageViewKey,
+                        pageBackgroundColor: const Color(0xffFFF8EE),
+                        controller: _controller,
+                        onPageChanged: _onPageChanged,
+                        initialPageNumber: widget.pageNumber,
+                        selectedVerseId: selectedVerseId,
+                        sp: scale,
+                        h: scale,
+                        textColor: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        onLongPressDown: (surah, ayah, details) async {
+                          context.read<VerseSelectionCubit>().selectVerse(
+                            surah,
+                            ayah,
+                          );
+
+                          final items = await getItems(surah, ayah);
+
+                          if (!context.mounted) return;
+
+                          StarMenuOverlay.displayStarMenu(
+                            context,
+                            StarMenu(
+                              parentContext: context,
+                              params: StarMenuParameters(
+                                shape: MenuShape.circle,
+                                circleShapeParams: CircleShapeParams(
+                                  radiusX: 90.w,
+                                  radiusY: 90.w,
+                                  startAngle: -90,
+                                  endAngle: 270,
+                                ),
+                                openDurationMs: 400,
+                                // Positioning the menu using centerOffset relative to screen center
+                                centerOffset:
+                                    details.globalPosition -
+                                    Offset(
+                                      MediaQuery.of(context).size.width / 2,
+                                      MediaQuery.of(context).size.height / 2,
+                                    ),
+                                useScreenCenter: true,
+                              ),
+                              onItemTapped: (index, controller) {
+                                controller.closeMenu!();
+                                VerseActionHandler.handleAction(
+                                  index: index,
+                                  context: context,
+                                  surah: surah,
+                                  ayah: ayah,
+                                );
+                              },
+                              items: items,
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
-            ),
 
-            // Bottom UI (Page Slider)
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              bottom: _showUI ? 40.h : -200.h,
-              left: 10.w,
-              right: 10.w,
-              child: GestureDetector(
-                onTap: () {}, // Prevent closing UI when clicking slider area
-                child: QuranPageSlider(
-                  currentPage: _currentPage,
-                  totalPages: 604,
-                  onPageChanged: _onSliderChanged,
+              // Top UI (App Bar)
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                top: _showUI ? 0 : -120.h,
+                left: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {}, // Prevent closing UI when clicking app bar
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: CustomSurahFramWidget(index: _currentPage),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+
+              // Bottom UI (Page Slider)
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                bottom: _showUI ? 40.h : -200.h,
+                left: 10.w,
+                right: 10.w,
+                child: GestureDetector(
+                  onTap: () {}, // Prevent closing UI when clicking slider area
+                  child: QuranPageSlider(
+                    currentPage: _currentPage,
+                    totalPages: 604,
+                    onPageChanged: _onSliderChanged,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
