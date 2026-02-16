@@ -58,6 +58,8 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
+
       floatingActionButton: FloatingActionButton(
 
         onPressed: () {

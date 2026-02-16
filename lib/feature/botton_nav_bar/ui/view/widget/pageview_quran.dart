@@ -233,7 +233,7 @@ class _PageContentState extends State<_PageContent>
                         getScreenType(context) == ScreenType.large
                             ? 13.2 / widget.sp
                             : 24 / widget.sp,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
               );
@@ -287,7 +287,7 @@ class _PageContentState extends State<_PageContent>
                 style: TextStyle(
                   fontFamily: pageFont,
                   package: 'qcf_quran',
-                  color: Colors.brown,
+                  color: Theme.of(context).primaryColorDark,//Colors.white,
                   height: 1.35 / widget.h,
                   backgroundColor:
                       isSelected ? Colors.yellow.withOpacity(0.3) : null,

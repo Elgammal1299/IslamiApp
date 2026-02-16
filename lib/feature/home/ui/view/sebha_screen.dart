@@ -369,11 +369,11 @@ class _SebhaScreenState extends State<SebhaScreen>
             // نص إرشادي
             if (!_showDhikrInput)
               Text(
-                "انقر على الدائرة للتسبيح",
+                "انقر على السبحة ",
                 style: context.textTheme.titleLarge?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.7),
+                  ).primaryColorDark,
                 ),
                 textAlign: TextAlign.center,
               ),

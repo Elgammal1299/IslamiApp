@@ -19,7 +19,7 @@ class SebhaCounterWidget extends StatelessWidget {
       onTap: onTap,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final double sebhaSize = 200;
+          const double sebhaSize = 200;
 
           return Stack(
             alignment: Alignment.center,
@@ -36,6 +36,7 @@ class SebhaCounterWidget extends StatelessWidget {
                           "assets/images/sebha.png",
                           width: sebhaSize,
                           height: sebhaSize,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       );
                     },
@@ -44,6 +45,8 @@ class SebhaCounterWidget extends StatelessWidget {
                     "assets/images/sebha2.png",
                     width: sebhaSize * 0.5,
                     height: sebhaSize * 0.5,
+                          color: Theme.of(context).primaryColorDark,
+
                   ),
                 ],
               ),
@@ -55,6 +58,8 @@ class SebhaCounterWidget extends StatelessWidget {
                   counter.toString(),
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColorDark,
+                        fontSize: sebhaSize * 0.25,
                       ),
                 ),
               ),

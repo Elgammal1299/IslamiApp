@@ -162,7 +162,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xffFFF8EE),
+      backgroundColor:Theme.of(context).primaryColorLight,// const Color(0xffFFF8EE),
       body: BlocListener<KhatmahCubit, KhatmahState>(
         listener: (context, state) {
           if (state is KhatmahDailyCompleted) {
@@ -179,7 +179,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           child: Stack(
             children: [
               Positioned(
-                top: 50,
+                top: 40,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -217,15 +217,16 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                       }
 
                       return PageviewQuran(
+
                         key: _pageViewKey,
-                        pageBackgroundColor: const Color(0xffFFF8EE),
+                        pageBackgroundColor:Theme.of(context).primaryColorLight,
                         controller: _controller,
                         onPageChanged: _onPageChanged,
                         initialPageNumber: widget.pageNumber,
                         selectedVerseId: selectedVerseId,
                         sp: scale,
                         h: scale,
-                        textColor: Colors.black,
+                        textColor:  Theme.of(context).primaryColorDark,
                         fontWeight: FontWeight.w500,
                         onLongPressDown: (surah, ayah, details) async {
                           context.read<VerseSelectionCubit>().selectVerse(
