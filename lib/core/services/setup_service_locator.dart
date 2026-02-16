@@ -13,6 +13,7 @@ import 'api/tafsir_service.dart';
 import 'api/hadith_service.dart';
 import 'api/audio_service.dart';
 import 'api/quran_audio_api.dart';
+import 'api/alquran_cloud_service.dart';
 import 'api/surah_db.dart';
 import 'hive_service.dart';
 import 'radio_service.dart';
@@ -24,6 +25,7 @@ import '../../feature/home/services/location_service.dart';
 import '../../feature/home/data/repo/radio_repository.dart';
 import '../../feature/botton_nav_bar/data/repo/surah_repository.dart';
 import '../../feature/botton_nav_bar/data/repo/tafsir_repo.dart';
+import '../../feature/botton_nav_bar/data/repo/quran_audio_repo.dart';
 
 // Cubits
 import '../../feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
@@ -34,6 +36,7 @@ import '../../feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_
 import '../../feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import '../../feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import '../../feature/botton_nav_bar/ui/view_model/quran_audio_cubit/quran_audio_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/nav_bar_cubit/nav_bar_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import '../../feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
@@ -92,6 +95,11 @@ Future<void> setupServiceLocator() async {
     return QuranAudioService(sl<Dio>());
   });
 
+  // AlQuranCloudService
+  sl.registerLazySingleton<AlQuranCloudService>(() {
+    return AlQuranCloudService(sl<Dio>());
+  });
+
   // SurahJsonServer
   sl.registerLazySingleton<SurahJsonServer>(() {
     return SurahJsonServer();
@@ -145,8 +153,6 @@ Future<void> setupServiceLocator() async {
       enableLogging: true,
     );
   });
-
-
 
   sl.registerLazySingleton<HiveService<NotificationModel>>(() {
     return HiveService.instanceFor<NotificationModel>(
@@ -211,6 +217,11 @@ Future<void> setupServiceLocator() async {
     return TafsirByAyahRepository(sl<TafsirService>());
   });
 
+  // QuranAudioRepository
+  sl.registerLazySingleton<QuranAudioRepository>(() {
+    return QuranAudioRepository(sl<AlQuranCloudService>());
+  });
+
   // KhatmahRepository
   sl.registerLazySingleton<KhatmahRepository>(() {
     return KhatmahRepository(sl<HiveService<KhatmahModel>>());
@@ -228,14 +239,16 @@ Future<void> setupServiceLocator() async {
     return AzkarYawmiCubit(sl<AzkarYawmiRepo>());
   });
 
-
-
   sl.registerLazySingleton<AzkarCubit>(() {
     return AzkarCubit(sl<AzkarRepo>());
   });
 
   sl.registerLazySingleton<TafsirCubit>(() {
     return TafsirCubit(sl<TafsirByAyahRepository>());
+  });
+
+  sl.registerLazySingleton<QuranAudioCubit>(() {
+    return QuranAudioCubit(sl<QuranAudioRepository>());
   });
 
   // Radio and Audio Cubits
@@ -246,8 +259,6 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<AudioCubit>(() {
     return AudioCubit(sl<AudioManager>());
   });
-
- 
 
   sl.registerLazySingleton<HadithCubit>(() {
     return HadithCubit(sl<HadithRepo>());
@@ -279,7 +290,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ReadingProgressCubit>(() {
     return ReadingProgressCubit();
   });
-sl.registerLazySingleton<KhatmahCubit>(() {
+  sl.registerLazySingleton<KhatmahCubit>(() {
     return KhatmahCubit(sl<KhatmahRepository>());
   });
   // ===== NOTE: Services will be initialized lazily when first accessed =====

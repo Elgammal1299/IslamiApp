@@ -5,6 +5,7 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/audio_bottom_sheet.dart';
+import 'package:islami_app/feature/botton_nav_bar/ui/view_model/quran_audio_cubit/quran_audio_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/verse_selection_cubit.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:share_plus/share_plus.dart';
@@ -18,8 +19,6 @@ class VerseActionHandler {
   }) async {
     final isBookmarked = await sl<BookmarkManager>().isBookmarked(surah, ayah);
     final cumulativeNumber = _getCumulativeAyahNumber(surah, ayah);
-    final audioURL =
-        "https://cdn.islamic.network/quran/audio/128/ar.alafasy/$cumulativeNumber.mp3";
 
     if (context.mounted) {
       context.read<VerseSelectionCubit>().clearSelection();
@@ -29,10 +28,17 @@ class VerseActionHandler {
       case 0: // Play
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
           builder:
-              (_) => AudioBottomSheet(
-                audioUrl: audioURL,
-                ayah: quran.getVerse(surah, ayah),
+              (_) => BlocProvider.value(
+                value: sl<QuranAudioCubit>(),
+                child: AudioBottomSheet(
+                  ayahNumber: cumulativeNumber,
+                  ayahText: quran.getVerse(surah, ayah),
+                  surahNumber: surah,
+                  surahName: quran.getSurahNameArabic(surah),
+                ),
               ),
         );
         break;
