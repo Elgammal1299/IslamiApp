@@ -173,7 +173,11 @@ class AppRouter {
                   BlocProvider.value(value: sl<KhatmahCubit>()),
                   BlocProvider(create: (_) => VerseSelectionCubit()),
                 ],
-                child: QuranViewScreen(pageNumber: args?['pageNumber']),
+                child: QuranViewScreen(
+                  pageNumber: args?['pageNumber'],
+                  isKhatmah: args?['isKhatmah'] ?? false,
+                  khatmahId: args?['khatmahId'],
+                ),
               ),
         );
 

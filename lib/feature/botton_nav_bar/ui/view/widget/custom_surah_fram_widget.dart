@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
@@ -19,19 +20,19 @@ class CustomSurahFramWidget extends StatelessWidget
 
     return AppBar(
       centerTitle: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.primary,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.black.withValues(alpha: 0.7), Colors.transparent],
-          ),
-        ),
-      ),
+      // flexibleSpace: Container(
+      //   decoration: BoxDecoration(
+      //     gradient: LinearGradient(
+      //       begin: Alignment.topCenter,
+      //       end: Alignment.bottomCenter,
+      //       colors: [Colors.black.withValues(alpha: 0.7), Colors.transparent],
+      //     ),
+      //   ),
+      // ),
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios, size: 20.sp, color: Colors.black),
+        icon: Icon(Icons.arrow_back_ios, size: 20.sp, color:Theme.of(context).secondaryHeaderColor),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
@@ -39,7 +40,7 @@ class CustomSurahFramWidget extends StatelessWidget
         overflow: TextOverflow.ellipsis,
         style: context.textTheme.titleLarge?.copyWith(
           fontSize: 18.sp,
-          color: Colors.black,
+          color: Theme.of(context).secondaryHeaderColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -51,13 +52,13 @@ class CustomSurahFramWidget extends StatelessWidget
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.black.withValues(alpha: 0.3)),
+              border: Border.all(color:Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.3)),
             ),
             child: Text(
               "صفحة $index | جزء $juz",
               style: TextStyle(
                 fontSize: 12.sp,
-                color: Colors.black,
+                color:Theme.of(context).secondaryHeaderColor,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -69,7 +70,7 @@ class CustomSurahFramWidget extends StatelessWidget
             onPressed: () {
               Navigator.pushNamed(context, AppRoutes.searchRouter);
             },
-            icon: const Icon(Icons.search, color: Colors.black),
+            icon:  Icon(Icons.search, color: Theme.of(context).secondaryHeaderColor),
           ),
         ),
       ],

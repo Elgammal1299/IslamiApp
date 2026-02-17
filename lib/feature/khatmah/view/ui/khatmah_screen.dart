@@ -181,75 +181,215 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               SizedBox(height: 10.h),
 
               // المدة
-              Text(
-                'مدة الختمة',
-                style: context.textTheme.titleMedium,
-              ),
-              SizedBox(height: 8.h),
-              ...KhatmahConstants.defaultDurations.map(
-                (duration) => RadioListTile<int>(
-                  value: duration,
-                  groupValue: _selectedDuration,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedDuration = value!;
-                    });
-                  },
-                  title: Text(
-                    KhatmahConstants.durationNames[duration]!,
-                    style: context.textTheme.bodyLarge,
-                  ),
-                  activeColor: AppColors.primary,
-                  contentPadding: EdgeInsets.zero,
+              Text('مدة الختمة', style: context.textTheme.titleMedium),
+              SizedBox(height: 12.h),
+
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10.h,),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
-              ),
-
-              SizedBox(height: 24.h),
-
-              // تاريخ البداية
-              Text(
-                'تاريخ البداية',
-                style: context.textTheme.titleMedium,
-              ),
-              SizedBox(height: 8.h),
-              InkWell(
-                onTap: () => _selectStartDate(context),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 16.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: AppColors.divider),
-                  ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today,
-                            color: AppColors.primary,
-                            size: 20.sp,
-                          ),
-                          SizedBox(width: 12.w),
-                          Text(
-                            dateFormat.format(_selectedStartDate),
-                            style: context.textTheme.bodyLarge,
-                          ),
-                        ],
+                      /// ✅ مدة مخصصة أول اختيار
+                      _buildDurationItem(
+                        title: "مدة مخصصة",
+                        selected: _isCustomDuration,
+                        onTap: () {
+                          setState(() {
+                            _isCustomDuration = true;
+                          });
+                        },
                       ),
-                      const Icon(
-                        Icons.arrow_drop_down,
-                        color: AppColors.textSecondary,
-                      ),
+
+
+                      /// ✅ باقي المدد
+                      ...KhatmahConstants.defaultDurations.map((duration) {
+                        return Padding(
+                          padding: EdgeInsets.only(right: 10.w),
+                          child: _buildDurationItem(
+                            title: KhatmahConstants.durationNames[duration]!,
+                            selected:
+                                !_isCustomDuration &&
+                                _selectedDuration == duration,
+                            onTap: () {
+                              setState(() {
+                                _selectedDuration = duration;
+                                _isCustomDuration = false;
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
                     ],
                   ),
                 ),
               ),
+
+              /// ✅ حقل المدة المخصصة
+              if (_isCustomDuration)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: TextFormField(
+                    controller: _customDaysController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: 'أدخل عدد الأيام',
+                      suffixText: 'يوم',
+                    ),
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (_isCustomDuration) {
+                        if (value == null || value.isEmpty) {
+                          return 'من فضلك أدخل عدد الأيام';
+                        }
+                        final days = int.tryParse(value);
+                        if (days == null || days <= 0) {
+                          return 'من فضلك أدخل رقماً صحيحاً أكبر من 0';
+                        }
+                        if (days > 1000) {
+                          return 'المدة طويلة جداً';
+                        }
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+              // SizedBox(height: 24.h),
+
+              // // تاريخ البداية
+              // Text('تاريخ البداية', style: context.textTheme.titleMedium),
+              // SizedBox(height: 8.h),
+              // InkWell(
+              //   onTap: () => _selectStartDate(context),
+              //   child: Container(
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: 16.w,
+              //       vertical: 16.h,
+              //     ),
+              //     decoration: BoxDecoration(
+              //       color: AppColors.cardBackground,
+              //       borderRadius: BorderRadius.circular(12.r),
+              //       border: Border.all(color: AppColors.divider),
+              //     ),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Row(
+              //           children: [
+              //             Icon(
+              //               Icons.calendar_today,
+              //               color: AppColors.primary,
+              //               size: 20.sp,
+              //             ),
+              //             SizedBox(width: 12.w),
+              //             Text(
+              //               dateFormat.format(_selectedStartDate),
+              //               style: context.textTheme.bodyLarge,
+              //             ),
+              //           ],
+              //         ),
+              //         const Icon(
+              //           Icons.arrow_drop_down,
+              //           color: AppColors.textSecondary,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+
+              SizedBox(height: 12.h),
+
+              // الإشعارات
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'تفعيل التذكير اليومي',
+                        style: context.textTheme.titleMedium,
+                      ),
+                      Switch(
+                        value: _isNotificationEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            _isNotificationEnabled = value;
+                          });
+                        },
+                        activeColor: AppColors.primary,
+                      ),
+                    ],
+                  ),
+                  if (_isNotificationEnabled) ...[
+                    SizedBox(height: 8.h),
+                    InkWell(
+                      onTap: () => _selectNotificationTime(context),
+                      child: Container(
+                        padding: EdgeInsets.all(16.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.cardBackground,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: AppColors.divider),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  color: AppColors.primary,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  'تنبيه في القت: ${_notificationTime?.format(context) ?? 'غير محدد'}',
+                                  style: context.textTheme.bodyLarge,
+                                ),
+                              ],
+                            ),
+                            const Icon(
+                              Icons.edit,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
               SizedBox(height: 24.h),
+
+              // زر الإنشاء
+              ElevatedButton(
+                onPressed: _createKhatmah,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: Text(
+                  'إنشاء الختمة',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 32.h),
+
               // معلومات إضافية
               Container(
                 padding: EdgeInsets.all(16.w),
@@ -275,10 +415,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                       ],
                     ),
                     SizedBox(height: 12.h),
-                    _buildInfoRow(
-                      'المدة:',
-                      '$_selectedDuration يوم',
-                    ),
+                    _buildInfoRow('المدة:', '$_selectedDuration يوم'),
                     _buildInfoRow(
                       'تاريخ البداية:',
                       dateFormat.format(_selectedStartDate),
@@ -308,7 +445,8 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                 ),
               ),
 
-              SizedBox(height: 32.h),
+              
+              SizedBox(height: 20.h),
             ],
           ),
         ),

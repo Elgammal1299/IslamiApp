@@ -20,8 +20,15 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/verse_action_ha
 
 class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
+  final bool isKhatmah;
+  final String? khatmahId;
 
-  const QuranViewScreen({super.key, required this.pageNumber});
+  const QuranViewScreen({
+    super.key,
+    required this.pageNumber,
+    this.isKhatmah = false,
+    this.khatmahId,
+  });
 
   @override
   State<QuranViewScreen> createState() => _QuranViewScreenState();
@@ -46,21 +53,28 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     // Update reading progress for the initial page
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        final pos = QuranPageIndex.firstAyahOnPage(_currentPage);
-        context.read<ReadingProgressCubit>().updateReadingProgress(
-          pos.surah,
-          pos.ayah,
-          _currentPage,
-        );
+        if (widget.isKhatmah) {
+          _updateKhatmahProgress(_currentPage);
+        } else {
+          final pos = QuranPageIndex.firstAyahOnPage(_currentPage);
+          context.read<ReadingProgressCubit>().updateReadingProgress(
+            pos.surah,
+            pos.ayah,
+            _currentPage,
+          );
+        }
       }
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateKhatmahProgress(_currentPage);
     });
   }
 
   void _updateKhatmahProgress(int pageNumber) {
-    KhatmahProgressTracker.updateCurrentPage(context, pageNumber: pageNumber);
+    if (widget.isKhatmah) {
+      KhatmahProgressTracker.updateCurrentPage(
+        context,
+        pageNumber: pageNumber,
+        khatmahId: widget.khatmahId,
+      );
+    }
   }
 
   @override
@@ -90,16 +104,18 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       if (!mounted) return;
 
-      _updateKhatmahProgress(page);
-
-      final pos = QuranPageIndex.firstAyahOnPage(page);
-      // استخدام read بدلاً من watch أو استدعاء مباشر عشان ميعملش rebuild
-      if (context.mounted) {
-        context.read<ReadingProgressCubit>().updateReadingProgress(
-          pos.surah,
-          pos.ayah,
-          page,
-        );
+      if (widget.isKhatmah) {
+        _updateKhatmahProgress(page);
+      } else {
+        final pos = QuranPageIndex.firstAyahOnPage(page);
+        // استخدام read بدلاً من watch أو استدعاء مباشر عشان ميعملش rebuild
+        if (context.mounted) {
+          context.read<ReadingProgressCubit>().updateReadingProgress(
+            pos.surah,
+            pos.ayah,
+            page,
+          );
+        }
       }
     });
   }
@@ -155,13 +171,14 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double scale = 393.72727272727275 / screenWidth;
-    
+
     // print("Screen width: $screenWidth, Scale factor: $scale");
 
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      backgroundColor:Theme.of(context).primaryColorLight,// const Color(0xffFFF8EE),
+      backgroundColor:
+          Theme.of(context).primaryColorLight, // const Color(0xffFFF8EE),
       body: BlocListener<KhatmahCubit, KhatmahState>(
         listener: (context, state) {
           if (state is KhatmahDailyCompleted) {
@@ -216,16 +233,16 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                       }
 
                       return PageviewQuran(
-
                         key: _pageViewKey,
-                        pageBackgroundColor:Theme.of(context).primaryColorLight,
+                        pageBackgroundColor:
+                            Theme.of(context).primaryColorLight,
                         controller: _controller,
                         onPageChanged: _onPageChanged,
                         initialPageNumber: widget.pageNumber,
                         selectedVerseId: selectedVerseId,
                         sp: scale,
                         h: scale,
-                        textColor:  Theme.of(context).primaryColorDark,
+                        textColor: Theme.of(context).primaryColorDark,
                         fontWeight: FontWeight.w500,
                         onLongPressDown: (surah, ayah, details) async {
                           context.read<VerseSelectionCubit>().selectVerse(

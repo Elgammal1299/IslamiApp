@@ -104,47 +104,44 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
         // رأس الختمة
         Container(
           padding: EdgeInsets.all(16.w),
-         
-            child: Column(
-              crossAxisAlignment:CrossAxisAlignment.start ,
 
-              children: [
-                Text(
-                  khatmah.name,
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.right,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+              Text(
+                khatmah.name,
+                style: context.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                SizedBox(height: 16.h),
-                LinearProgressIndicator(
-                  value: progress / 100,
-                  backgroundColor: AppColors.divider,
-                  valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-                ),
-                SizedBox(height: 8.h),
-                Align(
-                  alignment: Alignment.bottomLeft, 
-                  child:  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('التقدم', style: context.textTheme.bodyMedium),
-                      Text(
-                        '${progress.toStringAsFixed(1)}%',
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
+                textAlign: TextAlign.right,
+              ),
+              SizedBox(height: 16.h),
+              LinearProgressIndicator(
+                value: progress / 100,
+                backgroundColor: AppColors.divider,
+                valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+              ),
+              SizedBox(height: 8.h),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('التقدم', style: context.textTheme.bodyMedium),
+                    Text(
+                      '${progress.toStringAsFixed(1)}%',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
                       ),
-                    ],
-                  
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          
+              ),
+            ],
+          ),
         ),
-
 
         // إعدادات الإشعارات
         Card(
@@ -224,9 +221,6 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
           ),
         ),
 
-
-        
-
         SizedBox(height: 16.h),
 
         // قائمة الأيام
@@ -278,7 +272,7 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
             ),
           );
         }),
-                SizedBox(height: 12.h),
+        SizedBox(height: 12.h),
         // معلومات الختمة
         Card(
           child: Padding(
@@ -374,7 +368,11 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
                         Navigator.pushNamed(
                           context,
                           AppRoutes.quranViewRouter,
-                          arguments: {"pageNumber": juz.currentPage},
+                          arguments: {
+                            "pageNumber": juz.currentPage,
+                            "isKhatmah": true,
+                            "khatmahId": khatmah.id,
+                          },
                         );
                       },
                       child: const Text('قراءة'),

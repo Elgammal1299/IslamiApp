@@ -10,10 +10,17 @@ class KhatmahProgressTracker {
   static Future<void> updateCurrentPage(
     BuildContext context, {
     required int pageNumber,
+    String? khatmahId,
   }) async {
     // الحصول على الختمة النشطة
     final khatmahCubit = context.read<KhatmahCubit>();
-    final activeKhatmah = await khatmahCubit.getActiveKhatmah();
+
+    KhatmahModel? activeKhatmah;
+    if (khatmahId != null) {
+      activeKhatmah = khatmahCubit.getKhatmah(khatmahId);
+    } else {
+      activeKhatmah = await khatmahCubit.getActiveKhatmah();
+    }
 
     if (activeKhatmah == null) {
       // مفيش ختمة نشطة، مش محتاجين نتتبع
