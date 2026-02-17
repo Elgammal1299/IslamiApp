@@ -236,7 +236,8 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
           final isCurrentDay = currentDay?.dayNumber == day.dayNumber;
 
           return Card(
-            color: isCurrentDay ? AppColors.primary.withOpacity(0.1) : null,
+            color:
+                isCurrentDay ? AppColors.primary.withValues(alpha: 0.1) : null,
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor:

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:islami_app/core/constant/app_image.dart';
+
 import 'package:islami_app/feature/botton_nav_bar/data/model/verse_share_theme.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
@@ -94,7 +94,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -5),
                   ),
@@ -214,6 +214,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                   width: 3,
                 ),
                 boxShadow: [
+                  // ignore: prefer_const_constructors
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 4,
@@ -304,8 +305,6 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
             SizedBox(height: 20.h),
           ],
 
-       
-
           Directionality(
             textDirection: TextDirection.rtl,
             child: Text.rich(
@@ -347,7 +346,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
               textDirection: TextDirection.rtl,
               style: TextStyle(
                 fontSize: (_fontSize * 0.6).sp,
-                color: _selectedTheme.primaryColor.withOpacity(0.8),
+                color: _selectedTheme.primaryColor.withValues(alpha: 0.8),
                 fontFamily: 'Cairo',
                 height: 1.5,
               ),
@@ -364,7 +363,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
       decoration: BoxDecoration(
-        color: _selectedTheme.primaryColor.withOpacity(0.05),
+        color: _selectedTheme.primaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Row(
@@ -375,7 +374,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
             style: TextStyle(
               fontSize: 10.sp,
               fontFamily: 'Cairo',
-              color: _selectedTheme.primaryColor.withOpacity(0.6),
+              color: _selectedTheme.primaryColor.withValues(alpha: 0.6),
             ),
           ),
           Text(
@@ -384,7 +383,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
               fontSize: 10.sp,
               fontFamily: 'Cairo',
               fontWeight: FontWeight.bold,
-              color: _selectedTheme.secondaryColor.withOpacity(0.7),
+              color: _selectedTheme.secondaryColor.withValues(alpha: 0.7),
             ),
           ),
         ],

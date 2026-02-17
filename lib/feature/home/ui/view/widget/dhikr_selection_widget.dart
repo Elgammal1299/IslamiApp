@@ -62,7 +62,7 @@ class DhikrSelectionWidget extends StatelessWidget {
                             isSelected
                                 ? Theme.of(
                                   context,
-                                ).primaryColor.withOpacity(0.1)
+                                ).primaryColor.withValues(alpha: 0.1)
                                 : Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10),
                         border:

@@ -1,6 +1,4 @@
-
-
-import 'package:adhan/adhan.dart';
+﻿import 'package:adhan/adhan.dart';
 import 'package:flutter/material.dart';
 
 class PrayerHeaderWidget extends StatelessWidget {
@@ -31,14 +29,14 @@ class PrayerHeaderWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'الصلاة الحالية: ${currentPrayer != null ? displayName(currentPrayer!) : '-'}',
+              'الصلاة الحالية: \\${currentPrayer != null ? displayName(currentPrayer!) : '-'}',
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
               nextPrayer == null
                   ? '—'
-                  : 'الصلاة التالية: ${displayName(nextPrayer!)} بعد $hh:$mm:$ss',
+                  : 'الصلاة التالية: \\${displayName(nextPrayer!)} بعد \\$hh:\\$mm:\\$ss',
               style: theme.textTheme.headlineSmall,
             ),
           ],

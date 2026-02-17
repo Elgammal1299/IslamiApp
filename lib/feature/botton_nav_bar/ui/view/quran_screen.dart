@@ -119,11 +119,11 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           width: 50.w,
           height: 50.w,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.9),
+            color: color.withValues(alpha: 0.9),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),

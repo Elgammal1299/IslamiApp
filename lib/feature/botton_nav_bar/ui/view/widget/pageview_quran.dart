@@ -279,7 +279,7 @@ class _PageContentState extends State<_PageContent>
             recognizer: spanRecognizer,
             style: TextStyle(
               backgroundColor:
-                  isSelected ? Colors.yellow.withOpacity(0.3) : null,
+                  isSelected ? Colors.yellow.withValues(alpha: 0.3) : null,
             ),
             children: [
               TextSpan(
@@ -290,7 +290,7 @@ class _PageContentState extends State<_PageContent>
                   color: Theme.of(context).primaryColorDark,//Colors.white,
                   height: 1.35 / widget.h,
                   backgroundColor:
-                      isSelected ? Colors.yellow.withOpacity(0.3) : null,
+                      isSelected ? Colors.yellow.withValues(alpha: 0.3) : null,
                 ),
               ),
             ],

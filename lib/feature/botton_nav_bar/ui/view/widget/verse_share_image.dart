@@ -28,8 +28,6 @@ class VerseShareImage extends StatelessWidget {
           HeaderWidget(suraNumber: surah),
 
           SizedBox(height: 15.h),
-  
-      
 
           // The Verse formatted as Mushaf Page
           Padding(
@@ -72,7 +70,7 @@ class VerseShareImage extends StatelessWidget {
             "تطبيق وارتَقِ",
             style: TextStyle(
               fontSize: 10.sp,
-              color: const Color(0xff2B6777).withOpacity(0.5),
+              color: const Color(0xff2B6777).withValues(alpha: 0.5),
               fontWeight: FontWeight.bold,
               fontFamily: 'Cairo',
             ),

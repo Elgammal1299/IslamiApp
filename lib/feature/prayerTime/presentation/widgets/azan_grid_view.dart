@@ -1,4 +1,4 @@
-import 'package:adhan/adhan.dart';
+﻿import 'package:adhan/adhan.dart';
 import 'package:flutter/material.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/azan_item.dart';
 
@@ -10,12 +10,12 @@ class AzanGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prayers = [
-      {'name': 'الفجر', 'time': todayTimes.fajr, 'prayer': Prayer.fajr},
-      {'name': 'الشروق', 'time': todayTimes.sunrise, 'prayer': Prayer.sunrise},
-      {'name': 'الظهر', 'time': todayTimes.dhuhr, 'prayer': Prayer.dhuhr},
-      {'name': 'العصر', 'time': todayTimes.asr, 'prayer': Prayer.asr},
-      {'name': 'المغرب', 'time': todayTimes.maghrib, 'prayer': Prayer.maghrib},
-      {'name': 'العشاء', 'time': todayTimes.isha, 'prayer': Prayer.isha},
+      {'name': 'الفجر', 'time': todayTimes.fajr},
+      {'name': 'الشروق', 'time': todayTimes.sunrise},
+      {'name': 'الظهر', 'time': todayTimes.dhuhr},
+      {'name': 'العصر', 'time': todayTimes.asr},
+      {'name': 'المغرب', 'time': todayTimes.maghrib},
+      {'name': 'العشاء', 'time': todayTimes.isha},
     ];
 
     return GridView.count(
@@ -25,16 +25,15 @@ class AzanGrid extends StatelessWidget {
       childAspectRatio: 1,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(16),
-      children:
-          prayers
-              .map(
-                (p) => AzanItem(
-                  name: p['name'] as String,
-                  time: p['time'] as DateTime,
-                ),
-              )
-              .toList(),
+      padding: const EdgeInsets.all(16),
+      children: prayers
+          .map(
+            (p) => AzanItem(
+              name: p['name'] as String,
+              time: p['time'] as DateTime,
+            ),
+          )
+          .toList(),
     );
   }
 }

@@ -32,7 +32,7 @@ class DailyWardCompletionDialog extends StatelessWidget {
               width: 80.w,
               height: 80.w,
               decoration: BoxDecoration(
-                color: AppColors.success.withOpacity(0.2),
+                color: AppColors.success.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: Icon(

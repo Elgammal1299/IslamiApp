@@ -30,7 +30,7 @@ class SebhaControlsWidget extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.2),
+                    color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -72,7 +72,7 @@ class SebhaControlsWidget extends StatelessWidget {
                         : Theme.of(context).primaryColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.2),
+                    color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
