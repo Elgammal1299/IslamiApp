@@ -77,12 +77,13 @@ class KhatmahRepository {
     final khatmah = getKhatmah(khatmahId);
     if (khatmah == null) return;
 
-    final updatedDailyProgress = khatmah.dailyProgress.map((day) {
-      if (day.dayNumber == dayNumber) {
-        return newProgress;
-      }
-      return day;
-    }).toList();
+    final updatedDailyProgress =
+        khatmah.dailyProgress.map((day) {
+          if (day.dayNumber == dayNumber) {
+            return newProgress;
+          }
+          return day;
+        }).toList();
 
     // التحقق من إكمال الختمة
     final isCompleted = updatedDailyProgress.every((day) => day.isCompleted);
@@ -105,32 +106,32 @@ class KhatmahRepository {
     final khatmah = getKhatmah(khatmahId);
     if (khatmah == null) return;
 
-    final updatedDailyProgress = khatmah.dailyProgress.map((day) {
-      if (day.dayNumber == dayNumber) {
-        final updatedJuzList = day.juzList.map((juz) {
-          if (juz.juzNumber == juzNumber) {
-            return newJuzProgress;
+    final updatedDailyProgress =
+        khatmah.dailyProgress.map((day) {
+          if (day.dayNumber == dayNumber) {
+            final updatedJuzList =
+                day.juzList.map((juz) {
+                  if (juz.juzNumber == juzNumber) {
+                    return newJuzProgress;
+                  }
+                  return juz;
+                }).toList();
+
+            // التحقق من إكمال اليوم
+            final isDayCompleted = updatedJuzList.every(
+              (juz) => juz.isCompleted,
+            );
+
+            return day.copyWith(
+              juzList: updatedJuzList,
+              isCompleted: isDayCompleted,
+            );
           }
-          return juz;
+          return day;
         }).toList();
-
-        // التحقق من إكمال اليوم
-        final isDayCompleted = updatedJuzList.every((juz) => juz.isCompleted);
-
-        return day.copyWith(
-          juzList: updatedJuzList,
-          isCompleted: isDayCompleted,
-        );
-      }
-      return day;
-    }).toList();
-
-    // التحقق من إكمال الختمة
-    final isCompleted = updatedDailyProgress.every((day) => day.isCompleted);
 
     final updatedKhatmah = khatmah.copyWith(
       dailyProgress: updatedDailyProgress,
-      isCompleted: isCompleted,
     );
 
     await updateKhatmah(updatedKhatmah);
@@ -146,34 +147,28 @@ class KhatmahRepository {
     final khatmah = getKhatmah(khatmahId);
     if (khatmah == null) return;
 
-    final updatedDailyProgress = khatmah.dailyProgress.map((day) {
-      if (day.dayNumber == dayNumber) {
-        final updatedJuzList = day.juzList.map((juz) {
-          if (juz.juzNumber == juzNumber) {
-            final isCompleted = newPage >= juz.endPage;
-            return juz.copyWith(
-              currentPage: newPage,
-              isCompleted: isCompleted,
-            );
+    final updatedDailyProgress =
+        khatmah.dailyProgress.map((day) {
+          if (day.dayNumber == dayNumber) {
+            final updatedJuzList =
+                day.juzList.map((juz) {
+                  if (juz.juzNumber == juzNumber) {
+                    final isCompleted = newPage >= juz.endPage;
+                    return juz.copyWith(
+                      currentPage: newPage,
+                      isCompleted: isCompleted,
+                    );
+                  }
+                  return juz;
+                }).toList();
+
+            return day.copyWith(juzList: updatedJuzList);
           }
-          return juz;
+          return day;
         }).toList();
-
-        final isDayCompleted = updatedJuzList.every((juz) => juz.isCompleted);
-
-        return day.copyWith(
-          juzList: updatedJuzList,
-          isCompleted: isDayCompleted,
-        );
-      }
-      return day;
-    }).toList();
-
-    final isCompleted = updatedDailyProgress.every((day) => day.isCompleted);
 
     final updatedKhatmah = khatmah.copyWith(
       dailyProgress: updatedDailyProgress,
-      isCompleted: isCompleted,
     );
 
     await updateKhatmah(updatedKhatmah);

@@ -102,71 +102,123 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
       padding: EdgeInsets.all(16.w),
       children: [
         // رأس الختمة
-        Card(
-          child: Padding(
-            padding: EdgeInsets.all(16.w),
+        Container(
+          padding: EdgeInsets.all(16.w),
+         
             child: Column(
+              crossAxisAlignment:CrossAxisAlignment.start ,
+
               children: [
                 Text(
                   khatmah.name,
                   style: context.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.right,
                 ),
                 SizedBox(height: 16.h),
-                CircularProgressIndicator(
+                LinearProgressIndicator(
                   value: progress / 100,
-                  strokeWidth: 8,
                   backgroundColor: AppColors.divider,
                   valueColor: const AlwaysStoppedAnimation(AppColors.primary),
                 ),
                 SizedBox(height: 8.h),
-                Text(
-                  '${progress.toStringAsFixed(1)}%',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                Align(
+                  alignment: Alignment.bottomLeft, 
+                  child: Text(
+                    '${progress.toStringAsFixed(1)}%',
+                    style: context.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
+          
         ),
 
-        SizedBox(height: 16.h),
 
-        // معلومات الختمة
+        // إعدادات الإشعارات
         Card(
-          child: Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'معلومات الختمة',
-                  style: context.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+          child: Column(
+            children: [
+              SwitchListTile(
+                title: const Text('الإشعارات اليومية'),
+                subtitle: Text(
+                  khatmah.isNotificationEnabled
+                      ? 'منبه في: ${khatmah.notificationTime != null ? TimeOfDay.fromDateTime(khatmah.notificationTime!).format(context) : 'غير محدد'}'
+                      : 'التذكير اليومي معطل',
+                ),
+                value: khatmah.isNotificationEnabled,
+                activeColor: AppColors.primary,
+                onChanged: (value) {
+                  context.read<KhatmahCubit>().updateNotificationSettings(
+                    khatmahId: khatmah.id,
+                    isEnabled: value,
+                  );
+                },
+              ),
+              if (khatmah.isNotificationEnabled)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
+                  child: InkWell(
+                    onTap: () async {
+                      final picked = await showTimePicker(
+                        context: context,
+                        initialTime:
+                            khatmah.notificationTime != null
+                                ? TimeOfDay.fromDateTime(
+                                  khatmah.notificationTime!,
+                                )
+                                : const TimeOfDay(hour: 20, minute: 0),
+                      );
+                      if (picked != null) {
+                        if (!mounted) return;
+                        context.read<KhatmahCubit>().updateNotificationSettings(
+                          khatmahId: khatmah.id,
+                          isEnabled: true,
+                          notificationTime: DateTime(
+                            0,
+                            0,
+                            0,
+                            picked.hour,
+                            picked.minute,
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12.w),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time,
+                            color: AppColors.primary,
+                          ),
+                          SizedBox(width: 8.w),
+                          const Text('تغيير وقت التنبيه'),
+                          const Spacer(),
+                          const Icon(
+                            Icons.edit,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 12.h),
-                _buildInfoRow(
-                  'تاريخ البداية',
-                  dateFormat.format(khatmah.startDate),
-                ),
-                _buildInfoRow(
-                  'تاريخ الانتهاء',
-                  dateFormat.format(khatmah.endDate),
-                ),
-                _buildInfoRow('المدة الكلية', '${khatmah.totalDays} يوم'),
-                _buildInfoRow(
-                  'الحالة',
-                  khatmah.isCompleted ? 'مكتملة ✓' : 'جارية',
-                ),
-              ],
-            ),
+            ],
           ),
         ),
+
+
+        
 
         SizedBox(height: 16.h),
 
@@ -218,6 +270,38 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
             ),
           );
         }),
+                SizedBox(height: 12.h),
+        // معلومات الختمة
+        Card(
+          child: Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'معلومات الختمة',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                _buildInfoRow(
+                  'تاريخ البداية',
+                  dateFormat.format(khatmah.startDate),
+                ),
+                _buildInfoRow(
+                  'تاريخ الانتهاء',
+                  dateFormat.format(khatmah.endDate),
+                ),
+                _buildInfoRow('المدة الكلية', '${khatmah.totalDays} يوم'),
+                _buildInfoRow(
+                  'الحالة',
+                  khatmah.isCompleted ? 'مكتملة ✓' : 'جارية',
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

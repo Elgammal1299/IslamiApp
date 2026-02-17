@@ -60,16 +60,6 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
 
-      floatingActionButton: FloatingActionButton(
-
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.khatmahListRouter);
-        },
-        
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
-         child: const Icon(Icons.add,size: 40,),
-      ),
       appBar: AppBar(
         title: _buildAppBarTitle(),
         actions: _buildAppBarActions(),

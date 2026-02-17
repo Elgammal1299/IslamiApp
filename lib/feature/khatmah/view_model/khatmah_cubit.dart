@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/khatmah/data/model/khatmah_model.dart';
 import 'package:islami_app/feature/khatmah/data/repo/khatmah_repo.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_calculator.dart';
+import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
 
 part 'khatmah_state.dart';
 
@@ -35,6 +36,8 @@ class KhatmahCubit extends Cubit<KhatmahState> {
     required String name,
     required int totalDays,
     required DateTime startDate,
+    DateTime? notificationTime,
+    bool isNotificationEnabled = false,
   }) async {
     if (isClosed) return;
     try {
@@ -54,6 +57,22 @@ class KhatmahCubit extends Cubit<KhatmahState> {
         dailyProgress: dailyProgress,
       );
 
+      // إضافة إعدادات الإشعارات
+      final updatedKhatmah = khatmah.copyWith(
+        notificationTime: notificationTime,
+        isNotificationEnabled: isNotificationEnabled,
+      );
+      await _repository.updateKhatmah(updatedKhatmah);
+
+      // جدولة الإشعار إذا كان مفعلاً
+      if (isNotificationEnabled && notificationTime != null) {
+        await LocalNotificationService.scheduleKhatmahNotification(
+          khatmahId: updatedKhatmah.id,
+          khatmahName: updatedKhatmah.name,
+          notificationTime: notificationTime,
+        );
+      }
+
       debugPrint('✅ Khatmah created: ${khatmah.name}');
 
       // إعادة تحميل الختمات
@@ -70,6 +89,10 @@ class KhatmahCubit extends Cubit<KhatmahState> {
   Future<void> deleteKhatmah(String khatmahId) async {
     if (isClosed) return;
     try {
+      // إلغاء الإشعار المرتبط بالختمة
+      final notificationId = khatmahId.hashCode.abs() % 2147483647;
+      await LocalNotificationService.cancelNotification(notificationId);
+
       await _repository.deleteKhatmah(khatmahId);
       debugPrint('✅ Khatmah deleted: $khatmahId');
       await loadKhatmahs();
@@ -91,7 +114,7 @@ class KhatmahCubit extends Cubit<KhatmahState> {
       // حفظ الحالة السابقة
       final khatmahBefore = _repository.getKhatmah(khatmahId);
       if (khatmahBefore == null) return;
-      
+
       final dayBefore = khatmahBefore.dailyProgress.firstWhere(
         (day) => day.dayNumber == dayNumber,
       );
@@ -109,21 +132,23 @@ class KhatmahCubit extends Cubit<KhatmahState> {
         '✅ Updated page for Juz $juzNumber on Day $dayNumber to page $newPage',
       );
 
-      // التحقق من إتمام الورد اليومي
+      // التحقق من إكمال الورد اليومي
       final khatmahAfter = _repository.getKhatmah(khatmahId);
       if (khatmahAfter != null) {
         final dayAfter = khatmahAfter.dailyProgress.firstWhere(
           (day) => day.dayNumber == dayNumber,
         );
-        
-        // إذا تم إكمال اليوم للتو (لم يكن مكتملاً من قبل والآن أصبح مكتملاً)
-        if (!wasDayCompleted && dayAfter.isCompleted) {
-          debugPrint('🎉 Daily ward completed for day $dayNumber!');
+
+        // اليوم يعتبر "جاهز للإكمال" إذا انتهت جميع أجزائه
+        final isReadyNow = KhatmahCalculator.isDayCompleted(dayAfter);
+
+        // إذا أصبح جاهزاً للتو ولم يكن مكتملاً رسمياً بعد
+        if (!wasDayCompleted && isReadyNow) {
+          debugPrint('🎉 Daily ward ready for completion: Day $dayNumber!');
           if (!isClosed) {
-            emit(KhatmahDailyCompleted(
-              dayNumber: dayNumber,
-              khatmahId: khatmahId,
-            ));
+            emit(
+              KhatmahDailyCompleted(dayNumber: dayNumber, khatmahId: khatmahId),
+            );
           }
         }
       }
@@ -145,12 +170,13 @@ class KhatmahCubit extends Cubit<KhatmahState> {
       final khatmah = _repository.getKhatmah(khatmahId);
       if (khatmah == null) return;
 
-      final updatedDailyProgress = khatmah.dailyProgress.map((day) {
-        if (day.dayNumber == dayNumber) {
-          return day.copyWith(isCompleted: true);
-        }
-        return day;
-      }).toList();
+      final updatedDailyProgress =
+          khatmah.dailyProgress.map((day) {
+            if (day.dayNumber == dayNumber) {
+              return day.copyWith(isCompleted: true);
+            }
+            return day;
+          }).toList();
 
       // التحقق من إكمال الختمة
       final isCompleted = updatedDailyProgress.every((day) => day.isCompleted);
@@ -211,6 +237,44 @@ class KhatmahCubit extends Cubit<KhatmahState> {
     } catch (e) {
       debugPrint('❌ Error updating daily progress: $e');
       if (!isClosed) emit(KhatmahError('فشل تحديث التقدم اليومي: $e'));
+    }
+  }
+
+  /// تحديث إعدادات الإشعارات للخاتمة
+  Future<void> updateNotificationSettings({
+    required String khatmahId,
+    required bool isEnabled,
+    DateTime? notificationTime,
+  }) async {
+    if (isClosed) return;
+    try {
+      final khatmah = _repository.getKhatmah(khatmahId);
+      if (khatmah == null) return;
+
+      final updatedKhatmah = khatmah.copyWith(
+        isNotificationEnabled: isEnabled,
+        notificationTime: notificationTime ?? khatmah.notificationTime,
+      );
+
+      await _repository.updateKhatmah(updatedKhatmah);
+
+      final notificationId = khatmahId.hashCode.abs() % 2147483647;
+      if (isEnabled && updatedKhatmah.notificationTime != null) {
+        await LocalNotificationService.scheduleKhatmahNotification(
+          khatmahId: updatedKhatmah.id,
+          khatmahName: updatedKhatmah.name,
+          notificationTime: updatedKhatmah.notificationTime!,
+        );
+        debugPrint('✅ Khatmah notification scheduled: ${updatedKhatmah.name}');
+      } else {
+        await LocalNotificationService.cancelNotification(notificationId);
+        debugPrint('✅ Khatmah notification canceled: ${updatedKhatmah.name}');
+      }
+
+      await loadKhatmahs();
+    } catch (e) {
+      debugPrint('❌ Error updating notification settings: $e');
+      if (!isClosed) emit(KhatmahError('فشل تحديث إعدادات الإشعارات: $e'));
     }
   }
 

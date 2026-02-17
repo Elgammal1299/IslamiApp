@@ -29,7 +29,7 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('ختماتي'), centerTitle: true),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -42,10 +42,9 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
             ),
           );
         },
-        label: const Text('إنشاء ختمة جديدة'),
-        icon: const Icon(Icons.add),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
+        child:  const Icon(Icons.add),
       ),
       body: BlocListener<KhatmahCubit, KhatmahState>(
         listener: (context, state) {
@@ -160,11 +159,11 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.book_outlined,
-            size: 120.sp,
+            Icons.not_interested,
+            size: 150.sp,
             color: AppColors.primary.withOpacity(0.3),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
           Text(
             'لا توجد ختمات بعد',
             style: context.textTheme.titleLarge?.copyWith(
@@ -179,27 +178,6 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
             ),
           ),
           SizedBox(height: 24.h),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (_) => BlocProvider.value(
-                        value: context.read<KhatmahCubit>(),
-                        child: const CreateKhatmahScreen(),
-                      ),
-                ),
-              );
-            },
-            icon: const Icon(Icons.add),
-            label: const Text('إنشاء ختمة جديدة'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-            ),
-          ),
         ],
       ),
     );

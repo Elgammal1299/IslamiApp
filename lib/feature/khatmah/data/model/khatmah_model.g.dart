@@ -114,13 +114,15 @@ class KhatmahModelAdapter extends TypeAdapter<KhatmahModel> {
       dailyProgress: (fields[5] as List).cast<DailyProgress>(),
       isCompleted: fields[6] as bool,
       createdAt: fields[7] as DateTime,
+      notificationTime: fields[8] as DateTime?,
+      isNotificationEnabled: fields[9] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, KhatmahModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -136,7 +138,11 @@ class KhatmahModelAdapter extends TypeAdapter<KhatmahModel> {
       ..writeByte(6)
       ..write(obj.isCompleted)
       ..writeByte(7)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(8)
+      ..write(obj.notificationTime)
+      ..writeByte(9)
+      ..write(obj.isNotificationEnabled);
   }
 
   @override

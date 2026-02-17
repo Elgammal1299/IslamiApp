@@ -122,6 +122,12 @@ class KhatmahModel extends Equatable {
   @HiveField(7)
   final DateTime createdAt;
 
+  @HiveField(8)
+  final DateTime? notificationTime;
+
+  @HiveField(9)
+  final bool isNotificationEnabled;
+
   const KhatmahModel({
     required this.id,
     required this.name,
@@ -131,6 +137,8 @@ class KhatmahModel extends Equatable {
     required this.dailyProgress,
     required this.isCompleted,
     required this.createdAt,
+    this.notificationTime,
+    this.isNotificationEnabled = false,
   });
 
   KhatmahModel copyWith({
@@ -142,6 +150,8 @@ class KhatmahModel extends Equatable {
     List<DailyProgress>? dailyProgress,
     bool? isCompleted,
     DateTime? createdAt,
+    DateTime? notificationTime,
+    bool? isNotificationEnabled,
   }) {
     return KhatmahModel(
       id: id ?? this.id,
@@ -152,6 +162,9 @@ class KhatmahModel extends Equatable {
       dailyProgress: dailyProgress ?? this.dailyProgress,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
+      notificationTime: notificationTime ?? this.notificationTime,
+      isNotificationEnabled:
+          isNotificationEnabled ?? this.isNotificationEnabled,
     );
   }
 
@@ -165,5 +178,7 @@ class KhatmahModel extends Equatable {
     dailyProgress,
     isCompleted,
     createdAt,
+    notificationTime,
+    isNotificationEnabled,
   ];
 }

@@ -22,4 +22,5 @@ class AppImage {
   static const prayerTimesImages = 'assets/images/prayer_times_images.png';
   static const whatsIcon = 'assets/images/whatsIcon.svg';
   static const telegramIcon = 'assets/images/telegram.svg';
+  static const khatimaImage = 'assets/images/khatima_image.png';
 }

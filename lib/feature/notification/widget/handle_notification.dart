@@ -17,6 +17,20 @@ void handleNotification(BuildContext context, Map<String, dynamic> payload) {
       return;
     }
 
+    if (source == 'khatmah') {
+      final String khatmahId = (payload['khatmahId'] ?? '').toString();
+      log(
+        '🔔 Khatmah Notification tapped -> navigating to Khatmah: $khatmahId',
+      );
+
+      Navigator.of(context).pushNamed(
+        AppRoutes.khatmahDetailsRouter,
+        arguments: {'khatmahId': khatmahId},
+      );
+
+      return;
+    }
+
     // fallback for any other source
     log('📨 Notification -> NotificationView');
     Navigator.pushNamed(

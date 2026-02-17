@@ -64,26 +64,6 @@ class AppInitializer {
     } catch (_) {}
 
     // Initialize Khatmah service
-    // NUCLEAR CLEANUP: Delete all potentially corrupted or conflicting boxes
-    try {
-      final boxesToClear = [
-        'khatmahs',
-        'khatmahs_v2',
-        'khatmahs_v3',
-        'hadiths',
-        'hadiths_v2',
-        'hadiths_v3',
-      ];
-
-      for (final box in boxesToClear) {
-        try {
-          if (Hive.isBoxOpen(box)) {
-            await Hive.box(box).close();
-          }
-          await Hive.deleteBoxFromDisk(box);
-        } catch (_) {}
-      }
-    } catch (_) {}
 
     try {
       await sl<HiveService<KhatmahModel>>().init();
@@ -105,9 +85,7 @@ class AppInitializer {
     // ✅ 12. Run app
     runApp(
       MultiBlocProvider(
-        providers: [BlocProvider.value(value: themeCubit),
-        
-        ],
+        providers: [BlocProvider.value(value: themeCubit)],
         child: ScreenUtilInit(
           designSize: const Size(393.72727272727275, 800.7272727272727),
           minTextAdapt: true,

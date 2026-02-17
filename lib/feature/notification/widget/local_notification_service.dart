@@ -149,6 +149,44 @@ class LocalNotificationService {
     await _plugin.cancel(id);
   }
 
+  /// 📅 جدولة إشعار خاص بالخاتمة
+  static Future<void> scheduleKhatmahNotification({
+    required String khatmahId,
+    required String khatmahName,
+    required DateTime notificationTime,
+  }) async {
+    final int notificationId = _getKhatmahNotificationId(khatmahId);
+    final now = DateTime.now();
+
+    // تأكد من أن الوقت غداً إذا كان قد مر وقت اليوم
+    DateTime scheduledDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      notificationTime.hour,
+      notificationTime.minute,
+    );
+
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    await scheduleNotification(
+      id: notificationId,
+      title: 'وقت الخاتمة 📖',
+      body: 'حان موعد وردك اليومي في خاتمة: $khatmahName',
+      dateTime: scheduledDate,
+      repeat: DateTimeComponents.time,
+      payload: '{"source":"khatmah", "khatmahId":"$khatmahId"}',
+    );
+  }
+
+  /// تحويل معرف الخاتمة (String) إلى معرف إشعار (int) فريد
+  static int _getKhatmahNotificationId(String khatmahId) {
+    // يمكن استخدام hashCode ولكن يفضل التأكد من أنه موجب وضمن حدود الـ int32
+    return khatmahId.hashCode.abs() % 2147483647;
+  }
+
   static Future<void> cancelAll() async {
     await _plugin.cancelAll();
   }
