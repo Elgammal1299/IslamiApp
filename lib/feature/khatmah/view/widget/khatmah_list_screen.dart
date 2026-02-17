@@ -342,49 +342,49 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
                 ],
               ),
 
-              SizedBox(height: 8.h),
+              // SizedBox(height: 8.h),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildInfoChip(
-                      Icons.play_arrow,
-                      dateFormat.format(khatmah.startDate),
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: _buildInfoChip(
-                      Icons.flag,
-                      dateFormat.format(khatmah.endDate),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: _buildInfoChip(
+              //         Icons.play_arrow,
+              //         dateFormat.format(khatmah.startDate),
+              //       ),
+              //     ),
+              //     SizedBox(width: 8.w),
+              //     Expanded(
+              //       child: _buildInfoChip(
+              //         Icons.flag,
+              //         dateFormat.format(khatmah.endDate),
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
-              if (currentDay != null && !khatmah.isCompleted) ...[
-                SizedBox(height: 12.h),
-                Container(
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.today, color: AppColors.primary, size: 20.sp),
-                      SizedBox(width: 8.w),
-                      Text(
-                        'اليوم ${currentDay.dayNumber} من ${khatmah.totalDays}',
-                        style: context.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              // if (currentDay != null && !khatmah.isCompleted) ...[
+              //   SizedBox(height: 12.h),
+              //   Container(
+              //     padding: EdgeInsets.all(12.w),
+              //     decoration: BoxDecoration(
+              //       color: AppColors.primary.withValues(alpha: 0.1),
+              //       borderRadius: BorderRadius.circular(8.r),
+              //     ),
+              //     child: Row(
+              //       children: [
+              //         Icon(Icons.today, color: AppColors.primary, size: 20.sp),
+              //         SizedBox(width: 8.w),
+              //         Text(
+              //           'اليوم ${currentDay.dayNumber} من ${khatmah.totalDays}',
+              //           style: context.textTheme.bodyMedium?.copyWith(
+              //             fontWeight: FontWeight.bold,
+              //             color: AppColors.primary,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ],
             ],
           ),
         ),

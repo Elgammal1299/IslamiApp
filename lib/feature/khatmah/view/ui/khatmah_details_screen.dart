@@ -125,12 +125,19 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
                 SizedBox(height: 8.h),
                 Align(
                   alignment: Alignment.bottomLeft, 
-                  child: Text(
-                    '${progress.toStringAsFixed(1)}%',
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('التقدم', style: context.textTheme.bodyMedium),
+                      Text(
+                        '${progress.toStringAsFixed(1)}%',
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  
                   ),
                 ),
               ],

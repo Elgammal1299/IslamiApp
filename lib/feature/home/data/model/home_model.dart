@@ -16,7 +16,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.navBarRoute,
   ),
   HomeItemModel(
-    name: "خاتماتي",
+    name: "ختماتي",
     image: AppImage.khatimaImage,
     route: AppRoutes.khatmahListRouter,
   ),
