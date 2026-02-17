@@ -18,8 +18,6 @@ import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:quran/quran.dart' as quran;
 
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -28,6 +26,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -211,13 +211,13 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                     Text(
                       dua.content,
                       textAlign: TextAlign.justify,
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontFamily: 'uthmanic',
                         fontWeight: FontWeight.bold,
 
                         fontSize: 25,
                         height: 1.4,
-                        color: AppColors.black,
+                        color: Theme.of(context).primaryColorDark,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -226,12 +226,12 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                         Expanded(
                           child: Text(
                             dua.reference,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontFamily: 'uthmanic',
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               height: 1.4,
-                              color: AppColors.black,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ),
@@ -444,64 +444,67 @@ class _DateWidgetState extends State<DateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-
-        color: Theme.of(context).cardColor,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _showHijri = !_showHijri;
-              });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Uthmanic',
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, ),
+     child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+      
+          color: Theme.of(context).cardColor,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showHijri = !_showHijri;
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
+                        style: TextStyle(
+                          color:  Theme.of(context).primaryColorDark,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Uthmanic',
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      _showHijri ? _getHijriDate() : _getGregorianDate(),
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Uthmanic',
+                      SizedBox(height: 4.h),
+                      Text(
+                        _showHijri ? _getHijriDate() : _getGregorianDate(),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Uthmanic',
+                        ),
                       ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.black.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
+                    child: Icon(
+                      Icons.swap_horiz_rounded,
+                      color: Theme.of(context).primaryColorDark,
+                      size: 20.sp,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.swap_horiz_rounded,
-                    color: AppColors.black,
-                    size: 20.sp,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -4,14 +4,9 @@ import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_mod
 import 'package:islami_app/feature/home/ui/view/azkar/view/supplication_reader_screen.dart';
 
 class CustomAzkarYawmiListViewItem extends StatelessWidget {
-  const CustomAzkarYawmiListViewItem({
-    super.key,
-    required this.items,
-    required this.category,
-  });
+  const CustomAzkarYawmiListViewItem({super.key, required this.model});
 
-  final List<AzkarYawmiModel> items;
-  final String category;
+  final AzkarCategoryModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +16,8 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => SupplicationReaderScreen(supplications: items),
+            builder:
+                (_) => SupplicationReaderScreen(supplications: model.array),
           ),
         );
       },
@@ -45,7 +41,7 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      category,
+                      model.category,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(
                         context,
@@ -53,7 +49,7 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      '${items.length} ذكر',
+                      '${model.array.length} ذكر',
                       style: Theme.of(
                         context,
                       ).textTheme.bodyLarge?.copyWith(fontSize: 14.sp),

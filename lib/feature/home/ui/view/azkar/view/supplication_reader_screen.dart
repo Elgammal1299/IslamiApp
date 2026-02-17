@@ -22,7 +22,7 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
 
   void _handleTap() {
     final current = widget.supplications[currentIndex];
-    final maxCount = int.tryParse(current.count) ?? 1;
+    final maxCount = current.count;
 
     if (repeatCount + 1 < maxCount) {
       setState(() => repeatCount++);
@@ -52,7 +52,7 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
 
     final current = widget.supplications[currentIndex];
 
-    final maxCount = int.tryParse(current.count) ?? 1;
+    final maxCount = current.count;
     final progress = repeatCount / maxCount;
     // final listProgress = (currentIndex + 1) / widget.supplications.length;
 

@@ -15,24 +15,26 @@ class IslamiApp extends StatelessWidget {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         final isDark = state is ThemeChanged ? state.isDark : false;
-        return MaterialApp(
-          themeAnimationCurve: Curves.easeInOutSine,
-          themeAnimationDuration: const Duration(seconds: 2),
-          debugShowCheckedModeBanner: false,
-          title: 'وَارْتَـقِ',
-          navigatorKey: navigatorKey,
-          locale: const Locale('ar'),
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [const Locale('ar')],
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: AppRoutes.homeRoute,
-          onGenerateRoute: AppRouter.generateRoute,
+        return MediaQuery.withNoTextScaling(
+          child: MaterialApp(
+            themeAnimationCurve: Curves.easeInOutSine,
+            themeAnimationDuration: const Duration(seconds: 2),
+            debugShowCheckedModeBanner: false,
+            title: 'وَارْتَـقِ',
+            navigatorKey: navigatorKey,
+            locale: const Locale('ar'),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [const Locale('ar')],
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+            initialRoute: AppRoutes.homeRoute,
+            onGenerateRoute: AppRouter.generateRoute,
+          ),
         );
       },
     );

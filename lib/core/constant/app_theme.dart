@@ -9,6 +9,7 @@ class AppTheme {
     brightness: Brightness.light,
     focusColor: const Color(0xFFF8F3E7),
     scaffoldBackgroundColor: AppColors.background,
+    primaryColorLight: AppColors.backgroundQuran,
     primaryColor: AppColors.primary,
     cardColor: AppColors.cardBackground,
     dividerColor: AppColors.divider,
@@ -122,6 +123,7 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
     focusColor: AppColors.darkBackground,
+    primaryColorLight: AppColors.darkBackgroundQuran,
 
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.darkBackground,

@@ -10,7 +10,7 @@ class SupplicationInitial extends AzkarYawmiState {}
 class SupplicationLoading extends AzkarYawmiState {}
 
 class SupplicationLoaded extends AzkarYawmiState {
-  final Map<String, List<AzkarYawmiModel>> data;
+  final List<AzkarCategoryModel> data;
   SupplicationLoaded(this.data);
   @override
   List<Object?> get props => [data];

@@ -15,18 +15,12 @@ class AzkarYawmiScreen extends StatelessWidget {
         child: BlocBuilder<AzkarYawmiCubit, AzkarYawmiState>(
           builder: (context, state) {
             if (state is SupplicationLoaded) {
-              final keys = state.data.keys.toList();
-
               return ListView.builder(
-                itemCount: keys.length,
+                itemCount: state.data.length,
                 itemBuilder: (context, index) {
-                  final category = keys[index];
-                  final items = state.data[category]!;
+                  final categoryModel = state.data[index];
 
-                  return CustomAzkarYawmiListViewItem(
-                    items: items,
-                    category: category,
-                  );
+                  return CustomAzkarYawmiListViewItem(model: categoryModel);
                 },
               );
             } else if (state is SupplicationLoading) {

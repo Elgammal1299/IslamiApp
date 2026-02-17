@@ -18,6 +18,9 @@ class AppColors {
   static const Color background = Color(
     0xFFF9F9F9,
   ); // رمادي فاتح جدًا (خلفية عامة)
+  static const Color backgroundQuran= Color(
+    0xffFFF8EE,
+  ); // رمادي فاتح جدًا (خلفية عامة)
   static const Color cardBackground = Color(0xFFFFFFFF); // أبيض ناصع (للبطاقات)
   static const Color white = Colors.white;
   static const Color black = Colors.black;
@@ -35,6 +38,7 @@ class AppColors {
 
   /// -------- Dark Theme Colors --------
   static const Color darkBackground = Color(0xFF121212);
+  static const Color darkBackgroundQuran = Color(0xFF121212);
   static const Color darkCardBackground = Color(0xFF1E1E1E);
   static const Color darkPrimary = Color(0xFF144552);
   static const Color darkTextPrimary = Color(0xFFE1E1E1);

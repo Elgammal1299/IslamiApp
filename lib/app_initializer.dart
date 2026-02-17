@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,7 @@ class AppInitializer {
         
         ],
         child: ScreenUtilInit(
-          designSize: const Size(360, 780),
+          designSize: const Size(393.72727272727275, 800.7272727272727),
           minTextAdapt: true,
           splitScreenMode: true,
           useInheritedMediaQuery: true,

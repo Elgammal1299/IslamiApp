@@ -61,8 +61,8 @@ class AppRouter {
         );
       case AppRoutes.khatmahListRouter:
         return RouterTransitions.buildHorizontal(
-          BlocProvider(
-            create: (_) => sl<KhatmahCubit>(),
+          BlocProvider.value(
+            value: sl<KhatmahCubit>(),
             child: const KhatmahListScreen(),
           ),
         );
@@ -120,7 +120,9 @@ class AppRouter {
                   BlocProvider(create: (context) => sl<NavBarCubit>()),
                   BlocProvider.value(value: sl<SurahCubit>()),
                   BlocProvider.value(value: sl<ReadingProgressCubit>()),
-                  BlocProvider(create: (_) => QuranDuaCubit(QuranDuaRepository())..load()),
+                  BlocProvider(
+                    create: (_) => QuranDuaCubit(QuranDuaRepository())..load(),
+                  ),
                 ],
                 child: const HomeScreen(),
               ),
@@ -168,6 +170,7 @@ class AppRouter {
               (_) => MultiBlocProvider(
                 providers: [
                   BlocProvider.value(value: sl<ReadingProgressCubit>()),
+                  BlocProvider.value(value: sl<KhatmahCubit>()),
                   BlocProvider(create: (_) => VerseSelectionCubit()),
                 ],
                 child: QuranViewScreen(pageNumber: args?['pageNumber']),

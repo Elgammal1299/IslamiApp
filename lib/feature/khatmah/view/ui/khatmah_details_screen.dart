@@ -80,11 +80,12 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
       context: context,
       barrierDismissible: false, // لا يمكن إغلاقه بالضغط خارجه
       builder:
-          (context) => BlocProvider.value(
+          (dialogContext) => BlocProvider.value(
             value: context.read<KhatmahCubit>(),
             child: DailyWardCompletionDialog(
               khatmahId: widget.khatmahId,
               dayNumber: dayNumber,
+              cubit: context.read<KhatmahCubit>(),
             ),
           ),
     );
@@ -299,18 +300,18 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
+          (dialogContext) => AlertDialog(
             title: const Text('حذف الختمة'),
             content: const Text('هل أنت متأكد من حذف هذه الختمة؟'),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(dialogContext),
                 child: const Text('إلغاء'),
               ),
               TextButton(
                 onPressed: () {
                   context.read<KhatmahCubit>().deleteKhatmah(widget.khatmahId);
-                  Navigator.pop(context); // إغلاق الـ dialog
+                  Navigator.pop(dialogContext); // إغلاق الـ dialog
                   Navigator.pop(context); // الرجوع للصفحة السابقة
                 },
                 child: const Text(

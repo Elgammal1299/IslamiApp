@@ -66,6 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
       appBar: AppBar(
         leading: const BackButton(color: AppColors.secondary),
         title: const Text('البحث عن الايات'),

@@ -9,11 +9,13 @@ import 'package:islami_app/feature/khatmah/view_model/khatmah_cubit.dart';
 class DailyWardCompletionDialog extends StatelessWidget {
   final String khatmahId;
   final int dayNumber;
+  final KhatmahCubit cubit;
 
   const DailyWardCompletionDialog({
     super.key,
     required this.khatmahId,
     required this.dayNumber,
+    required this.cubit,
   });
 
   @override
@@ -72,7 +74,7 @@ class DailyWardCompletionDialog extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: () {
                       // حفظ إتمام الورد
-                      context.read<KhatmahCubit>().completeDailyWard(
+                      cubit.completeDailyWard(
                         khatmahId: khatmahId,
                         dayNumber: dayNumber,
                       );
@@ -114,16 +116,14 @@ class DailyWardCompletionDialog extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: () {
                       // حفظ إتمام الورد
-                      context.read<KhatmahCubit>().completeDailyWard(
+                      cubit.completeDailyWard(
                         khatmahId: khatmahId,
                         dayNumber: dayNumber,
                       );
                       Navigator.of(context).pop();
 
                       // الانتقال لليوم التالي
-                      final khatmah = context.read<KhatmahCubit>().getKhatmah(
-                        khatmahId,
-                      );
+                      final khatmah = cubit.getKhatmah(khatmahId);
 
                       if (khatmah != null && dayNumber < khatmah.totalDays) {
                         // رسالة تأكيد

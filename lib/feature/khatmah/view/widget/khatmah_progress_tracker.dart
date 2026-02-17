@@ -74,17 +74,20 @@ class KhatmahProgressTracker {
     BuildContext context, {
     required int dayNumber,
     required String khatmahId,
+    required KhatmahCubit cubit,
   }) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => BlocProvider.value(
-        value: context.read<KhatmahCubit>(),
-        child: DailyWardCompletionDialog(
-          khatmahId: khatmahId,
-          dayNumber: dayNumber,
-        ),
-      ),
+      builder:
+          (dialogContext) => BlocProvider.value(
+            value: cubit,
+            child: DailyWardCompletionDialog(
+              khatmahId: khatmahId,
+              dayNumber: dayNumber,
+              cubit: cubit,
+            ),
+          ),
     );
   }
 }
