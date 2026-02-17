@@ -34,8 +34,8 @@ class VerseActionHandler {
               (_) => BlocProvider.value(
                 value: sl<QuranAudioCubit>(),
                 child: AudioBottomSheet(
-                  ayahNumber: cumulativeNumber,
-                  ayahText: quran.getVerse(surah, ayah),
+                  ayahNumber: ayah,
+                  ayahText: quran.getVerse(surah, ayah, verseEndSymbol: true),
                   surahNumber: surah,
                   surahName: quran.getSurahNameArabic(surah),
                 ),
