@@ -21,8 +21,9 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
   int _selectedDuration = 30; // القيمة الافتراضية
   bool _isCustomDuration = false;
   DateTime _selectedStartDate = DateTime.now();
-  TimeOfDay? _notificationTime;
+  TimeOfDay? _notificationTime = const TimeOfDay(hour: 16, minute: 0);
   bool _isNotificationEnabled = true;
+
   final _customDaysController = TextEditingController();
 
   @override
@@ -202,7 +203,6 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                         },
                       ),
 
-
                       /// ✅ باقي المدد
                       ...KhatmahConstants.defaultDurations.map((duration) {
                         return Padding(
@@ -302,9 +302,8 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               //     ),
               //   ),
               // ),
-
               SizedBox(height: 16.h),
-             Text('إشعارات يومية', style: context.textTheme.titleMedium),
+              Text('إشعارات يومية', style: context.textTheme.titleMedium),
               SizedBox(height: 12.h),
 
               // الإشعارات اليومية
@@ -326,7 +325,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                           _isNotificationEnabled = value;
                           if (value && _notificationTime == null) {
                             _notificationTime = const TimeOfDay(
-                              hour: 20,
+                              hour: 16,
                               minute: 0,
                             );
                           }
@@ -374,7 +373,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               ),
 
               SizedBox(height: 24.h),
- // زر الإنشاء
+              // زر الإنشاء
               ElevatedButton(
                 onPressed: _createKhatmah,
                 style: ElevatedButton.styleFrom(
@@ -453,8 +452,6 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               ),
 
               SizedBox(height: 32.h),
-
-             
             ],
           ),
         ),
