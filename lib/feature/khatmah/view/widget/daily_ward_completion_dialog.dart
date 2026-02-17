@@ -19,9 +19,7 @@ class DailyWardCompletionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       child: Padding(
         padding: EdgeInsets.all(24.w),
         child: Column(
@@ -32,7 +30,7 @@ class DailyWardCompletionDialog extends StatelessWidget {
               width: 80.w,
               height: 80.w,
               decoration: BoxDecoration(
-                color: AppColors.success.withOpacity(0.2),
+                color: AppColors.success.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -75,11 +73,11 @@ class DailyWardCompletionDialog extends StatelessWidget {
                     onPressed: () {
                       // حفظ إتمام الورد
                       context.read<KhatmahCubit>().completeDailyWard(
-                            khatmahId: khatmahId,
-                            dayNumber: dayNumber,
-                          );
+                        khatmahId: khatmahId,
+                        dayNumber: dayNumber,
+                      );
                       Navigator.of(context).pop();
-                      
+
                       // رسالة تأكيد
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -117,16 +115,16 @@ class DailyWardCompletionDialog extends StatelessWidget {
                     onPressed: () {
                       // حفظ إتمام الورد
                       context.read<KhatmahCubit>().completeDailyWard(
-                            khatmahId: khatmahId,
-                            dayNumber: dayNumber,
-                          );
+                        khatmahId: khatmahId,
+                        dayNumber: dayNumber,
+                      );
                       Navigator.of(context).pop();
 
                       // الانتقال لليوم التالي
-                      final khatmah = context
-                          .read<KhatmahCubit>()
-                          .getKhatmah(khatmahId);
-                      
+                      final khatmah = context.read<KhatmahCubit>().getKhatmah(
+                        khatmahId,
+                      );
+
                       if (khatmah != null && dayNumber < khatmah.totalDays) {
                         // رسالة تأكيد
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -158,7 +156,10 @@ class DailyWardCompletionDialog extends StatelessWidget {
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AppColors.primary, width: 2),
+                      side: const BorderSide(
+                        color: AppColors.primary,
+                        width: 2,
+                      ),
                       padding: EdgeInsets.symmetric(vertical: 16.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),

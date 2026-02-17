@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:adhan/adhan.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/home/services/location_service.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
+import 'package:islami_app/core/widget/location_permission_gate.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/azan_display.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/location_card.dart';
 import 'package:islami_app/feature/prayerTime/presentation/widgets/prayer_tile.dart';
@@ -35,6 +35,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   final ValueNotifier<Position?> currentLocation = ValueNotifier(null);
   final ValueNotifier<String?> locationName = ValueNotifier(null);
   final ValueNotifier<bool> isUpdatingLocation = ValueNotifier(false);
+  final ValueNotifier<bool> needsLocationSetup = ValueNotifier(false);
 
   Timer? _ticker;
 
@@ -59,6 +60,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     currentLocation.dispose();
     locationName.dispose();
     isUpdatingLocation.dispose();
+    needsLocationSetup.dispose();
     super.dispose();
   }
 
@@ -66,6 +68,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     try {
       await _notificationService.init();
       final PrayerTimes times = await _prayerService.getTodayPrayerTimes();
+
+      needsLocationSetup.value = false;
 
       final position = _locationService.getStoredLocation();
       if (position != null) currentLocation.value = position;
@@ -77,7 +81,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       await _scheduleTodayAndTomorrow();
       _startTicker();
     } catch (e) {
-      if (mounted) {
+      // If no stored location, show first-time permission gate
+      if (!_locationService.hasStoredLocation()) {
+        needsLocationSetup.value = true;
+      } else if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
@@ -160,33 +167,19 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   }
 
   Future<void> _scheduleTodayAndTomorrow() async {
-    final DateTime now = DateTime.now();
-    final DateTime today = DateTime(now.year, now.month, now.day);
-    final DateTime tomorrow = today.add(const Duration(days: 1));
-
-    await _notificationService.scheduleForDay(
-      prayerTimes: namedTimes.value,
-      day: today,
-      preReminderEnabled: preReminderEnabled.value,
-      prayerName: _displayName,
-    );
-
     try {
       final pos = await _prayerService.getCurrentPosition();
-      final tmrTimes = _prayerService.getPrayerTimesForDate(
+      final params = CalculationMethod.muslim_world_league.getParameters()
+        ..madhab = Madhab.shafi;
+      await _notificationService.scheduleMultipleDays(
+        days: 7,
         latitude: pos.latitude,
         longitude: pos.longitude,
-        date: tomorrow,
-      );
-      final tmrNamed = _prayerService.getNamedTimes(tmrTimes);
-      await _notificationService.scheduleForDay(
-        prayerTimes: tmrNamed,
-        day: tomorrow,
-        preReminderEnabled: preReminderEnabled.value,
+        params: params,
         prayerName: _displayName,
       );
     } catch (e) {
-      if (kDebugMode) debugPrint("Tomorrow scheduling failed: $e");
+      if (kDebugMode) debugPrint("Multi-day scheduling failed: $e");
     }
   }
 
@@ -297,80 +290,99 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder<PrayerTimes?>(
-        valueListenable: todayTimes,
-        builder: (context, times, _) {
-          if (times == null) {
-            return const Center(child: CircularProgressIndicator());
+      body: ValueListenableBuilder<bool>(
+        valueListenable: needsLocationSetup,
+        builder: (context, needsSetup, _) {
+          if (needsSetup) {
+            // First time only – no stored location yet
+            return LocationPermissionGate(
+              onGrantedOnce: () async {
+                try {
+                  await _locationService.updateLocation();
+                  await _load();
+                } catch (_) {}
+              },
+              child: const Center(child: CircularProgressIndicator()),
+            );
           }
-          return RefreshIndicator(
-            onRefresh: _load,
-            child: ValueListenableBuilder<Prayer?>(
-              valueListenable: currentPrayer,
-              builder: (context, current, _) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: ShapeDecoration(
-                    gradient: _getGradientForPrayer(current),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: ListView(
-                    children: [
-                      LocationCardWidget(
-                        locationName: locationName.value,
-                        isUpdating: isUpdatingLocation.value,
-                        onUpdate: _updateLocation,
-                      ),
 
-                      AzanDisplay(times: times, currentPrayer: current),
-
-                      Image.asset(
-                        "assets/images/Vector.png",
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        color: const Color(0xff0C222B),
-                      ),
-
-                      ColoredBox(
-                        color: const Color(0xff0C222B),
-                        child: ListView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          children: () {
-                            final entries = namedTimes.value.entries.toList();
-
-                            entries.sort((a, b) {
-                              if (a.key == currentPrayer.value) return -1;
-                              if (b.key == currentPrayer.value) return 1;
-                              return 0;
-                            });
-                            final current = entries.firstWhere(
-                              (e) => e.key == currentPrayer.value,
-                              orElse: () => entries.first,
-                            );
-
-                            return entries.take(3).map((e) {
-                              return PrayerTileWidget(
-                                prayer: e.key,
-                                time: e.value,
-                                isCurrent: current.key == e.key,
-                                displayName: _displayName,
-                                format: _format,
-                                iconFor: _iconFor,
-                              );
-                            }).toList();
-                          }(),
+          return ValueListenableBuilder<PrayerTimes?>(
+            valueListenable: todayTimes,
+            builder: (context, times, _) {
+              if (times == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return RefreshIndicator(
+                onRefresh: _load,
+                child: ValueListenableBuilder<Prayer?>(
+                  valueListenable: currentPrayer,
+                  builder: (context, current, _) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: ShapeDecoration(
+                        gradient: _getGradientForPrayer(current),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                      child: ListView(
+                        children: [
+                          LocationCardWidget(
+                            locationName: locationName.value,
+                            isUpdating: isUpdatingLocation.value,
+                            onUpdate: _updateLocation,
+                          ),
+
+                          AzanDisplay(times: times, currentPrayer: current),
+
+                          Image.asset(
+                            "assets/images/Vector.png",
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            color: const Color(0xff0C222B),
+                          ),
+
+                          ColoredBox(
+                            color: const Color(0xff0C222B),
+                            child: ListView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: () {
+                                final entries =
+                                    namedTimes.value.entries.toList();
+
+                                entries.sort((a, b) {
+                                  if (a.key == currentPrayer.value) return -1;
+                                  if (b.key == currentPrayer.value) return 1;
+                                  return 0;
+                                });
+                                final current = entries.firstWhere(
+                                  (e) => e.key == currentPrayer.value,
+                                  orElse: () => entries.first,
+                                );
+
+                                return entries.take(3).map((e) {
+                                  return PrayerTileWidget(
+                                    prayer: e.key,
+                                    time: e.value,
+                                    isCurrent: current.key == e.key,
+                                    displayName: _displayName,
+                                    format: _format,
+                                    iconFor: _iconFor,
+                                  );
+                                }).toList();
+                              }(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
       ),

@@ -26,7 +26,7 @@ class CustomSurahFramWidget extends StatelessWidget
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+            colors: [Colors.black.withValues(alpha: 0.7), Colors.transparent],
           ),
         ),
       ),
@@ -49,9 +49,9 @@ class CustomSurahFramWidget extends StatelessWidget
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.black.withOpacity(0.3)),
+              border: Border.all(color: Colors.black.withValues(alpha: 0.3)),
             ),
             child: Text(
               "صفحة $index | جزء $juz",

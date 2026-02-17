@@ -34,7 +34,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     _currentPage = widget.pageNumber;
     _controller = PageController(initialPage: widget.pageNumber - 1);
 
@@ -52,15 +52,13 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
         );
       }
     });
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateKhatmahProgress(_currentPage);
     });
   }
-   void _updateKhatmahProgress(int pageNumber) {
-    KhatmahProgressTracker.updateCurrentPage(
-      context,
-      pageNumber: pageNumber,
-    );
+
+  void _updateKhatmahProgress(int pageNumber) {
+    KhatmahProgressTracker.updateCurrentPage(context, pageNumber: pageNumber);
   }
 
   @override
@@ -73,7 +71,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   void _onPageChanged(int page) async {
     setState(() {
       _currentPage = page;
-        _updateKhatmahProgress(_currentPage);
+      _updateKhatmahProgress(_currentPage);
     });
 
     final pos = QuranPageIndex.firstAyahOnPage(page);
@@ -96,11 +94,11 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           width: 50.w,
           height: 50.w,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.9),
+            color: color.withValues(alpha: 0.9),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),

@@ -178,26 +178,24 @@ class AnimatedAyahSwitcher extends StatelessWidget {
             );
           },
           child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start  ,
+            crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, ),
-                 child:  const Text(
-                    'آية اليوم',
-                    textAlign: TextAlign.start,
-                    style:  TextStyle(
-                      fontFamily: 'Amiri',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      height: 1.4,
-                      color: AppColors.primary2,
-                    ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: const Text(
+                  'آية اليوم',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    height: 1.4,
+                    color: AppColors.primary2,
                   ),
-               ),
-                SizedBox(
-                  height: 10.h,
                 ),
+              ),
+              SizedBox(height: 10.h),
               Container(
                 key: ValueKey(state.currentIndex),
                 padding: const EdgeInsets.all(16),
@@ -205,21 +203,18 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.success),
-                 
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start  ,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-              
-                   
                     Text(
                       dua.content,
                       textAlign: TextAlign.justify,
-                      style:  const TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'uthmanic',
                         fontWeight: FontWeight.bold,
-                        
+
                         fontSize: 25,
                         height: 1.4,
                         color: AppColors.black,
@@ -231,18 +226,22 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                         Expanded(
                           child: Text(
                             dua.reference,
-                            style:  const TextStyle(
-                        fontFamily: 'uthmanic',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        height: 1.4,
-                        color: AppColors.black,
-                      ),
+                            style: const TextStyle(
+                              fontFamily: 'uthmanic',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppColors.black,
+                            ),
                           ),
                         ),
                         IconButton(
                           tooltip: 'نسخ الآية',
-                          icon: const Icon(Icons.copy_rounded, size: 24,color: AppColors.primary2,),
+                          icon: const Icon(
+                            Icons.copy_rounded,
+                            size: 24,
+                            color: AppColors.primary2,
+                          ),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: dua.content));
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -254,12 +253,16 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                           },
                         ),
                         IconButton(
-                      icon: const Icon(Icons.refresh_rounded, size: 22,color: AppColors.primary2,),
-                      tooltip: 'تغيير',
-                      onPressed: () {
-                        context.read<QuranDuaCubit>().nextManual();
-                      },
-                    ),
+                          icon: const Icon(
+                            Icons.refresh_rounded,
+                            size: 22,
+                            color: AppColors.primary2,
+                          ),
+                          tooltip: 'تغيير',
+                          onPressed: () {
+                            context.read<QuranDuaCubit>().nextManual();
+                          },
+                        ),
                       ],
                     ),
                   ],
@@ -486,7 +489,7 @@ class _DateWidgetState extends State<DateWidget> {
                 Container(
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: AppColors.black.withOpacity(0.2),
+                    color: AppColors.black.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(

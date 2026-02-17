@@ -8,6 +8,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/core/services/hive_service.dart';
 import 'package:islami_app/feature/home/services/location_service.dart';
+import 'package:adhan/adhan.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/download_model.dart';
@@ -17,6 +18,7 @@ import 'package:islami_app/feature/home/data/model/hadith_model.dart';
 import 'package:islami_app/feature/khatmah/data/model/khatmah_model.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:islami_app/feature/notification/widget/local_notification_service.dart';
+import 'package:islami_app/core/services/prayer_background_service.dart';
 import 'package:islami_app/islami_app.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -130,17 +132,31 @@ class AppInitializer {
       final provider = SharedPrayerTimesProvider.instance;
       final locationService = sl<LocationService>();
       provider.setLocationService(locationService);
-      await provider.initialize();
 
-      // ✅ Setup prayer notifications
-      final notificationService = PrayerNotificationService();
-      await notificationService.init();
-      await notificationService.scheduleForDay(
-        prayerTimes: provider.namedTimes,
-        day: DateTime.now(),
-        preReminderEnabled: true,
-        prayerName: provider.getPrayerName,
-      );
+      // Only initialize prayer times if we already have a stored location.
+      // The first location fetch will happen when the user opens the prayer
+      // times screen (gated by LocationPermissionGate).
+      final position = locationService.getStoredLocation();
+      if (position != null) {
+        await provider.initialize();
+      }
+      if (position != null) {
+        final notificationService = PrayerNotificationService();
+        await notificationService.init();
+        final params =
+            CalculationMethod.muslim_world_league.getParameters()
+              ..madhab = Madhab.shafi;
+        await notificationService.scheduleMultipleDays(
+          days: scheduleDaysAhead,
+          latitude: position.latitude,
+          longitude: position.longitude,
+          params: params,
+          prayerName: provider.getPrayerName,
+        );
+      }
+
+      // ✅ Register background task to reschedule notifications daily
+      await initPrayerBackgroundService();
 
       log('✅ App services initialized successfully');
     } catch (e) {

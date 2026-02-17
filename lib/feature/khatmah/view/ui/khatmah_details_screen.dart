@@ -33,18 +33,19 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
                 _showDeleteDialog();
               }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete, color: AppColors.error),
-                    SizedBox(width: 8),
-                    Text('حذف الختمة'),
-                  ],
-                ),
-              ),
-            ],
+            itemBuilder:
+                (context) => [
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete, color: AppColors.error),
+                        SizedBox(width: 8),
+                        Text('حذف الختمة'),
+                      ],
+                    ),
+                  ),
+                ],
           ),
         ],
       ),
@@ -78,13 +79,14 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
     showDialog(
       context: context,
       barrierDismissible: false, // لا يمكن إغلاقه بالضغط خارجه
-      builder: (context) => BlocProvider.value(
-        value: context.read<KhatmahCubit>(),
-        child: DailyWardCompletionDialog( 
-          khatmahId: widget.khatmahId,
-          dayNumber: dayNumber,
-        ),
-      ),
+      builder:
+          (context) => BlocProvider.value(
+            value: context.read<KhatmahCubit>(),
+            child: DailyWardCompletionDialog(
+              khatmahId: widget.khatmahId,
+              dayNumber: dayNumber,
+            ),
+          ),
     );
   }
 
@@ -147,8 +149,14 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
                   ),
                 ),
                 SizedBox(height: 12.h),
-                _buildInfoRow('تاريخ البداية', dateFormat.format(khatmah.startDate)),
-                _buildInfoRow('تاريخ الانتهاء', dateFormat.format(khatmah.endDate)),
+                _buildInfoRow(
+                  'تاريخ البداية',
+                  dateFormat.format(khatmah.startDate),
+                ),
+                _buildInfoRow(
+                  'تاريخ الانتهاء',
+                  dateFormat.format(khatmah.endDate),
+                ),
                 _buildInfoRow('المدة الكلية', '${khatmah.totalDays} يوم'),
                 _buildInfoRow(
                   'الحالة',
@@ -175,28 +183,35 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
           final isCurrentDay = currentDay?.dayNumber == day.dayNumber;
 
           return Card(
-            color: isCurrentDay ? AppColors.primary.withOpacity(0.1) : null,
+            color:
+                isCurrentDay ? AppColors.primary.withValues(alpha: 0.1) : null,
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: day.isCompleted
-                    ? AppColors.success
-                    : isCurrentDay
-                    ? AppColors.primary
-                    : AppColors.divider,
-                child: day.isCompleted
-                    ? const Icon(Icons.check, color: Colors.white)
-                    : Text(
-                  '${day.dayNumber}',
-                  style: TextStyle(
-                    color: isCurrentDay ? Colors.white : AppColors.textPrimary,
-                  ),
-                ),
+                backgroundColor:
+                    day.isCompleted
+                        ? AppColors.success
+                        : isCurrentDay
+                        ? AppColors.primary
+                        : AppColors.divider,
+                child:
+                    day.isCompleted
+                        ? const Icon(Icons.check, color: Colors.white)
+                        : Text(
+                          '${day.dayNumber}',
+                          style: TextStyle(
+                            color:
+                                isCurrentDay
+                                    ? Colors.white
+                                    : AppColors.textPrimary,
+                          ),
+                        ),
               ),
               title: Text('اليوم ${day.dayNumber}'),
               subtitle: Text(dateFormat.format(day.date)),
-              trailing: day.isCompleted
-                  ? const Icon(Icons.done_all, color: AppColors.success)
-                  : Text('${dayProgress.toStringAsFixed(0)}%'),
+              trailing:
+                  day.isCompleted
+                      ? const Icon(Icons.done_all, color: AppColors.success)
+                      : Text('${dayProgress.toStringAsFixed(0)}%'),
               onTap: () {
                 _showDayDetails(day, khatmah);
               },
@@ -233,71 +248,78 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
   void _showDayDetails(DailyProgress day, KhatmahModel khatmah) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'اليوم ${day.dayNumber}',
-              style: context.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+      builder:
+          (context) => Container(
+            padding: EdgeInsets.all(16.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'اليوم ${day.dayNumber}',
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                ...day.juzList.map((juz) {
+                  return ListTile(
+                    leading: Icon(
+                      juz.isCompleted
+                          ? Icons.check_circle
+                          : Icons.circle_outlined,
+                      color:
+                          juz.isCompleted
+                              ? AppColors.success
+                              : AppColors.divider,
+                    ),
+                    title: Text('الجزء ${juz.juzNumber}'),
+                    subtitle: Text(
+                      'من صفحة ${juz.startPage} إلى ${juz.endPage}',
+                    ),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.quranViewRouter,
+                          arguments: {"pageNumber": juz.currentPage},
+                        );
+                      },
+                      child: const Text('قراءة'),
+                    ),
+                  );
+                }),
+              ],
             ),
-            SizedBox(height: 16.h),
-            ...day.juzList.map((juz) {
-              return ListTile(
-                leading: Icon(
-                  juz.isCompleted ? Icons.check_circle : Icons.circle_outlined,
-                  color: juz.isCompleted ? AppColors.success : AppColors.divider,
-                ),
-                title: Text('الجزء ${juz.juzNumber}'),
-                subtitle: Text(
-                  'من صفحة ${juz.startPage} إلى ${juz.endPage}',
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.quranViewRouter,
-                      arguments: {"pageNumber": juz.currentPage},
-                    );
-                  },
-                  child: const Text('قراءة'),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   void _showDeleteDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('حذف الختمة'),
-        content: const Text('هل أنت متأكد من حذف هذه الختمة؟'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('حذف الختمة'),
+            content: const Text('هل أنت متأكد من حذف هذه الختمة؟'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('إلغاء'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<KhatmahCubit>().deleteKhatmah(widget.khatmahId);
+                  Navigator.pop(context); // إغلاق الـ dialog
+                  Navigator.pop(context); // الرجوع للصفحة السابقة
+                },
+                child: const Text(
+                  'حذف',
+                  style: TextStyle(color: AppColors.error),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              context.read<KhatmahCubit>().deleteKhatmah(widget.khatmahId);
-              Navigator.pop(context); // إغلاق الـ dialog
-              Navigator.pop(context); // الرجوع للصفحة السابقة
-            },
-            child: const Text(
-              'حذف',
-              style: TextStyle(color: AppColors.error),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

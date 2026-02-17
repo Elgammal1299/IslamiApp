@@ -373,7 +373,7 @@ class _SebhaScreenState extends State<SebhaScreen>
                 style: context.textTheme.titleLarge?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.7),
+                  ).colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),

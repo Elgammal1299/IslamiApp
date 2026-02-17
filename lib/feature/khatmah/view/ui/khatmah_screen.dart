@@ -80,10 +80,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
     final dateFormat = DateFormat('yyyy/MM/dd', 'ar');
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('إنشاء ختمة جديدة'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('إنشاء ختمة جديدة'), centerTitle: true),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
         child: Form(
@@ -91,14 +88,8 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-             
-
-
               // اسم الختمة
-              Text(
-                'اسم الختمة',
-                style: context.textTheme.titleMedium,
-              ),
+              Text('اسم الختمة', style: context.textTheme.titleMedium),
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _nameController,
@@ -117,10 +108,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               SizedBox(height: 20.h),
 
               // المدة
-              Text(
-                'مدة الختمة',
-                style: context.textTheme.titleMedium,
-              ),
+              Text('مدة الختمة', style: context.textTheme.titleMedium),
               SizedBox(height: 8.h),
               ...KhatmahConstants.defaultDurations.map(
                 (duration) => RadioListTile<int>(
@@ -143,10 +131,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               SizedBox(height: 24.h),
 
               // تاريخ البداية
-              Text(
-                'تاريخ البداية',
-                style: context.textTheme.titleMedium,
-              ),
+              Text('تاريخ البداية', style: context.textTheme.titleMedium),
               SizedBox(height: 8.h),
               InkWell(
                 onTap: () => _selectStartDate(context),
@@ -192,7 +177,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
-                  color: AppColors.secondary.withOpacity(0.3),
+                  color: AppColors.secondary.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -213,10 +198,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                       ],
                     ),
                     SizedBox(height: 12.h),
-                    _buildInfoRow(
-                      'المدة:',
-                      '$_selectedDuration يوم',
-                    ),
+                    _buildInfoRow('المدة:', '$_selectedDuration يوم'),
                     _buildInfoRow(
                       'تاريخ البداية:',
                       dateFormat.format(_selectedStartDate),

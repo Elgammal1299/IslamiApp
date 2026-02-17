@@ -104,7 +104,9 @@ class LocationService {
     }
   }
 
-  /// Get current device position
+  /// Get current device position.
+  /// Does NOT request permissions – the UI layer (LocationPermissionGate)
+  /// must ensure permission is granted before calling this method.
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -112,9 +114,6 @@ class LocationService {
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
     if (permission == LocationPermission.deniedForever ||
         permission == LocationPermission.denied) {
       throw StateError('Location permissions are denied');

@@ -162,7 +162,7 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
           Icon(
             Icons.book_outlined,
             size: 120.sp,
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
           ),
           SizedBox(height: 24.h),
           Text(
@@ -387,7 +387,7 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
                 Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Row(
@@ -416,7 +416,7 @@ class _KhatmahListScreenState extends State<KhatmahListScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withOpacity(0.3),
+        color: AppColors.secondary.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(

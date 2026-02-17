@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:adhan/adhan.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-// import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Handles local notification initialization and scheduling for prayer times.
@@ -13,6 +12,7 @@ class PrayerNotificationService {
 
   bool _initialized = false;
   static const int nsBase = 2000; // namespace for prayer notifications
+  static const int prayersPerDay = 6; // fajr, sunrise, dhuhr, asr, maghrib, isha
 
   Future<void> init() async {
     if (_initialized) return;
@@ -24,7 +24,6 @@ class PrayerNotificationService {
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
-      
     );
     const InitializationSettings initSettings = InitializationSettings(
       android: androidInit,
@@ -44,7 +43,6 @@ class PrayerNotificationService {
   NotificationDetails _details({bool withSound = true}) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
-        
         'prayer_times_channel',
         'Prayer Times',
         channelDescription: 'Azan notifications for prayer times',
@@ -52,7 +50,6 @@ class PrayerNotificationService {
         priority: Priority.high,
         visibility: NotificationVisibility.public,
         playSound: withSound,
-        
         sound:
             withSound
                 ? const RawResourceAndroidNotificationSound('azan')
@@ -60,7 +57,6 @@ class PrayerNotificationService {
         icon: '@mipmap/ic_launcher',
       ),
       iOS: DarwinNotificationDetails(
-        
         presentAlert: true,
         presentBadge: true,
         presentSound: withSound,
@@ -86,46 +82,22 @@ class PrayerNotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       payload: 'prayer',
     );
-    // Also trigger playback when the time comes
-    final Duration delay = tzTime.difference(tz.TZDateTime.now(tz.local));
-    if (!delay.isNegative) {
-      Future.delayed(delay, () async {
-      });
-    }
   }
 
-  Future<void> scheduleDaily({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime time,
-    bool withSound = true,
-  }) async {
-    // Deprecated in favor of scheduleForDay one-shot scheduling
-    final DateTime now = DateTime.now();
-    DateTime target = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      time.hour,
-      time.minute,
-    );
-    if (target.isBefore(now)) target = target.add(const Duration(days: 1));
-    await scheduleOneShot(
-      id: id,
-      title: title,
-      body: body,
-      scheduledTime: target,
-      withSound: withSound,
-    );
+  /// Generate unique notification ID per prayer per day.
+  /// dayOffset: 0 = today, 1 = tomorrow, etc.
+  static int notificationId(int prayerIndex, int dayOffset) {
+    return nsBase + (dayOffset * prayersPerDay) + prayerIndex;
   }
 
   /// One-day scheduler for all prayers (and optional pre-reminders).
+  /// [dayOffset] is used to generate unique IDs (0=today, 1=tomorrow, ...).
   Future<List<Map<String, dynamic>>> scheduleForDay({
     required Map<Prayer, DateTime> prayerTimes,
     required DateTime day,
     required bool preReminderEnabled,
     String Function(Prayer)? prayerName,
+    int dayOffset = 0,
   }) async {
     final List<Map<String, dynamic>> scheduled = [];
     final DateTime now = DateTime.now();
@@ -140,7 +112,7 @@ class PrayerNotificationService {
         t.minute,
       );
       if (target.isAfter(now)) {
-        final int id = nsBase + p.index;
+        final int id = notificationId(p.index, dayOffset);
         await scheduleOneShot(
           id: id,
           title:
@@ -153,6 +125,39 @@ class PrayerNotificationService {
       }
     }
     return scheduled;
+  }
+
+  /// Schedule prayer notifications for [days] days ahead.
+  /// Requires a function to compute prayer times for a given date.
+  Future<void> scheduleMultipleDays({
+    required int days,
+    required double latitude,
+    required double longitude,
+    required CalculationParameters params,
+    String Function(Prayer)? prayerName,
+  }) async {
+    await cancelAll();
+    final DateTime now = DateTime.now();
+    for (int i = 0; i < days; i++) {
+      final DateTime day = DateTime(now.year, now.month, now.day).add(Duration(days: i));
+      final coordinates = Coordinates(latitude, longitude);
+      final dateComponents = DateComponents.from(day);
+      final prayerTimes = PrayerTimes(coordinates, dateComponents, params);
+
+      final Map<Prayer, DateTime> namedTimes = {};
+      for (final p in [Prayer.fajr, Prayer.sunrise, Prayer.dhuhr, Prayer.asr, Prayer.maghrib, Prayer.isha]) {
+        final t = prayerTimes.timeForPrayer(p);
+        if (t != null) namedTimes[p] = t;
+      }
+
+      await scheduleForDay(
+        prayerTimes: namedTimes,
+        day: day,
+        preReminderEnabled: true,
+        prayerName: prayerName,
+        dayOffset: i,
+      );
+    }
   }
 
   Future<void> cancel(int id) => _plugin.cancel(id);

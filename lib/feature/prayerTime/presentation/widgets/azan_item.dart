@@ -11,14 +11,16 @@ class AzanItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withOpacity(0.3),
+        color: Colors.blueGrey.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(DateFormat('hh:mm a', 'ar').format(time),
-              style: const TextStyle(color: Colors.white, fontSize: 20)),
+          Text(
+            DateFormat('hh:mm a', 'ar').format(time),
+            style: const TextStyle(color: Colors.white, fontSize: 20),
+          ),
           const SizedBox(height: 8),
           Text(name, style: const TextStyle(color: Colors.white70)),
         ],

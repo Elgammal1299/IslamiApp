@@ -242,7 +242,7 @@ class _PageContent extends StatelessWidget {
             recognizer: spanRecognizer,
             style: TextStyle(
               backgroundColor:
-                  isSelected ? Colors.yellow.withOpacity(0.3) : null,
+                  isSelected ? Colors.yellow.withValues(alpha: 0.3) : null,
             ),
             children: [
               TextSpan(
@@ -253,7 +253,7 @@ class _PageContent extends StatelessWidget {
                   color: Colors.brown,
                   height: 1.35 / h,
                   backgroundColor:
-                      isSelected ? Colors.yellow.withOpacity(0.3) : null,
+                      isSelected ? Colors.yellow.withValues(alpha: 0.3) : null,
                 ),
               ),
             ],
