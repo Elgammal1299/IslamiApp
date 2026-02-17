@@ -1,3 +1,5 @@
+﻿import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,17 +11,33 @@ class ArabicDateTimeWidget extends StatefulWidget {
 }
 
 class _ArabicDateTimeWidgetState extends State<ArabicDateTimeWidget> {
-  late String formattedDate, formattedTime;
+  late DateTime _now;
+  Timer? _ticker;
+
   @override
   void initState() {
-    formattedDate = DateFormat('d MMMM yyyy', 'ar').format(DateTime.now());
-    formattedTime = DateFormat('hh:mm a', 'ar').format(DateTime.now());
-
     super.initState();
+    _now = DateTime.now();
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() {
+          _now = DateTime.now();
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = DateFormat('d MMMM yyyy', 'ar').format(_now);
+    final formattedTime = DateFormat('hh:mm a', 'ar').format(_now);
+
     return Text(
       '$formattedDate - $formattedTime',
       style: const TextStyle(

@@ -1,7 +1,7 @@
-import 'package:adhan/adhan.dart';
+﻿import 'package:adhan/adhan.dart';
 import 'package:flutter/material.dart';
 
-class PrayerHeaderWidget extends StatefulWidget {
+class PrayerHeaderWidget extends StatelessWidget {
   final Prayer? currentPrayer;
   final Prayer? nextPrayer;
   final Duration countdown;
@@ -16,23 +16,11 @@ class PrayerHeaderWidget extends StatefulWidget {
   });
 
   @override
-  State<PrayerHeaderWidget> createState() => _PrayerHeaderWidgetState();
-}
-
-class _PrayerHeaderWidgetState extends State<PrayerHeaderWidget> {
-  late String hh, mm, ss;
-
-  @override
-  void initState() {
-    hh = widget.countdown.inHours.toString().padLeft(2, '0');
-    mm = (widget.countdown.inMinutes % 60).toString().padLeft(2, '0');
-    ss = (widget.countdown.inSeconds % 60).toString().padLeft(2, '0');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final String hh = countdown.inHours.toString().padLeft(2, '0');
+    final String mm = (countdown.inMinutes % 60).toString().padLeft(2, '0');
+    final String ss = (countdown.inSeconds % 60).toString().padLeft(2, '0');
 
     return Card(
       child: Padding(
@@ -41,14 +29,14 @@ class _PrayerHeaderWidgetState extends State<PrayerHeaderWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'الصلاة الحالية: ${widget.currentPrayer != null ? widget.displayName(widget.currentPrayer!) : '-'}',
+              'الصلاة الحالية: \\${currentPrayer != null ? displayName(currentPrayer!) : '-'}',
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             Text(
-              widget.nextPrayer == null
+              nextPrayer == null
                   ? '—'
-                  : 'الصلاة التالية: ${widget.displayName(widget.nextPrayer!)} بعد $hh:$mm:$ss',
+                  : 'الصلاة التالية: \\${displayName(nextPrayer!)} بعد \\$hh:\\$mm:\\$ss',
               style: theme.textTheme.headlineSmall,
             ),
           ],

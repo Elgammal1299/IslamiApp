@@ -13,6 +13,7 @@ class PrayerNotificationService {
   bool _initialized = false;
   static const int nsBase = 2000; // namespace for prayer notifications
   static const int prayersPerDay = 6; // fajr, sunrise, dhuhr, asr, maghrib, isha
+  static const int preReminderOffset = 1000;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -90,6 +91,10 @@ class PrayerNotificationService {
     return nsBase + (dayOffset * prayersPerDay) + prayerIndex;
   }
 
+  static int preReminderId(int prayerIndex, int dayOffset) {
+    return notificationId(prayerIndex, dayOffset) + preReminderOffset;
+  }
+
   /// One-day scheduler for all prayers (and optional pre-reminders).
   /// [dayOffset] is used to generate unique IDs (0=today, 1=tomorrow, ...).
   Future<List<Map<String, dynamic>>> scheduleForDay({
@@ -122,6 +127,24 @@ class PrayerNotificationService {
           withSound: true,
         );
         scheduled.add({'id': id, 'time': target});
+
+        if (preReminderEnabled) {
+          final DateTime reminderTime = target.subtract(
+            const Duration(minutes: 10),
+          );
+          if (reminderTime.isAfter(now)) {
+            final int reminderId = preReminderId(p.index, dayOffset);
+            await scheduleOneShot(
+              id: reminderId,
+              title:
+                  "تبقى 10 دقائق على ${(prayerName != null ? prayerName(p) : p.name)}",
+              body: 'استعد للصلاة',
+              scheduledTime: reminderTime,
+              withSound: false,
+            );
+            scheduled.add({'id': reminderId, 'time': reminderTime});
+          }
+        }
       }
     }
     return scheduled;
@@ -135,8 +158,9 @@ class PrayerNotificationService {
     required double longitude,
     required CalculationParameters params,
     String Function(Prayer)? prayerName,
+    bool preReminderEnabled = true,
   }) async {
-    await cancelAll();
+    await cancelPrayerNotifications();
     final DateTime now = DateTime.now();
     for (int i = 0; i < days; i++) {
       final DateTime day = DateTime(now.year, now.month, now.day).add(Duration(days: i));
@@ -153,10 +177,19 @@ class PrayerNotificationService {
       await scheduleForDay(
         prayerTimes: namedTimes,
         day: day,
-        preReminderEnabled: true,
+        preReminderEnabled: preReminderEnabled,
         prayerName: prayerName,
         dayOffset: i,
       );
+    }
+  }
+
+  Future<void> cancelPrayerNotifications({int maxDays = 30}) async {
+    for (int dayOffset = 0; dayOffset < maxDays; dayOffset++) {
+      for (int prayerIndex = 0; prayerIndex < prayersPerDay; prayerIndex++) {
+        await cancel(notificationId(prayerIndex, dayOffset));
+        await cancel(preReminderId(prayerIndex, dayOffset));
+      }
     }
   }
 

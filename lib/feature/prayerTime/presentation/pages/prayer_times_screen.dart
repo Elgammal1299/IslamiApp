@@ -177,6 +177,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         longitude: pos.longitude,
         params: params,
         prayerName: _displayName,
+        preReminderEnabled: preReminderEnabled.value,
       );
     } catch (e) {
       if (kDebugMode) debugPrint("Multi-day scheduling failed: $e");
