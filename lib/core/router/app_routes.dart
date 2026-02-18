@@ -29,4 +29,5 @@ class AppRoutes {
   static const aboutAppRouter = '/AboutAppScreen';
   static const aboutUsRouter = '/AboutUsScreen';
   static const verseSharePreviewRouter = '/verseSharePreview';
+  
 }

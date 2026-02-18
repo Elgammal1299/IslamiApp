@@ -44,7 +44,7 @@ class HomeItemCard extends StatelessWidget {
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontSize: 20.sp,
-                  fontFamily: 'uthmanic',
+                  fontFamily: 'Amiri',
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 1,

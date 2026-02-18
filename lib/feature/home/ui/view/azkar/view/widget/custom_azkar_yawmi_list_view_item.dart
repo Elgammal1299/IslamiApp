@@ -22,53 +22,47 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(top: 16.h),
+        padding: EdgeInsets.only(top: 12.h),
         child: Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 20.h),
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(
-              color: Theme.of(context).primaryColor,
-              width: 1.w,
-            ),
+            // border: Border.all(
+            //   color: Theme.of(context).primaryColor,
+            //   width: 1.w,
+            // ),
           ),
           child: Row(
             children: [
               SizedBox(width: 12.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      model.category,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(fontSize: 18.sp),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
+                child: Text(
+                  model.category,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontSize: 20.sp,fontFamily: 'Amiri'),
+                ),
+              ),
+               Text(
                       '${model.array.length} ذكر',
                       style: Theme.of(
                         context,
                       ).textTheme.bodyLarge?.copyWith(fontSize: 14.sp),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(6.w),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).primaryColor,
-                ),
-                child: Icon(
-                  Icons.bookmark_border_rounded,
-                  size: 22.sp,
-                  color: Theme.of(context).hintColor,
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.all(6.w),
+              //   decoration: BoxDecoration(
+              //     shape: BoxShape.circle,
+              //     color: Theme.of(context).primaryColor,
+              //   ),
+              //   child: Icon(
+              //     Icons.bookmark_border_rounded,
+              //     size: 22.sp,
+              //     color: Theme.of(context).hintColor,
+              //   ),
+              // ),
             ],
           ),
         ),

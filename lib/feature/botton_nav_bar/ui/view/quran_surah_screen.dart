@@ -58,7 +58,6 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
 
       appBar: AppBar(
         title: _buildAppBarTitle(),

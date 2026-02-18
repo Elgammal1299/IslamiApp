@@ -27,12 +27,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.hadithRouter,
   ),
 
-  HomeItemModel(
-    name: "السبحة",
-    image: AppImage.beadsImage,
-
-    route: AppRoutes.sebhaPageRouter,
-  ),
+  
 
   HomeItemModel(
     name: "ذكر يومي",
@@ -43,6 +38,12 @@ final List<HomeItemModel> items = [
     name: "مواقيت الصلاة",
     image: AppImage.prayerTimesImages,
     route: AppRoutes.prayertimesRouter,
+  ),
+  HomeItemModel(
+    name: "السبحة",
+    image: AppImage.beadsImage,
+
+    route: AppRoutes.sebhaPageRouter,
   ),
   HomeItemModel(
     name: "حصن المؤمن",

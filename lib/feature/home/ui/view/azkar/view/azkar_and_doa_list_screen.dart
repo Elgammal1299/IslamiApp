@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/category_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/widget/custom_dialog_rawy.dart';
@@ -33,7 +34,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).cardColor,
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
@@ -44,7 +45,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       Text(
                         supplication.body,
                         textAlign: TextAlign.right,
-                        style: context.textTheme.titleLarge,
+                        style: context.textTheme.titleLarge!.copyWith(fontSize: 24.sp, fontFamily: 'Amiri'),
                       ),
                       const SizedBox(height: 12),
                       if (supplication.note != null &&
@@ -60,20 +61,20 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                  decoration:  BoxDecoration(
+                    color: Theme.of(context).cardColor,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     ),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
                         icon: Icon(
                           Icons.share,
-                          color: Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                         tooltip: "مشاركة",
                         onPressed: () {
@@ -84,7 +85,7 @@ class AzkarAndDoaListScreen extends StatelessWidget {
                       IconButton(
                         icon: Icon(
                           Icons.copy,
-                          color: Theme.of(context).scaffoldBackgroundColor,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                         tooltip: "نسخ",
                         onPressed: () {

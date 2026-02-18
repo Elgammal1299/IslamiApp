@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -54,13 +56,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'نسخة $version',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white70,
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -73,7 +69,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 final isDark = state is ThemeChanged ? state.isDark : false;
 
                 return SwitchListTile(
-                  title: const Text('الوضع الليلي'),
+                  title:  Text('الوضع الليلي',style: context.textTheme.bodyLarge?.copyWith(fontSize: 20.sp, fontFamily: 'Amiri',)),
                   secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
                   value: isDark,
                   onChanged: (_) => context.read<ThemeCubit>().changeTheme(),
@@ -112,26 +108,54 @@ class _CustomDrawerState extends State<CustomDrawer> {
               },
             ),
             _DrawerItem(
-              icon: Icons.people,
-              title: 'من نحن',
+              icon: Icons.person,
+              title: 'عن المطور',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, AppRoutes.aboutUsRouter);
               },
             ),
+            _DrawerItem(
+              icon: Icons.share,
+              title: 'مشاركة التطبيق',
+              onTap: () {
+                Navigator.pop(context);
+                 Share.share(
+                  'اكتشف تطبيق وَارْتَقِ - رفيقك اليومي للقرآن والأذكار! 🌙📖\n\n'
+                  '🔹 استمع إلى القرآن الكريم بجودة عالية\n'
+                  '🔹 تصفح الأذكار والأدعية اليومية\n'
+                  '🔹 احصل على مواقيت الصلاة واتجاه القبلة\n'
+                  '🔹 واجهة سهلة الاستخدام وتصميم جذاب\n\n'
+                  'حمّل التطبيق الآن وارتقِ بتجربتك الروحية! 🙏✨\n\n'
+                  'رابط التحميل: https://example.com/download',
+    );
+              },
+            ),
 
             const Spacer(),
-
+const SizedBox(height: 4),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        'نسخة $version',
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: 20.sp,
+                          fontFamily: 'Amiri',),
+                      ),
+                    ),
+                  ),
             // 🔹 Footer
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Center(
-                child: Text(
-                  ' جميع الحقوق محفوظة © $year',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 12),
+            //   child: Center(
+            //     child: Text(
+            //       ' جميع الحقوق محفوظة © $year',
+            //       style: Theme.of(context).textTheme.bodySmall,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -154,7 +178,7 @@ class _DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(title, style: context.textTheme.bodyLarge),
+      title: Text(title, style: context.textTheme.bodyLarge?.copyWith(fontSize: 20.sp, fontFamily: 'Amiri',)),
       onTap: onTap,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/data/model/azkar_yawmi_model.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -33,7 +34,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Theme.of(context).secondaryHeaderColor,
+              color: Theme.of(context).cardColor,
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(20),
               ),
@@ -42,26 +43,23 @@ class CustomCardBodyAzkar extends StatelessWidget {
               cleanContent(current.content),
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColorDark,
+                    fontFamily: 'Amiri',
+                    fontSize: 25.sp,
+                    height: 1.5,
+                  ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
                   tooltip: 'مشاركة',
                   icon: Icon(
                     Icons.share,
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                   onPressed: () {
                     Share.share(current.content);
@@ -72,7 +70,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
                   tooltip: 'نسخ',
                   icon: Icon(
                     Icons.copy,
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: current.content));
@@ -83,7 +81,7 @@ class CustomCardBodyAzkar extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          
         ],
       ),
     );

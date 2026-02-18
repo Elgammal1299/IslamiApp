@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 
 class AboutAppScreen extends StatelessWidget {
@@ -21,11 +23,7 @@ class AboutAppScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 28,
                     backgroundColor: theme.colorScheme.primaryContainer,
-                    child: Icon(
-                      Icons.mosque,
-                      color: theme.colorScheme.secondary,
-                      size: 28,
-                    ),
+                    child: Image.asset(AppImage.splashImageDark,),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -35,11 +33,16 @@ class AboutAppScreen extends StatelessWidget {
                         'وَارْتَـــقِ',
                         style: context.textTheme.titleLarge!.copyWith(
                           fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Amiri',
                         ),
                       ),
                       Text(
-                        'منصة إسلامية للقراءة، الاستماع، الذِّكر والتدبر',
-                        style: textTheme.bodyMedium,
+                        'منصة إسلامية للقراءة، الاستماع، الذِّكر والتدبر',
+                        style: textTheme.bodyMedium!.copyWith(
+                          fontSize: 18,
+                          fontFamily: 'Amiri',
+                        ),
                       ),
                     ],
                   ),
@@ -49,7 +52,7 @@ class AboutAppScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Divider(color: Theme.of(context).colorScheme.outlineVariant),
               const SizedBox(height: 8),
-              Text('المزايا الرئيسية', style: textTheme.titleLarge),
+              Text('المزايا الرئيسية', style: textTheme.titleLarge!.copyWith(fontFamily: 'Amiri', fontSize: 22.sp)),
               const SizedBox(height: 12),
               const _FeatureItem(
                 title: 'القرآن الكريم',
@@ -120,9 +123,9 @@ class _FeatureItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
+                Text(title, style: Theme.of(context).textTheme.titleMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp)),
               ],
             ),
           ),
