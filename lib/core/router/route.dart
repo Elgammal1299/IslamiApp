@@ -28,6 +28,8 @@ import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
+import 'package:islami_app/feature/home/ui/view/radio_screen2.dart';
+import 'package:islami_app/feature/home/ui/view_model/radio_player_cubit/radio_player_cubit.dart';
 import 'package:islami_app/feature/khatmah/view/ui/khatmah_details_screen.dart';
 import 'package:islami_app/feature/khatmah/view/ui/khatmah_screen.dart';
 import 'package:islami_app/feature/khatmah/view/widget/khatmah_list_screen.dart';
@@ -229,6 +231,14 @@ class AppRouter {
               (_) => BlocProvider.value(
                 value: sl<RadioCubit>(),
                 child: const RadioScreen(),
+              ),
+        );
+      case AppRoutes.radioPage2Router:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider.value(
+                value: sl<RadioPlayerCubit>(),
+                child: const RadioScreen2(),
               ),
         );
 

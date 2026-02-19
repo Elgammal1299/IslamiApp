@@ -32,6 +32,7 @@ import '../../feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import '../../feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
+import '../../feature/home/ui/view_model/radio_player_cubit/radio_player_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/reciterCubit/reciter_cubit.dart';
 import '../../feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
 import '../../feature/home/ui/view_model/hadith_cubit/hadith_cubit.dart';
@@ -254,6 +255,10 @@ Future<void> setupServiceLocator() async {
   // Radio and Audio Cubits
   sl.registerLazySingleton<RadioCubit>(() {
     return RadioCubit(sl<RadioRepository>());
+  });
+
+  sl.registerLazySingleton<RadioPlayerCubit>(() {
+    return RadioPlayerCubit();
   });
 
   sl.registerLazySingleton<AudioCubit>(() {

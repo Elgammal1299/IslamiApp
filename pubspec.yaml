@@ -11,6 +11,7 @@ environment:
 dependencies:
   audio_service: ^0.18.18
   audioplayers: ^6.5.1
+  radio_player: ^2.2.1
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   dio: ^5.9.1

@@ -1188,6 +1188,14 @@ packages:
       relative: true
     source: path
     version: "1.2.3"
+  radio_player:
+    dependency: "direct main"
+    description:
+      name: radio_player
+      sha256: d8a5af5e7f174cfde62c3e908ca3bc5e48f8d9575d403d3f37dcd1aa18b24ce7
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
   record:
     dependency: "direct main"
     description:

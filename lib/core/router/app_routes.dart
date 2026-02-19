@@ -9,6 +9,7 @@ class AppRoutes {
   static const tafsirByQuranPageRouter = "/TafsirScreen";
   static const tafsirByQuranContentRouter = '/tafsirByQuranRouter';
   static const radioPageRouter = '/radioPage';
+  static const radioPage2Router = '/radioPage2';
   static const radioPlayerRouter = '/radioPlayer';
   static const sebhaPageRouter = '/SebhaPage';
   static const azkarPageRouter = "/azkarScreen";

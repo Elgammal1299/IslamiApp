@@ -69,6 +69,12 @@ final List<HomeItemModel> items = [
 
     route: AppRoutes.radioPageRouter,
   ),
+  HomeItemModel(
+    name: "الراديو",
+    image: AppImage.radioImage,
+
+    route: AppRoutes.radioPage2Router,
+  ),
 
   // HomeItemModel(
   //   name: "التفسير",
