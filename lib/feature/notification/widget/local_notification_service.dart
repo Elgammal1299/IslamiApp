@@ -49,7 +49,15 @@ class LocalNotificationService {
             .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin
             >();
+    await androidImpl?.requestNotificationsPermission();
     await androidImpl?.requestExactAlarmsPermission();
+
+    final iosImpl =
+        _plugin
+            .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin
+            >();
+    await iosImpl?.requestPermissions(alert: true, badge: true, sound: true);
 
     // 4. جدولة الإشعارات اليومية
     await _scheduleDailyMorningAndEvening();

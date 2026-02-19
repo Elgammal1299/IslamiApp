@@ -119,9 +119,13 @@ class LocationService {
       throw StateError('Location permissions are denied');
     }
 
+    final lastKnown = await Geolocator.getLastKnownPosition();
+    if (lastKnown != null) return lastKnown;
+
     return Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
+        accuracy: LocationAccuracy.medium,
+        timeLimit: Duration(seconds: 12),
       ),
     );
   }

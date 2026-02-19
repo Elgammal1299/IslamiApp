@@ -18,8 +18,6 @@ class _RadioScreen2State extends State<RadioScreen2> {
   @override
   void initState() {
     super.initState();
-    // Pre-load the radio but don't play yet
-    context.read<RadioPlayerCubit>().playRadio(_radioUrl, name: _radioName);
   }
 
   @override
@@ -77,18 +75,17 @@ class _RadioScreen2State extends State<RadioScreen2> {
                 children: [
                   // Radio Visualizer / Image
                   Container(
-                    padding: const EdgeInsets.all(20)                         ,
-                    
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         width: 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 20,
                           spreadRadius: 5,
                         ),
@@ -98,7 +95,7 @@ class _RadioScreen2State extends State<RadioScreen2> {
                       child: Icon(
                         Icons.radio_rounded,
                         size: 150,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                   ),
@@ -123,7 +120,7 @@ class _RadioScreen2State extends State<RadioScreen2> {
                     child: Text(
                       metadataText ?? "جاري جلب بيانات البث...",
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontStyle: FontStyle.italic,
                       ),
                       textAlign: TextAlign.center,
@@ -162,7 +159,8 @@ class _RadioScreen2State extends State<RadioScreen2> {
                         style: const TextStyle(color: Colors.redAccent),
                       ),
                     ),
-const SizedBox(height: 30),
+                  const SizedBox(height: 30),
+
                   // Playback Controls
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -179,7 +177,7 @@ const SizedBox(height: 30),
                           height: 60,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             border: Border.all(color: Colors.white, width: 2),
                           ),
                           child: const Icon(
@@ -204,7 +202,7 @@ const SizedBox(height: 30),
                             color: Colors.white,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 blurRadius: 15,
                                 offset: const Offset(0, 5),
                               ),
@@ -222,20 +220,11 @@ const SizedBox(height: 30),
 
                       const SizedBox(width: 30),
 
-                      // Placeholder or maybe stop button?
-                      // User only asked for restart, but to balance UI I will add a stop button or just leave it.
-                      // Let's just follow the request and keep it centered.
-                      // I'll make the refresh button on one side.
-                      const SizedBox(
-                        width: 60,
-                      ), // Space to balance the refresh button
+                      const SizedBox(width: 60),
                     ],
                   ),
 
                   const SizedBox(height: 30),
-
-                  // Playing Status Indicator
-                  
                 ],
               ),
             );

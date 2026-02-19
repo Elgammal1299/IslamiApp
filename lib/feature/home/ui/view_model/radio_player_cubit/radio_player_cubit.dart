@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radio_player/radio_player.dart';
 import 'radio_player_state.dart';
@@ -7,12 +9,16 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   String? _currentUrl;
   String? _currentName;
 
+  StreamSubscription? _playbackSub;
+  StreamSubscription? _metadataSub;
+  StreamSubscription? _remoteCommandSub;
+
   RadioPlayerCubit() : super(RadioPlayerInitial()) {
     _setupListeners();
   }
 
   void _setupListeners() {
-    RadioPlayer.playbackStateStream.listen((state) {
+    _playbackSub = RadioPlayer.playbackStateStream.listen((state) {
       final isPlaying = state == PlaybackState.playing;
       if (this.state is RadioPlayerPlaying) {
         emit(
@@ -26,7 +32,7 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
       }
     });
 
-    RadioPlayer.metadataStream.listen((metadata) {
+    _metadataSub = RadioPlayer.metadataStream.listen((metadata) {
       if (state is RadioPlayerPlaying) {
         emit(
           RadioPlayerPlaying(
@@ -39,8 +45,7 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
       }
     });
 
-    // Listen to remote commands (Next/Previous buttons from background)
-    RadioPlayer.remoteCommandStream.listen((command) {
+    _remoteCommandSub = RadioPlayer.remoteCommandStream.listen((command) {
       if (command == RemoteCommand.nextTrack) {
         // Use Next button for REFRESH
         if (_currentUrl != null) {
@@ -112,16 +117,23 @@ class RadioPlayerCubit extends Cubit<RadioPlayerState> {
   }
 
   Future<void> togglePlay() async {
-    if (state is RadioPlayerPlaying &&
-        (state as RadioPlayerPlaying).isPlaying) {
-      await RadioPlayer.pause();
-    } else {
-      await RadioPlayer.play();
+    try {
+      if (state is RadioPlayerPlaying &&
+          (state as RadioPlayerPlaying).isPlaying) {
+        await RadioPlayer.pause();
+      } else {
+        await RadioPlayer.play();
+      }
+    } catch (e) {
+      emit(const RadioPlayerError('تعذر التحكم في التشغيل'));
     }
   }
 
   @override
   Future<void> close() async {
+    await _playbackSub?.cancel();
+    await _metadataSub?.cancel();
+    await _remoteCommandSub?.cancel();
     await RadioPlayer.reset();
     return super.close();
   }

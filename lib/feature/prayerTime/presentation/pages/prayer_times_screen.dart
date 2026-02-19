@@ -168,7 +168,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   Future<void> _scheduleTodayAndTomorrow() async {
     try {
-      final pos = await _prayerService.getCurrentPosition();
+      final pos =
+          currentLocation.value ??
+          _locationService.getStoredLocation() ??
+          await _prayerService.getCurrentPosition();
       final params = CalculationMethod.muslim_world_league.getParameters()
         ..madhab = Madhab.shafi;
       await _notificationService.scheduleMultipleDays(

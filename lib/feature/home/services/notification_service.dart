@@ -11,6 +11,8 @@ class PrayerNotificationService {
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
+  AndroidScheduleMode _androidScheduleMode =
+      AndroidScheduleMode.exactAllowWhileIdle;
   static const int nsBase = 2000; // namespace for prayer notifications
   static const int prayersPerDay = 6; // fajr, sunrise, dhuhr, asr, maghrib, isha
   static const int preReminderOffset = 1000;
@@ -37,31 +39,74 @@ class PrayerNotificationService {
             .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin
             >();
+    await androidImpl?.requestNotificationsPermission();
     await androidImpl?.requestExactAlarmsPermission();
+
+    // حذف الـ channel القديم اللي كان فيه مشكلة الصوت
+    await androidImpl?.deleteNotificationChannel('prayer_times_channel');
+
+    // Fall back to inexact scheduling if exact alarms are not available.
+    final canScheduleExact =
+        await androidImpl?.canScheduleExactNotifications() ?? false;
+    _androidScheduleMode =
+        canScheduleExact
+            ? AndroidScheduleMode.exactAllowWhileIdle
+            : AndroidScheduleMode.inexactAllowWhileIdle;
+
+    final iosImpl =
+        _plugin
+            .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin
+            >();
+    await iosImpl?.requestPermissions(alert: true, badge: true, sound: true);
+
+    final macImpl =
+        _plugin
+            .resolvePlatformSpecificImplementation<
+              MacOSFlutterLocalNotificationsPlugin
+            >();
+    await macImpl?.requestPermissions(alert: true, badge: true, sound: true);
     _initialized = true;
   }
 
   NotificationDetails _details({bool withSound = true}) {
-    return NotificationDetails(
+    if (withSound) {
+      return const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'prayer_azan_channel_v2',
+          'أذان الصلاة',
+          channelDescription: 'صوت الأذان عند دخول وقت الصلاة',
+          importance: Importance.max,
+          priority: Priority.high,
+          visibility: NotificationVisibility.public,
+          playSound: true,
+          sound: RawResourceAndroidNotificationSound('azan'),
+          icon: '@mipmap/ic_launcher',
+        ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          sound: 'azan.mp3',
+        ),
+      );
+    }
+
+    return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'prayer_times_channel',
-        'Prayer Times',
-        channelDescription: 'Azan notifications for prayer times',
-        importance: Importance.max,
+        'prayer_reminder_channel',
+        'تذكير الصلاة',
+        channelDescription: 'تذكير قبل دخول وقت الصلاة',
+        importance: Importance.high,
         priority: Priority.high,
         visibility: NotificationVisibility.public,
-        playSound: withSound,
-        sound:
-            withSound
-                ? const RawResourceAndroidNotificationSound('azan')
-                : null,
+        playSound: false,
         icon: '@mipmap/ic_launcher',
       ),
       iOS: DarwinNotificationDetails(
         presentAlert: true,
         presentBadge: true,
-        presentSound: withSound,
-        sound: withSound ? 'azan.mp3' : null,
+        presentSound: false,
       ),
     );
   }
@@ -80,7 +125,7 @@ class PrayerNotificationService {
       body,
       tzTime,
       _details(withSound: withSound),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: _androidScheduleMode,
       payload: 'prayer',
     );
   }

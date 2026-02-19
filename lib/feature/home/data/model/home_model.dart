@@ -70,7 +70,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.radioPageRouter,
   ),
   HomeItemModel(
-    name: "الراديو",
+    name: "البث المباشر",
     image: AppImage.radioImage,
 
     route: AppRoutes.radioPage2Router,
