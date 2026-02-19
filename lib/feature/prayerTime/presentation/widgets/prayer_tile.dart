@@ -26,7 +26,7 @@ class PrayerTileWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: isCurrent ? 8 : 6),
       padding: EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: isCurrent ? 16 : 12,
+        vertical: isCurrent ? 20 : 14,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
