@@ -28,10 +28,7 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16.r),
-            // border: Border.all(
-            //   color: Theme.of(context).primaryColor,
-            //   width: 1.w,
-            // ),
+       
           ),
           child: Row(
             children: [
@@ -51,18 +48,7 @@ class CustomAzkarYawmiListViewItem extends StatelessWidget {
                         context,
                       ).textTheme.bodyLarge?.copyWith(fontSize: 14.sp),
                     ),
-              // Container(
-              //   padding: EdgeInsets.all(6.w),
-              //   decoration: BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     color: Theme.of(context).primaryColor,
-              //   ),
-              //   child: Icon(
-              //     Icons.bookmark_border_rounded,
-              //     size: 22.sp,
-              //     color: Theme.of(context).hintColor,
-              //   ),
-              // ),
+       
             ],
           ),
         ),
