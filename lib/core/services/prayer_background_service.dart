@@ -4,6 +4,7 @@ import 'package:adhan/adhan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:islami_app/feature/home/services/notification_service.dart';
+import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 
 const String prayerRescheduleTask = 'com.islamiapp.prayerReschedule';
 const int scheduleDaysAhead = 7;
@@ -36,8 +37,9 @@ Future<void> _rescheduleNotifications() async {
     return;
   }
 
-  final params = CalculationMethod.muslim_world_league.getParameters()
-    ..madhab = Madhab.shafi;
+  final calcMethod = PrayerSettings.loadMethod(prefs);
+  final madhab = PrayerSettings.loadMadhab(prefs);
+  final params = calcMethod.getParameters()..madhab = madhab;
 
   final notificationService = PrayerNotificationService();
   await notificationService.init();
@@ -46,29 +48,10 @@ Future<void> _rescheduleNotifications() async {
     latitude: latitude,
     longitude: longitude,
     params: params,
-    prayerName: _getPrayerName,
+    prayerName: PrayerTimesService.getPrayerName,
   );
 
   log('Prayer notifications rescheduled for $scheduleDaysAhead days');
-}
-
-String _getPrayerName(Prayer prayer) {
-  switch (prayer) {
-    case Prayer.fajr:
-      return 'الفجر';
-    case Prayer.sunrise:
-      return 'الشروق';
-    case Prayer.dhuhr:
-      return 'الظهر';
-    case Prayer.asr:
-      return 'العصر';
-    case Prayer.maghrib:
-      return 'المغرب';
-    case Prayer.isha:
-      return 'العشاء';
-    case Prayer.none:
-      return '';
-  }
 }
 
 /// Initialize WorkManager and register the periodic background task.
