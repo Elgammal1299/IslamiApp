@@ -45,25 +45,26 @@ class CustomSurahFramWidget extends StatelessWidget
         ),
       ),
       actions: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color:Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.3)),
-            ),
-            child: Text(
-              "صفحة $index | جزء $juz",
-              style: TextStyle(
-                fontSize: 12.sp,
-                color:Theme.of(context).secondaryHeaderColor,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 8.h),
+        //   child: Container(
+        //     padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        //     decoration: BoxDecoration(
+        //       color: Colors.black.withValues(alpha: 0.15),
+        //       borderRadius: BorderRadius.circular(8.r),
+        //       border: Border.all(color:Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.3)),
+        //     ),
+        //     child: Text(
+        //       "صفحة $index | جزء $juz",
+        //       style: TextStyle(
+        //         fontSize: 12.sp,
+        //         color:Theme.of(context).secondaryHeaderColor,
+        //         fontWeight: FontWeight.w500,
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        
         Padding(
           padding: EdgeInsets.symmetric(vertical: 8.h),
           child: IconButton(
@@ -73,6 +74,15 @@ class CustomSurahFramWidget extends StatelessWidget
             icon:  Icon(Icons.search, color: Theme.of(context).secondaryHeaderColor),
           ),
         ),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(vertical: 8.h),
+        //   child: IconButton(
+        //     onPressed: () {
+        //       Scaffold.of(context).openEndDrawer();
+        //     },
+        //     icon:  Icon(Icons.menu, color: Theme.of(context).secondaryHeaderColor),
+        //   ),
+        // ),
       ],
     );
   }
@@ -80,3 +90,42 @@ class CustomSurahFramWidget extends StatelessWidget
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+
+// class QuranDrawer extends StatelessWidget {
+//   final int currentSurahIndex;
+
+//   const QuranDrawer({Key? key, required this.currentSurahIndex}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Drawer(
+//       child: ListView.builder(
+//         itemCount: quran.totalSurahCount,
+//         itemBuilder: (context, surahIndex) {
+//           final surahName = quran.getSurahNameArabic(surahIndex + 1);
+//           return ListTile(
+//             title: Text(
+//               surahName,
+//               style: TextStyle(
+//                 fontWeight: surahIndex + 1 == currentSurahIndex
+//                     ? FontWeight.bold
+//                     : FontWeight.normal,
+//               ),
+//             ),
+//             onTap: () {
+//               Navigator.pop(context); // Close the drawer
+//               Navigator.pushReplacement(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => QuranViewScreen(
+//                     pageNumber: quran.getPageNumber(surahIndex + 1, 1),
+//                   ),
+//                 ),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

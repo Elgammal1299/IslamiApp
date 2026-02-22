@@ -16,6 +16,7 @@ import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/verse_action_handler.dart';
 
+
 class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
   final bool isKhatmah;
@@ -97,7 +98,9 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   }
 
   void _onPageChanged(int page) {
-    _currentPage = page;
+    setState(() {
+      _currentPage = page;
+    });
 
     if (_showUI) {
       setState(() {});
@@ -218,7 +221,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           child: Stack(
             children: [
               Positioned(
-                top: 40,
+                top: 30.h,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -285,7 +288,19 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
               ),
 
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 100),
+                bottom: _showUI ? 40.h : -200.h,
+                left: 10.w,
+                right: 10.w,
+                child: QuranPageSlider(
+                  currentPage: _currentPage,
+                  totalPages: 604,
+                  onPageChanged: _onSliderChanged,
+                ),
+              ),
+
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 100),
                 top: _showUI ? 0 : -120.h,
                 left: 0,
                 right: 0,
@@ -297,22 +312,49 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                 ),
               ),
 
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 400),
-                bottom: _showUI ? 40.h : -200.h,
+              Positioned(
+                bottom: 5.h,
                 left: 10.w,
                 right: 10.w,
-                child: QuranPageSlider(
-                  currentPage: _currentPage,
-                  totalPages: 604,
-                  onPageChanged: _onSliderChanged,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:  8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'الجزء: ${getJuz(_currentPage)}',
+                        style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
+                      ),
+                      Text(
+                        'الصفحة: $_currentPage',
+                                              style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
+
+                      ),
+                      Text(
+                        'الحزب: ${getHizb(_currentPage)}',
+                                            style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
+
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+      // endDrawer: QuranDrawer(currentSurahIndex: _currentPage),
     );
+  }
+
+  int getJuz(int page) {
+    final pos = QuranPageIndex.firstAyahOnPage(page);
+    return quran.getJuzNumber(pos.surah, pos.ayah); // Fetch Juz using quran_package
+  }
+
+  int getHizb(int page) {
+    // Calculate Hizb based on the page number
+    return ((page - 1) ~/ 10) + 1; // Each Hizb consists of 10 pages
   }
 }
 
