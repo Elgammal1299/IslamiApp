@@ -1,4 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:just_audio/just_audio.dart' as ja;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
@@ -25,7 +26,7 @@ class AudioBottomSheet extends StatefulWidget {
 }
 
 class _AudioBottomSheetState extends State<AudioBottomSheet> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final ja.AudioPlayer _audioPlayer = ja.AudioPlayer();
   Duration _duration = Duration.zero;
   Duration _position = Duration.zero;
   bool _isPlaying = false;
@@ -44,8 +45,8 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   // القارئ المختار (افتراضياً الحصري المجود)
   String _selectedReciterId = 'ar.husarymujawwad';
   String _selectedReciterName = 'محمود خليل الحصري (المجود)';
-    String get pageFont => "QCF_P${_currentAyahNumber.toString().padLeft(3, '0')}";
-
+  String get pageFont =>
+      "QCF_P${_currentAyahNumber.toString().padLeft(3, '0')}";
 
   @override
   void initState() {
@@ -65,37 +66,41 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   }
 
   void _setupAudioListeners() {
-    _audioPlayer.onDurationChanged.listen((newDuration) {
+    _audioPlayer.durationStream.listen((newDuration) {
       if (!mounted) return;
       setState(() {
-        _duration = newDuration;
+        _duration = newDuration ?? Duration.zero;
       });
     });
 
-    _audioPlayer.onPositionChanged.listen((newPosition) {
+    _audioPlayer.positionStream.listen((newPosition) {
       if (!mounted) return;
       setState(() {
         _position = newPosition;
       });
     });
 
-    _audioPlayer.onPlayerComplete.listen((_) {
+    _audioPlayer.playerStateStream.listen((state) {
       if (!mounted) return;
-      if (_isSequential) {
-        _nextAyah(fromAuto: true);
-      } else {
+
+      if (state.processingState == ja.ProcessingState.completed) {
+        if (_isSequential) {
+          _nextAyah(fromAuto: true);
+        } else {
+          setState(() {
+            _isPlaying = false;
+            _position = Duration.zero;
+          });
+          _audioPlayer.seek(Duration.zero);
+          _audioPlayer.pause();
+        }
+      }
+
+      if (!_isTransitioning) {
         setState(() {
-          _isPlaying = false;
-          _position = Duration.zero;
+          _isPlaying = state.playing;
         });
       }
-    });
-
-    _audioPlayer.onPlayerStateChanged.listen((state) {
-      if (!mounted || _isTransitioning) return;
-      setState(() {
-        _isPlaying = state == PlayerState.playing;
-      });
     });
   }
 
@@ -166,22 +171,13 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
       _currentAyahNumber = ayah;
       _currentSurahName = quran.getSurahNameArabic(surah);
       _currentAyahText = quran.getVerse(surah, ayah, verseEndSymbol: true);
-      _audioPlayer.stop();
       _isPlaying = keepPlaying;
       _position = Duration.zero;
       _duration = Duration.zero;
       _currentAudioUrl = '';
     });
+    // لا نحتاج لـ stop() هنا لأن setAudioSource ستقوم بالتبديل
     _loadAudio();
-
-    // إنهاء حالة الانتقال بعد فترة وجيزة للسماح لـ stop() بالتنفيذ
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        setState(() {
-          _isTransitioning = false;
-        });
-      }
-    });
   }
 
   @override
@@ -194,12 +190,10 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   Future<void> _togglePlay() async {
     if (_isPlaying) {
       await _audioPlayer.pause();
-      setState(() => _isPlaying = false);
     } else {
       if (_currentAudioUrl.isNotEmpty) {
         try {
-          await _audioPlayer.play(UrlSource(_currentAudioUrl));
-          setState(() => _isPlaying = true);
+          await _audioPlayer.play();
         } catch (e) {
           debugPrint("❌ Audio error: $e");
           if (!mounted) return;
@@ -473,7 +467,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -481,7 +475,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
               Container(
                 width: 40,
                 height: 4,
-                margin: const EdgeInsets.only(bottom: 24),
+                margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
                   color: Theme.of(context).dividerColor,
                   borderRadius: BorderRadius.circular(2),
@@ -519,19 +513,20 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
               // Ayah Box
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.05),
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   _currentAyahText,
                   textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.justify,
+                  textAlign: TextAlign.start,
                   style: context.textTheme.titleLarge?.copyWith(
                     height: 1.6,
-                    fontWeight: FontWeight.w600,
-                    // fontFamily: pageFont,
+                    fontWeight: FontWeight.w500,
+fontSize: 22.sp,
+                    fontFamily: 'Amiri',
                     color: Theme.of(context).primaryColorDark,
                   ),
                 ),
@@ -618,14 +613,50 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
 
               // Audio Controls
               BlocConsumer<QuranAudioCubit, QuranAudioState>(
-                listener: (context, state) {
+                listener: (context, state) async {
                   if (state is AyahAudioLoaded) {
                     setState(() {
                       _currentAudioUrl = state.ayahAudio.audio;
                     });
-                    // إذا كان المشغل في وضع التشغيل (تلقائي أو يدوي)، وبدأ الرابط بالوصول، ابدأ فوراً
-                    if (_isPlaying && (_currentAudioUrl.isNotEmpty)) {
-                      _audioPlayer.play(UrlSource(_currentAudioUrl));
+
+                    try {
+                      await _audioPlayer.setAudioSource(
+                        ja.AudioSource.uri(
+                          Uri.parse(_currentAudioUrl),
+                          headers: {
+                            'User-Agent':
+                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                            'Accept': '*/*',
+                          },
+                        ),
+                        preload: true,
+                      );
+
+                      if (mounted) {
+                        setState(() => _isTransitioning = false);
+                        if (_isPlaying) {
+                          _audioPlayer.play();
+                        }
+                      }
+                    } catch (e) {
+                      // تجاهل خطأ المقاطعة لأنه يحدث طبيعياً عند تغيير السورس بسرعة
+                      if (e.toString().contains("interrupted")) {
+                        debugPrint("ℹ️ Loading interrupted (handled)");
+                        return;
+                      }
+
+                      debugPrint("❌ Error setting audio source: $e");
+                      if (mounted) {
+                        setState(() {
+                          _isTransitioning = false;
+                          _isPlaying = false;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("خطأ في تحميل الرابط الصوتي"),
+                          ),
+                        );
+                      }
                     }
                   } else if (state is QuranAudioError) {
                     ScaffoldMessenger.of(context).showSnackBar(

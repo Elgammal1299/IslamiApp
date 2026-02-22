@@ -72,7 +72,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
         duration: const Duration(milliseconds: 250),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.white,
+          color: selected ? AppColors.primary : Theme.of( context).cardColor,
           borderRadius: BorderRadius.circular(14.r),
           border: Border.all(
             color: selected ? AppColors.primary : Colors.grey.shade300,
@@ -89,7 +89,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
             Text(
               title,
               style: context.textTheme.bodyLarge!.copyWith(
-                color: selected ? Colors.white : Colors.black,
+                color: selected ? Colors.white : Theme.of(  context).primaryColorDark,
               ),
             ),
           ],
@@ -166,9 +166,14 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   hintText: 'مثال: ختمة رمضان',
-                  prefixIcon: Icon(Icons.edit),
+                  prefixIcon: const Icon(Icons.edit),
+                  hintStyle: context.textTheme.bodyLarge!.copyWith(
+                                                     color:Theme.of( context).primaryColorDark,
+
+                  ),
+                  fillColor: Theme.of(context).cardColor,
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -187,7 +192,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 10.h,),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: SingleChildScrollView(
@@ -335,7 +340,7 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                       child: Container(
                         padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
-                          color: AppColors.cardBackground,
+                          color: Theme.of(  context).cardColor,
                           borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(color: AppColors.divider),
                         ),
@@ -344,21 +349,24 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                           children: [
                             Row(
                               children: [
-                                const Icon(
+                                 Icon(
                                   Icons.access_time,
-                                  color: AppColors.primary,
+                                  color:Theme.of( context).primaryColorDark,
                                 ),
                                 SizedBox(width: 12.w),
                                 Text(
                                   'تنبيه في القت: ${_notificationTime?.format(context) ?? 'غير محدد'}',
-                                  style: context.textTheme.bodyLarge,
+                                  style: context.textTheme.bodyLarge!.copyWith(
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
                                 ),
                               ],
                             ),
-                            const Icon(
+                             Icon(
                               Icons.edit,
                               size: 16,
-                              color: AppColors.primary,
+                                                             color:Theme.of( context).primaryColorDark,
+
                             ),
                           ],
                         ),
@@ -394,7 +402,8 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
-                  color: AppColors.secondary.withValues(alpha: 0.3),
+                                           color:Theme.of( context).cardColor,
+
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -404,13 +413,17 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: AppColors.primary,
+                                                     color:Theme.of( context).primaryColorDark,
+
                           size: 20.sp,
                         ),
                         SizedBox(width: 8.w),
                         Text(
                           'ملخص الختمة',
-                          style: context.textTheme.titleMedium,
+                          style: context.textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).primaryColorDark,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -463,13 +476,16 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
           Text(
             label,
             style: context.textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
+                                               color:Theme.of( context).primaryColorDark,
+
             ),
           ),
           Text(
             value,
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
+                                  color:Theme.of( context).primaryColorDark,
+
             ),
           ),
         ],

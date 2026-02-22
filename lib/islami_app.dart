@@ -17,8 +17,8 @@ class IslamiApp extends StatelessWidget {
         final isDark = state is ThemeChanged ? state.isDark : false;
         return MediaQuery.withNoTextScaling(
           child: MaterialApp(
-            themeAnimationCurve: Curves.easeInOutSine,
-            themeAnimationDuration: const Duration(seconds: 2),
+            // themeAnimationCurve: Curves.easeInOutSine,
+            // themeAnimationDuration: const Duration(seconds: 2),
             debugShowCheckedModeBanner: false,
             title: 'وَارْتَـقِ',
             navigatorKey: navigatorKey,
