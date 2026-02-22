@@ -63,12 +63,12 @@ final List<HomeItemModel> items = [
 
     route: AppRoutes.recitersPageRouter,
   ),
-  HomeItemModel(
-    name: "الراديو",
-    image: AppImage.radioImage,
+  // HomeItemModel(
+  //   name: "الراديو",
+  //   image: AppImage.radioImage,
 
-    route: AppRoutes.radioPageRouter,
-  ),
+  //   route: AppRoutes.radioPageRouter,
+  // ),
   HomeItemModel(
     name: "البث المباشر",
     image: AppImage.radioImage,

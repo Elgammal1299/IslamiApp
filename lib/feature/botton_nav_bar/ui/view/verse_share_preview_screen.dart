@@ -10,6 +10,7 @@ import 'package:qcf_quran/qcf_quran.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:gal/gal.dart';
 
 class VerseSharePreviewScreen extends StatefulWidget {
   final int surah;
@@ -30,8 +31,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   // Options
   double _fontSize = 24;
   VerseShareTheme _selectedTheme = VerseShareTheme.themes[0];
-  bool _showSuraHeader = true;
-  bool _showBottomBar = true;
+
   bool _addTafsir = false;
   String? _tafsirText;
   bool _isLoadingTafsir = false;
@@ -79,7 +79,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
           children: [
             // Preview Area
             Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(10.w),
               child: Screenshot(
                 controller: _screenshotController,
                 child: _buildImageContent(),
@@ -118,21 +118,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                   ),
 
                   SizedBox(height: 10.h),
-                  Row(
-                    children: [
-                      _buildToggle(
-                        "إظهار الهيدر",
-                        _showSuraHeader,
-                        (v) => setState(() => _showSuraHeader = v),
-                      ),
-                      const Spacer(),
-                      _buildToggle(
-                        "إظهار التذييل",
-                        _showBottomBar,
-                        (v) => setState(() => _showBottomBar = v),
-                      ),
-                    ],
-                  ),
+                  SizedBox(height: 10.h),
 
                   SizedBox(height: 10.h),
                   _buildToggle("إضافة التفسير", _addTafsir, (v) {
@@ -153,7 +139,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                     children: [
                       Expanded(
                         child: _buildActionButton(
-                          label: "حفظ في الاستوديو",
+                          label: "حفظ",
                           icon: Icons.download,
                           color: Colors.blueGrey,
                           onTap: _saveToGallery,
@@ -162,7 +148,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                       SizedBox(width: 15.w),
                       Expanded(
                         child: _buildActionButton(
-                          label: "مشاركة الآن",
+                          label: "مشاركة",
                           icon: Icons.share,
                           color: const Color(0xff2B6777),
                           onTap: _shareImage,
@@ -291,19 +277,13 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
     final verseNumberSymbol = getVerseNumberQCF(widget.surah, widget.ayah);
 
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 20.w),
-      decoration: BoxDecoration(
-        color: _selectedTheme.backgroundColor,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      decoration: BoxDecoration(color: _selectedTheme.backgroundColor),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (_showSuraHeader) ...[
-            HeaderWidget(suraNumber: widget.surah),
-            SizedBox(height: 20.h),
-          ],
+          HeaderWidget(suraNumber: widget.surah,),
 
           Directionality(
             textDirection: TextDirection.rtl,
@@ -320,16 +300,18 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                       color: _selectedTheme.primaryColor,
                       height: 2.2,
                     ),
-                  ),
-                  TextSpan(
-                    text: " $verseNumberSymbol",
-                    style: TextStyle(
-                      fontFamily: pageFont,
-                      package: 'qcf_quran',
-                      fontSize: _fontSize.sp,
-                      color: _selectedTheme.secondaryColor,
-                      height: 2.2,
-                    ),
+                    children: [
+                      TextSpan(
+                        text: " $verseNumberSymbol",
+                        style: TextStyle(
+                          fontFamily: pageFont,
+                          package: 'qcf_quran',
+                          fontSize: _fontSize.sp,
+                          color: _selectedTheme.secondaryColor,
+                          height: 2.2,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -339,7 +321,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
           ),
 
           if (_addTafsir && _tafsirText != null) ...[
-            const Divider(height: 30),
+            const Divider(height: 10),
             Text(
               _tafsirText!,
               textAlign: TextAlign.justify,
@@ -353,42 +335,56 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
             ),
           ],
 
-          if (_showBottomBar) ...[SizedBox(height: 30.h), _buildBottomBanner()],
+          SizedBox(height: 30.h),
+          _buildBottomBanner(),
         ],
       ),
     );
   }
 
   Widget _buildBottomBanner() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
-      decoration: BoxDecoration(
-        color: _selectedTheme.primaryColor.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "سورة ${quran.getSurahNameArabic(widget.surah)} | آية ${widget.ayah}",
-            style: TextStyle(
-              fontSize: 10.sp,
-              fontFamily: 'Cairo',
-              color: _selectedTheme.primaryColor.withValues(alpha: 0.6),
-            ),
-          ),
-          Text(
-            "تطبيق وارتَقِ",
-            style: TextStyle(
-              fontSize: 10.sp,
-              fontFamily: 'Cairo',
-              fontWeight: FontWeight.bold,
-              color: _selectedTheme.secondaryColor.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
+    return Align(
+      alignment: Alignment.center,
+      child: Text(
+        "تطبيق وارتَقِ",
+        style: TextStyle(
+          fontSize: 15.sp,
+          fontFamily: 'Amiri',
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).primaryColorDark.withValues(alpha: 0.7),
+          // _selectedTheme.secondaryColor.withValues(alpha: 0.7),
+        ),
       ),
     );
+    // Container(
+    //   padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
+    //   decoration: BoxDecoration(
+    //     color: _selectedTheme.primaryColor.withValues(alpha: 0.05),
+    //     borderRadius: BorderRadius.circular(10.r),
+    //   ),
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Text(
+    //         "سورة ${quran.getSurahNameArabic(widget.surah)} | آية ${widget.ayah}",
+    //         style: TextStyle(
+    //           fontSize: 10.sp,
+    //           fontFamily: 'Cairo',
+    //           color: _selectedTheme.primaryColor.withValues(alpha: 0.6),
+    //         ),
+    //       ),
+    //       Text(
+    //         "تطبيق وارتَقِ",
+    //         style: TextStyle(
+    //           fontSize: 10.sp,
+    //           fontFamily: 'Cairo',
+    //           fontWeight: FontWeight.bold,
+    //           color: _selectedTheme.secondaryColor.withValues(alpha: 0.7),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Future<void> _shareImage() async {
@@ -410,16 +406,62 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   }
 
   Future<void> _saveToGallery() async {
-    // Note: Implementing gallery saving usually requires permission handling and gallery_saver or similar.
-    // For this demonstration, we'll notify the user about the simulation.
     final image = await _screenshotController.capture();
     if (image == null) return;
 
-    // Suggesting the use of a package like gallery_saver if this was a production app
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("جاري حفظ الصورة في الاستوديو... (تمت المحاكاة)"),
-      ),
-    );
+    try {
+      // Check for permission first
+      bool hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        hasAccess = await Gal.requestAccess();
+      }
+
+      if (hasAccess) {
+        final tempDir = await getTemporaryDirectory();
+        final path =
+            '${tempDir.path}/verse_${widget.surah}_${widget.ayah}_${DateTime.now().millisecondsSinceEpoch}.png';
+        final file = File(path);
+        await file.writeAsBytes(image);
+
+        await Gal.putImage(file.path, album: 'Islami App');
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "تم حفظ الصورة في الاستوديو بنجاح",
+                style: TextStyle(fontFamily: 'Cairo'),
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "نحتاج إلى إذن للوصول إلى الاستوديو لحفظ الصورة",
+                style: TextStyle(fontFamily: 'Cairo'),
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print(e);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "حدث خطأ أثناء حفظ الصورة: $e",
+              style: const TextStyle(fontFamily: 'Cairo'),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

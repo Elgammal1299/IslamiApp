@@ -267,7 +267,20 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
                       ? const Icon(Icons.done_all, color: AppColors.success)
                       : Text('${dayProgress.toStringAsFixed(0)}%'),
               onTap: () {
-                _showDayDetails(day, khatmah);
+                // البحث عن أول جزء لم يكتمل، أو أول جزء إذا كان اليوم مكتمل
+                final juz = day.juzList.firstWhere(
+                  (j) => !j.isCompleted,
+                  orElse: () => day.juzList.first,
+                );
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.quranViewRouter,
+                  arguments: {
+                    "pageNumber": juz.currentPage,
+                    "isKhatmah": true,
+                    "khatmahId": khatmah.id,
+                  },
+                );
               },
             ),
           );
@@ -328,60 +341,6 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showDayDetails(DailyProgress day, KhatmahModel khatmah) {
-    showModalBottomSheet(
-      context: context,
-      builder:
-          (context) => Container(
-            padding: EdgeInsets.all(16.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'اليوم ${day.dayNumber}',
-                  style: context.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                ...day.juzList.map((juz) {
-                  return ListTile(
-                    leading: Icon(
-                      juz.isCompleted
-                          ? Icons.check_circle
-                          : Icons.circle_outlined,
-                      color:
-                          juz.isCompleted
-                              ? AppColors.success
-                              : AppColors.divider,
-                    ),
-                    title: Text('الجزء ${juz.juzNumber}'),
-                    subtitle: Text(
-                      'من صفحة ${juz.startPage} إلى ${juz.endPage}',
-                    ),
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.quranViewRouter,
-                          arguments: {
-                            "pageNumber": juz.currentPage,
-                            "isKhatmah": true,
-                            "khatmahId": khatmah.id,
-                          },
-                        );
-                      },
-                      child: const Text('قراءة'),
-                    ),
-                  );
-                }),
-              ],
-            ),
-          ),
     );
   }
 

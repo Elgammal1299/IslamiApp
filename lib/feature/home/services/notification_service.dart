@@ -14,12 +14,14 @@ class PrayerNotificationService {
   AndroidScheduleMode _androidScheduleMode =
       AndroidScheduleMode.exactAllowWhileIdle;
   static const int nsBase = 2000; // namespace for prayer notifications
-  static const int prayersPerDay = 6; // fajr, sunrise, dhuhr, asr, maghrib, isha
+  static const int prayersPerDay =
+      6; // fajr, sunrise, dhuhr, asr, maghrib, isha
   static const int preReminderOffset = 1000;
 
   Future<void> init() async {
     if (_initialized) return;
     tz.initializeTimeZones();
+    // No need to setLocalLocation here if already set, but doesn't hurt
 
     const AndroidInitializationSettings androidInit =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -32,7 +34,13 @@ class PrayerNotificationService {
       android: androidInit,
       iOS: iosInit,
     );
-    await _plugin.initialize(initSettings);
+
+    await _plugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        // Here you can handle clicks for prayer notifications if needed
+      },
+    );
 
     final androidImpl =
         _plugin
@@ -208,13 +216,24 @@ class PrayerNotificationService {
     await cancelPrayerNotifications();
     final DateTime now = DateTime.now();
     for (int i = 0; i < days; i++) {
-      final DateTime day = DateTime(now.year, now.month, now.day).add(Duration(days: i));
+      final DateTime day = DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).add(Duration(days: i));
       final coordinates = Coordinates(latitude, longitude);
       final dateComponents = DateComponents.from(day);
       final prayerTimes = PrayerTimes(coordinates, dateComponents, params);
 
       final Map<Prayer, DateTime> namedTimes = {};
-      for (final p in [Prayer.fajr, Prayer.sunrise, Prayer.dhuhr, Prayer.asr, Prayer.maghrib, Prayer.isha]) {
+      for (final p in [
+        Prayer.fajr,
+        Prayer.sunrise,
+        Prayer.dhuhr,
+        Prayer.asr,
+        Prayer.maghrib,
+        Prayer.isha,
+      ]) {
         final t = prayerTimes.timeForPrayer(p);
         if (t != null) namedTimes[p] = t;
       }

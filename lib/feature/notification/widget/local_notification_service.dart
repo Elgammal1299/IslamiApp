@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:islami_app/app_initializer.dart';
 import 'package:islami_app/feature/notification/data/repo/notification_repo.dart';
 import 'package:islami_app/feature/notification/widget/handle_notification.dart';
@@ -9,10 +10,20 @@ class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
+  static AndroidScheduleMode _androidScheduleMode =
+      AndroidScheduleMode.exactAllowWhileIdle;
+
   /// 🔧 تهيئة الإشعارات والـ Timezone
   static Future<void> init() async {
     // 1. تهيئة المنطقة الزمنية
     tz.initializeTimeZones();
+    try {
+      final String currentTimeZone =
+          (await FlutterTimezone.getLocalTimezone()).identifier;
+      tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    } catch (_) {
+      // Fallback to UTC if timezone detection fails
+    }
 
     // 2. إعداد الإشعارات
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -52,6 +63,18 @@ class LocalNotificationService {
     await androidImpl?.requestNotificationsPermission();
     await androidImpl?.requestExactAlarmsPermission();
 
+    // Check if we can schedule exact notifications
+    try {
+      final canScheduleExact =
+          await androidImpl?.canScheduleExactNotifications() ?? false;
+      _androidScheduleMode =
+          canScheduleExact
+              ? AndroidScheduleMode.exactAllowWhileIdle
+              : AndroidScheduleMode.inexactAllowWhileIdle;
+    } catch (_) {
+      _androidScheduleMode = AndroidScheduleMode.inexactAllowWhileIdle;
+    }
+
     final iosImpl =
         _plugin
             .resolvePlatformSpecificImplementation<
@@ -67,7 +90,7 @@ class LocalNotificationService {
   static Future<void> _scheduleDailyMorningAndEvening() async {
     final now = DateTime.now();
 
-    // 🕣 8:30 صباحًا
+    // 🕣 8:00 صباحًا
     final morningTime = DateTime(now.year, now.month, now.day, 8);
     await scheduleNotification(
       id: 1,
@@ -80,13 +103,8 @@ class LocalNotificationService {
       repeat: DateTimeComponents.time,
     );
 
-    // 🌙 8:30 مساءً
-    final eveningTime = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      20,
-    ); // 20 = 8 مساءً
+    // 🌙 8:00 مساءً
+    final eveningTime = DateTime(now.year, now.month, now.day, 20);
     await scheduleNotification(
       id: 2,
       title: 'مساء الخير 🌙',
@@ -97,6 +115,7 @@ class LocalNotificationService {
               : eveningTime,
       repeat: DateTimeComponents.time,
     );
+
     int daysUntilFriday = DateTime.friday - now.weekday;
     if (daysUntilFriday < 0) daysUntilFriday += 7;
 
@@ -142,7 +161,7 @@ class LocalNotificationService {
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: _androidScheduleMode,
       matchDateTimeComponents: repeat,
       payload: payload ?? '{"source":"local"}',
     );
@@ -191,7 +210,6 @@ class LocalNotificationService {
 
   /// تحويل معرف الخاتمة (String) إلى معرف إشعار (int) فريد
   static int _getKhatmahNotificationId(String khatmahId) {
-    // يمكن استخدام hashCode ولكن يفضل التأكد من أنه موجب وضمن حدود الـ int32
     return khatmahId.hashCode.abs() % 2147483647;
   }
 

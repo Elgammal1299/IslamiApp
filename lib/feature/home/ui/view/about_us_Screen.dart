@@ -25,26 +25,18 @@ class AboutUsScreen extends StatelessWidget {
                   children: [
                      const CircleAvatar(
                       radius: 70,
-                      backgroundImage: AssetImage(AppImage.ahmedImage),
+                      backgroundImage: AssetImage(AppImage.splashImageDark),
                       
                     ),
                       SizedBox(height: 12.h),
                     Text(
-                      'أحمد محمد الجمال',
+                      'وَارْتَـــقِ',
                       style: textTheme.headlineMedium?.copyWith(
                         fontSize: 24.sp,
                         fontFamily: 'Amiri',
                       ),
                     ),
-                      SizedBox(height: 4.h),
-                    Text(
-                      'مطور تطبيقات الموبيل',
-                      style: textTheme.headlineMedium?.copyWith(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Amiri',
-                      ),
-                    ),
+                 
                   ],
                 ),
               ),

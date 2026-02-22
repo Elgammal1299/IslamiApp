@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart' as quran;
-import 'package:islami_app/core/constant/app_image.dart';
 import 'package:qcf_quran/qcf_quran.dart';
 
 class VerseShareImage extends StatelessWidget {
@@ -63,7 +62,7 @@ class VerseShareImage extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 30.h),
+          SizedBox(height: 10.h),
 
           // Institutional Branding
           Text(
@@ -72,7 +71,7 @@ class VerseShareImage extends StatelessWidget {
               fontSize: 10.sp,
               color: const Color(0xff2B6777).withValues(alpha: 0.5),
               fontWeight: FontWeight.bold,
-              fontFamily: 'Cairo',
+              fontFamily: 'Amiri',
             ),
           ),
         ],
