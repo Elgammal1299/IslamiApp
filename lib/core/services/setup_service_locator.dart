@@ -29,6 +29,7 @@ import '../../feature/botton_nav_bar/data/repo/quran_audio_repo.dart';
 
 // Cubits
 import '../../feature/home/ui/view_model/theme_cubit/theme_cubit.dart';
+import '../../feature/home/ui/view_model/hadith_40_cubit/hadith_40_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
 import '../../feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import '../../feature/home/ui/view_model/radio_cubit/radio_cubit.dart';
@@ -47,6 +48,7 @@ import '../../feature/notification/ui/view_model/cubit/notification_cubit.dart';
 // Additional repositories needed for cubits
 import '../../feature/home/ui/view/azkar/data/repo/azkar_yawmi_repo.dart';
 import '../../feature/home/ui/view/azkar/data/repo/azkar_repo.dart';
+import '../../feature/home/data/repo/hadith_40_repo.dart';
 import '../../feature/home/data/repo/hadith_repo.dart';
 import '../../feature/home/ui/view/all_reciters/data/repo/reciters_repo.dart';
 
@@ -204,6 +206,10 @@ Future<void> setupServiceLocator() async {
     return HadithRepo();
   });
 
+  sl.registerLazySingleton<Hadith40Repo>(() {
+    return Hadith40Repo();
+  });
+
   sl.registerLazySingleton<ReciterRepo>(() {
     return ReciterRepo(sl<QuranAudioService>());
   });
@@ -267,6 +273,10 @@ Future<void> setupServiceLocator() async {
 
   sl.registerLazySingleton<HadithCubit>(() {
     return HadithCubit(sl<HadithRepo>());
+  });
+
+  sl.registerLazySingleton<Hadith40Cubit>(() {
+    return Hadith40Cubit(sl<Hadith40Repo>());
   });
 
   sl.registerLazySingleton<ReciterCubit>(() {

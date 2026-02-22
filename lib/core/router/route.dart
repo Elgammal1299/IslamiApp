@@ -22,9 +22,11 @@ import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view/azkar_yawmi_screen.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_cubit/azkar_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cubit/azkar_yawmi_cubit.dart';
+import 'package:islami_app/feature/home/ui/view_model/hadith_40_cubit/hadith_40_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
+import 'package:islami_app/feature/home/ui/view/hadith_40_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
 import 'package:islami_app/feature/home/ui/view/home_screen.dart';
@@ -304,6 +306,14 @@ class AppRouter {
               (_) => VerseSharePreviewScreen(
                 surah: args?['surah'],
                 ayah: args?['ayah'],
+              ),
+        );
+      case AppRoutes.hadith40Router:
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => sl<Hadith40Cubit>()..loadHadiths(),
+                child: const Hadith40Screen(),
               ),
         );
 

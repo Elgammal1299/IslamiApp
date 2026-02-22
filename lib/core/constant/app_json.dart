@@ -14,5 +14,5 @@ class AppJson {
   static const azkarSectionJson = 'assets/json/Azkar/Section.json';
   static const azkarYawmiJson = 'assets/json/adhkar.json';
   static const quranVersesJson = 'assets/json/quran_verses.json';
-  // static const hadithNawawiJson = 'assets/json/40_hadith_nawawi.json';
+ static const hadithNawawiJson = 'assets/json/40-hadith-nawawi.json';
 }

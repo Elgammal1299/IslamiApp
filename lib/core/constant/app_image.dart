@@ -23,4 +23,5 @@ class AppImage {
   static const whatsIcon = 'assets/images/whatsIcon.svg';
   static const telegramIcon = 'assets/images/telegram.svg';
   static const khatimaImage = 'assets/images/khatima_image.png';
+  static const hadith40Image = 'assets/images/40-hadith-nawawi.png';
 }

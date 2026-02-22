@@ -34,11 +34,18 @@ final List<HomeItemModel> items = [
     image: AppImage.azkarImage,
     route: AppRoutes.azkarYawmiScreen,
   ),
+  
   HomeItemModel(
     name: "مواقيت الصلاة",
     image: AppImage.prayerTimesImages,
     route: AppRoutes.prayertimesRouter,
   ),
+  HomeItemModel(
+    name: "الاربعون نووية",
+    image: AppImage.hadith40Image,
+    route: AppRoutes.hadith40Router,
+  ),
+
   HomeItemModel(
     name: "السبحة",
     image: AppImage.beadsImage,
