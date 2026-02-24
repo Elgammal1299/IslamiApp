@@ -47,8 +47,8 @@ class VerseActionHandler {
           context,
           AppRoutes.tafsirDetailsByAyahRouter,
           arguments: {
-            "tafsirIdentifier": "ar.muyassar",
-            "verse": cumulativeNumber,
+            "pageNumber": quran.getPageNumber(surah, ayah),
+            "targetVerse": cumulativeNumber,
             "text": quran.getVerse(surah, ayah),
           },
         );

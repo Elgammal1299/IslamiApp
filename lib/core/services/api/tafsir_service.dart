@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_by_ayah.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_page_model.dart';
 import 'package:islami_app/feature/home/data/model/tafsir_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -30,4 +31,24 @@ abstract class TafsirService {
   // Future<TafsirQuran> getQuranWithTafsir(
   //   @Path("editionIdentifier") String editionIdentifier,
   // );
+}
+
+/// Extension يضيف دالة جلب تفاسير صفحة كاملة يدوياً (بدون retrofit code generation)
+/// GET /page/{pageNumber}/{editionIdentifier}
+extension TafsirServiceExtension on TafsirService {
+  Future<TafsirPageModel> getPageTafsir(
+    String pageNumber,
+    String editionIdentifier,
+  ) async {
+    // نحتاج الـ Dio — نستخدمه من خلال helper static
+    final dio = Dio();
+    dio.options.baseUrl = 'http://api.alquran.cloud/v1';
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
+
+    final response = await dio.get<Map<String, dynamic>>(
+      '/page/$pageNumber/$editionIdentifier',
+    );
+    return TafsirPageModel.fromJson(response.data!);
+  }
 }

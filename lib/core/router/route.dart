@@ -10,6 +10,7 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/tafsir_details_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/about_app_screen.dart';
 import 'package:islami_app/feature/home/ui/view/about_us_Screen.dart';
@@ -190,11 +191,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                create: (context) => sl<TafsirCubit>(),
+                create: (_) => TafsirCubit(sl<TafsirByAyahRepository>()),
                 child: TafsirDetailsScreen(
-                  tafsirIdentifier: args?['tafsirIdentifier'],
-                  verse: args?['verse'],
-                  text: args?['text'],
+                  pageNumber: args?['pageNumber'] ?? 1,
+                  targetVerse: args?['targetVerse'] ?? 1,
+                  text: args?['text'] ?? '',
                 ),
               ),
         );
