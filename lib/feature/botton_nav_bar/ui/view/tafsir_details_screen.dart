@@ -4,6 +4,7 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_page_model.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
+import 'package:quran/quran.dart' as quran;
 
 class TafsirDetailsScreen extends StatefulWidget {
   /// رقم الصفحة في المصحف (1-604)
@@ -56,7 +57,6 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
     setState(() {
       _selectedEdition = edition;
       _ayahs = [];
-      _ayahKeys.clear();
     });
     context.read<TafsirCubit>().fetchPageTafsir(
       widget.pageNumber.toString(),
@@ -64,20 +64,26 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
     );
   }
 
-  // ─── auto-scroll للآية المختارة ───
+  // ─── auto-scroll للآية المختارة - فوري وتلقائي ───
   void _scrollToTargetVerse() {
-    if (!mounted) return;
-    final key = _ayahKeys[widget.targetVerse];
-    final ctx = key?.currentContext;
-    if (ctx == null) return;
+    if (!mounted || _ayahs.isEmpty) return;
 
-    // نستدعي ensureVisible مباشرة بدون addPostFrameCallback إضافي
+    final targetKey = _ayahKeys[widget.targetVerse];
+    if (targetKey == null || targetKey.currentContext == null) {
+      debugPrint('❌ Key or Context not found for verse: ${widget.targetVerse}');
+      return;
+    }
+
+    // Scroll فوري وتلقائي بدقة باستخدام ensureVisible
     Scrollable.ensureVisible(
-      ctx,
+      targetKey.currentContext!,
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeInOut,
-      alignment: 0.1,
+      alignment:
+          0.1, // ليكون الكارد قريباً من القمة قليلاً وليس ملصقاً بها تماماً
     );
+
+    debugPrint('🎯 Accurate Scroll to verse: ${widget.targetVerse}');
   }
 
   @override
@@ -85,7 +91,7 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("تفسير الآية"),
+          title: const Text("تفسير الصفحة"),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(60),
             child: _buildDropdownArea(),
@@ -109,24 +115,14 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
 
               // ─── استقبال آيات الصفحة ───
               if (state is TafsirPageLoaded) {
-                // نبني الـ keys أولاً قبل setState عشان تكون جاهزة
-                final newKeys = <int, GlobalKey>{};
-                for (final ayah in state.ayahs) {
-                  if (ayah.number != null) {
-                    newKeys[ayah.number!] = GlobalKey();
-                  }
-                }
                 setState(() {
                   _ayahs = state.ayahs;
-                  _ayahKeys
-                    ..clear()
-                    ..addAll(newKeys);
                 });
-                // نستنى frame + frame تانية عشان الـ ListView يبني كل الـ items
-                Future.delayed(
-                  const Duration(milliseconds: 300),
-                  _scrollToTargetVerse,
-                );
+
+                // Scroll فوري بعد رسم الـ UI
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scrollToTargetVerse();
+                });
               }
             },
             builder: (context, state) {
@@ -163,15 +159,26 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 );
               }
 
-              // ─── عرض آيات الصفحة (كلها مرة واحدة عشان الـ GlobalKeys تشتغل) ───
+              // ─── عرض جميع آيات الصفحة مع تفاسيرها ───
               if (_ayahs.isNotEmpty) {
-                return ListView(
+                return SingleChildScrollView(
                   controller: _scrollController,
-                  children:
-                      _ayahs.map((ayah) {
-                        final isTarget = ayah.number == widget.targetVerse;
-                        return _buildAyahCard(ayah, isTarget);
-                      }).toList(),
+                  child: Column(
+                    children:
+                        _ayahs.map((ayah) {
+                          final isTarget = ayah.number == widget.targetVerse;
+                          // إنشاء أو استعادة المفتاح لكل آية (استخدام رقم الآية كمفتاح)
+                          final ayahNumber = ayah.number ?? 0;
+                          final key = _ayahKeys.putIfAbsent(
+                            ayahNumber,
+                            () => GlobalKey(),
+                          );
+                          return Container(
+                            key: key,
+                            child: _buildAyahCard(ayah, isTarget),
+                          );
+                        }).toList(),
+                  ),
                 );
               }
 
@@ -233,18 +240,16 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
     );
   }
 
-  // ─── Card لكل آية ───
+  // ─── Card لكل آية + تفسيرها ───
   Widget _buildAyahCard(TafsirAyahItem ayah, bool isTarget) {
-    final key = _ayahKeys[ayah.number];
-
     return Container(
-      key: key,
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
+        // تمييز الآية المختارة بـ Border
         border:
             isTarget
-                ? Border.all(color: Theme.of(context).primaryColor, width: 2)
+                ? Border.all(color: Theme.of(context).primaryColor, width: 2.5)
                 : null,
         boxShadow:
             isTarget
@@ -252,9 +257,9 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                   BoxShadow(
                     color: Theme.of(
                       context,
-                    ).primaryColor.withValues(alpha: 0.15),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
+                    ).primaryColor.withValues(alpha: 0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
                   ),
                 ]
                 : null,
@@ -263,9 +268,9 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
         margin: EdgeInsets.zero,
         color:
             isTarget
-                ? Theme.of(context).primaryColor.withValues(alpha: 0.07)
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
                 : Theme.of(context).cardColor,
-        elevation: isTarget ? 0 : 1,
+        elevation: isTarget ? 2 : 1,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         child: Padding(
           padding: const EdgeInsets.all(14),
@@ -278,8 +283,8 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 children: [
                   // رقم الآية في دائرة
                   Container(
-                    width: 34,
-                    height: 34,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color:
@@ -315,34 +320,68 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 ],
               ),
 
-              // ─── نص الآية المختارة (فقط للآية المستهدفة) ───
-              if (isTarget) ...[
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).primaryColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+              const Divider(height: 16),
+
+              // ─── نص الآية (مظلل للآية المختارة) ───
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color:
+                      isTarget
+                          ? Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.12)
+                          : Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border:
+                      isTarget
+                          ? Border.all(
+                            color: Theme.of(
+                              context,
+                            ).primaryColor.withValues(alpha: 0.3),
+                            width: 1,
+                          )
+                          : null,
+                ),
+                child: Text(
+                  quran.getVerse(
+                    ayah.surahNumber ?? 1,
+                    ayah.numberInSurah ?? 1,
+                    verseEndSymbol: true,
                   ),
-                  child: Text(
-                    widget.text,
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.titleMedium?.copyWith(height: 1.8),
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.titleMedium?.copyWith(
+                    height: 2.0,
+                    fontWeight: isTarget ? FontWeight.w600 : FontWeight.w500,
+                    color: Theme.of(context).primaryColorDark,
                   ),
                 ),
-              ],
+              ),
 
-              const Divider(height: 18),
+              const SizedBox(height: 14),
+
+              // ─── عنوان التفسير ───
+              Text(
+                '📖 التفسير:',
+                textDirection: TextDirection.rtl,
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 8),
 
               // ─── نص التفسير ───
               Text(
                 ayah.text ?? '',
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.justify,
-                style: context.textTheme.bodyMedium?.copyWith(height: 1.9),
+                style: context.textTheme.bodyMedium?.copyWith(
+                  height: 1.9,
+                  color: Theme.of(context).primaryColorDark,
+                ),
               ),
             ],
           ),

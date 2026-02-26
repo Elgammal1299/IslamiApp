@@ -69,6 +69,14 @@ class CustomSurahFramWidget extends StatelessWidget
           padding: EdgeInsets.symmetric(vertical: 8.h),
           child: IconButton(
             onPressed: () {
+            },
+            icon:  Icon(Icons.bookmark_add_rounded, color: Theme.of(context).secondaryHeaderColor),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child: IconButton(
+            onPressed: () {
               Navigator.pushNamed(context, AppRoutes.searchRouter);
             },
             icon:  Icon(Icons.search, color: Theme.of(context).secondaryHeaderColor),
