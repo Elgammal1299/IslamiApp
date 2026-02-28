@@ -207,7 +207,7 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).primaryColor.withValues(alpha: 0.4),
+          color: Theme.of(context).primaryColorDark,
           width: 1.5,
         ),
       ),
@@ -217,18 +217,25 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
           value: _selectedEdition,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorDark,
           ),
           hint: const Text('اختر التفسير', textDirection: TextDirection.rtl),
+          dropdownColor: Theme.of(context).cardColor,
+          
           items:
               _editions.map((edition) {
                 return DropdownMenuItem<TafsirEditionData>(
                   value: edition,
+
                   child: Text(
                     edition.name,
                     textDirection: TextDirection.rtl,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.bodyMedium,
+                    style: context.textTheme.bodyMedium!.copyWith(
+                      color: Theme.of(context).primaryColorDark,
+                      fontFamily: 'Amiri',
+                      fontSize: 20,
+                    ),
                   ),
                 );
               }).toList(),
@@ -243,7 +250,7 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
   // ─── Card لكل آية + تفسيرها ───
   Widget _buildAyahCard(TafsirAyahItem ayah, bool isTarget) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         // تمييز الآية المختارة بـ Border
@@ -251,97 +258,101 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
             isTarget
                 ? Border.all(color: Theme.of(context).primaryColor, width: 2.5)
                 : null,
-        boxShadow:
-            isTarget
-                ? [
-                  BoxShadow(
-                    color: Theme.of(
-                      context,
-                    ).primaryColor.withValues(alpha: 0.2),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-                : null,
+        // boxShadow:
+        //     isTarget
+        //         ? [
+        //           BoxShadow(
+        //             color: Theme.of(
+        //               context,
+        //             ).primaryColor.withValues(alpha: 0.2),
+        //             blurRadius: 12,
+        //             offset: const Offset(0, 4),
+        //           ),
+        //         ]
+        //         : null,
       ),
       child: Card(
         margin: EdgeInsets.zero,
         color:
-            isTarget
-                ? Theme.of(context).primaryColor.withValues(alpha: 0.08)
-                : Theme.of(context).cardColor,
-        elevation: isTarget ? 2 : 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            Theme.of(context).cardColor,
+        // elevation: isTarget ? 2 : 1,
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ─── رأس الكارد: اسم السورة + رقم الآية ───
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // رقم الآية في دائرة
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          isTarget
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(
-                                context,
-                              ).primaryColor.withValues(alpha: 0.15),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${ayah.numberInSurah}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              isTarget
-                                  ? Colors.white
-                                  : Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // اسم السورة
-                  Text(
-                    ayah.surahName ?? '',
-                    style: context.textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     // رقم الآية في دائرة
+              //     Container(
+              //       width: 36,
+              //       height: 36,
+              //       decoration: BoxDecoration(
+              //         shape: BoxShape.circle,
+              //         color:
+              //             isTarget
+              //                 ? Theme.of(context).primaryColor
+              //                 : Theme.of(
+              //                   context,
+              //                 ).primaryColor.withValues(alpha: 0.15),
+              //       ),
+              //       child: Center(
+              //         child: Text(
+              //           '${ayah.numberInSurah}',
+              //           style: TextStyle(
+              //             fontSize: 12,
+              //             fontWeight: FontWeight.bold,
+              //             color:
+              //                 isTarget
+              //                     ? Colors.white
+              //                     : Theme.of(context).primaryColor,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     // اسم السورة
+              //     Text(
+              //       ayah.surahName ?? '',
+              //       style: context.textTheme.bodySmall?.copyWith(
+              //         color: Theme.of(context).primaryColor,
+              //         fontWeight: FontWeight.w600,
+              //       ),
+              //       textDirection: TextDirection.rtl,
+              //     ),
+              //   ],
+              // ),
 
-              const Divider(height: 16),
+              // const Divider(height: 16),
 
               // ─── نص الآية (مظلل للآية المختارة) ───
               Container(
-                padding: const EdgeInsets.all(12),
+                // padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color:
-                      isTarget
-                          ? Theme.of(
-                            context,
-                          ).primaryColor.withValues(alpha: 0.12)
-                          : Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border:
-                      isTarget
-                          ? Border.all(
-                            color: Theme.of(
-                              context,
-                            ).primaryColor.withValues(alpha: 0.3),
-                            width: 1,
-                          )
-                          : null,
+                  color: Theme.of(context).cardColor,
+                  // color:
+                  //     isTarget
+                  //         ? Theme.of(
+                  //           context,
+                  //         ).primaryColor.withValues(alpha: 0.12)
+                  //         : Theme.of(context).scaffoldBackgroundColor,
+                  // borderRadius: BorderRadius.circular(10),
+                  // border:Border.all(
+                  //           color: Theme.of(
+                  //             context,
+                  //           ).primaryColor.withValues(alpha: 0.3),
+                  //           width: 1,
+                  //         ),
+                      // isTarget
+                      //     ? Border.all(
+                      //       color: Theme.of(
+                      //         context,
+                      //       ).primaryColor.withValues(alpha: 0.3),
+                      //       width: 1,
+                      //     )
+                      //     : null,
                 ),
                 child: Text(
                   quran.getVerse(
@@ -350,11 +361,12 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                     verseEndSymbol: true,
                   ),
                   textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.justify,
                   style: context.textTheme.titleMedium?.copyWith(
                     height: 2.0,
-                    fontWeight: isTarget ? FontWeight.w600 : FontWeight.w500,
                     color: Theme.of(context).primaryColorDark,
+                    fontFamily: 'Amiri',
+                    fontSize: 22,
                   ),
                 ),
               ),
@@ -368,6 +380,8 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 style: context.textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Amiri',
+                  fontSize: 18,
                 ),
               ),
 
@@ -381,6 +395,8 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 style: context.textTheme.bodyMedium?.copyWith(
                   height: 1.9,
                   color: Theme.of(context).primaryColorDark,
+                  fontFamily: 'Amiri',
+                  fontSize: 18,
                 ),
               ),
             ],
