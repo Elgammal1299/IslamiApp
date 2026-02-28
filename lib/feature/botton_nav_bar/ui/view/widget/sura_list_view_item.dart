@@ -48,7 +48,7 @@ class SuraListViewItem extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        "( $ayahCount ) ",
+        "($ayahCount) ",
         style: context.textTheme.titleMedium!.copyWith(fontSize: 16.sp),
       ),
 

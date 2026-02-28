@@ -41,7 +41,7 @@ final List<HomeItemModel> items = [
     route: AppRoutes.prayertimesRouter,
   ),
   HomeItemModel(
-    name: "الاربعون نووية",
+    name: "الأربعون نووية",
     image: AppImage.hadith40Image,
     route: AppRoutes.hadith40Router,
   ),

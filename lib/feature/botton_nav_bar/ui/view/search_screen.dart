@@ -118,7 +118,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 color: AppColors.primary,
                               ),
                               SizedBox(height: 10),
-                              const Text(
+                               Text(
                                 'ابدأ البحث عن الآيات',
                                 style: TextStyle(
                                   color: AppColors.black,

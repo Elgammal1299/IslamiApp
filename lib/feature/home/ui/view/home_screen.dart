@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hijri/hijri_calendar.dart' show HijriCalendar;
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
@@ -13,9 +11,11 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
+import 'package:islami_app/feature/home/ui/view/widget/date_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:quran/quran.dart' as quran;
 
 class HomeScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<SurahCubit>(context, listen: false).getSurahs();
-
+  // checkForUpdate(context);
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
 
@@ -41,6 +41,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+
+// Future<void> checkForUpdate(BuildContext context) async {
+//   final newVersion = NewVersionPlus(
+//     androidId: "com.islamic.wartaqi.app", // غيرها بالـ package name بتاعك
+//   );
+
+//   final status = await newVersion.getVersionStatus();
+
+//   if (status != null && status.canUpdate) {
+//     newVersion.showUpdateDialog(
+//       context: context,
+//       versionStatus: status,
+//       dialogTitle: "تحديث جديد متاح 🚀",
+//       dialogText: "يوجد إصدار جديد من التطبيق، يُفضل التحديث للحصول على أحدث المميزات.",
+//       updateButtonText: "حدث الآن",
+//       dismissButtonText: "لاحقًا",
+//     );
+//   }
+// }
   @override
   Widget build(BuildContext context) {
     // final isDark = context.watch<ThemeCubit>().state is ThemeChanged;
@@ -124,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Grid of items
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((context, index) {
                 return HomeItemCard(item: items[index]);
@@ -136,10 +155,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          
           // const SliverToBoxAdapter(child: SizedBox(height: 100)),
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(12, 0, 12, 16),
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 16),
               child: AnimatedAyahSwitcher(),
             ),
           ),
@@ -334,7 +354,7 @@ class CustomReadingQuran extends StatelessWidget {
                         );
                       },
                       child: Text(
-                        'متابعة القرءة',
+                        'متابعة القراءة',
 
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontFamily: 'uthmanic',
@@ -420,92 +440,4 @@ class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
   }
 }
 
-class DateWidget extends StatefulWidget {
-  const DateWidget({super.key});
 
-  @override
-  State<DateWidget> createState() => _DateWidgetState();
-}
-
-class _DateWidgetState extends State<DateWidget> {
-  bool _showHijri = true;
-
-  String _getHijriDate() {
-    HijriCalendar.setLocal('ar');
-    var hijriDate = HijriCalendar.now();
-    return '${hijriDate.hDay} ${hijriDate.getLongMonthName()} ${hijriDate.hYear} هـ';
-  }
-
-  String _getGregorianDate() {
-    final now = DateTime.now();
-    final formatter = DateFormat('d MMMM yyyy', 'ar');
-    return '${formatter.format(now)} م';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, ),
-     child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-      
-          color: Theme.of(context).cardColor,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showHijri = !_showHijri;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
-                        style: TextStyle(
-                          color:  Theme.of(context).primaryColorDark,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Uthmanic',
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        _showHijri ? _getHijriDate() : _getGregorianDate(),
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Uthmanic',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorDark.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.swap_horiz_rounded,
-                      color: Theme.of(context).primaryColorDark,
-                      size: 20.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
