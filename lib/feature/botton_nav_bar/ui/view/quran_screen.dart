@@ -48,8 +48,9 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     super.didChangeDependencies();
 
     // نحسب scale مرة واحدة فقط
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width ;
     scale = 396.72727272727275 / screenWidth;
+    
   }
 
   @override
@@ -219,7 +220,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           child: Stack(
             children: [
               Positioned(
-                top: 45.h,
+                top: 30.h,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -329,7 +330,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                         style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri'),
                       ),
                       Text(
-                        'الحزب: ${getHizb(_currentPage)}',
+                        getHizb(_currentPage),
                         style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri'),
                       ),
                     ],
@@ -364,11 +365,11 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     if (quarter == 0) {
       return '$hizbNumber';
     } else if (quarter == 1) {
-      return '$hizbNumber وربع';
+      return ' ربع الحزب $hizbNumber';
     } else if (quarter == 2) {
-      return '$hizbNumber ونصف';
+      return ' نصف الحزب $hizbNumber';
     } else {
-      return '$hizbNumber وثلاثة أرباع';
+      return ' ثلاثة أرباع الحزب $hizbNumber';
     }
   }
 }
