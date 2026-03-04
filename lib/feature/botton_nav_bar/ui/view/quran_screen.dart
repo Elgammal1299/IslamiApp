@@ -16,7 +16,6 @@ import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/verse_action_handler.dart';
 
-
 class QuranViewScreen extends StatefulWidget {
   final int pageNumber;
   final bool isKhatmah;
@@ -71,10 +70,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
       } else {
         final pos = QuranPageIndex.firstAyahOnPage(_currentPage);
         context.read<ReadingProgressCubit>().updateReadingProgress(
-              pos.surah,
-              pos.ayah,
-              _currentPage,
-            );
+          pos.surah,
+          pos.ayah,
+          _currentPage,
+        );
       }
     });
   }
@@ -116,10 +115,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
       } else {
         final pos = QuranPageIndex.firstAyahOnPage(page);
         context.read<ReadingProgressCubit>().updateReadingProgress(
-              pos.surah,
-              pos.ayah,
-              page,
-            );
+          pos.surah,
+          pos.ayah,
+          page,
+        );
       }
     });
   }
@@ -198,8 +197,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedVerseId =
-        context.select((VerseSelectionCubit c) => c.state);
+    final selectedVerseId = context.select((VerseSelectionCubit c) => c.state);
 
     return Scaffold(
       extendBody: true,
@@ -226,12 +224,12 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                 right: 0,
                 bottom: 0,
                 child: MediaQuery(
-                  data: MediaQuery.of(context)
-                      .copyWith(textScaler: const TextScaler.linear(1.0)),
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: const TextScaler.linear(1.0)),
                   child: PageviewQuran(
                     key: _pageViewKey,
-                    pageBackgroundColor:
-                        Theme.of(context).primaryColorLight,
+                    pageBackgroundColor: Theme.of(context).primaryColorLight,
                     controller: _controller,
                     onPageChanged: _onPageChanged,
                     initialPageNumber: widget.pageNumber,
@@ -241,9 +239,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                     textColor: Theme.of(context).primaryColorDark,
                     fontWeight: FontWeight.normal,
                     onLongPressDown: (surah, ayah, details) async {
-                      context
-                          .read<VerseSelectionCubit>()
-                          .selectVerse(surah, ayah);
+                      context.read<VerseSelectionCubit>().selectVerse(
+                        surah,
+                        ayah,
+                      );
 
                       final items = await _getItems(surah, ayah);
 
@@ -264,10 +263,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                             openDurationMs: 400,
                             centerOffset:
                                 details.globalPosition -
-                                    Offset(
-                                      MediaQuery.of(context).size.width / 2,
-                                      MediaQuery.of(context).size.height / 2,
-                                    ),
+                                Offset(
+                                  MediaQuery.of(context).size.width / 2,
+                                  MediaQuery.of(context).size.height / 2,
+                                ),
                             useScreenCenter: true,
                           ),
                           items: items,
@@ -317,23 +316,21 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                 left: 10.w,
                 right: 10.w,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:  8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'الجزء: ${getJuz(_currentPage)}',
-                        style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
+                        style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri'),
                       ),
                       Text(
                         'الصفحة: $_currentPage',
-                                              style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
-
+                        style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri'),
                       ),
                       Text(
                         'الحزب: ${getHizb(_currentPage)}',
-                                            style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri', ),
-
+                        style: TextStyle(fontSize: 18.sp, fontFamily: 'Amiri'),
                       ),
                     ],
                   ),
@@ -349,12 +346,30 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   int getJuz(int page) {
     final pos = QuranPageIndex.firstAyahOnPage(page);
-    return quran.getJuzNumber(pos.surah, pos.ayah); // Fetch Juz using quran_package
+    return quran.getJuzNumber(
+      pos.surah,
+      pos.ayah,
+    ); // Fetch Juz using quran_package
   }
 
-  int getHizb(int page) {
-    // Calculate Hizb based on the page number
-    return ((page - 1) ~/ 10) + 1; // Each Hizb consists of 10 pages
+  String getHizb(int page) {
+    if (page == 1) return '1';
+
+    // في مصحف المدينة، كل حزب 10 صفحات، وكل ربع 2.5 صفحة تقريباً
+    // الحزب الأول يبدأ من الصفحة 2
+    int absoluteQuarter = (((page - 2) / 2.5).floor()) + 1;
+    int hizbNumber = ((absoluteQuarter - 1) ~/ 4) + 1;
+    int quarter = (absoluteQuarter - 1) % 4;
+
+    if (quarter == 0) {
+      return '$hizbNumber';
+    } else if (quarter == 1) {
+      return '$hizbNumber وربع';
+    } else if (quarter == 2) {
+      return '$hizbNumber ونصف';
+    } else {
+      return '$hizbNumber وثلاثة أرباع';
+    }
   }
 }
 
@@ -384,9 +399,7 @@ class QuranPageIndex {
   static AyahPosition firstAyahOnPage(int page) {
     final idx = _firstAyahByPage;
     if (idx == null) {
-      throw StateError(
-        'Call QuranPageIndex.ensureBuilt() first',
-      );
+      throw StateError('Call QuranPageIndex.ensureBuilt() first');
     }
     return idx[page] ?? const AyahPosition(1, 1);
   }
