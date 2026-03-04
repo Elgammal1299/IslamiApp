@@ -14,7 +14,7 @@ class CustomNotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final key = entry.key;
     final model = entry.value;
-    final isRead = model.isRead ?? false;
+    // final isRead = model.isRead ?? false;
 
     return InkWell(
       onTap: () {
@@ -34,17 +34,17 @@ class CustomNotificationItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color:
-              isRead
-                  ? Theme.of(context).cardColor
-                  : Theme.of(context).secondaryHeaderColor,
+           
+                  Theme.of(context).cardColor,
+                
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(model.title, style: context.textTheme.titleLarge),
+            Text(model.title, style: context.textTheme.titleLarge!.copyWith(fontSize: 20,fontFamily: 'Amiri', fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(model.body, style: context.textTheme.titleMedium),
+            Text(model.body, style: context.textTheme.titleMedium!.copyWith(fontSize: 16,fontFamily: 'Amiri', color: Theme.of(context).primaryColorDark)),
           ],
         ),
       ),

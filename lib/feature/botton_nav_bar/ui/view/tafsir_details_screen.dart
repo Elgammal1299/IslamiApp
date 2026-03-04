@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_page_model.dart';
@@ -91,6 +92,13 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => Navigator.pop(context),
+          ),
+          backgroundColor: Theme.of(context).cardColor,
+          foregroundColor: Theme.of(context).primaryColorDark,
           title: const Text("تفسير الصفحة"),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(60),
@@ -378,10 +386,10 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                 '📖 التفسير:',
                 textDirection: TextDirection.rtl,
                 style: context.textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Amiri',
-                  fontSize: 18,
+                  fontSize: 20.sp,
                 ),
               ),
 

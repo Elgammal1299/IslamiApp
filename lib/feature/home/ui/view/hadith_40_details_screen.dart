@@ -11,7 +11,9 @@ class Hadith40DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(model.category),
+        title: Text(model.category),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,
         actions: [
           IconButton(
             onPressed: () {
@@ -67,12 +69,13 @@ class Hadith40DetailsScreen extends StatelessWidget {
                   Text(
                     "شرح الحديث",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).primaryColorDark,
                   fontFamily: 'Amiri',
-                      fontSize: 24.sp,
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: 8.h),
                   const Divider(),
                   Text(
                     textAlign: TextAlign.justify,

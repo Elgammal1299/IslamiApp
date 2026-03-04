@@ -16,7 +16,15 @@ class NotificationView extends StatelessWidget {
     // final body = args?['body'] ?? 'لا يوجد محتوى';
 
     return Scaffold(
-      appBar: AppBar(title: const Text('تفاصيل الإشعار')),
+      appBar: AppBar(
+         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        title: const Text('تفاصيل الإشعار'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

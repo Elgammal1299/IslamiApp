@@ -21,13 +21,13 @@ class DhikrInputWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 5),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,15 +36,18 @@ class DhikrInputWidget extends StatelessWidget {
             "إضافة ذكر للسبحة",
             style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColorDark,
+              fontFamily: 'Amiri',
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 15),
           TextField(
-            style: const TextStyle(
-              color: Colors.black,
+            style:  TextStyle(
+              color: Theme.of(context).primaryColorDark,
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Amiri',
             ),
             autofocus: true,
 
@@ -59,7 +62,10 @@ class DhikrInputWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               filled: true,
-              fillColor: Theme.of(context).secondaryHeaderColor,
+              fillColor: Theme.of(context).cardColor,
+              hintStyle: TextStyle(
+                color: Theme.of(context).primaryColorDark
+              ),
             ),
           ),
           const SizedBox(height: 15),
@@ -67,10 +73,12 @@ class DhikrInputWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  style:  TextStyle(
+                       color: Theme.of(context).primaryColorDark,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Amiri',
+
                   ),
                   controller: targetController,
                   keyboardType: TextInputType.number,
@@ -79,9 +87,13 @@ class DhikrInputWidget extends StatelessWidget {
                     hintText: "العدد المطلوب (اختياري)",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                     
                     ),
                     filled: true,
-                    fillColor: Theme.of(context).secondaryHeaderColor,
+                    fillColor: Theme.of(context).cardColor,
+                     hintStyle: TextStyle(
+                color: Theme.of(context).primaryColorDark
+              ),
                   ),
                 ),
               ),
@@ -89,20 +101,26 @@ class DhikrInputWidget extends StatelessWidget {
               ElevatedButton(
                 onPressed: onSave,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).cardColor,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 12,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(
+                      color: Theme.of(context).primaryColorDark,
+                      width: 1,
+                    ),
                   ),
                 ),
                 child: Text(
                   "حفظ",
                   style: context.textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColorDark,
+                    fontFamily: 'Amiri',
+                    fontSize: 16,
                   ),
                 ),
               ),

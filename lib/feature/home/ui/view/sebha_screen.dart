@@ -203,17 +203,19 @@ class _SebhaScreenState extends State<SebhaScreen>
                           _toggleDhikrSelection();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Theme.of(context).cardColor,
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(color: Theme.of(context).primaryColorDark, width: 2),
                           ),
                         ),
                         child: Text(
                           "أذكار جاهزة",
                           style: context.textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
+                            color: Theme.of(  context).primaryColorDark,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Amiri',
                           ),
                         ),
                       ),
@@ -227,18 +229,21 @@ class _SebhaScreenState extends State<SebhaScreen>
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Theme.of(context).secondaryHeaderColor,
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onSurface,
+                              Theme.of(context).cardColor,
+                          // foregroundColor:
+                          //     Theme.of(context).colorScheme.onSurface,
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: Theme.of(context).primaryColorDark, width: 2),
                           ),
                         ),
                         child: Text(
                           "ذكر مخصص",
                           style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColorDark,
+                            fontFamily: 'Amiri',
                           ),
                         ),
                       ),
@@ -270,7 +275,11 @@ class _SebhaScreenState extends State<SebhaScreen>
             title: Text(
               "مبروك!",
               textAlign: TextAlign.center,
-              style: context.textTheme.titleLarge,
+              style: context.textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Amiri',
+              ),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -280,21 +289,29 @@ class _SebhaScreenState extends State<SebhaScreen>
                 Text(
                   "لقد أكملت $_targetCount من $_dhikrText",
                   textAlign: TextAlign.center,
-                  style: context.textTheme.titleLarge,
+                  style: context.textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Amiri',
+                  ),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text("حسناً", style: context.textTheme.bodyLarge),
+                child: Text("حسناً", style: context.textTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold ,
+                    fontFamily: 'Amiri',)),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   _resetCounter();
                 },
-                child: Text("ابدأ من جديد", style: context.textTheme.bodyLarge),
+                child: Text("ابدأ من جديد", style: context.textTheme.bodyLarge!.copyWith(color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold ,
+                    fontFamily: 'Amiri',)),
               ),
             ],
           ),
@@ -315,8 +332,15 @@ class _SebhaScreenState extends State<SebhaScreen>
       appBar: AppBar(
         title: const Text("السبحة الإلكترونية"),
         centerTitle: true,
-        elevation: 0,
+         foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,
+       automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
       ),
+      
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -374,6 +398,9 @@ class _SebhaScreenState extends State<SebhaScreen>
                   color: Theme.of(
                     context,
                   ).primaryColorDark,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Amiri',
+                    fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
               ),

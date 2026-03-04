@@ -9,7 +9,9 @@ class Hadith40Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الأربعون نووية')),
+      appBar: AppBar(title: const Text('الأربعون نووية'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<Hadith40Cubit, Hadith40State>(

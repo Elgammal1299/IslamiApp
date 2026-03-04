@@ -153,7 +153,15 @@ class _CreateKhatmahScreenState extends State<CreateKhatmahScreen> {
     final dateFormat = DateFormat('yyyy/MM/dd', 'ar');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('إنشاء ختمة جديدة'), centerTitle: true),
+      appBar: AppBar(title: const Text('إنشاء ختمة جديدة'),
+      automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
+      centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: Form(

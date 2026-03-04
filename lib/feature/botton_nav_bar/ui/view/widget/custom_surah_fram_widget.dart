@@ -209,22 +209,24 @@ class CustomSurahFramWidget extends StatelessWidget
   Widget build(BuildContext context) {
     final pos = QuranPageIndex.firstAyahOnPage(index);
     final surahName = quran.getSurahNameArabic(pos.surah);
-    final juz = quran.getJuzNumber(pos.surah, pos.ayah);
+    // final juz = quran.getJuzNumber(pos.surah, pos.ayah);
 
     return AppBar(
       centerTitle: false,
-      backgroundColor: AppColors.primary,
+      backgroundColor: Theme.of(  context).cardColor,
+      
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios, size: 20.sp, color:Theme.of(context).secondaryHeaderColor),
+        icon: Icon(Icons.arrow_back_ios, color:Theme.of(context).primaryColorDark),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
         surahName,
         overflow: TextOverflow.ellipsis,
         style: context.textTheme.titleLarge?.copyWith(
-          fontSize: 18.sp,
-          color: Theme.of(context).secondaryHeaderColor,
+          fontSize: 20.sp,
+          color: Theme.of(context).primaryColorDark,
+          fontFamily: 'Amiri',
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -235,7 +237,7 @@ class CustomSurahFramWidget extends StatelessWidget
             onPressed: () {
               _showBookmarksPopup(context);
             },
-            icon: Icon(Icons.bookmark_add_rounded, color: Theme.of(context).secondaryHeaderColor),
+            icon: Icon(Icons.bookmark_add_rounded, color: Theme.of(context).primaryColorDark),
           ),
         ),
         Padding(
@@ -244,7 +246,7 @@ class CustomSurahFramWidget extends StatelessWidget
             onPressed: () {
               Navigator.pushNamed(context, AppRoutes.searchRouter);
             },
-            icon:  Icon(Icons.search, color: Theme.of(context).secondaryHeaderColor),
+            icon:  Icon(Icons.search, color: Theme.of(context).primaryColorDark),
           ),
         ),
       ],

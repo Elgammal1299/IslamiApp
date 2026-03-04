@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<SurahCubit>(context, listen: false).getSurahs();
-  // checkForUpdate(context);
+  checkForUpdate(context);
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
 
@@ -42,24 +42,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-// Future<void> checkForUpdate(BuildContext context) async {
-//   final newVersion = NewVersionPlus(
-//     androidId: "com.islamic.wartaqi.app", // غيرها بالـ package name بتاعك
-//   );
+Future<void> checkForUpdate(BuildContext context) async {
+  final newVersion = NewVersionPlus(
+    androidId: "com.islamic.wartaqi.app", 
+  );
 
-//   final status = await newVersion.getVersionStatus();
+  final status = await newVersion.getVersionStatus();
 
-//   if (status != null && status.canUpdate) {
-//     newVersion.showUpdateDialog(
-//       context: context,
-//       versionStatus: status,
-//       dialogTitle: "تحديث جديد متاح 🚀",
-//       dialogText: "يوجد إصدار جديد من التطبيق، يُفضل التحديث للحصول على أحدث المميزات.",
-//       updateButtonText: "حدث الآن",
-//       dismissButtonText: "لاحقًا",
-//     );
-//   }
-// }
+  if (status != null && status.canUpdate) {
+    newVersion.showUpdateDialog(
+      context: context,
+      versionStatus: status,
+      dialogTitle: "تحديث جديد متاح 🚀",
+      dialogText: "يوجد إصدار جديد من التطبيق، يُفضل التحديث للحصول على أحدث المميزات.",
+      updateButtonText: "حدث الآن",
+      dismissButtonText: "لاحقًا",
+    );
+  }
+}
   @override
   Widget build(BuildContext context) {
     // final isDark = context.watch<ThemeCubit>().state is ThemeChanged;
@@ -71,12 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        foregroundColor: Theme.of(context).primaryColorDark,
         title: Text(
           "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
           style: context.textTheme.titleLarge!.copyWith(
-            color: AppColors.white,
-            fontFamily: 'uthmanic',
-            fontSize: 20,
+            fontFamily: 'Amiri',
+            fontSize: 22.sp,
           ),
         ),
         centerTitle: true,

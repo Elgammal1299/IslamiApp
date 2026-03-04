@@ -48,7 +48,7 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         onPressed: () {
           Navigator.pushNamed(context, AppRoutes.searchRouter);
         },
-        icon: const Icon(Icons.search, color: AppColors.secondary),
+        icon:  Icon(Icons.search, color: Theme.of(context).primaryColorDark,),
       ),
     ];
   }
@@ -60,8 +60,15 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
     return Scaffold(
 
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor:  Theme.of(context).cardColor,
         title: _buildAppBarTitle(),
         actions: _buildAppBarActions(),
+        foregroundColor: Theme.of(context).primaryColorDark,
         centerTitle: true,
       ),
       body: Padding(
@@ -69,8 +76,8 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         child: Column(
           children: [
             TextField(
-              style: const TextStyle(
-                color: Colors.black,
+              style:  TextStyle(
+                color: Theme.of(context).primaryColorDark,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -78,11 +85,13 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
                 FocusScope.of(context).unfocus();
               },
               controller: _searchTextSurahController,
-              cursorColor: AppColors.black,
+              cursorColor:  Theme.of(context).primaryColorDark,
               // style: const TextStyle(color: AppColors.black),
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 hintText: 'ابحث عن سورة...',
                 border: InputBorder.none,
+                hintStyle: TextStyle(color: Theme.of(context).primaryColorDark,),
+                fillColor:  Theme.of(context).cardColor,
               ),
               onChanged: (searchedSurah) {
                 addSearchedForSurahToSearchedList(searchedSurah);

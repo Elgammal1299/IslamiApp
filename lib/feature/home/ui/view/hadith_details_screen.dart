@@ -9,7 +9,9 @@ class HadithDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("حديث اليوم")),
+      appBar: AppBar(title: const Text("حديث اليوم"),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: BlocBuilder<HadithCubit, HadithState>(
         buildWhen:
             (previous, current) =>

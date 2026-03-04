@@ -26,29 +26,32 @@ class SebhaControlsWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).cardColor,
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
+                //     blurRadius: 8,
+                //     offset: const Offset(0, 4),
+                //   ),
+                // ],
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                // mainAxisSize: MainAxisSize.min,
+                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                   Icon(
                     Icons.refresh_rounded,
-                    color: AppColors.white,
+                    color: Theme.of(context).primaryColorDark,
                     size: 20,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     "إعادة التعيين",
                     style: context.textTheme.titleMedium?.copyWith(
-                      color: AppColors.white,
+                      color: Theme.of(context).primaryColorDark,
+fontFamily: 'Amiri',
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -65,33 +68,36 @@ class SebhaControlsWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(12),
                 color:
                     hasCustomDhikr
-                        ? Colors.green
-                        : Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                        ? Theme.of(context).cardColor
+                        : Theme.of(context).cardColor,
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Theme.of(context).shadowColor.withValues(alpha: 0.2),
+                //     blurRadius: 8,
+                //     offset: const Offset(0, 4),
+                //   ),
+                // ],
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                         mainAxisAlignment: MainAxisAlignment.center,
+
                 children: [
                   Icon(
                     hasCustomDhikr ? Icons.edit : Icons.add,
-                    color: AppColors.white,
+                    color: Theme.of(context).primaryColorDark,
                     size: 20,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     hasCustomDhikr ? "تعديل الذكر" : "إضافة ذكر",
                     style: context.textTheme.titleMedium?.copyWith(
-                      color: AppColors.white,
+                      color: Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Amiri',
+                      fontSize: 16,
                     ),
                   ),
                 ],

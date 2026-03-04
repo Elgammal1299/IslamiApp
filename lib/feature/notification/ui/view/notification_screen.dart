@@ -10,9 +10,15 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
         title: const Text('الإشعارات'),
         centerTitle: true,
-        leading: const BackButton(),
+    backgroundColor: Theme.of(context).cardColor,
+      foregroundColor: Theme.of(context).primaryColorDark,
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),

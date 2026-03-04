@@ -17,38 +17,40 @@ class VerseShareTheme {
     VerseShareTheme(
       backgroundColor: Color(0xffFFF8EE),
       primaryColor: Colors.black,
-      secondaryColor: Color(0xff2B6777),
+      // secondaryColor: Color(0xff2B6777),
+      secondaryColor:Colors.black,
       name: "الأصيل",
     ),
     VerseShareTheme(
       backgroundColor: Color(0xff1E1E1E),
       primaryColor: Colors.white,
-      secondaryColor: Color(0xffD4AF37),
+    //  secondaryColor: Color(0xffD4AF37),
+      secondaryColor: Colors.white,
       name: "ليلي مذهب",
     ),
-    VerseShareTheme(
-      backgroundColor: Color(0xffFDF6E3),
-      primaryColor: Color(0xff586E75),
-      secondaryColor: Color(0xffB58900),
-      name: "ورقي قديم",
-    ),
-    VerseShareTheme(
-      backgroundColor: Color(0xffE0F2F1),
-      primaryColor: Color(0xff004D40),
-      secondaryColor: Color(0xff80CBC4),
-      name: "تركواز هادئ",
-    ),
-    VerseShareTheme(
-      backgroundColor: Color(0xffFFFDE7),
-      primaryColor: Color(0xff3E2723),
-      secondaryColor: Color(0xffFBC02D),
-      name: "شمس الضحى",
-    ),
-    VerseShareTheme(
-      backgroundColor: Color(0xffF3E5F5),
-      primaryColor: Color(0xff4A148C),
-      secondaryColor: Color(0xffCE93D8),
-      name: "بنفسجي ملكي",
-    ),
+    // VerseShareTheme(
+    //   backgroundColor: Color(0xffFDF6E3),
+    //   primaryColor: Color(0xff586E75),
+    //   secondaryColor: Color(0xffB58900),
+    //   name: "ورقي قديم",
+    // ),
+    // VerseShareTheme(
+    //   backgroundColor: Color(0xffE0F2F1),
+    //   primaryColor: Color(0xff004D40),
+    //   secondaryColor: Color(0xff80CBC4),
+    //   name: "تركواز هادئ",
+    // ),
+    // VerseShareTheme(
+    //   backgroundColor: Color(0xffFFFDE7),
+    //   primaryColor: Color(0xff3E2723),
+    //   secondaryColor: Color(0xffFBC02D),
+    //   name: "شمس الضحى",
+    // ),
+    // VerseShareTheme(
+    //   backgroundColor: Color(0xffF3E5F5),
+    //   primaryColor: Color(0xff4A148C),
+    //   secondaryColor: Color(0xffCE93D8),
+    //   name: "بنفسجي ملكي",
+    // ),
   ];
 }

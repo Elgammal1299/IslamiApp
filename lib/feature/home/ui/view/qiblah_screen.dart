@@ -38,7 +38,9 @@ class _QiblahScreenState extends State<QiblahScreen> {
     // First time – no stored location, need to get it once
     if (stored == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text("اتجاه القبلة")),
+        appBar: AppBar(title: const Text("اتجاه القبلة"),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
         body: LocationPermissionGate(
           onGrantedOnce: () async {
             try {

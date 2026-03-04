@@ -9,7 +9,10 @@ class AzkarYawmiScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الأذكار')),
+      appBar: AppBar(title: const Text('الأذكار'),centerTitle: true,
+      
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocBuilder<AzkarYawmiCubit, AzkarYawmiState>(

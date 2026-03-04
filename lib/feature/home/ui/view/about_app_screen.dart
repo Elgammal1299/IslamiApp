@@ -11,7 +11,9 @@ class AboutAppScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('عن التطبيق')),
+      appBar: AppBar(title: const Text('عن التطبيق'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

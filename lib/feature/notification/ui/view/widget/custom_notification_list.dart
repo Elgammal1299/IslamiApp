@@ -11,7 +11,7 @@ class CustomNotificationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (notifications.isEmpty) {
-      return const Center(child: Text('لا توجد إشعارات'));
+      return const Center(child: Text('لا توجد إشعارات', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Amiri', )));
     }
 
     return RefreshIndicator(
@@ -21,7 +21,8 @@ class CustomNotificationList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _MarkAllAsReadButton(),
+          // const _MarkAllAsReadButton(),
+          const SizedBox(height: 12),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -54,7 +55,7 @@ class _MarkAllAsReadButton extends StatelessWidget {
           "تحديد الكل كمقروء",
           style: Theme.of(
             context,
-          ).textTheme.titleLarge!.copyWith(color: Colors.blue),
+          ).textTheme.titleLarge!.copyWith(fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'Amiri', color: Theme.of(context).primaryColorDark),
         ),
       ),
     );

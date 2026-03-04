@@ -21,7 +21,9 @@ class _RadioScreenState extends State<RadioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('إذاعة القرآن'), centerTitle: true),
+      appBar: AppBar(title: const Text('إذاعة القرآن'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: BlocBuilder<RadioCubit, RadioState>(
         //  buildWhen: (previous, current) {
         //       // إعادة البناء فقط عند تغيير حالة التشغيل

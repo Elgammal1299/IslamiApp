@@ -17,28 +17,32 @@ class DhikrDisplayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      // margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColorDark,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Theme.of(context).primaryColorDark,
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 5),
+        //   ),
+        // ],
       ),
       child: Column(
         children: [
           // الذكر الحالي
           Text(
+            
             dhikrText,
             style: context.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
               height: 1.5,
+              color: Theme.of(context).primaryColorDark,
+              fontFamily: 'Amiri',
+
             ),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 15),
           // شريط التقدم

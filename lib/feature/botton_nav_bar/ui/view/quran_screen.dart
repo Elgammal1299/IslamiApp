@@ -50,7 +50,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
     // نحسب scale مرة واحدة فقط
     final screenWidth = MediaQuery.of(context).size.width;
-    scale = 393.72727272727275 / screenWidth;
+    scale = 396.72727272727275 / screenWidth;
   }
 
   @override
@@ -221,7 +221,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           child: Stack(
             children: [
               Positioned(
-                top: 30.h,
+                top: 45.h,
                 left: 0,
                 right: 0,
                 bottom: 0,

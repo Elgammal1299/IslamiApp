@@ -94,7 +94,15 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       elevation: 0,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, ),
+        onPressed: () => Navigator.pop(context),
+      ),
       title: const Text('التحميلات'),
+      centerTitle: true,
+      backgroundColor: Theme.of(context).cardColor,
+      foregroundColor: Theme.of(context).primaryColorDark,
       actions: [
         BlocBuilder<DownloadCubit, DownloadState>(
           builder: (context, state) {

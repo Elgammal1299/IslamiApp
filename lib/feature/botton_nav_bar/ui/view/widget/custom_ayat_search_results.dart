@@ -53,20 +53,30 @@ class CustomAyatSearchResults extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  
                   "سورة ${getSurahNameArabic(result["surah"])} - الآية ${result["verse"]}",
-                  style: context.textTheme.titleLarge,
+                  style: context.textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).primaryColorDark,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Amiri',
+                  ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 HighlightedText(
                   text: _normalizeArabic(verseText),
                   query: searchQuery,
-                  baseStyle: context.textTheme.bodyLarge ?? const TextStyle(),
+                  baseStyle: context.textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 20,
+                    fontFamily: 'Amiri',
+                  ) ,
                   highlightStyle: (context.textTheme.bodyLarge ??
                           const TextStyle())
                       .copyWith(
                         color: Colors.green,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Amiri',
                       ),
                   caseSensitive: true,
                 ),

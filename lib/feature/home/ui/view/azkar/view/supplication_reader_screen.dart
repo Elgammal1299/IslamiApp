@@ -37,7 +37,9 @@ class _SupplicationReaderScreenState extends State<SupplicationReaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الذكر')),
+      appBar: AppBar(title: const Text('الذكر'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: widget.supplications.length,

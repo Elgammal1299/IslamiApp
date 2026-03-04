@@ -74,14 +74,17 @@ class _RecitersScreenState extends State<RecitersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("قرّاء القرآن"),
+        backgroundColor: Theme.of(context).cardColor,
+        foregroundColor: Theme.of(context).primaryColorDark,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
-                   style: const TextStyle(
-              color: Colors.black,
+                   style:  TextStyle(
+              color:Theme.of( context).primaryColorDark ,
               fontSize: 18,
+              fontFamily: 'Amiri',
               fontWeight: FontWeight.bold,
             ),
               onTapOutside: (event) {
@@ -90,7 +93,14 @@ class _RecitersScreenState extends State<RecitersScreen> {
               controller: _searchController,
               // style: const TextStyle(color: AppColors.black, fontSize: 18),
               decoration: InputDecoration(
-                labelText: "بحث عن قارئ",
+                hint: Text( "بحث عن قارئ",style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily:   'Amiri',
+                ),),
+                
+                fillColor: Theme.of(context).cardColor,
                 border: const OutlineInputBorder(),
                 suffixIcon:
                     _searchController.text.isNotEmpty
@@ -101,7 +111,7 @@ class _RecitersScreenState extends State<RecitersScreen> {
                             _onSearchChanged('');
                           },
                         )
-                        : const Icon(Icons.search),
+                        :  Icon(Icons.search,color: Theme.of(context).primaryColorDark,),
               ),
               onChanged: _onSearchChanged,
             ),

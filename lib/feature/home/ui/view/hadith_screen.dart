@@ -8,7 +8,9 @@ class HadithScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('أحاديث نبوية')),
+      appBar: AppBar(title: const Text('أحاديث نبوية'),centerTitle: true,
+      foregroundColor: Theme.of(context).primaryColorDark,
+      backgroundColor: Theme.of(context).cardColor,),
       body: ListView.builder(
         padding: const EdgeInsets.only(top: 8, bottom: 16),
         itemCount: hadithItems.length,

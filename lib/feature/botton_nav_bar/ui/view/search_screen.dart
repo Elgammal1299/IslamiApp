@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
           'لا توجد نتائج بحث',
           style: Theme.of(
             context,
-          ).textTheme.titleLarge!.copyWith(color: AppColors.black),
+          ).textTheme.titleLarge!.copyWith(color: Theme.of(context).primaryColorDark,fontFamily: 'Amiri'),
         ),
       );
     }
@@ -66,9 +66,15 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
-        leading: const BackButton(color: AppColors.secondary),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: Theme.of(context).cardColor, 
+        foregroundColor: Theme.of(context).primaryColorDark,
         title: const Text('البحث عن الايات'),
         centerTitle: true,
       ),
@@ -77,10 +83,11 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             TextField(
-              style: const TextStyle(
-                color: Colors.black,
+              style:  TextStyle(
+                color: Theme.of(context).primaryColorDark,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Amiri',
               ),
               onTapOutside: (event) {
                 FocusScope.of(context).unfocus();
@@ -88,13 +95,18 @@ class _SearchScreenState extends State<SearchScreen> {
               focusNode: _searchFocusNode,
               controller: _searchTextAyatController,
               cursorColor: Theme.of(context).primaryColorDark,
+
               decoration: InputDecoration(
+                
                 hintText: 'ابحث في الآيات...',
                 border: InputBorder.none,
                 hintStyle: TextStyle(
-                  color: Theme.of(context).cardColor,
+                  color: Theme.of(context).primaryColorDark,
                   fontSize: 18,
+                  fontFamily: 'Amiri',
                 ),
+                fillColor: Theme.of(context).cardColor,
+              
               ),
               onChanged: (searchedCharacter) {
                 addSearchedForAyatsToSearchedList(searchedCharacter);
@@ -109,20 +121,21 @@ class _SearchScreenState extends State<SearchScreen> {
                       valueListenable: searchedForAyats,
                       builder: (context, value, _) {
                         if (value == null) {
-                          return const Column(
+                          return  Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.search_off,
                                 size: 50,
-                                color: AppColors.primary,
+                                color: Theme.of(context).primaryColorDark,
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                                Text(
                                 'ابدأ البحث عن الآيات',
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 18,
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontSize: 20,
+                                  fontFamily: 'Amiri',
                                 ),
                               ),
                             ],

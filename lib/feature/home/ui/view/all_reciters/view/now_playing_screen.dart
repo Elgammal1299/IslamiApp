@@ -46,7 +46,14 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
         }
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: IconButton(onPressed: (){
+              Navigator.pop(context);
+            }, icon: const Icon(Icons.arrow_back_ios)),
             title: Text(state.currentItem?.title ?? 'لا توجد أغنية'),
+            centerTitle: true,
+            backgroundColor: Theme.of(context).cardColor,
+            foregroundColor: Theme.of(context).primaryColorDark,
           ),
           body: Column(
             children: [
@@ -56,13 +63,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 child: Column(
                   children: [
                     Text(
-                      state.currentItem?.title ?? 'لا توجد أغنية',
+                      state.currentItem?.title ?? 'لا توجد صوت ',
                       style: context.textTheme.labelLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      state.currentItem?.artist ?? 'فنان غير معروف',
+                      state.currentItem?.artist ?? 'قارئ غير معروف',
                       style: context.textTheme.titleLarge,
                       textAlign: TextAlign.center,
                     ),
@@ -87,13 +94,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       height: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          const BoxShadow(
-            color: AppColors.secondary,
-            blurRadius: 20,
-            offset: Offset(2, 2),
-          ),
-        ],
+        // boxShadow: [
+        //   const BoxShadow(
+        //     color: AppColors.secondary,
+        //     blurRadius: 20,
+        //     offset: Offset(2, 2),
+        //   ),
+        // ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -213,7 +220,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             color:
                 state.loopMode != LoopMode.off
                     ? Theme.of(context).primaryColor
-                    : Theme.of(context).primaryColor,
+                    : Theme.of(context).primaryColorDark,
           ),
           onPressed: () {
             final newMode =
@@ -229,19 +236,19 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
           icon: Icon(
             Icons.skip_previous,
             size: 36,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () => context.read<AudioCubit>().skipToPrevious(),
         ),
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorDark,
             boxShadow: [
               BoxShadow(
                 color: Theme.of(
                   context,
-                ).colorScheme.primary.withValues(alpha: 0.5),
+                ).primaryColorDark,
                 blurRadius: 10,
                 spreadRadius: 2,
               ),
@@ -260,7 +267,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
           icon: Icon(
             Icons.skip_next,
             size: 36,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColorDark,
           ),
           onPressed: () => context.read<AudioCubit>().skipToNext(),
         ),
@@ -271,7 +278,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
             color:
                 state.isShuffled
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).primaryColor,
+                    : Theme.of(context).primaryColorDark,
           ),
           onPressed:
               () => context.read<AudioCubit>().setShuffle(!state.isShuffled),

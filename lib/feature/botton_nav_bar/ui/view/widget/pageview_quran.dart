@@ -220,9 +220,41 @@ class _PageContentState extends State<_PageContent>
 
       for (int v = start; v <= end; v++) {
         if (v == start && v == 1) {
-          verseSpans.add(WidgetSpan(
-       
-            child: HeaderWidget(suraNumber: surah,)));
+          verseSpans.add(
+            WidgetSpan(
+              child: HeaderWidget(
+                suraNumber: surah,
+                theme:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? QcfThemeData(
+                          customHeaderBuilder:
+                              (surahNumber) => Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  const Image(
+                                    image: AssetImage(
+                                      "assets/images/mainframedark.png",
+                                    ),
+                                  ),
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      text: surah.toString(),
+                                      style: TextStyle(
+                                        fontFamily: "arsura",
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                            0.07,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        )
+                        : null,
+              ),
+            ),
+          );
           if (widget.pageNumber != 1 && widget.pageNumber != 187) {
             if (surah != 97) {
               verseSpans.add(
@@ -289,7 +321,7 @@ class _PageContentState extends State<_PageContent>
                 style: TextStyle(
                   fontFamily: pageFont,
                   package: 'qcf_quran',
-                  color: Theme.of(context).primaryColorDark,//Colors.white,
+                  color: Theme.of(context).primaryColorDark, //Colors.white,
                   height: 1.35 / widget.h,
                   backgroundColor:
                       isSelected ? Colors.yellow.withValues(alpha: 0.3) : null,

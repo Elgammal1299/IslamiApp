@@ -10,18 +10,18 @@ class ResetBottonWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).cardColor,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.refresh_rounded, color: AppColors.white, size: 24),
+           Icon(Icons.refresh_rounded, color: Theme.of(context).primaryColorDark, size: 24),
           const SizedBox(width: 8),
           Text(
             "إعادة التعيين",
             style: Theme.of(
               context,
-            ).textTheme.titleLarge!.copyWith(color: AppColors.white),
+            ).textTheme.titleLarge!.copyWith(color: Theme.of(context).primaryColorDark),
           ),
         ],
       ),

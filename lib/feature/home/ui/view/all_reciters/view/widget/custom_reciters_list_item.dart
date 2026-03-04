@@ -29,7 +29,12 @@ class CustomRecitersListItem extends StatelessWidget {
             ),
             title: Text(
               reciter.name ?? 'Unknown',
-              style: context.textTheme.titleLarge,
+              style: context.textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Amiri',
+                fontSize: 20,
+              ),
             ),
             trailing: Icon(
               isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
@@ -44,7 +49,11 @@ class CustomRecitersListItem extends StatelessWidget {
                     return ListTile(
                       title: Text(
                         moshaf.name ?? "Unknown",
-                        style: context.textTheme.bodyLarge,
+                        style: context.textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).primaryColorDark,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Amiri',
+                        ),
                       ),
                       trailing: const Icon(
                         Icons.play_arrow,

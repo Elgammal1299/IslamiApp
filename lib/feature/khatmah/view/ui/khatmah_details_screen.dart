@@ -24,6 +24,13 @@ class _KhatmahDetailsScreenState extends State<KhatmahDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
+       foregroundColor : Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).cardColor,
         title: const Text('تفاصيل الختمة'),
         centerTitle: true,
         actions: [

@@ -31,12 +31,24 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   // Options
   double _fontSize = 24;
   VerseShareTheme _selectedTheme = VerseShareTheme.themes[0];
+  bool _isThemeInitialized = false;
 
   bool _addTafsir = false;
   String? _tafsirText;
   bool _isLoadingTafsir = false;
 
   final ScreenshotController _screenshotController = ScreenshotController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isThemeInitialized) {
+      if (Theme.of(context).brightness == Brightness.dark) {
+        _selectedTheme = VerseShareTheme.themes[1];
+      }
+      _isThemeInitialized = true;
+    }
+  }
 
   @override
   void initState() {
@@ -63,14 +75,18 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           "تخصيص المشاركة",
           style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Theme.of(context).cardColor,
+        foregroundColor: Theme.of(context).primaryColorDark,
         elevation: 0,
         centerTitle: true,
       ),
@@ -90,7 +106,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
             Container(
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
                 boxShadow: [
                   BoxShadow(
@@ -113,7 +129,9 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                     value: _fontSize,
                     min: 18,
                     max: 40,
-                    activeColor: _selectedTheme.secondaryColor,
+                    activeColor: Colors.grey,//_selectedTheme.secondaryColor,
+                    // thumbColor: Colors.white,
+                    inactiveColor: Theme.of(context).primaryColorDark,
                     onChanged: (v) => setState(() => _fontSize = v),
                   ),
 
@@ -170,10 +188,10 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 16.sp,
         fontWeight: FontWeight.bold,
-        fontFamily: 'Cairo',
-        color: Colors.grey[700],
+        fontFamily: 'Amiri',
+        color: Theme.of(context).primaryColorDark,
       ),
     );
   }
@@ -234,7 +252,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
           activeColor: _selectedTheme.secondaryColor,
           onChanged: onChanged,
         ),
-        Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 13.sp)),
+        Text(label, style: TextStyle(fontFamily: 'Amiri', fontSize: 16.sp)),
       ],
     );
   }
@@ -251,7 +269,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
       label: Text(
         label,
         style: const TextStyle(
-          fontFamily: 'Cairo',
+          fontFamily: 'Amiri',
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -283,7 +301,37 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          HeaderWidget(suraNumber: widget.surah,),
+          HeaderWidget(
+            suraNumber: widget.surah,
+            theme:
+                _selectedTheme == VerseShareTheme.themes[1]
+                    ? QcfThemeData(
+                      customHeaderBuilder:
+                          (surahNumber) => Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage(
+                                  "assets/images/mainframedark.png",
+                                ),
+                              ),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  text: widget.surah.toString(),
+                                  style: TextStyle(
+                                    fontFamily: "arsura",
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                        0.07,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                    )
+                    : null,
+          ),
 
           Directionality(
             textDirection: TextDirection.rtl,
@@ -307,8 +355,8 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                           fontFamily: pageFont,
                           package: 'qcf_quran',
                           fontSize: _fontSize.sp,
-                          color: _selectedTheme.secondaryColor,
-                          height: 2.2,
+                          color:_selectedTheme.secondaryColor,
+                          height: 2,
                         ),
                       ),
                     ],
@@ -321,7 +369,11 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
           ),
 
           if (_addTafsir && _tafsirText != null) ...[
-            const Divider(height: 10),
+             Divider(height: 10,
+            color: Colors.grey[600],
+            
+            ),
+            SizedBox(height: 6.h),
             Text(
               _tafsirText!,
               textAlign: TextAlign.justify,
@@ -329,7 +381,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
               style: TextStyle(
                 fontSize: (_fontSize * 0.6).sp,
                 color: _selectedTheme.primaryColor.withValues(alpha: 0.8),
-                fontFamily: 'Cairo',
+                fontFamily: 'Amiri',
                 height: 1.5,
               ),
             ),
@@ -345,14 +397,17 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   Widget _buildBottomBanner() {
     return Align(
       alignment: Alignment.center,
-      child: Text(
-        "تطبيق وارتَقِ",
-        style: TextStyle(
-          fontSize: 15.sp,
-          fontFamily: 'Amiri',
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).primaryColorDark.withValues(alpha: 0.7),
-          // _selectedTheme.secondaryColor.withValues(alpha: 0.7),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "تطبيق وارتَقِ",
+          style: TextStyle(
+            fontSize: 15.sp,
+            fontFamily: 'Amiri',
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[600],
+            // _selectedTheme.secondaryColor.withValues(alpha: 0.7),
+          ),
         ),
       ),
     );
@@ -442,7 +497,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
             const SnackBar(
               content: Text(
                 "نحتاج إلى إذن للوصول إلى الاستوديو لحفظ الصورة",
-                style: TextStyle(fontFamily: 'Cairo'),
+                style: TextStyle(fontFamily: 'Amiri'),
               ),
               backgroundColor: Colors.red,
             ),
@@ -456,7 +511,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
           SnackBar(
             content: Text(
               "حدث خطأ أثناء حفظ الصورة: $e",
-              style: const TextStyle(fontFamily: 'Cairo'),
+              style: const TextStyle(fontFamily: 'Amiri'),
             ),
             backgroundColor: Colors.red,
           ),

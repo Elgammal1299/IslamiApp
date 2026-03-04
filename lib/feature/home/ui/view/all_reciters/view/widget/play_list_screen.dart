@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/helper/audio_manager.dart';
@@ -78,9 +77,17 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       child: BlocBuilder<AudioCubit, AudioState>(
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () => Navigator.pop(context),
+              ),  
               title: const Text('قائمة التشغيل'),
+              backgroundColor: Theme.of(context).cardColor,
+              foregroundColor: Theme.of(context).primaryColorDark,
+              centerTitle: true,
+
               actions: [
                 // BlocBuilder<DownloadCubit, DownloadState>(
                 //   builder: (context, downloadState) {
@@ -161,15 +168,13 @@ class _PlaylistScreenState extends State<PlaylistScreen>
 
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          elevation: isCurrentItem ? 4 : 2,
+          // elevation: isCurrentItem ? 4 : 2,
           color:
-              isCurrentItem
-                  ? Theme.of(context).secondaryHeaderColor
-                  : Theme.of(context).cardColor,
+            
+                 Theme.of(context).cardColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          shadowColor: AppColors.white,
           child: InkWell(
             onTap: () async {
               final index = state.playlist.indexOf(item);
@@ -189,7 +194,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
               decoration: BoxDecoration(
                 border:
                     isCurrentItem
-                        ? Border.all(color: Colors.black, width: 2)
+                        ? Border.all(color: Theme.of(context).primaryColorDark, width: 2)
                         : const Border(),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -214,10 +219,17 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                                         isCurrentItem
                                             ? context.textTheme.titleLarge!
                                                 .copyWith(
-                                                  color: AppColors.black,
-                                                  fontWeight: FontWeight.bold,
+                                                 color: Theme.of(context).primaryColorDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Amiri',
+                                              fontSize: 18,
                                                 )
-                                            : context.textTheme.titleLarge,
+                                            : context.textTheme.titleLarge!.copyWith(
+                                              color: Theme.of(context).primaryColorDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Amiri',
+                                              fontSize: 18,
+                                            ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -232,9 +244,16 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                                         isCurrentItem
                                             ? context.textTheme.bodyLarge!
                                                 .copyWith(
-                                                  color: AppColors.black,
+                                              color: Theme.of(context).primaryColorDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Amiri',
+                                              fontSize: 18,
                                                 )
-                                            : context.textTheme.bodyLarge,
+                                            : context.textTheme.bodyLarge!.copyWith(
+                                              color: Theme.of(context).primaryColorDark,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Amiri',
+                                            ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -247,9 +266,15 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                               style:
                                   isCurrentItem
                                       ? context.textTheme.bodyLarge!.copyWith(
-                                        color: AppColors.black,
+                                       color: Theme.of(context).primaryColorDark,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Amiri',
+                                              fontSize: 18,
                                       )
-                                      : context.textTheme.bodyLarge,
+                                      : context.textTheme.bodyLarge!.copyWith(
+                                        color: Theme.of(context).primaryColorDark,
+                                        fontFamily: 'Amiri',
+                                      ),
                             ),
                           ],
                         ),
@@ -271,7 +296,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                           ),
                           child: Icon(
                             Icons.equalizer,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).primaryColorDark,
                             size: 20,
                           ),
                         ),
@@ -289,13 +314,15 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                               Text(
                                 'جاري التحميل...',
                                 style: context.textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontFamily: 'Amiri',
+                                  fontSize: 16,
                                 ),
                               ),
                               Text(
                                 '${downloadProgress.toStringAsFixed(0)}%',
                                 style: context.textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme.of(context).primaryColorDark,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -307,9 +334,9 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                             child: LinearProgressIndicator(
                               value: downloadProgress / 100,
                               minHeight: 6,
-                              backgroundColor: Colors.grey[300],
+                              backgroundColor: Theme.of(context).cardColor,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor,
+                                Theme.of(context).primaryColorDark,
                               ),
                             ),
                           ),
@@ -344,7 +371,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                 value: downloadProgress / 100,
                 strokeWidth: 3,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor,
+                  Theme.of(context).primaryColorDark,
                 ),
               ),
             ),
@@ -402,7 +429,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
         ];
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(2.0),
         child: _buildDownloadIcon(isDownloaded),
       ),
     );
@@ -415,7 +442,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
 
     return Icon(
       Icons.cloud_download_outlined,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).primaryColorDark,
       size: 28,
     );
   }
@@ -465,7 +492,7 @@ class _PlaylistScreenState extends State<PlaylistScreen>
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Theme.of(context).primaryColorDark.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

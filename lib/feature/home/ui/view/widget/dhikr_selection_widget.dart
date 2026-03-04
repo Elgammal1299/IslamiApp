@@ -18,32 +18,33 @@ class DhikrSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+      // margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).shadowColor,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Theme.of(context).shadowColor,
+        //     blurRadius: 10,
+        //     offset: const Offset(0, 5),
+        //   ),
+        // ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             "اختر ذكرًا للسبحة",
             style: context.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColorDark,
+              fontFamily: 'Amiri',
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 8),
           SizedBox(
-            height: 200,
+            height: 400,
             child: ListView.builder(
               itemCount: dhikrList.length,
               itemBuilder: (context, index) {
@@ -62,16 +63,19 @@ class DhikrSelectionWidget extends StatelessWidget {
                             isSelected
                                 ? Theme.of(
                                   context,
-                                ).primaryColor.withValues(alpha: 0.1)
-                                : Theme.of(context).primaryColor,
+                                ).cardColor
+                                : Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
                         border:
                             isSelected
                                 ? Border.all(
-                                  color: Theme.of(context).secondaryHeaderColor,
+                                  color: Theme.of(context).primaryColorDark,
                                   width: 2,
                                 )
-                                : null,
+                                : Border.all(
+                                  color: Colors.grey,
+                                  width:1,
+                                ),
                       ),
                       child: Row(
                         children: [
@@ -79,16 +83,18 @@ class DhikrSelectionWidget extends StatelessWidget {
                             child: Text(
                               dhikr.text,
                               style: context.textTheme.bodyMedium?.copyWith(
+                                fontFamily: 'Amiri',
+                                fontSize: 16,
                                 fontWeight:
                                     isSelected
                                         ? FontWeight.bold
                                         : FontWeight.normal,
                                 color:
                                     isSelected
-                                        ? Theme.of(context).secondaryHeaderColor
+                                        ? Theme.of(context).primaryColorDark
                                         : Theme.of(
                                           context,
-                                        ).colorScheme.onSurface,
+                                        ).primaryColorDark,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -96,7 +102,7 @@ class DhikrSelectionWidget extends StatelessWidget {
                           if (isSelected)
                             Icon(
                               Icons.check_circle,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColorDark,
                               size: 20,
                             ),
                         ],
@@ -107,30 +113,30 @@ class DhikrSelectionWidget extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: onCustomDhikr,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    "ذكر مخصص",
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          // const SizedBox(height: 15),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: ElevatedButton(
+          //         onPressed: onCustomDhikr,
+          //         style: ElevatedButton.styleFrom(
+          //           backgroundColor: Theme.of(context).primaryColor,
+          //           foregroundColor: Theme.of(context).colorScheme.onSurface,
+          //           padding: const EdgeInsets.symmetric(vertical: 12),
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(10),
+          //           ),
+          //         ),
+          //         child: Text(
+          //           "ذكر مخصص",
+          //           style: context.textTheme.titleMedium?.copyWith(
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );

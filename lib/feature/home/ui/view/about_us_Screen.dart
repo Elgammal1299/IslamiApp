@@ -12,7 +12,17 @@ class AboutUsScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('عن المطور')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        title: const Text('عن المطور'),
+        centerTitle: true,
+        foregroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).cardColor,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -23,12 +33,11 @@ class AboutUsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                     const CircleAvatar(
+                    const CircleAvatar(
                       radius: 70,
                       backgroundImage: AssetImage(AppImage.splashImageDark),
-                      
                     ),
-                      SizedBox(height: 12.h),
+                    SizedBox(height: 12.h),
                     Text(
                       'وَارْتَـــقِ',
                       style: textTheme.headlineMedium?.copyWith(
@@ -36,7 +45,6 @@ class AboutUsScreen extends StatelessWidget {
                         fontFamily: 'Amiri',
                       ),
                     ),
-                 
                   ],
                 ),
               ),
@@ -67,28 +75,55 @@ class AboutUsScreen extends StatelessWidget {
               // const SizedBox(height: 16),
               // Divider(color: theme.colorScheme.outlineVariant),
               const SizedBox(height: 8),
-              Text('رسالتنا', style: textTheme.titleLarge!.copyWith(fontFamily: 'Amiri', fontSize: 22.sp)),
+              Text(
+                'رسالتنا',
+                style: textTheme.titleLarge!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 22.sp,
+                ),
+              ),
               const SizedBox(height: 6),
               Text(
                 'نسعى لتقديم تجربة رقمية موثوقة وسهلة تُعين المسلم على تلاوة القرآن، سماع التلاوات، التذكير بالأذكار، والتعرّف على السنّة في واجهة عربية أنيقة.',
-                style: textTheme.bodyMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp),
+                style: textTheme.bodyMedium!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 18.sp,
+                ),
               ),
               const SizedBox(height: 8),
-              Text('رؤيتنا', style: textTheme.titleLarge!.copyWith(fontFamily: 'Amiri', fontSize: 22.sp)),
+              Text(
+                'رؤيتنا',
+                style: textTheme.titleLarge!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 22.sp,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 'أن تكون “وَارْتَـــقِ” رفيقك اليومي في الطاعة، مع محتوى موثّق وأداء سريع ودعم دون اتصال.',
-                style: textTheme.bodyMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp),
+                style: textTheme.bodyMedium!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 18.sp,
+                ),
               ),
               // const SizedBox(height: 16),
 
               // Divider(color: theme.colorScheme.outlineVariant),
               const SizedBox(height: 8),
-              Text('تواصل معنا', style: textTheme.titleLarge!.copyWith(fontFamily: 'Amiri', fontSize: 22.sp)),
+              Text(
+                'تواصل معنا',
+                style: textTheme.titleLarge!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 22.sp,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 'لأي استفسارات أو اقتراحات او مشاكل، لا تتردد في التواصل معنا عبر واتس أب أو تليجرام.',
-                style: textTheme.bodyMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp),
+                style: textTheme.bodyMedium!.copyWith(
+                  fontFamily: 'Amiri',
+                  fontSize: 18.sp,
+                ),
               ),
               const SizedBox(height: 8),
               InkWell(
@@ -153,8 +188,7 @@ class AboutUsScreen extends StatelessWidget {
                           fontSize: 16,
                         ),
                       ),
-                                            const Spacer(),
-
+                      const Spacer(),
 
                       SvgPicture.asset(AppImage.telegramIcon),
                     ],
@@ -174,7 +208,12 @@ class AboutUsScreen extends StatelessWidget {
                   width: 200.w,
 
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 3, 134, 242), // لون تليجرام
+                    color: const Color.fromARGB(
+                      255,
+                      3,
+                      134,
+                      242,
+                    ), // لون تليجرام
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: EdgeInsets.symmetric(
@@ -191,11 +230,7 @@ class AboutUsScreen extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      const Icon(
-                        Icons.facebook,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                      const Icon(Icons.facebook, color: Colors.white, size: 24),
                       // SvgPicture.asset(AppImage.telegramIcon),
                     ],
                   ),

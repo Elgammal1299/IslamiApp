@@ -59,6 +59,7 @@ class SebhaCounterWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColorDark,
+                        fontFamily: 'Amiri',
                         fontSize: sebhaSize * 0.25,
                       ),
                 ),
