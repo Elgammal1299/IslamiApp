@@ -1,5 +1,6 @@
 class AppRoutes {
-  static const homeRoute = '/';
+  static const splashRoute = '/';
+  static const homeRoute = '/home';
   static const navBarRoute = '/NavBarScreen';
   static const khatmahListRouter = '/khatmahList';
   static const createKhatmahRouter = '/createKhatmah';

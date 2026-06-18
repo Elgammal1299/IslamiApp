@@ -27,63 +27,43 @@ class _DateWidgetState extends State<DateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-     child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-      
-          color: Theme.of(context).cardColor,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 6.h),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Theme.of(context).primaryColorDark.withOpacity(0.5),
+          width: 1,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-        child: Column(
+      ),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _showHijri = !_showHijri;
+          });
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showHijri = !_showHijri;
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _showHijri ? 'التاريخ الهجري' : 'التاريخ الميلادي',
-                        style: TextStyle(
-                          color:  Theme.of(context).primaryColorDark,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Uthmanic',
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        _showHijri ? _getHijriDate() : _getGregorianDate(),
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColorDark,
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Uthmanic',
-                        ),
-                      ),
-                    ],
+           Text(
+                  _showHijri ? _getHijriDate() : _getGregorianDate(),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Uthmanic',
                   ),
-                  Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorDark.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.swap_horiz_rounded,
-                      color: Theme.of(context).primaryColorDark,
-                      size: 20.sp,
-                    ),
-                  ),
-                ],
+                ),
+                SizedBox(width: 12.w),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.swap_horiz_rounded,
+                color: Theme.of(context).primaryColorDark,
+                size: 22.sp,
               ),
             ),
           ],

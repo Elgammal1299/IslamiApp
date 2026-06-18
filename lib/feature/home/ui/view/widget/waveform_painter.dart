@@ -17,7 +17,6 @@ class WaveformPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width * 0.3;
-
     for (int i = 0; i < numberOfBars; i++) {
       final angle = (i * 2 * pi) / numberOfBars;
       final barHeight =

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_image.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
+import 'package:islami_app/feature/home/ui/view/drawer_screen/widget/custom_feature_item.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
@@ -56,40 +57,40 @@ class AboutAppScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text('المزايا الرئيسية', style: textTheme.titleLarge!.copyWith(fontFamily: 'Amiri', fontSize: 22.sp)),
               const SizedBox(height: 12),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'القرآن الكريم',
                 subtitle: 'تصفح السور، البحث، الحفظ والمتابعة، وعرض التفسير.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'التلاوات الصوتية',
                 subtitle:
                     'استماع للتلاوات، شاشة “الآن يُشغّل”، وتنزيل المقاطع للاستخدام دون اتصال.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'الأذكار والدعاء',
                 subtitle: 'أذكار اليوم والليلة وعرض منسق.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'الحديث الشريف',
                 subtitle: 'عرض الأحاديث وتفاصيلها بسهولة.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'أوقات الصلاة والقبلة',
                 subtitle: 'عرض مواقيت الصلاة واتجاه القبلة باستخدام الموقع.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'الراديو الإسلامي',
                 subtitle: 'استمع إلى قنوات الراديو الإسلامية مباشرة.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'السبحة',
                 subtitle: 'عداد أذكار بسيط مع تحكم سريع.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'الإشعارات',
                 subtitle: 'استقبال تنبيهات مخصّصة عبر خدمة الرسائل السحابية.',
               ),
-              const _FeatureItem(
+              const CustomFeatureItem(
                 title: 'الوضع الليلي',
                 subtitle: 'تبديل سريع بين الوضع الفاتح والداكن.',
               ),
@@ -97,41 +98,6 @@ class AboutAppScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _FeatureItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const _FeatureItem({required this.title, required this.subtitle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.check_circle,
-            size: 20,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp)),
-                const SizedBox(height: 2),
-                Text(subtitle, style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontFamily: 'Amiri', fontSize: 18.sp)),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

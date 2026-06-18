@@ -10,7 +10,7 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubi
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
 import 'package:islami_app/feature/home/data/model/home_model.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/widget/custom_drawer.dart';
+import 'package:islami_app/feature/home/ui/view/drawer_screen/custom_drawer.dart';
 import 'package:islami_app/feature/home/ui/view/widget/date_widget.dart';
 import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<SurahCubit>(context, listen: false).getSurahs();
-  checkForUpdate(context);
+    checkForUpdate(context);
     // Initialize the shared prayer times provider
     SharedPrayerTimesProvider.instance.initialize();
 
@@ -41,25 +41,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> checkForUpdate(BuildContext context) async {
+    final newVersion = NewVersionPlus(androidId: "com.islamic.wartaqi.app");
 
-Future<void> checkForUpdate(BuildContext context) async {
-  final newVersion = NewVersionPlus(
-    androidId: "com.islamic.wartaqi.app", 
-  );
+    final status = await newVersion.getVersionStatus();
 
-  final status = await newVersion.getVersionStatus();
-
-  if (status != null && status.canUpdate) {
-    newVersion.showUpdateDialog(
-      context: context,
-      versionStatus: status,
-      dialogTitle: "تحديث جديد متاح 🚀",
-      dialogText: "يوجد إصدار جديد من التطبيق، يُفضل التحديث للحصول على أحدث المميزات.",
-      updateButtonText: "حدث الآن",
-      dismissButtonText: "لاحقًا",
-    );
+    if (status != null && status.canUpdate) {
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: "تحديث جديد متاح 🚀",
+        dialogText:
+            "يوجد إصدار جديد من التطبيق، يُفضل التحديث للحصول على أحدث المميزات.",
+        updateButtonText: "حدث الآن",
+        dismissButtonText: "لاحقًا",
+      );
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     // final isDark = context.watch<ThemeCubit>().state is ThemeChanged;
@@ -73,13 +72,7 @@ Future<void> checkForUpdate(BuildContext context) async {
       appBar: AppBar(
         backgroundColor: Theme.of(context).cardColor,
         foregroundColor: Theme.of(context).primaryColorDark,
-        title: Text(
-          "اقْرَأْ وَارْتَقِ وَرَتِّلْ",
-          style: context.textTheme.titleLarge!.copyWith(
-            fontFamily: 'Amiri',
-            fontSize: 22.sp,
-          ),
-        ),
+        title: const DateWidget(),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -101,7 +94,7 @@ Future<void> checkForUpdate(BuildContext context) async {
                 child: Stack(
                   children: [
                     Image.asset('assets/images/banner.png'),
-                    const Positioned(bottom: 0, child: PrayerAndDateWidget()),
+                    // const Positioned(bottom: 0, child: PrayerAndDateWidget()),
                     Positioned(
                       child: BlocBuilder<
                         ReadingProgressCubit,
@@ -140,7 +133,7 @@ Future<void> checkForUpdate(BuildContext context) async {
           ),
 
           // Prayer Times & Date Widget (Combined)
-          const SliverToBoxAdapter(child: DateWidget()),
+          // const SliverToBoxAdapter(child: DateWidget()),
 
           // Grid of items
           SliverPadding(
@@ -156,7 +149,7 @@ Future<void> checkForUpdate(BuildContext context) async {
               ),
             ),
           ),
-          
+
           // const SliverToBoxAdapter(child: SizedBox(height: 100)),
           const SliverToBoxAdapter(
             child: Padding(
@@ -232,7 +225,7 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                     Text(
                       dua.content,
                       textAlign: TextAlign.justify,
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontFamily: 'uthmanic',
                         fontWeight: FontWeight.bold,
 
@@ -247,7 +240,7 @@ class AnimatedAyahSwitcher extends StatelessWidget {
                         Expanded(
                           child: Text(
                             dua.reference,
-                            style:  TextStyle(
+                            style: TextStyle(
                               fontFamily: 'uthmanic',
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -322,8 +315,28 @@ class CustomReadingQuran extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.bookmark_outline_outlined,
+                          color: AppColors.white,
+                          size: 22.sp,
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          'آخر المتصفحات',
+                          style: theme.textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                            fontSize: 22.sp,
+                            fontFamily: 'uthmanic',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
                     Text(
-                      quran.getSurahNameArabic(surah),
+                      "سورة ${ quran.getSurahNameArabic(surah)}".toString(),
                       style: theme.textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
@@ -331,9 +344,8 @@ class CustomReadingQuran extends StatelessWidget {
                         fontFamily: 'uthmanic',
                       ),
                     ),
-                    // SizedBox(height: 4.h),
                     Text(
-                      "آية $ayah - صفحة $pageNumber",
+                      "صفحة $pageNumber",
                       style: theme.textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
@@ -341,8 +353,12 @@ class CustomReadingQuran extends StatelessWidget {
                         fontFamily: 'uthmanic',
                       ),
                     ),
+                    SizedBox(height: 4.h),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -359,7 +375,7 @@ class CustomReadingQuran extends StatelessWidget {
 
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontFamily: 'uthmanic',
-                          fontSize: 20.sp,
+                          fontSize: 22.sp,
                         ),
                       ),
                     ),
@@ -401,7 +417,6 @@ class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
                     Text(
                       'الصلاة القادمة : ',
                       style: TextStyle(
-                        color: AppColors.white,
                         fontSize: 22.sp,
                         fontFamily: 'uthmanic',
                         fontWeight: FontWeight.bold,
@@ -440,5 +455,3 @@ class _PrayerAndDateWidgetState extends State<PrayerAndDateWidget> {
     );
   }
 }
-
-

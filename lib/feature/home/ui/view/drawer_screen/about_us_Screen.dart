@@ -48,32 +48,7 @@ class AboutUsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              // Row(
-              //   children: [
-              //     CircleAvatar(
-              //       radius: 28,
-              //       backgroundColor: theme.colorScheme.primary,
-              //       child: Icon(
-              //         Icons.mosque,
-              //         color: theme.colorScheme.secondary,
-              //         size: 28,
-              //       ),
-              //     ),
-              //     const SizedBox(width: 12),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Text('وَارْتَـــقِ', style: textTheme.titleLarge),
-              //         Text(
-              //           'منصة إسلامية للقراءة، الاستماع، الذِّكر والتدبر',
-              //           style: textTheme.bodyMedium,
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 16),
-              // Divider(color: theme.colorScheme.outlineVariant),
+         
               const SizedBox(height: 8),
               Text(
                 'رسالتنا',

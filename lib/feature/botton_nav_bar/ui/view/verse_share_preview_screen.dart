@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:qcf_quran_plus/src/widgets/surah_header_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:islami_app/feature/botton_nav_bar/data/model/verse_share_theme.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qcf_quran/qcf_quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -287,12 +288,12 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   Widget _buildImageContent() {
     final pageNumber = quran.getPageNumber(widget.surah, widget.ayah);
     final pageFont = "QCF_P${pageNumber.toString().padLeft(3, '0')}";
-    final verseText = getVerseQCF(
+    final verseText = getVerse(
       widget.surah,
       widget.ayah,
       verseEndSymbol: false,
     );
-    final verseNumberSymbol = getVerseNumberQCF(widget.surah, widget.ayah);
+    final verseNumberSymbol = getaya_noQCF(widget.surah, widget.ayah);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -301,37 +302,30 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          HeaderWidget(
-            suraNumber: widget.surah,
-            theme:
-                _selectedTheme == VerseShareTheme.themes[1]
-                    ? QcfThemeData(
-                      customHeaderBuilder:
-                          (surahNumber) => Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const Image(
-                                image: AssetImage(
-                                  "assets/images/mainframedark.png",
-                                ),
-                              ),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  text: widget.surah.toString(),
-                                  style: TextStyle(
-                                    fontFamily: "arsura",
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                        0.07,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                    )
-                    : null,
-          ),
+          _selectedTheme == VerseShareTheme.themes[1]
+              ? Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Image(
+                      image: AssetImage(
+                        "assets/images/mainframedark.png",
+                      ),
+                    ),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: widget.surah.toString(),
+                        style: TextStyle(
+                          fontFamily: "arsura",
+                          fontSize: MediaQuery.of(context).size.width * 0.07,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : SurahHeaderWidget(
+                  suraNumber: widget.surah,
+                ),
 
           Directionality(
             textDirection: TextDirection.rtl,
@@ -343,7 +337,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                         "${verseText.substring(0, 1)}\u200A${verseText.substring(1)}",
                     style: TextStyle(
                       fontFamily: pageFont,
-                      package: 'qcf_quran',
+                      package: 'qcf_quran_plus',
                       fontSize: _fontSize.sp,
                       color: _selectedTheme.primaryColor,
                       height: 2.2,
@@ -353,7 +347,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
                         text: " $verseNumberSymbol",
                         style: TextStyle(
                           fontFamily: pageFont,
-                          package: 'qcf_quran',
+                          package: 'qcf_quran_plus',
                           fontSize: _fontSize.sp,
                           color:_selectedTheme.secondaryColor,
                           height: 2,

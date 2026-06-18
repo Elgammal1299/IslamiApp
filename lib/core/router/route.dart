@@ -12,8 +12,8 @@ import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubi
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/reading_progress_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/about_app_screen.dart';
-import 'package:islami_app/feature/home/ui/view/about_us_Screen.dart';
+import 'package:islami_app/feature/home/ui/view/drawer_screen/about_app_screen.dart';
+import 'package:islami_app/feature/home/ui/view/drawer_screen/about_us_Screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/now_playing_screen.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/reciters_surah_list.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/audio_manager_cubit/audio_cubit.dart';
@@ -26,7 +26,7 @@ import 'package:islami_app/feature/home/ui/view/azkar/view_model/azkar_yawmi_cub
 import 'package:islami_app/feature/home/ui/view_model/hadith_40_cubit/hadith_40_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view_model/cubit/download_cubit.dart';
 import 'package:islami_app/feature/home/ui/view/azkar/view_model/quran_dua_cubit/quran_dua_cubit.dart';
-import 'package:islami_app/feature/home/ui/view/downloads_screen.dart';
+import 'package:islami_app/feature/home/ui/view/drawer_screen/downloads_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_40_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_details_screen.dart';
 import 'package:islami_app/feature/home/ui/view/hadith_screen.dart';
@@ -52,6 +52,7 @@ import 'package:islami_app/feature/notification/ui/view_model/cubit/notification
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/verse_selection_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/verse_share_preview_screen.dart';
+import 'package:islami_app/feature/splash_screen/splash_screen.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
@@ -135,6 +136,8 @@ class AppRouter {
 
       case AppRoutes.sebhaPageRouter:
         return MaterialPageRoute(builder: (_) => const SebhaScreen());
+      case AppRoutes.splashRoute:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case AppRoutes.azkarPageRouter:
         return MaterialPageRoute(

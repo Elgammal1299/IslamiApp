@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +28,14 @@ class AppInitializer {
   static Future<void> init() async {
     // ✅ 1. Initialize Flutter binding FIRST
     WidgetsFlutterBinding.ensureInitialized();
+
+    // ✅ Initialize QCF Fonts
+    // try {
+    //   await QcfFontLoader.setupFontsAtStartup();
+    //   log('✅ QCF Fonts initialized successfully');
+    // } catch (e) {
+    //   log('⚠️ Error initializing QCF fonts: $e');
+    // }
 
     // ✅ 7. Initialize Hive
     await Hive.initFlutter();
@@ -78,10 +87,12 @@ class AppInitializer {
     _initializeAppServices();
 
     // ✅ 11. Set orientations
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+   await SystemChrome.setPreferredOrientations([
+  DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+  DeviceOrientation.landscapeLeft,
+  DeviceOrientation.landscapeRight,
+]);
 
     // ✅ 12. Run app
     runApp(

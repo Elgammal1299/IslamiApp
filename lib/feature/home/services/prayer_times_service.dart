@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:islami_app/feature/home/services/location_service.dart';
+import 'package:islami_app/core/services/home_widget_service.dart';
 
 /// Encapsulates all Adhan logic: location, calculation method, madhab, etc.
 class PrayerTimesService {
@@ -196,6 +197,20 @@ class SharedPrayerTimesProvider extends ChangeNotifier {
       _countdown = _tomorrowFajr!.difference(DateTime.now());
     } else {
       _countdown = Duration.zero;
+    }
+
+    _updateHomeWidgetIfNeeded();
+  }
+
+  void _updateHomeWidgetIfNeeded() {
+    if (_todayTimes != null) {
+      // Fire-and-forget: update every second for live seconds countdown
+      HomeWidgetService.updatePrayerTimesWidget(
+        prayerTimes: _todayTimes!,
+        currentPrayer: _currentPrayer ?? Prayer.none,
+        nextPrayer: _nextPrayer ?? Prayer.none,
+        countdown: _countdown,
+      );
     }
   }
 

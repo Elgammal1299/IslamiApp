@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:qcf_quran_plus/src/widgets/surah_header_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran/quran.dart' as quran;
-import 'package:qcf_quran/qcf_quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class VerseShareImage extends StatelessWidget {
   final int surah;
@@ -13,8 +14,8 @@ class VerseShareImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final pageNumber = quran.getPageNumber(surah, ayah);
     final pageFont = "QCF_P${pageNumber.toString().padLeft(3, '0')}";
-    final verseText = getVerseQCF(surah, ayah, verseEndSymbol: false);
-    final verseNumberSymbol = getVerseNumberQCF(surah, ayah);
+    final verseText = getVerse(surah, ayah, verseEndSymbol: false);
+    final verseNumberSymbol = getaya_noQCF(surah, ayah);
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -24,7 +25,7 @@ class VerseShareImage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Use the EXACT HeaderWidget from qcf_quran package
-          HeaderWidget(suraNumber: surah),
+          SurahHeaderWidget(suraNumber: surah),
 
           SizedBox(height: 15.h),
 
@@ -40,7 +41,7 @@ class VerseShareImage extends StatelessWidget {
                       text: verseText,
                       style: TextStyle(
                         fontFamily: pageFont,
-                        package: 'qcf_quran',
+                        package: 'qcf_quran_plus',
                         fontSize: 20.sp,
                         color: Colors.black,
                         height: 2.2, // Mushaf height
@@ -50,7 +51,7 @@ class VerseShareImage extends StatelessWidget {
                       text: verseNumberSymbol,
                       style: TextStyle(
                         fontFamily: pageFont,
-                        package: 'qcf_quran',
+                        package: 'qcf_quran_plus',
                         fontSize: 18.sp,
                         color: Colors.brown,
                       ),
