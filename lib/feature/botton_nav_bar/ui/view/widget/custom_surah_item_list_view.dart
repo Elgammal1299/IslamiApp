@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/sura_list_view_item.dart';
-import 'package:quran/quran.dart';
+// import 'package:quran/quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class CustomSurahItemListView extends StatelessWidget {
   const CustomSurahItemListView({

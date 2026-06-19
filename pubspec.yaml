@@ -31,8 +31,6 @@ dependencies:
   just_audio: ^0.10.5
   logger: ^2.5.0
   path_provider: ^2.1.5
-  quran:
-    path: ./quran-1.2.2
   retrofit: ^4.9.1
   rxdart: ^0.28.0
   share_plus: ^12.0.1
@@ -69,6 +67,7 @@ dependencies:
   flutter_timezone: ^5.0.1
   new_version_plus: ^1.0.1
   home_widget: 0.9.0
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:

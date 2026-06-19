@@ -8,8 +8,7 @@ import 'package:islami_app/core/helper/audio_manager.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/data/model/reciters_model.dart';
 import 'package:islami_app/feature/home/ui/view/all_reciters/view/widget/audio_app_wrapper.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:quran/quran.dart' as quran;
-
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 class RecitersSurahList extends StatefulWidget {
   final Moshaf moshaf;
   final String name;
@@ -56,7 +55,7 @@ class _RecitersSurahListState extends State<RecitersSurahList> {
           final formattedNumber = surahNumber.toString().padLeft(3, '0');
           return MediaItem(
             id: '${widget.moshaf.server}$formattedNumber.mp3',
-            title: quran.getSurahNameArabic(surahNumber),
+            title: getSurahNameArabic(surahNumber),
 
             // genre: 'عبدالباسط',
             displayTitle: widget.name,

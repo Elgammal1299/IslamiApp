@@ -5,8 +5,8 @@ import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/tafsir_page_model.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/tafsir_cubit/tafsir_cubit.dart';
-import 'package:quran/quran.dart' as quran;
-
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 class TafsirDetailsScreen extends StatefulWidget {
   /// رقم الصفحة في المصحف (1-604)
   final int pageNumber;
@@ -363,11 +363,7 @@ class _TafsirDetailsScreenState extends State<TafsirDetailsScreen> {
                       //     : null,
                 ),
                 child: Text(
-                  quran.getVerse(
-                    ayah.surahNumber ?? 1,
-                    ayah.numberInSurah ?? 1,
-                    verseEndSymbol: true,
-                  ),
+                  getVerse(ayah.surahNumber ?? 1, ayah.numberInSurah ?? 1, verseEndSymbol: true),
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.justify,
                   style: context.textTheme.titleMedium?.copyWith(

@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/reciter_edition.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/quran_audio_cubit/quran_audio_cubit.dart';
-import 'package:quran/quran.dart' as quran;
-
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 class AudioBottomSheet extends StatefulWidget {
   final int ayahNumber;
   final String ayahText;
@@ -120,13 +120,13 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   int _calculateGlobalAyahNumber(int surah, int ayah) {
     int total = 0;
     for (int i = 1; i < surah; i++) {
-      total += quran.getVerseCount(i);
+      total += getVerseCount(i);
     }
     return total + ayah;
   }
 
   void _nextAyah({bool fromAuto = false}) {
-    int totalVerses = quran.getVerseCount(_currentSurahNumber);
+    int totalVerses = getVerseCount(_currentSurahNumber);
     bool shouldPlay = fromAuto || _isPlaying;
 
     if (_currentAyahNumber < totalVerses) {
@@ -158,7 +158,7 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
       int prevSurah = _currentSurahNumber - 1;
       _updateAyah(
         prevSurah,
-        quran.getVerseCount(prevSurah),
+        getVerseCount(prevSurah),
         keepPlaying: shouldPlay,
       );
     }
@@ -169,8 +169,8 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
       _isTransitioning = true; // بدء الانتقال
       _currentSurahNumber = surah;
       _currentAyahNumber = ayah;
-      _currentSurahName = quran.getSurahNameArabic(surah);
-      _currentAyahText = quran.getVerse(surah, ayah, verseEndSymbol: true);
+      _currentSurahName = getSurahNameArabic(surah);
+      _currentAyahText = getVerse(surah, ayah, verseEndSymbol: true);
       _isPlaying = keepPlaying;
       _position = Duration.zero;
       _duration = Duration.zero;

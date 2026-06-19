@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/surah_repository.dart';
-import 'package:quran/quran.dart';
+// import 'package:quran/quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:share_plus/share_plus.dart';
 part 'surah_state.dart';
 

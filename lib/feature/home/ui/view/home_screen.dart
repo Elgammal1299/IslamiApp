@@ -16,7 +16,7 @@ import 'package:islami_app/feature/home/ui/view/widget/home_item_card.dart';
 import 'package:islami_app/feature/home/services/prayer_times_service.dart';
 import 'package:islami_app/feature/khatmah/utils/khatmah_constants.dart';
 import 'package:new_version_plus/new_version_plus.dart';
-import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -336,7 +336,7 @@ class CustomReadingQuran extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "سورة ${ quran.getSurahNameArabic(surah)}".toString(),
+                      "سورة ${getSurahNameArabic(surah)}".toString(),
                       style: theme.textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,

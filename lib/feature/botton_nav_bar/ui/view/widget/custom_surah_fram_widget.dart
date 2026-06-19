@@ -146,7 +146,8 @@ import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class CustomSurahFramWidget extends StatelessWidget
     implements PreferredSizeWidget {
@@ -208,8 +209,8 @@ class CustomSurahFramWidget extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final pos = QuranPageIndex.firstAyahOnPage(index);
-    final surahName = quran.getSurahNameArabic(pos.surah);
-    // final juz = quran.getJuzNumber(pos.surah, pos.ayah);
+    final surahName = getSurahNameArabic(pos.surah);
+    // final juz = getJuzNumber(pos.surah, pos.ayah);
 
     return AppBar(
       centerTitle: false,
@@ -440,13 +441,13 @@ class _BookmarksPopupMenuState extends State<BookmarksPopupMenu> {
                         final surah = int.parse(parts[0]);
                         final ayah = int.parse(parts[1]);
                         final verseText =
-                            quran.getVerse(surah, ayah, verseEndSymbol: false);
-                        final surahName = quran.getSurahNameArabic(surah);
+                            getVerse(surah, ayah, verseEndSymbol: false);
+                        final surahName = getSurahNameArabic(surah);
                         final truncatedVerse = _truncateText(verseText, 40);
 
                         return InkWell(
                           onTap: () {
-                            final pageNumber = quran.getPageNumber(surah, ayah);
+                            final pageNumber = getPageNumber(surah, ayah);
                             Navigator.pop(context); // Close popup first
                             Navigator.pushNamed(
                               context,

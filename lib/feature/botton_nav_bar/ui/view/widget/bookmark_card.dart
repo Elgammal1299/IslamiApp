@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/bookmarks/bookmark_cubit.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class BookmarkCard extends StatelessWidget {
   final int surah;
@@ -15,7 +16,7 @@ class BookmarkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final pageNumber = quran.getPageNumber(surah, ayah);
+        final pageNumber = getPageNumber(surah, ayah);
         Navigator.pushNamed(
           context,
           AppRoutes.quranViewRouter,
@@ -39,7 +40,7 @@ class BookmarkCard extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'سورة ${quran.getSurahNameArabic(surah)} ($ayah)',
+                    'سورة ${getSurahNameArabic(surah)} ($ayah)',
                     style: Theme.of(
                       context,
                     ).textTheme.titleLarge!.copyWith(color: AppColors.white),
@@ -74,7 +75,7 @@ class BookmarkCard extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(16),
               child: Text(
-                quran.getVerse(surah, ayah),
+                getVerse(surah, ayah),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge!.copyWith(color: AppColors.black),

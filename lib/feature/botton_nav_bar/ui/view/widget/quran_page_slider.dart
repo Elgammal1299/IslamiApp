@@ -2,7 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/constant/app_color.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/quran_screen.dart';
 
 class QuranPageSlider extends StatelessWidget {
@@ -21,7 +22,7 @@ class QuranPageSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get surah name for the current page
     final pos = QuranPageIndex.firstAyahOnPage(currentPage);
-    final surahName = quran.getSurahNameArabic(pos.surah);
+    final surahName = getSurahNameArabic(pos.surah);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.r),

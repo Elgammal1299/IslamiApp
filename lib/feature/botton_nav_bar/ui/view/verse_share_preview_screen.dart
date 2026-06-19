@@ -8,7 +8,7 @@ import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qcf_quran_plus/qcf_quran_plus.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:gal/gal.dart';
@@ -286,7 +286,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   }
 
   Widget _buildImageContent() {
-    final pageNumber = quran.getPageNumber(widget.surah, widget.ayah);
+    final pageNumber = getPageNumber(widget.surah, widget.ayah);
     final pageFont = "QCF_P${pageNumber.toString().padLeft(3, '0')}";
     final verseText = getVerse(
       widget.surah,
@@ -450,7 +450,7 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
     await Share.shareXFiles(
       [XFile(file.path)],
       text:
-          "سورة ${quran.getSurahNameArabic(widget.surah)} آية ${widget.ayah}\nتمت المشاركة من تطبيق وارتَقِ",
+          "سورة ${getSurahNameArabic(widget.surah)} آية ${widget.ayah}\nتمت المشاركة من تطبيق وارتَقِ",
     );
   }
 

@@ -7,7 +7,8 @@ import 'package:islami_app/core/services/setup_service_locator.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/audio_bottom_sheet.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/quran_audio_cubit/quran_audio_cubit.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/verse_selection_cubit.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 class VerseActionHandler {
@@ -35,9 +36,9 @@ class VerseActionHandler {
                 value: sl<QuranAudioCubit>(),
                 child: AudioBottomSheet(
                   ayahNumber: ayah,
-                  ayahText: quran.getVerse(surah, ayah, verseEndSymbol: true),
+                  ayahText: getVerse(surah, ayah, verseEndSymbol: true),
                   surahNumber: surah,
-                  surahName: quran.getSurahNameArabic(surah),
+                  surahName: getSurahNameArabic(surah),
                 ),
               ),
         );
@@ -47,14 +48,14 @@ class VerseActionHandler {
           context,
           AppRoutes.tafsirDetailsByAyahRouter,
           arguments: {
-            "pageNumber": quran.getPageNumber(surah, ayah),
+            "pageNumber": getPageNumber(surah, ayah),
             "targetVerse": cumulativeNumber,
-            "text": quran.getVerse(surah, ayah),
+            "text": getVerse(surah, ayah),
           },
         );
         break;
       case 2: // Copy
-        Clipboard.setData(ClipboardData(text: quran.getVerse(surah, ayah)));
+        Clipboard.setData(ClipboardData(text: getVerse(surah, ayah)));
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('تم نسخ الآية')));
@@ -75,7 +76,7 @@ class VerseActionHandler {
         break;
       case 4: // Share Text
         Share.share(
-          '${quran.getVerse(surah, ayah)}\n\nسورة ${quran.getSurahNameArabic(surah)} - آية $ayah',
+          '${getVerse(surah, ayah)}\n\nسورة ${getSurahNameArabic(surah)} - آية $ayah',
         );
         break;
       case 5: // Share Image (Preview & Customize)
@@ -91,7 +92,7 @@ class VerseActionHandler {
   static int _getCumulativeAyahNumber(int surahNumber, int ayahNumber) {
     int cumulativeNumber = 0;
     for (int i = 1; i < surahNumber; i++) {
-      cumulativeNumber += quran.getVerseCount(i);
+      cumulativeNumber += getVerseCount(i);
     }
     return cumulativeNumber + ayahNumber;
   }

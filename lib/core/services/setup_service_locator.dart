@@ -89,9 +89,9 @@ Future<void> setupServiceLocator() async {
   });
 
   // AudioService
-  sl.registerLazySingleton<AudioService>(() {
-    return AudioService();
-  });
+  // sl.registerLazySingleton<AudioService>(() {
+  //   return AudioService();
+  // });
 
   // QuranAudioService
   sl.registerLazySingleton<QuranAudioService>(() {

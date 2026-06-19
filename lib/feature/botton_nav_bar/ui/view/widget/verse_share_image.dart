@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qcf_quran_plus/src/widgets/surah_header_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quran/quran.dart' as quran;
+// import 'package:quran/quran.dart' as quran;
 import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class VerseShareImage extends StatelessWidget {
@@ -12,7 +12,7 @@ class VerseShareImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageNumber = quran.getPageNumber(surah, ayah);
+    final pageNumber = getPageNumber(surah, ayah);
     final pageFont = "QCF_P${pageNumber.toString().padLeft(3, '0')}";
     final verseText = getVerse(surah, ayah, verseEndSymbol: false);
     final verseNumberSymbol = getaya_noQCF(surah, ayah);

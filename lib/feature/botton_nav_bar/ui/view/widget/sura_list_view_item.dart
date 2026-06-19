@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:islami_app/core/extension/theme_text.dart';
 import 'package:islami_app/core/router/app_routes.dart';
-import 'package:quran/quran.dart';
-
+// import 'package:quran/quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 class SuraListViewItem extends StatelessWidget {
   const SuraListViewItem({
     super.key,

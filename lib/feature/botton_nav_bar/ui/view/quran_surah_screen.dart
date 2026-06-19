@@ -1,12 +1,145 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:islami_app/core/constant/app_color.dart';
+// import 'package:islami_app/core/router/app_routes.dart';
+// import 'package:islami_app/core/widget/error_widget.dart';
+// import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
+// import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_item_list_view.dart';
+// import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
+// import 'package:quran/quran.dart';
+
+// class QuranSurahScreen extends StatefulWidget {
+//   const QuranSurahScreen({super.key});
+
+//   @override
+//   State<QuranSurahScreen> createState() => _QuranSurahScreenState();
+// }
+
+// class _QuranSurahScreenState extends State<QuranSurahScreen> {
+//   final ValueNotifier<List<SurahModel>> searchedForSurah = ValueNotifier([]);
+//   final _searchTextSurahController = TextEditingController();
+
+//   @override
+//   void dispose() {
+//     _searchTextSurahController.dispose();
+//     searchedForSurah.dispose();
+//     super.dispose();
+//   }
+
+//   void addSearchedForSurahToSearchedList(String searchQuery) {
+//     final surahCubit = BlocProvider.of<SurahCubit>(context).surahs;
+//     if (searchQuery.isNotEmpty) {
+//       searchedForSurah.value =
+//           surahCubit.where((sura) {
+//             final suraName = sura.englishName.toLowerCase();
+//             final suraNameTranslated =
+//                 getSurahNameArabic(sura.number).toLowerCase();
+//             return suraName.contains(searchQuery.toLowerCase()) ||
+//                 suraNameTranslated.contains(searchQuery.toLowerCase());
+//           }).toList();
+//     } else {
+//       searchedForSurah.value = [];
+//     }
+//   }
+
+//   List<Widget> _buildAppBarActions() {
+//     return [
+//       IconButton(
+//         onPressed: () {
+//           Navigator.pushNamed(context, AppRoutes.searchRouter);
+//         },
+//         icon:  Icon(Icons.search, color: Theme.of(context).primaryColorDark,),
+//       ),
+//     ];
+//   }
+
+//   Widget _buildAppBarTitle() => const Text('القرآن الكريم');
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false,
+//         leading: IconButton(
+//           icon: const Icon(Icons.arrow_back_ios),
+//           onPressed: () => Navigator.pop(context),
+//         ),
+//         backgroundColor:  Theme.of(context).cardColor,
+//         title: _buildAppBarTitle(),
+//         actions: _buildAppBarActions(),
+//         foregroundColor: Theme.of(context).primaryColorDark,
+//         centerTitle: true,
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: Column(
+//           children: [
+//             TextField(
+//               style:  TextStyle(
+//                 color: Theme.of(context).primaryColorDark,
+//                 fontSize: 18,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//               onTapOutside: (event) {
+//                 FocusScope.of(context).unfocus();
+//               },
+//               controller: _searchTextSurahController,
+//               cursorColor:  Theme.of(context).primaryColorDark,
+//               // style: const TextStyle(color: AppColors.black),
+//               decoration:  InputDecoration(
+//                 hintText: 'ابحث عن سورة...',
+//                 border: InputBorder.none,
+//                 hintStyle: TextStyle(color: Theme.of(context).primaryColorDark,),
+//                 fillColor:  Theme.of(context).cardColor,
+//               ),
+//               onChanged: (searchedSurah) {
+//                 addSearchedForSurahToSearchedList(searchedSurah);
+//               },
+//             ),
+//             Expanded(
+//               child: BlocBuilder<SurahCubit, SurahState>(
+//                 builder: (context, state) {
+//                   if (state is SurahLoading) {
+//                     return const Center(child: CircularProgressIndicator());
+//                   }
+//                   if (state is SurahError) {
+//                     return customErrorWidget(
+//                       onPressed: () {
+//                         BlocProvider.of<SurahCubit>(context).surahs;
+//                       },
+//                     );
+//                   }
+//                   if (state is SurahSuccess) {
+//                     return ValueListenableBuilder<List<SurahModel>>(
+//                       valueListenable: searchedForSurah,
+//                       builder: (context, filteredSurahs, _) {
+//                         return CustomSurahItemListView(
+//                           surahs: state.surahs,
+//                           searchTextSurahController: _searchTextSurahController,
+//                           searchedForSurah: filteredSurahs,
+//                         );
+//                       },
+//                     );
+//                   }
+//                   return const SizedBox.shrink();
+//                 },
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islami_app/core/constant/app_color.dart';
 import 'package:islami_app/core/router/app_routes.dart';
 import 'package:islami_app/core/widget/error_widget.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/sura.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view/widget/custom_surah_item_list_view.dart';
 import 'package:islami_app/feature/botton_nav_bar/ui/view_model/surah/surah_cubit.dart';
-import 'package:quran/quran.dart';
+import 'package:qcf_quran_plus/qcf_quran_plus.dart';
 
 class QuranSurahScreen extends StatefulWidget {
   const QuranSurahScreen({super.key});
@@ -48,7 +181,7 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         onPressed: () {
           Navigator.pushNamed(context, AppRoutes.searchRouter);
         },
-        icon:  Icon(Icons.search, color: Theme.of(context).primaryColorDark,),
+        icon: Icon(Icons.search, color: Theme.of(context).primaryColorDark),
       ),
     ];
   }
@@ -58,14 +191,13 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
-        backgroundColor:  Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         title: _buildAppBarTitle(),
         actions: _buildAppBarActions(),
         foregroundColor: Theme.of(context).primaryColorDark,
@@ -76,7 +208,7 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
         child: Column(
           children: [
             TextField(
-              style:  TextStyle(
+              style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -85,13 +217,14 @@ class _QuranSurahScreenState extends State<QuranSurahScreen> {
                 FocusScope.of(context).unfocus();
               },
               controller: _searchTextSurahController,
-              cursorColor:  Theme.of(context).primaryColorDark,
-              // style: const TextStyle(color: AppColors.black),
-              decoration:  InputDecoration(
+              cursorColor: Theme.of(context).primaryColorDark,
+              decoration: InputDecoration(
                 hintText: 'ابحث عن سورة...',
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Theme.of(context).primaryColorDark,),
-                fillColor:  Theme.of(context).cardColor,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                fillColor: Theme.of(context).cardColor,
               ),
               onChanged: (searchedSurah) {
                 addSearchedForSurahToSearchedList(searchedSurah);
