@@ -43,8 +43,8 @@ class _AudioBottomSheetState extends State<AudioBottomSheet> {
   String _currentAudioUrl = '';
 
   // القارئ المختار (افتراضياً الحصري المجود)
-  String _selectedReciterId = 'ar.husarymujawwad';
-  String _selectedReciterName = 'محمود خليل الحصري (المجود)';
+  String _selectedReciterId = 'ar.husary';
+  String _selectedReciterName = 'محمود خليل الحصري';
   String get pageFont =>
       "QCF_P${_currentAyahNumber.toString().padLeft(3, '0')}";
 

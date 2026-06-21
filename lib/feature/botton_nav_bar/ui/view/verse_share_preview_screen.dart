@@ -329,7 +329,8 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
 
           Directionality(
             textDirection: TextDirection.rtl,
-            child: Text.rich(
+            child: 
+            Text.rich(
               TextSpan(
                 children: [
                   TextSpan(

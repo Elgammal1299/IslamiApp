@@ -29,13 +29,7 @@ class AppInitializer {
     // ✅ 1. Initialize Flutter binding FIRST
     WidgetsFlutterBinding.ensureInitialized();
 
-    // ✅ Initialize QCF Fonts
-    // try {
-    //   await QcfFontLoader.setupFontsAtStartup();
-    //   log('✅ QCF Fonts initialized successfully');
-    // } catch (e) {
-    //   log('⚠️ Error initializing QCF fonts: $e');
-    // }
+   
 
     // ✅ 7. Initialize Hive
     await Hive.initFlutter();
