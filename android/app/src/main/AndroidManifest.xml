@@ -92,6 +92,22 @@
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/prayer_widget_info" />
         </receiver>
+        <receiver
+    android:name="com.islamic.wartaqi.app.widget.PrayerWidgetUpdateReceiver"
+    android:exported="false">
+    <!-- alarm الدقيقي لتحديث الـ countdown -->
+    <intent-filter>
+        <action android:name="com.islamic.wartaqi.app.WIDGET_MINUTE_UPDATE" />
+    </intent-filter>
+    <!-- إعادة الجدولة بعد إعادة تشغيل الجهاز -->
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+    </intent-filter>
+    <!-- إعادة الجدولة بعد تحديث التطبيق -->
+    <intent-filter>
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+    </intent-filter>
+</receiver>
 
     </application>
 

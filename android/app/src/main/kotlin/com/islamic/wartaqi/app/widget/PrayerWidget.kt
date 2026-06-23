@@ -1,6 +1,7 @@
 package com.islamic.wartaqi.app.widget
 
 import android.content.Context
+import android.os.SystemClock
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -9,6 +10,7 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.ImageProvider
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -44,9 +46,13 @@ class PrayerWidget : GlanceAppWidget() {
     private fun Content() {
         val prefs = currentState<HomeWidgetGlanceState>().preferences
 
-        val nextPrayerName     = prefs.getString("next_prayer_name", "--") ?: "--"
-        val nextPrayerTime     = prefs.getString("next_prayer_time", "--:--") ?: "--:--"
-        val countdown          = prefs.getString("countdown", "--:--:--") ?: "--:--:--"
+        val nextPrayerName = prefs.getString("next_prayer_name", "--") ?: "--"
+        val nextPrayerTime = prefs.getString("next_prayer_time", "--:--") ?: "--:--"
+
+        // ── الحل الجوهري: احسب الـ countdown من الـ timestamp مباشرةً ──
+        // Flutter بيبعت next_prayer_timestamp كـ epoch milliseconds
+        val nextPrayerTimestamp = prefs.getLong("next_prayer_timestamp", 0L)
+        val countdown = computeCountdown(nextPrayerTimestamp)
 
         val fajr    = prefs.getString("fajr",    "--:--") ?: "--:--"
         val sunrise = prefs.getString("sunrise", "--:--") ?: "--:--"
@@ -94,7 +100,7 @@ class PrayerWidget : GlanceAppWidget() {
 
                 Spacer(modifier = GlanceModifier.height(4.dp))
 
-                // ── Countdown ─────────────────────────────────────────────
+                // ── Countdown (محسوب natively من الـ timestamp) ──────────
                 Text(
                     text = countdown,
                     style = TextStyle(
@@ -120,15 +126,15 @@ class PrayerWidget : GlanceAppWidget() {
 
                 // ── Prayer Times Grid ─────────────────────────────────────
                 Row(modifier = GlanceModifier.fillMaxWidth()) {
-                    PrayerCell(label = "الفجر", time = fajr, modifier = GlanceModifier.defaultWeight())
-                    PrayerCell(label = "الشروق", time = sunrise, modifier = GlanceModifier.defaultWeight())
-                    PrayerCell(label = "الظهر", time = dhuhr, modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "الفجر",   time = fajr,    modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "الشروق",  time = sunrise, modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "الظهر",   time = dhuhr,   modifier = GlanceModifier.defaultWeight())
                 }
                 Spacer(modifier = GlanceModifier.height(8.dp))
                 Row(modifier = GlanceModifier.fillMaxWidth()) {
-                    PrayerCell(label = "العصر", time = asr, modifier = GlanceModifier.defaultWeight())
-                    PrayerCell(label = "المغرب", time = maghrib, modifier = GlanceModifier.defaultWeight())
-                    PrayerCell(label = "العشاء", time = isha, modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "العصر",   time = asr,     modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "المغرب",  time = maghrib, modifier = GlanceModifier.defaultWeight())
+                    PrayerCell(label = "العشاء",  time = isha,    modifier = GlanceModifier.defaultWeight())
                 }
             }
         }
@@ -157,6 +163,38 @@ class PrayerWidget : GlanceAppWidget() {
                     textAlign = TextAlign.Center
                 )
             )
+        }
+    }
+
+    companion object {
+        /**
+         * يحسب الـ countdown من الوقت الحالي حتى [targetEpochMs].
+         * لو الوقت فات أو مش موجود، يرجع "--:--:--".
+         * الـ Glance framework بيستدعي provideContent كل ما الـ widget يتحدث،
+         * ولو الـ updatePeriodMillis = 1800000 (30 دقيقة)، فهيتحدث كل 30 دقيقة تلقائياً.
+         *
+         * للتحديث كل دقيقة، PrayerWidgetUpdateWorker بيشيدل الـ AlarmManager.
+         */
+        fun computeCountdown(targetEpochMs: Long): String {
+            if (targetEpochMs <= 0L) return "--:--:--"
+            val diffMs = targetEpochMs - System.currentTimeMillis()
+            if (diffMs <= 0L) return "00:00:00"
+
+            val totalSeconds = diffMs / 1000L
+            val hours   = totalSeconds / 3600L
+            val minutes = (totalSeconds % 3600L) / 60L
+            val seconds = totalSeconds % 60L
+
+            return "%02d:%02d:%02d".format(hours, minutes, seconds)
+        }
+
+        /** يُحدِّث كل instances من الـ widget فوراً */
+        suspend fun updateAll(context: Context) {
+            val manager = GlanceAppWidgetManager(context)
+            val ids = manager.getGlanceIds(PrayerWidget::class.java)
+            ids.forEach { id ->
+                PrayerWidget().update(context, id)
+            }
         }
     }
 }
