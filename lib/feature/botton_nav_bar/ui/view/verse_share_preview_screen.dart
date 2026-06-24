@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qcf_quran_plus/src/widgets/surah_header_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:qcf_quran_plus/src/data/quran_data.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/model/verse_share_theme.dart';
 import 'package:islami_app/feature/botton_nav_bar/data/repo/tafsir_repo.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
@@ -95,12 +95,9 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
         child: Column(
           children: [
             // Preview Area
-            Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Screenshot(
-                controller: _screenshotController,
-                child: _buildImageContent(),
-              ),
+            Screenshot(
+              controller: _screenshotController,
+              child: _buildImageContent(),
             ),
 
             // Controls
@@ -286,116 +283,136 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
   }
 
   Widget _buildImageContent() {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10.w),
-    width: double.infinity,
-    decoration: BoxDecoration(color: _selectedTheme.backgroundColor),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // ─── Header السورة ───
-        // _selectedTheme == VerseShareTheme.themes[1]
-        //     ? Stack(
-        //         alignment: Alignment.center,
-        //         children: [
-        //           const Image(
-        //             image: AssetImage("assets/images/mainframedark.png"),
-        //           ),
-        //           RichText(
-        //             textAlign: TextAlign.center,
-        //             text: TextSpan(
-        //               text: widget.surah.toString(),
-        //               style: TextStyle(
-        //                 fontFamily: "arsura",
-        //                 fontSize: MediaQuery.of(context).size.width * 0.07,
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       )
-        //     : SurahHeaderWidget(suraNumber: widget.surah),
+    final bool isDark = _selectedTheme == VerseShareTheme.themes[1];
 
-        // ─── الآية بالنص العثماني ───
-        _VerseOthmanicWidget(
-          surah: widget.surah,
-          ayah: widget.ayah,
-          fontSize: _fontSize,
-          isDark: _selectedTheme == VerseShareTheme.themes[1],
-          primaryColor: _selectedTheme.primaryColor,
-          secondaryColor: _selectedTheme.secondaryColor,
-        ),
-
-        // ─── التفسير إن وُجد ───
-        if (_addTafsir && _tafsirText != null) ...[
-          Divider(height: 10, color: Colors.grey[600]),
-          SizedBox(height: 6.h),
-          Text(
-            _tafsirText!,
-            textAlign: TextAlign.justify,
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-              fontSize: (_fontSize * 0.6).sp,
-              color: _selectedTheme.primaryColor.withValues(alpha: 0.8),
-              fontFamily: 'Amiri',
-              height: 1.5,
-            ),
-          ),
-        ],
-
-        SizedBox(height: 30.h),
-        _buildBottomBanner(),
-      ],
-    ),
-  );
-}
-
-
-  Widget _buildBottomBanner() {
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          "تطبيق وارتَقِ",
-          style: TextStyle(
-            fontSize: 15.sp,
-            fontFamily: 'Amiri',
-            fontWeight: FontWeight.bold,
-            color: Colors.grey[600],
-            // _selectedTheme.secondaryColor.withValues(alpha: 0.7),
+    // ── نلف الكل في Theme محلي لإعطاء SurahHeaderWidget اللون الصح ──
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: Theme.of(context).textTheme.copyWith(
+          bodyLarge: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: _selectedTheme.primaryColor,
           ),
         ),
       ),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(color: _selectedTheme.backgroundColor),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 8.h),
+
+            // ─── Header السورة من الباكدج ───
+            SurahHeaderWidget(suraNumber: widget.surah),
+
+            // ─── خط فاصل أنيق تحت الهيدر ───
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.w),
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: Divider(
+            //           color: _selectedTheme.primaryColor.withValues(alpha: 0.2),
+            //           thickness: 0.8,
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: EdgeInsets.symmetric(horizontal: 8.w),
+            //         child: Icon(
+            //           Icons.star,
+            //           size: 10.sp,
+            //           color: _selectedTheme.primaryColor.withValues(alpha: 0.35),
+            //         ),
+            //       ),
+            //       Expanded(
+            //         child: Divider(
+            //           color: _selectedTheme.primaryColor.withValues(alpha: 0.2),
+            //           thickness: 0.8,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+            // SizedBox(height: 8.h),
+
+            // ─── الآية بالنص العثماني ───
+            _VerseOthmanicWidget(
+              surah: widget.surah,
+              ayah: widget.ayah,
+              fontSize: _fontSize,
+              
+              isDark: isDark,
+              primaryColor: _selectedTheme.primaryColor,
+              secondaryColor: _selectedTheme.secondaryColor,
+            ),
+
+            // ─── التفسير إن وُجد ───
+            if (_addTafsir && _tafsirText != null) ...[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Divider(
+                  height: 16,
+                  color: _selectedTheme.primaryColor.withValues(alpha: 0.25),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Text(
+                  _tafsirText!,
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontSize: (_fontSize * 0.58).sp,
+                    color: _selectedTheme.primaryColor.withValues(alpha: 0.75),
+                    fontFamily: 'Amiri',
+                    height: 1.7,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.h),
+            ],
+
+            // ─── شعار التطبيق في الأسفل ───
+            _buildBottomBanner(),
+          ],
+        ),
+      ),
     );
-    // Container(
-    //   padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 15.w),
-    //   decoration: BoxDecoration(
-    //     color: _selectedTheme.primaryColor.withValues(alpha: 0.05),
-    //     borderRadius: BorderRadius.circular(10.r),
-    //   ),
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Text(
-    //         "سورة ${quran.getSurahNameArabic(widget.surah)} | آية ${widget.ayah}",
-    //         style: TextStyle(
-    //           fontSize: 10.sp,
-    //           fontFamily: 'Cairo',
-    //           color: _selectedTheme.primaryColor.withValues(alpha: 0.6),
-    //         ),
-    //       ),
-    //       Text(
-    //         "تطبيق وارتَقِ",
-    //         style: TextStyle(
-    //           fontSize: 10.sp,
-    //           fontFamily: 'Cairo',
-    //           fontWeight: FontWeight.bold,
-    //           color: _selectedTheme.secondaryColor.withValues(alpha: 0.7),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
+  }
+
+  Widget _buildBottomBanner() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 14.h, top: 6.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 30.w,
+            height: 0.8,
+            color: _selectedTheme.primaryColor.withValues(alpha: 0.2),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              "تطبيق وارتَقِ",
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontFamily: 'Amiri',
+                fontWeight: FontWeight.bold,
+                color: _selectedTheme.primaryColor.withValues(alpha: 0.45),
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+          Container(
+            width: 30.w,
+            height: 0.8,
+            color: _selectedTheme.primaryColor.withValues(alpha: 0.2),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _shareImage() async {
@@ -476,8 +493,10 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
     }
   }
 }
+
 /// Widget خاص بعرض آية واحدة بالخط العثماني الأصيل
 /// يستخدم QuranSurahListView من الباكدج لكن بيعرض آية واحدة بس
+
 class _VerseOthmanicWidget extends StatelessWidget {
   final int surah;
   final int ayah;
@@ -497,51 +516,70 @@ class _VerseOthmanicWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // ارتفاع مناسب لآية واحدة - قابل للتعديل
-      height: 180,
-      child: QuranSurahListView(
-        surahNumber: surah,
-        highlights: [
-          HighlightVerse(
-            surah: surah,
-            verseNumber: ayah,
-            page: getPageNumber(surah, ayah),
-            color: Colors.transparent, // بدون تلوين
-          ),
-        ],
-        fontSize: fontSize,
-        isTajweed: false, // false عشان اللون بيتحكم فيه _selectedTheme
-        isDarkMode: isDark,
-        ayahBuilder: (
-          context,
-          surahNumber,
-          verseNumber,
-          pageNumber,
-          ayahWidget,
-          isHighlighted,
-          highlightColor,
-        ) {
-          // نعرض الآية المطلوبة بس ونخفي باقي الآيات
-          if (verseNumber != ayah) {
-            return const SizedBox.shrink(); // إخفاء باقي الآيات
-          }
+    final ayahData = quran.firstWhere(
+      (e) => e['sora'] == surah && e['aya_no'] == ayah ,
+    );
 
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 8.w,
-              vertical: 12.h,
+    final int pageNumber = ayahData['page'];
+
+    final String othmanicText = ayahData['qcfData']
+        .toString()
+        .replaceAll('\n', '')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trimRight();
+
+    final String glyph = getaya_noQCF(surah, ayah);
+
+    String textWithoutGlyph = othmanicText;
+
+    final bool hasGlyph = othmanicText.endsWith(glyph);
+
+    if (hasGlyph) {
+      textWithoutGlyph = othmanicText.substring(
+        0,
+        othmanicText.length - glyph.length,
+      
+      );
+    }
+
+    final defaultStyle = QuranTextStyles.qcfStyle(
+
+      pageNumber: pageNumber,
+      height: 1.8,
+      color: primaryColor,
+    );
+
+    final mainTextStyle = defaultStyle.copyWith(
+      fontSize: fontSize,
+      height: 1.8,
+      
+    );
+
+    final numberTextStyle = defaultStyle.copyWith(
+      fontSize: fontSize,
+      height: 1.8,
+      color: secondaryColor,
+    );
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
+      ),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: textWithoutGlyph,
+              style: mainTextStyle,
             ),
-            child: DefaultTextStyle(
-              style: TextStyle(
-                color: primaryColor,
-                fontSize: fontSize.sp,
-                height: 2.2,
+            if (hasGlyph)
+              TextSpan(
+                text: glyph,
+                style: numberTextStyle,
               ),
-              child: ayahWidget, // ✅ النص العثماني الأصيل من الباكدج
-            ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }

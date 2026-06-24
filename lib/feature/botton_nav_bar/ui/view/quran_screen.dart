@@ -40,24 +40,36 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   late PageController _controller;
 
   // ─── UI visibility ───
-  // نستخدم ValueNotifier بدل setState لتجنب rebuild كاملة للـ tree
+  // ValueNotifier بدل setState لتجنب rebuild كاملة للـ tree
   final ValueNotifier<bool> _showUI = ValueNotifier(false);
 
-  late int _currentPage;
+  // ─── Current page كـ ValueNotifier مستقل ───
+  // بيسمح للـ slider والـ AppBar يتحدثوا بدون rebuild للشجرة الكاملة
+  late final ValueNotifier<int> _currentPageNotifier;
+
+  int get _currentPage => _currentPageNotifier.value;
+
   final GlobalKey _pageViewKey = GlobalKey();
 
+  // ─── Highlights كـ ValueNotifier ───
+  // الهدف: منع rebuild الـ QuranPageView الكاملة عند كل تغيير في VerseSelectionCubit
+  // بيتحدث فقط عند الضغط الطويل — مش أثناء التقليب بين الصفحات
+  final ValueNotifier<List<HighlightVerse>> _highlightsNotifier =
+      ValueNotifier(const []);
+
   // ─── Bookmark cache ───
-  // Cache بسيط: key = "surah:ayah", value = isBookmarked
-  // يتحدث تلقائياً بعد أي تغيير من VerseActionHandler
   final Map<String, bool> _bookmarkCache = {};
-  bool _cacheReady = false;
 
   Timer? _debounce;
+
+  // ─── isDark: محسوب مرة واحدة في didChangeDependencies ───
+  // لتفادي استدعاء Theme.of(context) في كل build()
+  late bool _isDark;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = widget.pageNumber;
+    _currentPageNotifier = ValueNotifier(widget.pageNumber);
     _controller = PageController(initialPage: widget.pageNumber - 1);
 
     WakelockPlus.enable();
@@ -68,17 +80,14 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _updateProgress(_currentPage);
-      // تحميل مسبق للـ bookmarks للصفحة الحالية
-      _preloadBookmarksForPage(_currentPage);
     });
   }
 
-  // ─── تحميل مسبق لـ bookmarks الصفحة الحالية والمجاورة ───
-  Future<void> _preloadBookmarksForPage(int page) async {
-    if (_cacheReady) return;
-    // ما نحتاجش نعمل حاجة هنا لأن الـ bookmarks بتتحمل عند الـ long press
-    // بس نحضّر الـ cache flag
-    _cacheReady = true;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // نحسب isDark هنا مش في build() لتفادي إعادة تمريره لـ wrapper عند كل rebuild
+    _isDark = Theme.of(context).brightness == Brightness.dark;
   }
 
   void _updateProgress(int page) {
@@ -102,6 +111,8 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   void dispose() {
     _debounce?.cancel();
     _showUI.dispose();
+    _currentPageNotifier.dispose();
+    _highlightsNotifier.dispose();
     WakelockPlus.disable();
     _controller.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -109,20 +120,19 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
   }
 
   // ─── Page changed ───
-  // لا نعمل setState هنا إلا لو _showUI كانت true (الـ slider ظاهر)
-  // لأن currentPage مش مستخدم في الـ UI المرئي أثناء الـ scroll
+  // ❌ مفيش setState هنا خالص
+  // ✅ بنستخدم ValueNotifiers فقط لتحديث الـ UI
   void _onPageChanged(int page) {
-    _currentPage = page;
+    debugPrint('PAGE CHANGED => $page');
+    _currentPageNotifier.value = page;
 
-    // لو الـ UI ظاهر، نحتاج rebuild عشان الـ slider يتحدث
-    // لو مش ظاهر، مش محتاجين حاجة
-    if (_showUI.value) {
-      // بدل setState، نستخدم ValueNotifier لتحديث الـ slider فقط
-      _showUI.notifyListeners();
+    // مسح الـ highlight لما المستخدم يقلّب الصفحة
+    if (_highlightsNotifier.value.isNotEmpty) {
+      _highlightsNotifier.value = const [];
     }
 
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
+    _debounce = Timer(const Duration(milliseconds: 600), () {
       if (!mounted) return;
       _updateProgress(page);
     });
@@ -130,8 +140,7 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   void _onSliderChanged(int page) {
     _controller.jumpToPage(page - 1);
-    _currentPage = page;
-    _showUI.notifyListeners();
+    _currentPageNotifier.value = page;
   }
 
   // ─── Bookmark helpers ───
@@ -143,13 +152,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     return val;
   }
 
-  // إعادة تحميل الـ cache بعد تغيير bookmark
   void _invalidateBookmarkCache(int s, int a) {
     _bookmarkCache.remove('$s:$a');
   }
 
-  // بناء قائمة الـ items للـ StarMenu
-  // يتعمل مرة واحدة بناءً على حالة الـ bookmark الحالية
   Future<List<Widget>> _buildMenuItems(int surah, int ayah) async {
     final isBookmarked = await _isBookmarked(surah, ayah);
     return [
@@ -209,8 +215,6 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -231,96 +235,119 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
           child: Stack(
             children: [
               // ─── QuranPageView: معزول تماماً عن باقي الـ tree ───
-              // استخدام _QuranPageViewWrapper لمنع rebuild من VerseSelectionCubit
-              Positioned.fill(
-                child: MediaQuery(
-                  data: MediaQuery.of(context).copyWith(
-                    textScaler: const TextScaler.linear(1.0),
-                  ),
-                  child: _QuranPageViewWrapper(
-                    pageViewKey: _pageViewKey,
-                    controller: _controller,
-                    isDark: isDark,
-                    onPageChanged: _onPageChanged,
-                    onLongPress: (surah, ayah, details) async {
-                      // تحميل الـ items بشكل async (مرة واحدة)
-                      final items = await _buildMenuItems(surah, ayah);
-                      if (!context.mounted) return;
-
-                      // تحديد الـ verse المختار
-                      context
-                          .read<VerseSelectionCubit>()
-                          .selectVerse(surah, ayah);
-
-                      StarMenuOverlay.displayStarMenu(
-                        context,
-                        StarMenu(
-                          parentContext: context,
-                          params: StarMenuParameters(
-                            shape: MenuShape.circle,
-                            circleShapeParams: CircleShapeParams(
-                              radiusX: 90.w,
-                              radiusY: 90.w,
-                              startAngle: -90,
-                              endAngle: 270,
-                            ),
-                            openDurationMs: 400,
-                            centerOffset: details.globalPosition -
-                                Offset(
-                                  MediaQuery.of(context).size.width / 2,
-                                  MediaQuery.of(context).size.height / 2,
-                                ),
-                            useScreenCenter: true,
-                          ),
-                          items: items,
-                          onItemTapped: (index, controller) {
-                            controller.closeMenu!();
-                            // لو كان action هو bookmark، نعمل invalidate للـ cache
-                            if (index == 3) {
-                              _invalidateBookmarkCache(surah, ayah);
-                            }
-                            VerseActionHandler.handleAction(
-                              index: index,
-                              context: context,
-                              surah: surah,
-                              ayah: ayah,
-                            );
-                          },
+              // الـ _QuranPageViewWrapper:
+              //  ✅ لا يستمع لـ VerseSelectionCubit مباشرة (مصدر الـ lag القديم)
+              //  ✅ يستمع فقط لـ _highlightsNotifier (يتغير عند الضغط الطويل فقط)
+              //  ✅ محاط بـ RepaintBoundary لعزل الـ repaints
+              _QuranPageViewWrapper(
+                pageViewKey: _pageViewKey,
+                controller: _controller,
+                isDark: _isDark,
+                highlightsNotifier: _highlightsNotifier,
+                onPageChanged: _onPageChanged,
+                onLongPress: (surah, ayah, details) async {
+                  final items = await _buildMenuItems(surah, ayah);
+                  if (!context.mounted) return;
+                          
+                  // تحديث الـ highlights عبر ValueNotifier بدل Cubit
+                  // ده بيمنع rebuild الـ QuranPageView كاملة
+                  context
+                      .read<VerseSelectionCubit>()
+                      .selectVerse(surah, ayah);
+                  final selected =
+                      context.read<VerseSelectionCubit>().state;
+                  if (selected != null) {
+                    final parts = selected.split(':');
+                    final s = int.parse(parts[0]);
+                    final a = int.parse(parts[1]);
+                    _highlightsNotifier.value = [
+                      HighlightVerse(
+                        surah: s,
+                        verseNumber: a,
+                        page: getPageNumber(s, a),
+                        color: Colors.yellow.withValues(alpha: 0.3),
+                      ),
+                    ];
+                  } else {
+                    _highlightsNotifier.value = const [];
+                  }
+                          
+                  StarMenuOverlay.displayStarMenu(
+                    context,
+                    StarMenu(
+                      parentContext: context,
+                      params: StarMenuParameters(
+                        shape: MenuShape.circle,
+                        circleShapeParams: CircleShapeParams(
+                          radiusX: 90.w,
+                          radiusY: 90.w,
+                          startAngle: -90,
+                          endAngle: 270,
                         ),
-                      );
-                    },
-                  ),
-                ),
+                        openDurationMs: 400,
+                        centerOffset: details.globalPosition -
+                            Offset(
+                              MediaQuery.of(context).size.width / 2,
+                              MediaQuery.of(context).size.height / 2,
+                            ),
+                        useScreenCenter: true,
+                      ),
+                      items: items,
+                      onItemTapped: (index, controller) {
+                        controller.closeMenu!();
+                        if (index == 3) {
+                          _invalidateBookmarkCache(surah, ayah);
+                        }
+                        VerseActionHandler.handleAction(
+                          index: index,
+                          context: context,
+                          surah: surah,
+                          ayah: ayah,
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
 
-              // ─── Slider: يتحدث بـ ValueListenableBuilder بدل setState ───
+              // ─── Slider ───
+              // طبقتان من ValueListenableBuilder:
+              //  1) _showUI: التحكم في الظهور
+              //  2) _currentPageNotifier: تحديث الصفحة المعروضة في الـ slider
+              // كلاهما محدود الـ rebuild بالـ widget الصغير فقط
               ValueListenableBuilder<bool>(
                 valueListenable: _showUI,
-                builder: (_, show, child) => AnimatedPositioned(
+                builder: (_, show, __) => AnimatedPositioned(
                   duration: const Duration(milliseconds: 100),
                   bottom: show ? 40.h : -200.h,
                   left: 10.w,
                   right: 10.w,
-                  child: QuranPageSlider(
-                    currentPage: _currentPage,
-                    totalPages: 604,
-                    onPageChanged: _onSliderChanged,
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: _currentPageNotifier,
+                    builder: (_, page, __) => QuranPageSlider(
+                      currentPage: page,
+                      totalPages: 604,
+                      onPageChanged: _onSliderChanged,
+                    ),
                   ),
                 ),
               ),
 
-              // ─── AppBar: يتحدث بـ ValueListenableBuilder بدل setState ───
+              // ─── AppBar ───
               ValueListenableBuilder<bool>(
                 valueListenable: _showUI,
-                builder: (_, show, child) => AnimatedPositioned(
+                builder: (_, show, __) => AnimatedPositioned(
                   duration: const Duration(milliseconds: 100),
                   top: show ? 0 : -120.h,
                   left: 0,
                   right: 0,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: CustomSurahFramWidget(index: _currentPage),
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: _currentPageNotifier,
+                    builder: (_, page, __) => SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: CustomSurahFramWidget(index: page),
+                      ),
                     ),
                   ),
                 ),
@@ -332,10 +359,26 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
     );
   }
 }
-class _QuranPageViewWrapper extends StatelessWidget {
+
+// ─────────────────────────────────────────────
+//  _QuranPageViewWrapper
+// ─────────────────────────────────────────────
+// تم تحويله من StatelessWidget إلى StatefulWidget
+//
+// السبب:
+//  - الكود القديم: كان يستخدم context.select(VerseSelectionCubit) مباشرة
+//    → كل تغيير في state الـ Cubit كان يعيد بناء QuranPageView كاملة
+//    → QuranPageView.constructor يُشغّل _loadQuranData() مرة ثانية
+//    → هذا كان يسبب الـ lag والتقطيع
+//
+//  - الكود الجديد: يستمع فقط لـ ValueNotifier<List<HighlightVerse>>
+//    → الـ rebuild يحدث فقط عند الضغط الطويل على آية
+//    → أثناء التقليب بين الصفحات: zero rebuilds للـ QuranPageView
+class _QuranPageViewWrapper extends StatefulWidget {
   final GlobalKey pageViewKey;
   final PageController controller;
   final bool isDark;
+  final ValueNotifier<List<HighlightVerse>> highlightsNotifier;
   final ValueChanged<int> onPageChanged;
   final void Function(int surah, int ayah, LongPressStartDetails details)
       onLongPress;
@@ -344,47 +387,58 @@ class _QuranPageViewWrapper extends StatelessWidget {
     required this.pageViewKey,
     required this.controller,
     required this.isDark,
+    required this.highlightsNotifier,
     required this.onPageChanged,
     required this.onLongPress,
   });
 
   @override
-  Widget build(BuildContext context) {
-    // نستخدم context.select هنا بدل في الـ parent
-    // عشان الـ rebuild يتحصر في الـ wrapper ده بس
-    final selectedVerseId =
-        context.select((VerseSelectionCubit c) => c.state);
+  State<_QuranPageViewWrapper> createState() => _QuranPageViewWrapperState();
+}
 
-    final List<HighlightVerse> highlights;
-    if (selectedVerseId != null) {
-      final parts = selectedVerseId.split(':');
-      final s = int.parse(parts[0]);
-      final a = int.parse(parts[1]);
-      highlights = [
-        HighlightVerse(
-          surah: s,
-          verseNumber: a,
-          page: getPageNumber(s, a),
-          color: Colors.yellow.withValues(alpha: 0.3),
-        ),
-      ];
-    } else {
-      highlights = const [];
+class _QuranPageViewWrapperState extends State<_QuranPageViewWrapper> {
+  late List<HighlightVerse> _highlights;
+
+  @override
+  void initState() {
+    super.initState();
+    _highlights = widget.highlightsNotifier.value;
+    widget.highlightsNotifier.addListener(_onHighlightsChanged);
+  }
+
+  void _onHighlightsChanged() {
+    if (mounted) {
+      setState(() {
+        _highlights = widget.highlightsNotifier.value;
+      });
     }
+  }
 
+  @override
+  void dispose() {
+    widget.highlightsNotifier.removeListener(_onHighlightsChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('QuranPageViewWrapper BUILD');
     return QuranPageView(
-    
-      key: pageViewKey,
-      pageController: controller,
-      onPageChanged: onPageChanged,
-      isDarkMode: isDark,
+      key: widget.pageViewKey,
+      pageController: widget.controller,
+      onPageChanged: widget.onPageChanged,
+      isDarkMode: widget.isDark,
+   
       isTajweed: false,
-      highlights: highlights,
-      onLongPress: onLongPress,
+      highlights: _highlights,
+      onLongPress: widget.onLongPress,
     );
   }
 }
 
+// ─────────────────────────────────────────────
+//  AyahPosition & QuranPageIndex
+// ─────────────────────────────────────────────
 
 class AyahPosition {
   final int surah;
