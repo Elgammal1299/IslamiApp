@@ -117,11 +117,11 @@ class _VerseSharePreviewScreenState extends State<VerseSharePreviewScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSectionTitle("سمات التصميم"),
-                  SizedBox(height: 10.h),
-                  _buildThemeSelector(),
+                  // _buildSectionTitle("سمات التصميم"),
+                  // SizedBox(height: 10.h),
+                  // _buildThemeSelector(),
 
-                  SizedBox(height: 20.h),
+                  // SizedBox(height: 20.h),
                   _buildSectionTitle("حجم الخط"),
                   Slider(
                     value: _fontSize,
