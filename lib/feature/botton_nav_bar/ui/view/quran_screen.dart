@@ -10,7 +10,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../view_model/reading_progress_cubit.dart';
 import 'widget/custom_surah_fram_widget.dart';
 import '../view_model/verse_selection_cubit.dart';
-import 'widget/quran_page_slider.dart';
+import 'widget/quran_drawer.dart';
 import 'package:star_menu/star_menu.dart';
 import 'package:islami_app/core/services/bookmark_manager.dart';
 import 'package:islami_app/core/services/setup_service_locator.dart';
@@ -219,6 +219,22 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).primaryColorLight,
+      endDrawer: ValueListenableBuilder<int>(
+        valueListenable: _currentPageNotifier,
+        builder: (context, page, child) {
+          final pos = QuranPageIndex.firstAyahOnPage(page);
+          return QuranDrawer(
+            currentSurahIndex: pos.surah,
+            onSurahSelected: (surahIndex) {
+              final pageNum = getPageNumber(surahIndex, 1);
+              Navigator.pop(context);
+              if (pageNum != _currentPageNotifier.value) {
+                _onSliderChanged(pageNum);
+              }
+            },
+          );
+        },
+      ),
       body: BlocListener<KhatmahCubit, KhatmahState>(
         listener: (context, state) {
           if (state is KhatmahDailyCompleted) {
@@ -308,30 +324,10 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                     ),
                   );
                 },
+                currentPageNotifier: _currentPageNotifier,
               ),
 
-              // ─── Slider ───
-              // طبقتان من ValueListenableBuilder:
-              //  1) _showUI: التحكم في الظهور
-              //  2) _currentPageNotifier: تحديث الصفحة المعروضة في الـ slider
-              // كلاهما محدود الـ rebuild بالـ widget الصغير فقط
-              ValueListenableBuilder<bool>(
-                valueListenable: _showUI,
-                builder: (_, show, __) => AnimatedPositioned(
-                  duration: const Duration(milliseconds: 100),
-                  bottom: show ? 40.h : -200.h,
-                  left: 10.w,
-                  right: 10.w,
-                  child: ValueListenableBuilder<int>(
-                    valueListenable: _currentPageNotifier,
-                    builder: (_, page, __) => QuranPageSlider(
-                      currentPage: page,
-                      totalPages: 604,
-                      onPageChanged: _onSliderChanged,
-                    ),
-                  ),
-                ),
-              ),
+              // ─── Slider (Removed as per requirements) ───
 
               // ─── AppBar ───
               ValueListenableBuilder<bool>(
@@ -382,6 +378,7 @@ class _QuranPageViewWrapper extends StatefulWidget {
   final ValueChanged<int> onPageChanged;
   final void Function(int surah, int ayah, LongPressStartDetails details)
       onLongPress;
+  final ValueNotifier<int> currentPageNotifier;
 
   const _QuranPageViewWrapper({
     required this.pageViewKey,
@@ -390,6 +387,7 @@ class _QuranPageViewWrapper extends StatefulWidget {
     required this.highlightsNotifier,
     required this.onPageChanged,
     required this.onLongPress,
+    required this.currentPageNotifier,
   });
 
   @override
@@ -428,10 +426,54 @@ class _QuranPageViewWrapperState extends State<_QuranPageViewWrapper> {
       pageController: widget.controller,
       onPageChanged: widget.onPageChanged,
       isDarkMode: widget.isDark,
-   
+ 
       isTajweed: false,
       highlights: _highlights,
       onLongPress: widget.onLongPress,
+      bottomBar: ValueListenableBuilder<int>(
+        valueListenable: widget.currentPageNotifier,
+        builder: (context, page, _) {
+          
+          final pos = QuranPageIndex.firstAyahOnPage(page);
+          final juz = getJuzNumber(pos.surah, pos.ayah);
+          final hizb = getHizbTextByPage(page);
+
+          return Container(
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              textDirection: TextDirection.rtl,
+              children: [
+                Text(
+                  'الجزء $juz',
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
+                    fontSize: 16.sp,
+                    color: widget.isDark ? Colors.white : Colors.black,
+                  ),
+                ),
+                Text(
+                  '$page',
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
+                    fontSize: 16.sp,
+                    color: widget.isDark ? Colors.white : Colors.black,
+                  ),
+                ),
+                Text(
+                  hizb,
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
+                    fontSize: 16.sp,
+                    color: widget.isDark ? Colors.white : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

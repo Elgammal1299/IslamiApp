@@ -250,6 +250,15 @@ class CustomSurahFramWidget extends StatelessWidget
             icon:  Icon(Icons.search, color: Theme.of(context).primaryColorDark),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          child: IconButton(
+            onPressed: () {
+              Scaffold.of(context).openEndDrawer();
+            },
+            icon:  Icon(Icons.menu, color: Theme.of(context).primaryColorDark),
+          ),
+        ),
       ],
     );
   }
