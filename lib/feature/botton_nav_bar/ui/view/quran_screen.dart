@@ -292,6 +292,11 @@ class _QuranViewScreenState extends State<QuranViewScreen> {
                     context,
                     StarMenu(
                       parentContext: context,
+                      onStateChanged: (state) {
+                        if (state == MenuState.closed) {
+                          _highlightsNotifier.value = const [];
+                        }
+                      },
                       params: StarMenuParameters(
                         shape: MenuShape.circle,
                         circleShapeParams: CircleShapeParams(
